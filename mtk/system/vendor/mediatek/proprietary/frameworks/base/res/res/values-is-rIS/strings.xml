@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">Hindrun símtala tókst ekki.</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">Þjónusta veitt.</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">Loka SIM-korti</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">Leyfir forriti að taka við og vinna úr DM-skráðum SMS-skilaboðum. Engin öpp nema DM-appið ættu að nota þetta</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Myndband</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Losa pláss"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">Hleð\u2026</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"Hleður í biðminni %d%%..."</string>
+   <string name="media_controller_live">"Virkt"</string>
+   <string name="media_controller_playing">"Spilar"</string>
+   <string name="media_controller_connecting">"Tengir..."</string>
+
+   <string name="VideoView_error_text_bad_file">"Skemmt skrá, ekki er hægt að spila þetta myndband."</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"Ekki hægt að tengjast netþjóni."</string>
+   <string name="VideoView_error_text_type_not_supported">"Gerð miðlaskrár ekki studd."</string>
+   <string name="VideoView_error_text_drm_not_supported">"DRM-varið, ekki er hægt að spila þetta myndband."</string>
+   <string name="VideoView_error_text_invalid_connection">"Ógild tenging. (403 bannað)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">Nýtt SIM</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Eyða</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">Greinir...</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">Þú hefur slegið inn rangt PIN <xliff:g id="number">%1$d</xliff:g> sinnum.
+        \n\nReyndu aftur eftir <xliff:g id="number">%2$d</xliff:g> sekúndur.</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">Þú hefur slegið inn rangt aðgangsorð <xliff:g id="number">%1$d</xliff:g> sinnum.
+        \n\nReyndu aftur eftir <xliff:g id="number">%2$d</xliff:g> sekúndur.</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Innri geymsla er að fyllast, forritið hefur verið stöðvað. Losaðu um pláss og reyndu aftur.</string>
+    <string name="aerr_process_lowstorage">Innri geymsla er að fyllast, ferlið hefur verið stöðvað. Losaðu um pláss og reyndu aftur.</string>
+    <string name="low_internal_storage_view_title">Innri geymsla er að fyllast</string>
+    <string name="low_storage_warning_message">Losaðu um pláss, annars munu sum forrit og kerfisaðgerðir ekki virka eins og skyldi.</string>
+    <string name="deleteMails">Eyða póstum</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Verndarstaða:</string>
+    <string name="drm_can_forward">Hægt að áframsenda.</string>
+    <string name="drm_can_not_forward">Ekki hægt að áframsenda.</string>
+    <string name="drm_no_limitation">Engin mörk.</string>
+    <string name="drm_no_license">Ekkert tiltækt DRM-leyfi.</string>
+    <string name="drm_begin">Byrja:</string>
+    <string name="drm_end">Ljúka:</string>
+    <string name="drm_use_left">Fjöldi eftir:</string>
+    <string name="drm_protectioninfo_renew">Endurnýja</string>
+    <string name="drm_protectioninfo_title">Verndarupplýsingar</string>
+    <string name="drm_licenseacquisition_title">DRM-leyfisveiting</string>
+    <string name="drm_licenseacquisition_message">%1$s hefur ekkert tiltækt DRM-leyfi. Þú getur ýtt á hnappinn „Endurnýja“ til að fá DRM-leyfi.</string>
+    <string name="drm_toast_license_expired">DRM-leyfi er útrunnið.</string>
+    <string name="drm_forwardforbidden_title">Bannað að áframsenda</string>
+    <string name="drm_forwardforbidden_message">Ekki er hægt að áframsenda sumar varðar skrár.</string>
+    <string name="drm_license_install_success">DRM-leyfi hefur verið uppsett.</string>
+    <string name="drm_license_install_fail">Ekki tókst að setja upp DRM-leyfi.</string>
+    <string name="drm_secure_timer_title">Ógild örugg DRM-klukka</string>
+    <string name="drm_secure_timer_message">Þú ættir ekki að nota DRM-varðar skrár. Gakktu úr skugga um að gagnatenging sé tiltæk.</string>
+    <string name="drm_consume_title">Notkun á DRM-réttindum</string>
+    <string name="drm_consume_message">Aðgerð þín mun nota DRM-réttindi.</string>
+
+    <string name="drm_first_time_use">Þetta er fyrsta notkun.</string>
+    <string name="drm_use_now">Viltu nota þetta núna?</string>
+    <string name="drm_consume_interval">Þessi skrá verður tiltæk innan %1$s eftir að þú hefur notkun á þessu.</string>
+    <string name="drm_effective_duration">Tímalengd virkni:</string>
+    <string name="drm_expire_dialog_future">Gildistímabil:</string>
+    <string name="validity_period">Gildisími:</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Kveikt á flugstillingu</string>
+    <string name="confirm_flight_mode_msg">Til að nota númerið skaltu fyrst slökkva á flugstillingu.</string>
+    <string name="confirm_radio_title">Slökkt á SIM</string>
+    <string name="confirm_radio_msg">Til að nota númerið skaltu fyrst kveikja á því.</string>
+    <string name="confirm_flight_mode_radio_title">Kveikt á flugstillingu og slökkt á SIM</string>
+    <string name="confirm_flight_mode_radio_msg">Til að nota númerið skaltu fyrst slökkva á flugstillingu og svo kveikja á SIM.</string>
+    <string name="confirm_unlock_title">SIM læst</string>
+    <string name="confirm_unlock_msg">Til að nota SIM-kortið þarf fyrst að aflæsa því.</string>
+    <string name="confirm_roaming_title">Reikiviðvörun</string>
+    <string name="confirm_roaming_msg">SIM-kortið er í reiki. Viltu halda áfram að nota það?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">VoLTE og hringingaþjónusta China Telecom eru ekki tiltæk núna. Slökkva á VoLTE?</string>
+
+    <string name="confirm_button_ok">Í lagi</string>
+    <string name="confirm_button_cancel">Hætta við</string>
+    <string name="confirm_button_unlock">Aflæsa</string>
+    <string name="confirm_button_turn_off">Slökkva</string>
+    <string name="confirm_button_turn_on">Kveikja á</string>
+    <string name="confirm_button_yes">Já</string>
+    <string name="confirm_button_no">Nei</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Kveikt á flugstillingu og slökkt á UIM</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">Til að nota númerið skaltu fyrst slökkva á flugstillingu og svo kveikja á UIM.</string>
+    <string name="confirm_radio_title_UIM">Slökkt á UIM</string>
+    <string name="confirm_radio_msg_UIM">Til að nota númerið skaltu fyrst kveikja á því.</string>
+    <string name="confirm_unlock_title_UIM">UIM læst</string>
+    <string name="confirm_unlock_msg_UIM">Til að nota UIM-kortið þarf fyrst að aflæsa því.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Skilaboð</string>
+    <string name="url_dialog_choice_message">Þetta opnast í vafra, halda áfram?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">Taktu öryggisafrit af pósti og losaðu um geymslupláss</string>
+
+    <string name="storage_withsd">Ekki er nóg pláss í símageymslunni. Losaðu um geymslupláss eða breyttu sjálfgefnu geymslunni í stillingunum.</string>
+    <string name="storage_withoutsd">Ekki er nóg pláss í símageymslunni. Losaðu um geymslupláss eða settu inn SD-kort.</string>
+    <string name="storage_sd">Það er ekki nóg pláss í SD-kortinu. Losaðu um geymslupláss eða breyttu sjálfgefnu geymslunni í stillingunum.</string>
+    <string name="usb_ums_notification_title">Tengt sem USB-geymsla</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Aðeins USB-hleðsla</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">Ekki tókst að fá tíma frá GPS</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> tengt, <xliff:g id="blocked">%2$d</xliff:g> útilokað</string>
+    <string name="tethered_notification_message_bandwidth_set">Bandvídd er sett</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">Miðnætti</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">Sjálfgefið</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">Strjúktu til hægri til að hunsa</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">Strjúktu til vinstri til að blunda</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">Strjúktu upp til að hunsa</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">Strjúktu niður til að blunda</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Ýttu á lit til að nota</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">Slökkt verður á HDMI þegar þú kveikir á þráðlausum skjá. Viltu halda áfram?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">Slökkt verður á þráðlausum skjá þegar þú kveikir á HDMI. Viltu halda áfram?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">Núverandi Wi-Fi Direct tenging verður aftengd þegar þú tengist tæki með þráðlausum skjá. Viltu halda áfram?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Óstöðug tenging</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Núverandi tenging þráðlausa skjásins er óstöðug.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Núverandi tenging þráðlausa skjásins er óstöðug, reyndu að færa þig nær tækinu.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Endurtengjast</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Þráðlaus skjár aftengdur. Viltu tengja aftur?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Þráðlaus skjár aftengdur.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">Önnur WPS-lota fannst. Reyndu aftur eftir nokkrar mínútur.</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">Síminn mun aftengjast Wi-Fi tímabundið á meðan hann er tengdur <xliff:g id="device_name">%1$s</xliff:g> (aðeins ef skipt er um rásaband og auðkenni núgildandi Wi-Fi aðgangspunkta í <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Kveikt er á þráðlausum skjá og Wi-Fi.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">Margmiðlunarhljóð mun ekki spilast í höfuðtólunum þínum.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">Ef þú breytir upplausninni endurtengist þráðlausi skjárinn sjálfkrafa.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">Ekki minna mig á aftur.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Núverandi Wi-Fi aðgangspunkturinn kann að hafa áhrif á gæði þráðlausa skjásins.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">Bíður eftir tengingarboðum frá öðrum tækjum.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">langar að tengjast við þig.</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">Boð um að tengjast.</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">Tengt við Wi-Fi-net <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Wi-Fi net <xliff:g id="wifi_ap_name">%1$s</xliff:g> aftengt.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Rásir skarast á</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Current Wi-Fi network can\’t coexist with cast screen connection.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">SD-kort tilbúið</string>
+    <string name="sdcard_select_default_path">Viltu breyta sjálfgefinni geymslu?</string>
+    <string name="sdcard_default_path_change">Sjálfgefinni geymslu var breytt.</string>
+    <string name="usb_storage_ready_title">Ytri USB-geymsla tilbúin</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Heyrnartólin þín eru ekki samhæf símanum. Prófaðu önnur</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">Tengt sem sjálfvirk keyrsla geisladrifs</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">HDMI-snúra tengd</string>
+    <string name="hdmi_notification_content">Smelltu til að samskipa HDMI</string>
+    <string name="hdmi_hdvideo_toast">HDMI getur ekki spilað 4K myndbandið, tengingin mun rofna.</string>
+    <string name="hdmi_mutex_call_content">Því miður hefur HDMI stöðvast vegna símtals sem nú er í gangi.</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Hljóðúttak</string>
+    <string name="hdmi_audio_output_stereo">Steríó</string>
+    <string name="hdmi_audio_output_multi_channel">Margrása</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Aðeins gagnatenging</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">LTE-net er ekki tiltækt.</string>
+    <string name="Suggest_To_Change_USIM">Við mælum með því að þú skiptir um 4G SIM-kort.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Sjálfgefið aðgangsval</string>
+    <string name="account_always_ask_title">Spyrja fyrst</string>
+    <string name="other_accounts">Aðrir aðgangar</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">bannað</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">Tókst ekki að spila hljóð.</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"Ekki stuðningur við þetta myndband."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Staðfesta"</string>
+    <string name="save_password_message">"Viltu að vafrinn muni þetta aðgangsorð?"</string>
+    <string name="save_password_notnow">"Ekki núna"</string>
+    <string name="save_password_remember">"Muna"</string>
+    <string name="save_password_never">"Aldrei"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">vekja spjaldtölvuna</string>
+    <string name="permlab_wake_device_sensorhub" product="default">vekja símann</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Leyfir appinu að vekja spjaldtölvuna þegar hún er í svefnstillingu í gegnum skynjaramiðstöð.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Leyfir appinu að vekja símann þegar hann er í svefnsstillingu í gegnum skynjaramiðstöð.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">Þú ert núna í alþjóðlegu reiki og það er kveikt á farsímagögnum. Gjaldfærsla gæti átt sér stað.</string>
+    <string name="known">"Ég skil"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">tákn forritsmerkis</string>
+    <string name="close">loka forriti</string>   
+    <string name="maximum">fullstækka forritsglugga</string>
+    <string name="minimize">fullsmækka forritsglugga</string>
+    <string name="drag">draga til stærð forritsglugga</string> 
+    <string name="gallery_camera_mutex">Ekki hægt að nota Gallerí, Myndavél eða Myndspilara á sama tíma</string> 
+    <string name="mw_max_size_string">Hámark <xliff:g id="number">%d</xliff:g> fljótandi gluggar</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">OMAPI-kerfisútstöð</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">App með þessa heimild gefur til kynna að það sé OMAPI-útstöð kerfisins.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">Bindast OMAPI útstöð</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">App með þessa heimild getur bundist OMAPI-útstöðvum kerfisins. Aðeins SmartcardService ætti að nota þetta.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">hefja hóphringingar</string>
+    <string name="permdesc_cta_conference_call">Leyfir appinu að hefja hringingar á hóp. Þetta getur leitt til óvæntra gjalda. Skaðleg öpp geta kostað þig peninga með því að hefja hóphringingar án þíns samþykkis.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">símtalaflutningur</string>
+    <string name="permdesc_cta_call_forward">Leyfir appinu að nota símtalaflutning.</string>
+    <string name="permlab_cta_send_mms">senda MMS</string>
+    <string name="permdesc_cta_send_mms">Leyfir appinu að senda MMS skilaboð. Þetta getur leitt til óvæntra gjalda. Skaðleg öpp geta kostað þig peninga með því að senda skilaboð án þíns samþykkis.</string>
+    <string name="permlab_cta_send_email">senda tölvupósta</string>
+    <string name="permdesc_cta_send_email">Leyfir appinu að senda tölvupósta. Þetta getur leitt til óvæntrar notkunar á farsímagögnum. Skaðleg öpp geta kostað þig peninga með því að senda tölvupósta án þíns samþykkis.</string>
+    <string name="permgrouplab_email">Netfang</string>
+    <string name="permgroupdesc_email">senda tölvupósta</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">„<xliff:g id="err_ap_name">%1$s</xliff:g>“ er ekki leyft að <xliff:g id="permission_name">%2$s</xliff:g>. Gefa leyfið?</string>
+    <string name="aerr_application_permission_connectivity">„<xliff:g id="err_ap_name">%1$s</xliff:g>“ fær ekki að <xliff:g id="permission_name">%2$s</xliff:g>, þú getur valið að <xliff:g id="permission_name2">%2$s</xliff:g> í „Stillingum“</string>
+    <string name="aerr_application_unknown_permission">„<xliff:g id="err_ap_name">%1$s</xliff:g>“ er ekki hægt að nota, prófaðu að gefa því heimildir.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Stillingar</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">virkja útþurrkunarþjónustu</string>
+    <string name="permdesc_mount_service_wipe">Leyfir appinu að senda út til að sníða símageymslu og SD-kort.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">IPO biðstaða</string>
+</resources>

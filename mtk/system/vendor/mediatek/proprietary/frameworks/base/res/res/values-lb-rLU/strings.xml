@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">Uruffspär feelgeschloen.</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">Service bereetgestallt.</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">SIM-Kaart zougemaach</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">Erlaabt der Applikatioun, DM-Register-SMS-Noriichten ze kréien an ze veraarbechten. Keng Applikatioun ausser DM-APP sollt dat benotzen</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Video</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Fräi Plaz"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">Gëtt gelueden \u2026</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"Bufferen %d%%..."</string>
+   <string name="media_controller_live">"Live"</string>
+   <string name="media_controller_playing">"Spillen"</string>
+   <string name="media_controller_connecting">"Gëtt verbonnen ..."</string>
+
+   <string name="VideoView_error_text_bad_file">"Feelerhaft Datei, de Video kann net gespillt ginn."</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"Verbindung mam Server feelgeschloen."</string>
+   <string name="VideoView_error_text_type_not_supported">"Mediendateityp net ënnerstëtzt."</string>
+   <string name="VideoView_error_text_drm_not_supported">"DRM-geschützt, de Video kann net gespillt ginn."</string>
+   <string name="VideoView_error_text_invalid_connection">"Ongülteg Verbindung. (403 Verbueden)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">Nei SIM</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Läschen</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">Erkennen ...</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">Du hues deng PIN <xliff:g id="number">%1$d</xliff:g> Mol falsch aginn.
+        \n\nWgl. a(n) <xliff:g id="number">%2$d</xliff:g> Sekonnen nach eng Kéier probéieren.</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%1$d</xliff:g> Mol falsch aginn.
+        \n\nWgl. a(n) <xliff:g id="number">%2$d</xliff:g> Sekonnen nach eng Kéier probéieren.</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Intern Späicherplaz leeft aus, d’Applikatioun gouf gestoppt. Maach wgl. e bësse Plaz fräi a probéiert et erneit.</string>
+    <string name="aerr_process_lowstorage">Intern Späicherplaz leeft aus, de Prozess gouf gestoppt. Maach wgl. e bësse Plaz fräi a probéiert et erneit.</string>
+    <string name="low_internal_storage_view_title">Interne Späicher leeft aus</string>
+    <string name="low_storage_warning_message">Maach wgl. e bësse Plaz fräi, oder e puer Applikatiounen a Systemfunktiounen funktionéieren eventuell net gutt.</string>
+    <string name="deleteMails">E-Maile läschen</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Schutzstatus:</string>
+    <string name="drm_can_forward">Ka weidergeleet ginn.</string>
+    <string name="drm_can_not_forward">Kann net weidergeleet ginn.</string>
+    <string name="drm_no_limitation">Keng Limitt.</string>
+    <string name="drm_no_license">Keng verfügbar DRM-Lizenz.</string>
+    <string name="drm_begin">Ufank:</string>
+    <string name="drm_end">Enn:</string>
+    <string name="drm_use_left">Unzuel iwwereg:</string>
+    <string name="drm_protectioninfo_renew">Erneieren</string>
+    <string name="drm_protectioninfo_title">Schutzinfo</string>
+    <string name="drm_licenseacquisition_title">DRM-Lizenz-Acquisitioun</string>
+    <string name="drm_licenseacquisition_message">%1$s huet keng verfügbar DRM-Lizenz. Du kanns „Erneieren“ drécken, fir eng DRM-Lizenz ze kréien.</string>
+    <string name="drm_toast_license_expired">DRM-Lizenz ass ofgelaf.</string>
+    <string name="drm_forwardforbidden_title">Weiderleede verbueden</string>
+    <string name="drm_forwardforbidden_message">Verschidde geschützt Dateie kënnen net weidergeleet ginn.</string>
+    <string name="drm_license_install_success">DRM-Lizenz-Installatioun erfollegräich.</string>
+    <string name="drm_license_install_fail">DRM-Lizenz-Installatioun feelgeschloen.</string>
+    <string name="drm_secure_timer_title">Ongülteg vun DRM geséchert Auer</string>
+    <string name="drm_secure_timer_message">Du konns keng mat DMR geschützt Dateie benotzen. Stell wgl. sécher, datt eng Dateverbindung verfügbar ass.</string>
+    <string name="drm_consume_title">DRM-Rechter verbrauchen</string>
+    <string name="drm_consume_message">Deng Aktioun verbraucht DRM-Rechter.</string>
+
+    <string name="drm_first_time_use">Dat ass déi éischt Benotzung.</string>
+    <string name="drm_use_now">Elo benotzen?</string>
+    <string name="drm_consume_interval">D’Datei ass innerhalb vu(n) %1$s nom Start vun der Benotzung verfügbar.</string>
+    <string name="drm_effective_duration">Effektiv Dauer:</string>
+    <string name="drm_expire_dialog_future">Gülteg Period:</string>
+    <string name="validity_period">Gültegkeet:</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Fluchmodus un</string>
+    <string name="confirm_flight_mode_msg">Fir d’Nummer ze benotzen, desaktivéier fir d’éischt de Fluchmodus.</string>
+    <string name="confirm_radio_title">SIM aus</string>
+    <string name="confirm_radio_msg">Fir d’Nummer ze benotzen, aktivéier se fir d’éischt.</string>
+    <string name="confirm_flight_mode_radio_title">Fluchmodus un a SIM aus</string>
+    <string name="confirm_flight_mode_radio_msg">Fir d’Nummer ze benotzen, desaktivéier fir d’éischt de Fluchmodus an aktivéier d’SIM.</string>
+    <string name="confirm_unlock_title">SIM gespaart</string>
+    <string name="confirm_unlock_msg">Fir d’SIM-Kaart ze benotzen, entspär se fir d’éischt.</string>
+    <string name="confirm_roaming_title">Roaming-Warnhiweis</string>
+    <string name="confirm_roaming_msg">D’SIM-Kaart roamt. Weider benotzen?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">China Telecom VoLTE an Uruff-Servicer sinn aktuell net verfügbar. VoLTE AUS maachen?</string>
+
+    <string name="confirm_button_ok">OK</string>
+    <string name="confirm_button_cancel">Ofbriechen</string>
+    <string name="confirm_button_unlock">Entspären</string>
+    <string name="confirm_button_turn_off">Desaktivéieren</string>
+    <string name="confirm_button_turn_on">Aktivéieren</string>
+    <string name="confirm_button_yes">Jo</string>
+    <string name="confirm_button_no">Nee</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Fluchmodus un an UIM aus</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">Fir d’Nummer ze benotzen, desaktivéier fir d’éischt de Fluchmodus an aktivéier den UIM.</string>
+    <string name="confirm_radio_title_UIM">UIM aus</string>
+    <string name="confirm_radio_msg_UIM">Fir d’Nummer ze benotzen, aktivéier se fir d’éischt.</string>
+    <string name="confirm_unlock_title_UIM">UIM gespaart</string>
+    <string name="confirm_unlock_msg_UIM">Fir d’UIM-Kaart ze benotzen, entspär se fir d’éischt.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Noriichten</string>
+    <string name="url_dialog_choice_message">Dat mécht de Browser op, virufueren?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">E-Maile sécheren a Späicherplaz fräiginn</string>
+
+    <string name="storage_withsd">Et ass net genuch Plaz um Telefonspäicher. Maach wgl. Späicher fräi oder änner de „Standardschreifdisk“ an den Astellungen.</string>
+    <string name="storage_withoutsd">Et ass net genuch Plaz um Telefonspäicher. Gëff wgl. e bësse Späicherplaz fräi oder setz eng SD-Kaart an.</string>
+    <string name="storage_sd">Et ass net genuch Plaz o der SD-Kaart. Maach wgl. Späicher fräi oder änner de „Standardschreifdisk“ an den Astellungen.</string>
+    <string name="usb_ums_notification_title">Als USB-Späicher verbonnen</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Nëmmen USB-Lueden</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">Ofruffe vun GPS-Zäit feelgeschloen</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> verbonnen, <xliff:g id="blocked">%2$d</xliff:g> blockéiert</string>
+    <string name="tethered_notification_message_bandwidth_set">Bandbreet ass festgeluecht</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">Mëtternuecht</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">Standard</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">No riets wëschen, fir ze verwerfen</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">No lénks wëschen, fir ze schlummeren</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">Erop wëschen, fir ze verwerfen</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">Erof wëschen, fir ze schlummeren</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Dréck op Faarf, fir unzewenden</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">HDMI gëtt desaktivéiert, wann den Drotlosdisplay aktivéiert ass. Wëlls du virufueren?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">Drotlosdisplay gëtt desaktivéiert wann s du HDMI. aktivéiers. Wëlls du virufueren?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">Déi aktuell Wi-Fi-Direct-Verbindung gëtt getrennt, wann s du dech mam Drotlosdisplayapparat verbanns. Wëlls du virufueren?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Onstabil Verbindung</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Déi aktuell Verbindung vum Drotlosdisplay ass net stabil.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Déi aktuell Verbindung vum Drotlosdisplay ass net stabil, probéier wgl. méi no bei de Bildschiermapparat ze goen.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Nei verbannen</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Drotlosdisplay Verbindung getrennt. Wëlls du dech erëm verbannen?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Drotlosdisplay Verbindung gouf getrennt.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">Eng aner WPS-Sessioun gouf erkannt. Wgl. an e puer Minutten nach eng Kéier probéieren.</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">Den Telefon gëtt temporär vum Wi-Fi getrennt wärend e mat <xliff:g id="device_name">%1$s</xliff:g> verbonnen ass (nëmme wann d’Kanalband an d’ID vun den aktuelle Wi-Fi-Zougangspunkten op <xliff:g id="oper_freq">%2$s</xliff:g> geännert gëtt)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Drotlosdisplay a Wi-Fi sinn aktivéiert.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">Et gëtt kee Multimedia-Sound vun dengem Headset gespillt.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">D’geännert Opléisung gëtt automatesch erëm mam Drotlosdisplay verbonnen.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">Net méi erënneren.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Aktuell Wi-Fi-AP kann d’Qualitéit vum Drotlosdisplay beaflossen.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">Op Verbindungsinvitatioune vun aneren Apparater waarden.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">wëllt eng Verbindung mat dir erstellen.</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">Verbindung gëtt hiergestallt.</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">Net mam Wi-Fi-Netzwierk <xliff:g id="wifi_ap_name">%1$s</xliff:g> verbonnen.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Verbindung mat Wi-Fi-Netzwierk <xliff:g id="wifi_ap_name">%1$s</xliff:g> getrennt.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Kanal-Konflikt</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Current Wi-Fi network can\’t coexist with cast screen connection.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">SD-Kaart bereet</string>
+    <string name="sdcard_select_default_path">Wëlls du de Standard-Schreifdisk änneren?</string>
+    <string name="sdcard_default_path_change">De Standard-Schreifdisk gouf geännert.</string>
+    <string name="usb_storage_ready_title">Externen USB-Späicher bereet</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Deng Kopfhörer sinn net kompatibel mam Telefon. Probéiert wgl. anerer</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">Als autorun cdrom verbonnen</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">HDMI-Kabel verbonnen</string>
+    <string name="hdmi_notification_content">Klicken, fir HDMI ze konfiguréieren</string>
+    <string name="hdmi_hdvideo_toast">HDMI kann de 4K-Video net ofspillen, d’Verbindung gëtt ënnerbrach.</string>
+    <string name="hdmi_mutex_call_content">Entschëllegt, HDMI gouf wéinst engem aktuellen Telefonsgespréich gestoppt.</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Audio-Output</string>
+    <string name="hdmi_audio_output_stereo">Stereo</string>
+    <string name="hdmi_audio_output_multi_channel">Multikanal</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Nëmmen Dateverbindung</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">LTE-Netzwierk ass net verfügbar.</string>
+    <string name="Suggest_To_Change_USIM">Recommandéiert op eng 4g-SIM-Kaart ze wiesselen.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Standard-Kontauswiel</string>
+    <string name="account_always_ask_title">Fir d’éischt nofroen</string>
+    <string name="other_accounts">Aner Konten</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">verbinden</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">Audio ofspille feelgeschloen.</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"De Video gëtt net ënnerstëtzt."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Bestätegen"</string>
+    <string name="save_password_message">"Soll sech de Browser d’Passwuert mierken?"</string>
+    <string name="save_password_notnow">"Elo net"</string>
+    <string name="save_password_remember">"Erënneren"</string>
+    <string name="save_password_never">"Ni"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">Tablet erwächen</string>
+    <string name="permlab_wake_device_sensorhub" product="default">Telefon erwächen</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Erlaabt der App, den Tablet ze erwächen, wann en am Suspend-Modus duerch Sensorhub ass.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Erlaabt der App, den Telefon ze erwächen, wann en am Suspend-Modus duerch Sensorhub ass.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">Du bass am Moment am internationale Roaming, Mobilfunkdaten sinn aktivéiert, et kënne lokal Käschten ufalen.</string>
+    <string name="known">"Verstan"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">Applikatiounslogosymbol</string>
+    <string name="close">Applikatioun zoumaachen</string>   
+    <string name="maximum">Maximal Applikatioun</string>
+    <string name="minimize">Applikatioun minimiséieren</string>
+    <string name="drag">Fënstergréisst vun der Applikatioun zéien</string> 
+    <string name="gallery_camera_mutex">Galerie, Kamera oder Videoplayer kënnen net gläichzäiteg benotzt ginn</string> 
+    <string name="mw_max_size_string">Maximal <xliff:g id="number">%d</xliff:g> onverankert Fënsteren</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">OMAPI System Terminal</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">Eng App mat dëser Erlabnes weist, datt et en OMAPI-Terminal vum System ass.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">OMAPI Terminal bannen</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">Eng App mat dëser Erlabnes ka sech un d’OMAPI Terminale vum System bannen. Nëmme SmartcardService sollt et benotzen.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">Uriff vu verschiddene Parteien initiéieren</string>
+    <string name="permdesc_cta_conference_call">Der App erlaben, Uriff vu verschiddene Parteien ze initiéieren. Dëst kann zu onerwaarte Käschte féieren. Béiswëlleg Appe kënnen dech Sue kaschten andeems se Uriff vu verschiddene Parteien ouni deng Bestätegung initiéieren.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">Uruffweiderleedung</string>
+    <string name="permdesc_cta_call_forward">Der App d’Uruffweiderleedung erlaben.</string>
+    <string name="permlab_cta_send_mms">MMS schécken</string>
+    <string name="permdesc_cta_send_mms">Der App erlaben, MMS-Noriichten ze schécken. Dëst kann zu onerwaarte Käschte féieren. Béiswëlleg Appe kënnen dech Sue kaschten andeem se Noriichten ouni deng Bestätegung initiéieren.</string>
+    <string name="permlab_cta_send_email">E‑Maile schécken</string>
+    <string name="permdesc_cta_send_email">Der App erlaben, E‑Mailen ze schécken. Dat kann zu onerwaartem Mobilfunkdatekonsum féieren. Béiswëlleg Appe kënnen dech Sue kaschten andeem se E‑Mailen ouni deng Bestätegung initiéieren.</string>
+    <string name="permgrouplab_email">E‑Mail-Adress</string>
+    <string name="permgroupdesc_email">E‑Maile schécken</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">„<xliff:g id="err_ap_name">%1$s</xliff:g>“ gëtt fir <xliff:g id="permission_name">%2$s</xliff:g> verweigert. D’Berechtegung erlaben?</string>
+    <string name="aerr_application_permission_connectivity">„<xliff:g id="err_ap_name">%1$s</xliff:g>“ kann net <xliff:g id="permission_name">%2$s</xliff:g>, du kanns <xliff:g id="permission_name2">%2$s</xliff:g> an „Astellungen“</string>
+    <string name="aerr_application_unknown_permission">„<xliff:g id="err_ap_name">%1$s</xliff:g>“ kann net benotzt ginn, probéier wgl., Berechtegungen ze erlaben.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Astellungen</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">Service-wësche mounten</string>
+    <string name="permdesc_mount_service_wipe">Erlaabt der App, d’Iwwerdroung ze schécken, fir den Telefonsspäicher an d’SD-Kaart ze formatéieren.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">IPO-Standby</string>
+</resources>

@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">Неуспешна забрана на повикванията.</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">Услугата е предоставена.</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">Затваряне на SIM карта</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">Позволява на приложението да получава
+ и обработва DM Register SMS съобщения. Никое приложение, с изключение на приложенията за DM, не трябва да
+ използва това</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Видео</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Свободно пространство"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">Зареждане\u2026</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"Буфериране на %d%%..."</string>
+   <string name="media_controller_live">"На живо"</string>
+   <string name="media_controller_playing">"Възпроизвежда"</string>
+   <string name="media_controller_connecting">"Свързване..."</string>
+
+   <string name="VideoView_error_text_bad_file">"Повреден файл, това видео не може да бъде възпроизведено."</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"Неуспешно свързване със сървъра."</string>
+   <string name="VideoView_error_text_type_not_supported">"Видът мултимедиен файл не се поддържа."</string>
+   <string name="VideoView_error_text_drm_not_supported">"Защитено с DRM, това видео не може да бъде възпроизведено."</string>
+   <string name="VideoView_error_text_invalid_connection">"Невалидна връзка. (403 Забранено)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">Нов SIM</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Изтриване</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">Откриване...</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">Въвели сте неправилно своя PIN код <xliff:g id="number">%1$d</xliff:g> пъти.
+ \n\nМоля, опитайте отново след <xliff:g id="number">%2$d</xliff:g> секунди.</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">Въвели сте неправилно своята парола <xliff:g id="number">%1$d</xliff:g> пъти.
+ \n\nМоля, опитайте отново след <xliff:g id="number">%2$d</xliff:g> секунди.</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Вътрешната памет се изчерпва, приложението е спряно. Моля, освободете пространство и опитайте отново.</string>
+    <string name="aerr_process_lowstorage">Вътрешната памет се изчерпва, процесът е спрян. Моля, освободете пространство и опитайте отново.</string>
+    <string name="low_internal_storage_view_title">Вътрешната памет се изчерпва</string>
+    <string name="low_storage_warning_message">Моля, освободете място, защото в противен случай някои приложения и системни функции може да не работят добре.</string>
+    <string name="deleteMails">Изтриване на имейли</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Статус на защита:</string>
+    <string name="drm_can_forward">Може да се препрати.</string>
+    <string name="drm_can_not_forward">Не може да се препрати.</string>
+    <string name="drm_no_limitation">Няма ограничения.</string>
+    <string name="drm_no_license">Няма наличен DRM лиценз.</string>
+    <string name="drm_begin">Начало:</string>
+    <string name="drm_end">Край:</string>
+    <string name="drm_use_left">Оставащ брой:</string>
+    <string name="drm_protectioninfo_renew">Подновяване</string>
+    <string name="drm_protectioninfo_title">Информация за защитата</string>
+    <string name="drm_licenseacquisition_title">Придобиване на DRM лиценз</string>
+    <string name="drm_licenseacquisition_message">%1$s няма наличен DRM лиценз. Можете да натиснете бутона „Подновяване“, за да придобиете DRM лиценз.</string>
+    <string name="drm_toast_license_expired">DRM лицензът е изтекъл.</string>
+    <string name="drm_forwardforbidden_title">Препращането е забранено</string>
+    <string name="drm_forwardforbidden_message">Някои защитени файлове не могат да бъдат препратени.</string>
+    <string name="drm_license_install_success">Инсталирането на DRM лиценза е успешно.</string>
+    <string name="drm_license_install_fail">Инсталирането на DRM лиценза е неуспешно.</string>
+    <string name="drm_secure_timer_title">Невалиден часовник за DRM защита</string>
+    <string name="drm_secure_timer_message">Не можахте да използвате файлове, защитени с DRM. Моля, уверете се, че е налична връзка за данни.</string>
+    <string name="drm_consume_title">Консумиране на DRM права</string>
+    <string name="drm_consume_message">Вашето действие ще изразходва DRM правата.</string>
+
+    <string name="drm_first_time_use">Това е първата употреба.</string>
+    <string name="drm_use_now">Използване сега?</string>
+    <string name="drm_consume_interval">Този файл ще бъде достъпен в продължение на %1$s, след като започнете да го използвате.</string>
+    <string name="drm_effective_duration">Ефективна продължителност:</string>
+    <string name="drm_expire_dialog_future">Период на валидност:</string>
+    <string name="validity_period">Валидност:</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Включен самолетен режим</string>
+    <string name="confirm_flight_mode_msg">За да използвате номера, първо изключете самолетния режим.</string>
+    <string name="confirm_radio_title">Изключена SIM карта</string>
+    <string name="confirm_radio_msg">За да използвате номера, първо я включете.</string>
+    <string name="confirm_flight_mode_radio_title">Включване на самолетния режим и изключване на SIM картата</string>
+    <string name="confirm_flight_mode_radio_msg">За да използвате номера, първо изключете самолетния режим и включете SIM картата.</string>
+    <string name="confirm_unlock_title">Заключена SIM карта</string>
+    <string name="confirm_unlock_msg">За да използвате SIM картата, първо я отключете.</string>
+    <string name="confirm_roaming_title">Предупреждение за роуминг</string>
+    <string name="confirm_roaming_msg">SIM картата е в роуминг. Ще продължите ли да я използвате?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">В момента услугите на China Telecom за VoLTE и разговори не са налични.Изключване на VoLTE?</string>
+
+    <string name="confirm_button_ok">OK</string>
+    <string name="confirm_button_cancel">Отказ</string>
+    <string name="confirm_button_unlock">Отключване</string>
+    <string name="confirm_button_turn_off">Изключване</string>
+    <string name="confirm_button_turn_on">Включване</string>
+    <string name="confirm_button_yes">Да</string>
+    <string name="confirm_button_no">Не</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Включване на самолетния режим и изключване на UIM картата</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">За да използвате номера, първо изключете самолетния режим и включете UIM картата.</string>
+    <string name="confirm_radio_title_UIM">Изключена UIM карта</string>
+    <string name="confirm_radio_msg_UIM">За да използвате номера, първо я включете.</string>
+    <string name="confirm_unlock_title_UIM">Заключена UIM карта</string>
+    <string name="confirm_unlock_msg_UIM">За да използвате UIM картата, първо я отключете.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Съобщения</string>
+    <string name="url_dialog_choice_message">Това ще отвори браузъра, продължаване?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">Архивиране на пощата и освобождаване на хранилище</string>
+
+    <string name="storage_withsd">Мястото за съхранение на телефона не е достатъчно. Моля, освободете място за съхранение или променете диска за запис по подразбиране от настройките.</string>
+    <string name="storage_withoutsd">Мястото за съхранение на телефона не е достатъчно. Моля, освободете място за съхранение или поставете SD карта.</string>
+    <string name="storage_sd">Мястото за съхранение на SD картата не е достатъчно. Моля, освободете място за съхранение или променете диска за запис по подразбиране от настройките.</string>
+    <string name="usb_ums_notification_title">Свързано като USB памет</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Само USB зареждане</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">Неуспешно получаване на предоставеното от GPS време</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> свързан(и), <xliff:g id="blocked">%2$d</xliff:g> блокиран(и)</string>
+    <string name="tethered_notification_message_bandwidth_set">Честотната лента е зададена</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">Полунощ</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">По подразбиране</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">Плъзнете надясно за отхвърляне</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">Плъзнете наляво за отлагане</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">Плъзнете нагоре за отхвърляне</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">Плъзнете надолу за отлагане</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Натиснете върху „Цвят“, за да приложите</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">HDMI ще се изключи, когато включите безжичния дисплей. Желаете ли да продължите?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">Безжичният дисплей ще се изключи, когато включите HDMI. Желаете ли да продължите?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">Текущата Wi-Fi Direct връзка ще бъде прекъсната, когато се свържете с устройството за безжичен дисплей. Желаете ли да продължите?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Нестабилна връзка</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Текущата връзка на безжичния дисплей не е стабилна.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Текущата връзка на безжичния дисплей не е стабилна, моля, опитайте да се приближите до устройството за дисплей.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Повторно свързване</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Връзката с безжичния дисплей е прекъсната. Желаете ли да се свържете отново?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Връзката с безжичния дисплей е прекъсната.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">Открита е друга WPS сесия. Моля, опитайте отново малко по-късно.</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">Телефонът временно ще прекъсне връзката с Wi-Fi, докато е свързан с <xliff:g id="device_name">%1$s</xliff:g> (само ако честотата на канала и ID на текущите точки за достъп до Wi-Fi се сменят на <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Безжичният дисплей и Wi-Fi са включени.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">Мултимедийният звук не се възпроизвежда от слушалките.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">Промяната на резолюцията автоматично ще възстанови връзката с безжичния дисплей.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">Не напомняй отново.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Текущата Wi-Fi точка за достъп може да повлияе на качеството на безжичния дисплей.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">Изчакване на покани за свързване от други устройства.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">иска да изгради връзка с вас.</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">Изграждане на връзка.</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">Свързано към Wi-Fi мрежа <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Връзката с Wi-Fi мрежа <xliff:g id="wifi_ap_name">%1$s</xliff:g> е прекъсната.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Конфликт на канали</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Current Wi-Fi network can\’t coexist with cast screen connection.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">SD картата е готова</string>
+    <string name="sdcard_select_default_path">Искате ли да промените диска за запис по подразбиране?</string>
+    <string name="sdcard_default_path_change">Дискът за запис по подразбиране е променен.</string>
+    <string name="usb_storage_ready_title">Външната USB памет е готова</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Слушалките ви не са съвместими с телефона. Моля, опитайте с други</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">Свързан като cdrom с автоматично възпроизвеждане</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">Свързан е HDMI кабел</string>
+    <string name="hdmi_notification_content">Кликнете, за да конфигурирате HDMI</string>
+    <string name="hdmi_hdvideo_toast">HDMI не може да възпроизвежда 4K видео, връзката ще бъде прекъсната.</string>
+    <string name="hdmi_mutex_call_content">Съжаляваме, HDMI е спрян поради текущо телефонно обаждане.</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Аудио изход</string>
+    <string name="hdmi_audio_output_stereo">Стерео</string>
+    <string name="hdmi_audio_output_multi_channel">Мулти канал</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Само връзка за данни</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">LTE мрежата не е налична.</string>
+    <string name="Suggest_To_Change_USIM">Предлагане на смяна на 4G SIM карта.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Избор на акаунт по подразбиране</string>
+    <string name="account_always_ask_title">Първо питане</string>
+    <string name="other_accounts">Други акаунти</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">забранено</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">Неуспешно възпроизвеждане на аудио.</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"Това видео не се поддържа."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Потвърждаване"</string>
+    <string name="save_password_message">"Искате ли браузърът да запомни тази парола?"</string>
+    <string name="save_password_notnow">"Не сега"</string>
+    <string name="save_password_remember">"Запомняне"</string>
+    <string name="save_password_never">"Никога"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">събуждане на таблета</string>
+    <string name="permlab_wake_device_sensorhub" product="default">събуждане на телефона</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Позволява на приложението да събужда таблета, когато той е в режим на заспиване, чрез сензорите.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Позволява на приложението да събужда телефона, когато той е в режим на заспиване, чрез сензорите.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">В момента сте в международен роуминг, мобилните данни са включени, моля, имайте предвид местните такси.</string>
+    <string name="known">"Знам"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">икона на лого на приложение</string>
+    <string name="close">затваряне на приложение</string>   
+    <string name="maximum">максимизиране на приложение</string>
+    <string name="minimize">минимизиране на приложение</string>
+    <string name="drag">плъзгане на размера на прозорец на приложение</string> 
+    <string name="gallery_camera_mutex">Не можете да използвате „Галерия“, „Камера“ или „Видеоплейър“ едновременно</string> 
+    <string name="mw_max_size_string">Максимум <xliff:g id="number">%d</xliff:g> плаващи прозореца</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">OMAPI терминал на системата</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">Приложение с това разрешение показва, че то е OMAPI терминал на системата.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">Свързване на OMAPI терминал</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">Приложение с това разрешение може да се свързва с OMAPI терминалите на системата. Би трябвало само SmartcardService да го използва.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">иницииране на повиквания с няколко страни</string>
+    <string name="permdesc_cta_conference_call">Позволява на приложението да инициира повиквания с няколко страни. Това може да доведе до неочаквани разходи. Злонамерени приложения могат да ви струват пари, като инициират повиквания с няколко страни без вашето потвърждение.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">пренасочване на повиквания</string>
+    <string name="permdesc_cta_call_forward">Позволява на приложението да пренасочва повиквания.</string>
+    <string name="permlab_cta_send_mms">изпращане на MMS</string>
+    <string name="permdesc_cta_send_mms">Позволява на приложението да изпраща MMS съобщения. Това може да доведе до неочаквани разходи. Злонамерени приложения могат да ви струват пари, като изпращат съобщения без вашето потвърждение.</string>
+    <string name="permlab_cta_send_email">изпращане на имейли</string>
+    <string name="permdesc_cta_send_email">Позволява на приложението да изпраща имейли. Това може да доведе до неочаквано потребление на клетъчни данни. Злонамерени приложения могат да ви струват пари, като изпращат имейли без вашето потвърждение.</string>
+    <string name="permgrouplab_email">Имейл</string>
+    <string name="permgroupdesc_email">изпращане на имейли</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission"><xliff:g id="permission_name">%2$s</xliff:g> е отказано на „<xliff:g id="err_ap_name">%1$s</xliff:g>“ Давате ли разрешението?</string>
+    <string name="aerr_application_permission_connectivity">„<xliff:g id="err_ap_name">%1$s</xliff:g>“ няма право на <xliff:g id="permission_name">%2$s</xliff:g>, можете да <xliff:g id="permission_name2">%2$s</xliff:g> от „Настройки“</string>
+    <string name="aerr_application_unknown_permission">„<xliff:g id="err_ap_name">%1$s</xliff:g>“ не може да се използва, моля, опитайте да дадете разрешения.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Настройки</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">изчистване на услуга за монтиране</string>
+    <string name="permdesc_mount_service_wipe">Позволява на приложението да изпраща излъчване за форматиране на паметта на телефона и SD картата.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">IPO Standby</string>
+</resources>

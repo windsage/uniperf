@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">Gagal pada sekatan panggilan.</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">Perkhidmatan yang diperuntukkan.</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">Kad SIM dekat</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">Membenarkan aplikasi untuk menerima
+      dan memproses mesej SMS Berdaftar DM. Sebarang aplikasi kecuali APLIKASI DM tidak
+      patut menggunakan ini</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Video</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Ruang Kosong"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">"Memuatkan…"</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"Menimbal %d%%..."</string>
+   <string name="media_controller_live">"Langsung"</string>
+   <string name="media_controller_playing">"Memainkan"</string>
+   <string name="media_controller_connecting">"Menyambung..."</string>
+
+   <string name="VideoView_error_text_bad_file">"Fail rosak, video ini tidak boleh dimainkan."</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"Tidak boleh menyambung kepada pelayan."</string>
+   <string name="VideoView_error_text_type_not_supported">"Jenis fail media tidak disokong."</string>
+   <string name="VideoView_error_text_drm_not_supported">"Dilindungi DRM, video ini tidak boleh dimainkan."</string>
+   <string name="VideoView_error_text_invalid_connection">"Sambungan yang tidak sah. (403 Dilarang)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">Kad SIM</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Padam</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">Mengesan...</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">Anda telah memasukkan PIN anda dengan salah sebanyak <xliff:g id="number">%1$d</xliff:g> kali.
+        \n\nSila cuba lagi dalam <xliff:g id="number">%2$d</xliff:g> saat.</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">Anda telah memasukkan kata laluan anda dengan salah sebanyak <xliff:g id="number">%1$d</xliff:g> kali.
+        \n\nSila cuba lagi dalam <xliff:g id="number">%2$d</xliff:g> saat.</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Simpanan dalaman berjalan keluar, permohonan itu telah berhenti. Sila kosongkan sedikit ruang dan cuba sekali lagi.</string>
+    <string name="aerr_process_lowstorage">Simpanan dalaman berjalan keluar, proses tersebut telah berhenti. Sila kosongkan sedikit ruang dan cuba sekali lagi.</string>
+    <string name="low_internal_storage_view_title">Simpanan dalaman yang kehabisan</string>
+    <string name="low_storage_warning_message">Sila kosongkan sedikit ruang, atau sesetengah aplikasi dan fungsi sistem mungkin tidak berfungsi baik.</string>
+    <string name="deleteMails">Menghapuskan e-mel</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Status perlindungan:</string>
+    <string name="drm_can_forward">Boleh dimajukan.</string>
+    <string name="drm_can_not_forward">Tidak dapat dimajukan.</string>
+    <string name="drm_no_limitation">Tiada had.</string>
+    <string name="drm_no_license">Tiada lesen DRM yang disediakan.</string>
+    <string name="drm_begin">Mula:</string>
+    <string name="drm_end">Tamat:</string>
+    <string name="drm_use_left">Kiraan kiri:</string>
+    <string name="drm_protectioninfo_renew">Memperbaharui</string>
+    <string name="drm_protectioninfo_title">Perlindungan maklumat</string>
+    <string name="drm_licenseacquisition_title">Perolehan lesen DRM</string>
+    <string name="drm_licenseacquisition_message">%1$s telah tiada lesen DRM yang disediakan. Anda boleh menekan butang "Renew" untuk memperolehi lesen DRM.</string>
+    <string name="drm_toast_license_expired">DRM lesen telah tamat tempoh.</string>
+    <string name="drm_forwardforbidden_title">Ke hadapan dilarang</string>
+    <string name="drm_forwardforbidden_message">Sesetengah fail terlindung tidak dapat dimajukan.</string>
+    <string name="drm_license_install_success">Pemasangan lesen DRM telah berjaya.</string>
+    <string name="drm_license_install_fail">Pemasangan lesen DRM gagal.</string>
+    <string name="drm_secure_timer_title">Tidak sah DRM selamat jam</string>
+    <string name="drm_secure_timer_message">Anda tidak boleh menggunakan fail dilindungi DRM. Sila pastikan sambungan data.</string>
+    <string name="drm_consume_title">Mengambil hak DRM</string>
+    <string name="drm_consume_message">Tindakan anda akan mengambil hak DRM.</string>
+
+    <string name="drm_first_time_use">Ini adalah penggunaan masa yang pertama.</string>
+    <string name="drm_use_now">Menggunakannya sekarang?</string>
+    <string name="drm_consume_interval">Fail ini boleh didapati dalam %1$s selepas anda mula menggunakannya.</string>
+    <string name="drm_effective_duration">Tempoh berkesan:</string>
+    <string name="drm_expire_dialog_future">Tempoh sah:</string>
+    <string name="validity_period">"Kesahan:"</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Mod kapal terbang di</string>
+    <string name="confirm_flight_mode_msg">Untuk menggunakan nombor, mula-mula mematikan Mod kapal terbang.</string>
+    <string name="confirm_radio_title">SIM off</string>
+    <string name="confirm_radio_msg">Untuk menggunakan nombor, mula-mula menghidupkan ia.</string>
+    <string name="confirm_flight_mode_radio_title">Mod kapal terbang pada dan SIM off</string>
+    <string name="confirm_flight_mode_radio_msg">Untuk menggunakan nombor, mula-mula mematikan Mod kapal terbang dan menghidupkan SIM.</string>
+    <string name="confirm_unlock_title">SIM terkunci</string>
+    <string name="confirm_unlock_msg">Untuk menggunakan kad SIM, mula-mula Buka.</string>
+    <string name="confirm_roaming_title">Perantauan amaran</string>
+    <string name="confirm_roaming_msg">Kad SIM perantauan. Terus menggunakannya?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">China Telecom VoLTE and call services unavailable currently.Turn VoLTE OFF?</string>
+
+    <string name="confirm_button_ok">OK</string>
+    <string name="confirm_button_cancel">Batal</string>
+    <string name="confirm_button_unlock">"Buka kunci"</string>
+    <string name="confirm_button_turn_off">"Matikan"</string>
+    <string name="confirm_button_turn_on">"Hidupkan"</string>
+    <string name="confirm_button_yes">Ya</string>
+    <string name="confirm_button_no">Tidak</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Mod kapal terbang pada dan UIM off</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">Untuk menggunakan nombor, mula-mula mematikan Mod kapal terbang dan pasang di UIM.</string>
+    <string name="confirm_radio_title_UIM">UIM off</string>
+    <string name="confirm_radio_msg_UIM">Untuk menggunakan nombor, mula-mula menghidupkan ia.</string>
+    <string name="confirm_unlock_title_UIM">UIM yang dikunci</string>
+    <string name="confirm_unlock_msg_UIM">Untuk menggunakan Kad UIM, mula-mula Buka.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Mesej</string>
+    <string name="url_dialog_choice_message">Ia akan membuka pelayar, terus?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">Sandarkan mel dan melepaskan stroage</string>
+
+    <string name="storage_withsd">Storan telefon itu tidak mempunyai ruang yang cukup. Sila lepaskan beberapa simpanan atau menukar cakera tulis lalai dalam tetapan.</string>
+    <string name="storage_withoutsd">Storan telefon itu tidak mempunyai ruang yang cukup. Sila lepaskan beberapa simpanan atau masukkan kad SD.</string>
+    <string name="storage_sd">Kad SD tidak mempunyai ruang yang cukup. Sila lepaskan  beberapa simpanan atau menukar cakera tulis lalai dalam tetapan.</string>
+    <string name="usb_ums_notification_title">Berkaitan sebagai storan USB</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Caj USB sahaja</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">Gagal mendapat GPS yang disediakan masa</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot">Sambungan <xliff:g id="connected">%1$d</xliff:g>, <xliff:g id="blocked">%2$d</xliff:g> disekat</string>
+    <string name="tethered_notification_message_bandwidth_set">Lebar jalur yang ditetapkan</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">"Tengah malam"</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">Lalai</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">Slaid kanan untuk memberhentikan</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">Slaid kiri untuk tidur sekejap</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">Slaid sehingga untuk memberhentikan</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">Slaid ke tunda</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Tekan pada warna untuk memohon</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">HDMI akan dimatikan apabila anda menghidupkan paparan tanpa wayar. Adakah anda mahu meneruskan?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">Paparan tanpa wayar akan dimatikan apabila anda menghidupkan HDMI. Adakah anda mahu meneruskan?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">Sambungan internet tanpa wayar secara langsung semasa akan terputus apabila anda menyambung ke peranti wayarles paparan. Adakah anda mahu meneruskan?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Sambungan tidak stabil</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Sambungan semasa paparan wayarles adalah tidak stabil.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Sambungan wayarles paparan semasa tidak stabil, cuba untuk mendapatkan lebih dekat kepada peranti paparan.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Sambung semula</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Televisyen memaparkan putus sambungan. Adakah anda mahu menyambung semula?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Paparan tanpa wayar yang terputus.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">"Sesi WPS lain dikesan. Sila cuba lagi dalam beberapa minit."</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">Telefon sementara putus dari Wi-Fi manakala it ini disambungkan ke <xliff:g id="device_name">%1$s</xliff:g>(hanya jika menukar saluran band dan ID titik capaian Wi-Fi semasa kepada <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Paparan wayarles dan internet tanpa wayar akan dipasang.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">Multimedia won bunyi \'t memainkan dari set kepala anda.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">Resolusi perubahan akan menyambung tanpa wayar paparan secara automatik.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">Jangan Ingatkan lagi.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Semasa Wi-Fi AP boleh menjejaskan kualiti paparan televisyen.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">Menunggu sambungan jemputan daripada peranti lain.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">ingin membina hubungan dengan anda.</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">Sambungan bangunan.</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">Disambungkan kepada rangkaian Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Rangkaian Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g> diputuskan.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Confliction saluran</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Current Wi-Fi network can\’t coexist with cast screen connection.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">Kad SD sedia</string>
+    <string name="sdcard_select_default_path">Adakah anda mahu menukar cakera tulis lalai?</string>
+    <string name="sdcard_default_path_change">Lalai tulis cakera telah ditukar.</string>
+    <string name="usb_storage_ready_title">Storan USB luar sedia</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Telinga anda tidak serasi dengan Phone.Please yang cuba orang-orang lain</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">Berkaitan sebagai satu cdrom autojalan</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">Kabel HDMI yang bersambung</string>
+    <string name="hdmi_notification_content">Klik untuk mengkonfigurasi HDMI</string>
+    <string name="hdmi_hdvideo_toast">HDMI tidak boleh memainkan video 4K, sambungan akan terganggu.</string>
+    <string name="hdmi_mutex_call_content">Maaf, HDMI telah berhenti kerana semasa panggilan telefon.</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Audio output</string>
+    <string name="hdmi_audio_output_stereo">Stereo</string>
+    <string name="hdmi_audio_output_multi_channel">Berbilang saluran</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Sambungan data hanya</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">Rangkaian LTE tidak disediakan.</string>
+    <string name="Suggest_To_Change_USIM">Mencadangkan untuk menukar kad SIM 4G.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Pilihan akaun lalai</string>
+    <string name="account_always_ask_title">"Tanya dahulu"</string>
+    <string name="other_accounts">Akaun lain</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">dilarang</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">Gagal untuk memainkan audio.</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"Video ini tidak disokong."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Sahkan"</string>
+    <string name="save_password_message">"Adakah anda mahu pelayar mengingati kata laluan ini?"</string>
+    <string name="save_password_notnow">"Bukan sekarang"</string>
+    <string name="save_password_remember">"Ingat"</string>
+    <string name="save_password_never">"Jangan sekali-kali"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">bangun tablet</string>
+    <string name="permlab_wake_device_sensorhub" product="default">bangun telefon</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Membenarkan apl untuk jaga tablet apabila menggantung dalam mod melalui hab sensor.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Membenarkan apl untuk jaga telefon apabila ia digantung dalam mod melalui hab sensor.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">Anda sedang berada di perantauan antarabangsa, data mudah alih dihidupkan, Sila ambil perhatian bahawa tempatan caj.</string>
+    <string name="known">"Saya Tahu"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">Permohonan logo ikon</string>
+    <string name="close">tutup permohonan</string>   
+    <string name="maximum">maksimum permohonan</string>
+    <string name="minimize">mengurangkan permohonan</string>
+    <string name="drag">Seret saiz tetingkap permohonan</string> 
+    <string name="gallery_camera_mutex">Tidak boleh menggunakan Galeri, kamera atau Video Player dalam masa yang sama</string> 
+    <string name="mw_max_size_string">Maksimum <xliff:g id="number">%d</xliff:g> terapung windows</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">OMAPI sistem Terminal</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">Apl dengan kebenaran ini menunjukkan bahawa ia adalah Terminal OMAPI sistem.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">Mengikat OMAPI Terminal</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">Apl dengan kebenaran ini mampu mengikat System\'s OMAPI terminal. SmartcardService hanya perlu menggunakannya.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">memulakan panggilan berbilang parti</string>
+    <string name="permdesc_cta_conference_call">Membolehkan aplikasi untuk memulakan panggilan berbilang parti. Ini boleh mengakibatkan caj-caj yang tidak dijangka. Aplikasi berniat jahat mungkin kos anda wang dengan memulakan panggilan berbilang parti tanpa pengesahan anda.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">pemajuan panggilan</string>
+    <string name="permdesc_cta_call_forward">Membenarkan aplikasi untuk memajukan panggilan.</string>
+    <string name="permlab_cta_send_mms">"Hantar MMS"</string>
+    <string name="permdesc_cta_send_mms">Membolehkan aplikasi ini untuk menghantar mesej MMS. Ini boleh mengakibatkan caj-caj yang tidak dijangka. Aplikasi berniat jahat mungkin kos anda wang dengan menghantar mesej tanpa pengesahan anda.</string>
+    <string name="permlab_cta_send_email">menghantar e-mel</string>
+    <string name="permdesc_cta_send_email">Membenarkan apl untuk menghantar e-mel. Ini boleh mengakibatkan pengambilan data selular yang tidak dijangka. Aplikasi berniat jahat mungkin kos anda wang dengan menghantar e-mel tanpa pengesahan anda.</string>
+    <string name="permgrouplab_email">"E-mel"</string>
+    <string name="permgroupdesc_email">menghantar e-mel</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" dinafikan <xliff:g id="permission_name">%2$s</xliff:g>. Membenarkan kebenaran?</string>
+    <string name="aerr_application_permission_connectivity">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" tidak boleh <xliff:g id="permission_name">%2$s</xliff:g>, anda boleh <xliff:g id="permission_name2">%2$s</xliff:g> dalam \"Tetapan\"</string>
+    <string name="aerr_application_unknown_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" tidak boleh digunakan, sila cuba untuk membenarkan kebenaran.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Tetapan</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">kosongkan storan</string>
+    <string name="permdesc_mount_service_wipe">Membenarkan aplikasi menghantar siaran untuk memformatkan storan telefon dan Kad SD.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">IPO Bersedia</string>
+</resources>

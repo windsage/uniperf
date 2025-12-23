@@ -1,0 +1,52 @@
+
+cc_library_headers {
+
+    name: "MemHal_client_system_headers",
+
+    system_ext_specific: true,
+
+    export_include_dirs: [
+         ".",
+    ],
+}
+cc_library_shared {
+
+    srcs: [
+        "client.cpp",
+    ],
+
+    header_libs: [
+        "libcutils_headers",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libutils",
+        "libbinder_ndk",
+        "vendor.qti.MemHal-V1-ndk",
+    ],
+
+    cflags: [
+        "-DCLIENT",
+        "-g0",
+        "-Wall",
+        "-Wno-unused-variable",
+        "-Wno-unused-parameter",
+        "-Wno-unused-function",
+        "-DVENDOR_DIR=\"/vendor/etc\"",
+        "-DQC_DEBUG=0",
+        "-Wextra",
+        "-Werror",
+    ],
+
+    cppflags: [
+        "-fexceptions",
+    ],
+
+    name: "libqti-MemHal-client-system",
+    owner: "qti",
+    system_ext_specific: true,
+}
+

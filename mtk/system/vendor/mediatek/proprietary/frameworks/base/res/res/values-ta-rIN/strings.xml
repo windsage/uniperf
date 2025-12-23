@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">அழைப்பு தடுப்பு தோல்வியடையும்</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">சேவை ஒதுக்கப்படவில்லை .</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">ஆன்ட்ராய்டு1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">சிம் கார்டு நெருங்கிய</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">DM பதிவு SMS செய்திகளைப்
+ பெற மற்றும் செயற்படுத்த, செயலியை அனுமதிக்கிறது. DM செயலி தவிர வேறு செயலி எதுவும் இதைப்
+ பயன்படுத்தக்கூடாது</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">வீடியோ</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"காலி இடம்"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">ஏற்றுகிறது…</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"இடையகமாக்குகிறது %d%%..."</string>
+   <string name="media_controller_live">"நேரலை"</string>
+   <string name="media_controller_playing">"இயக்குகிறது"</string>
+   <string name="media_controller_connecting">"இணைத்தல்..."</string>
+
+   <string name="VideoView_error_text_bad_file">"மோசமான கோப்பு, இந்த வீடியோவை இயக்க முடியாது."</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"சேவையக்த்தில் இணைக்க முடியாது."</string>
+   <string name="VideoView_error_text_type_not_supported">"மீடியா கோப்பு வகை ஆதரிக்கவில்லை."</string>
+   <string name="VideoView_error_text_drm_not_supported">"DRM பாதுகாத்தது, இந்த வீடியோவை இயக்க முடியாது."</string>
+   <string name="VideoView_error_text_invalid_connection">"செல்லாத இணைப்பு. (403 தடுக்கப்பட்டது)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">புதிய சிம்</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">நீக்கு</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">கண்டறிகிறது …</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">உங்கள் PIN-ஐ <xliff:g id="number">%1$d</xliff:g> முறை தவறாக உள்ளிட்டுள்ளீர்கள்.
+        \n\n<xliff:g id="number">%2$d</xliff:g> நொடிகளில் மீண்டும் முயற்சியுங்கள்.</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">உங்கள் கடவுச்சொல்லை <xliff:g id="number">%1$d</xliff:g> முறை தவறாக உள்ளிட்டுள்ளீர்கள்.
+        \n\n<xliff:g id="number">%2$d</xliff:g> நொடிகளில் மீண்டும் முயற்சியுங்கள்.</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">உட்புற சேமிப்பு வெளியே இயங்கும், விண்ணப்ப நிறுத்தப்பட்டது. சில இடத்தை விடுவிக்க , மீண்டும் முயற்சிக்கவும் .</string>
+    <string name="aerr_process_lowstorage">உட்புற சேமிப்பு வெளியே இயங்கும், பணி நிறுத்தப்பட்டது . சில இடத்தை விடுவிக்க , மீண்டும் முயற்சிக்கவும் .</string>
+    <string name="low_internal_storage_view_title">வெளியே இயங்கும் உட்புற சேமிப்பு</string>
+    <string name="low_storage_warning_message">சில இடத்தில் , அல்லது சில பயன்பாடுகள் வரை இலவச மற்றும் கணினி செயல்பாடுகளை சரியாக வேலை செய்யாமல் இருக்கலாம் கொள்ளவும். மீண்டும் தயவு செய்து உள்ளீடு</string>
+    <string name="deleteMails">அஞ்சல்கள் நீக்கு</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">பாதுகாப்பு நிலை:</string>
+    <string name="drm_can_forward">அனுப்பப்படும்</string>
+    <string name="drm_can_not_forward">முன்னனுப்ப முடியவில்லை</string>
+    <string name="drm_no_limitation">எல்லை இல்லை .</string>
+    <string name="drm_no_license">இல்லை கிடைக்க DRM உரிமத்தை .</string>
+    <string name="drm_begin">தொடங்குங்கள்:</string>
+    <string name="drm_end">முடிவு :</string>
+    <string name="drm_use_left">விட்டு எண்ணிக்கை:</string>
+    <string name="drm_protectioninfo_renew">புதுப்பிக்க</string>
+    <string name="drm_protectioninfo_title">பாதுகாப்பு தகவல்</string>
+    <string name="drm_licenseacquisition_title">DRM உரிமத்தை கையகப்படுத்துதல்</string>
+    <string name="drm_licenseacquisition_message">%1$s கிடைக்க DRM உரிமத்தை உள்ளது. நீங்கள் அழுத்த முடியும் DRM உரிமத்தை பெறுவதற்கு பொத்தானை " புதுப்பித்தல்" .</string>
+    <string name="drm_toast_license_expired">DRM உரிமத்தை காலாவதியானது.</string>
+    <string name="drm_forwardforbidden_title">முன்னோக்கி விலக்கப்பட்டவர்கள்</string>
+    <string name="drm_forwardforbidden_message">பாதுகாக்கப்பட்ட சில கோப்புகளை அனுப்பி வைக்கப்படும் முடியாது.</string>
+    <string name="drm_license_install_success">DRM உரிமத்தை நிறுவல் வெற்றி .</string>
+    <string name="drm_license_install_fail">DRM உரிமத்தை நிறுவல் தோல்வி அடைந்தது.</string>
+    <string name="drm_secure_timer_title">தவறான டிஆர்எம் பாதுகாப்பான கடிகாரம்</string>
+    <string name="drm_secure_timer_message">நீங்கள் டிஆர்எம் பாதுகாக்கப்பட்ட கோப்புகளை பயன்படுத்த முடியவில்லை. உறுதி தரவு இணைப்பு கிடைக்கும் உறுதி செய்து கொள்ளவும்.</string>
+    <string name="drm_consume_title">DRM உரிமைகள் கிடைக்கும்</string>
+    <string name="drm_consume_message">உங்கள் நடவடிக்கை DRM உரிமைகள் உட்கொள்ளும்.</string>
+
+    <string name="drm_first_time_use">இது முதன்முறைப் பயன்பாடு.</string>
+    <string name="drm_use_now">இதை இப்போது பயன்படுத்தவா?</string>
+    <string name="drm_consume_interval">இக்கோப்பு, நீங்கள் இதை துவக்கிய பிறகு %1$s-க்குள் கிடைக்கும்.</string>
+    <string name="drm_effective_duration">செயல்படு காலகட்டம்:</string>
+    <string name="drm_expire_dialog_future">செல்லுபடி காலம்:</string>
+    <string name="validity_period">"செல்லுபடியாகும் காலம்:"</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">விமானப் பயன்முறை</string>
+    <string name="confirm_flight_mode_msg">பயன்படுத்த, முதலில் விமானப் முறையில் அணைக்க .</string>
+    <string name="confirm_radio_title">ஆஃப் சிம்</string>
+    <string name="confirm_radio_msg">பயன்படுத்த, முதலில் இயக்க .</string>
+    <string name="confirm_flight_mode_radio_title">விமானப் பயன்முறை மற்றும் சிம்மிலிருந்து</string>
+    <string name="confirm_flight_mode_radio_msg">பயன்படுத்த, முதலில் விமானப் முறையில் அணைக்க மற்றும் சிம் திரும்ப .</string>
+    <string name="confirm_unlock_title">SIM பூட்டப்பட்டது</string>
+    <string name="confirm_unlock_msg">சிம் கார்டு பயன்படுத்த, முதலில் அதை திறக்க .</string>
+    <string name="confirm_roaming_title">ரோமிங் எச்சரிக்கை</string>
+    <string name="confirm_roaming_msg">சிம் கார்டு சுத்திட்டு இருக்கு . அதை தொடர்ந்து பயன்படுத்தலாம் ?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">சைனா டெலிகாம் VoLTE மற்றும் அழைப்புச் சேவைகள் தற்போது கிடைக்கவில்லை. VoLTE -ஐ ஆஃப் செய்யவா?</string>
+
+    <string name="confirm_button_ok">சரி</string>
+    <string name="confirm_button_cancel">ரத்துசெய்</string>
+    <string name="confirm_button_unlock">"திற"</string>
+    <string name="confirm_button_turn_off">"முடக்கு"</string>
+    <string name="confirm_button_turn_on">"இயக்கு"</string>
+    <string name="confirm_button_yes">ஆம்</string>
+    <string name="confirm_button_no">இல்லை</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">விமானம் முறையில் ஆன் மற்றும் ஆஃப் UIM</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">பயன்படுத்த, முதலில் விமானப் முறையில் அணைக்க மற்றும் UIM திரும்ப .</string>
+    <string name="confirm_radio_title_UIM">UIM முன்னுரிமை</string>
+    <string name="confirm_radio_msg_UIM">பயன்படுத்த, முதலில் இயக்க .</string>
+    <string name="confirm_unlock_title_UIM">UIM ஆஃப்</string>
+    <string name="confirm_unlock_msg_UIM">UIM அட்டை பயன்படுத்த, முதலில் அதை திறக்க .</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">செய்திகள்</string>
+    <string name="url_dialog_choice_message">அது , உலாவி திறக்க தொடரும்?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">காப்பு மின்னஞ்சல்கள், மற்றும் வெளியீடு சேமிப்பு</string>
+
+    <string name="storage_withsd">தொலைபேசி சேமிப்பு போதுமான இடைவெளி இல்லை. சில சேமிப்பு வெளியிட அல்லது அமைப்புகள் முன்னிருப்பாக எழுத வட்டு மாற்ற கொள்ளவும்.</string>
+    <string name="storage_withoutsd">தொலைபேசி சேமிப்பு போதுமான இடைவெளி இல்லை. சில சேமிப்பு வெளியிட அல்லது SD கார்டு நுழைக்க கொள்ளவும்.</string>
+    <string name="storage_sd">SD அட்டை போதுமான இடைவெளி இல்லை. சில சேமிப்பு வெளியிட அல்லது அமைப்புகள் முன்னிருப்பாக எழுத வட்டு மாற்ற கொள்ளவும்.</string>
+    <string name="usb_ums_notification_title">USB சேமிப்பு என இணைக்கப்பட்டார்</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">யுஎஸ்பி பொறுப்பு மட்டும்</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">ஜிபிஎஸ் வழங்கப்பட்ட நேரம் பெறுவதில் தோல்வி</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> இணைக்கப்பட்ட ,<xliff:g id="blocked">%2$d</xliff:g> தடுக்கப்பட்டது</string>
+    <string name="tethered_notification_message_bandwidth_set">அலைவரிசை அமைக்கப்படுகிறது</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">"நள்ளிரவு"</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">இயல்புநிலை</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">பதவி நீக்கம் செய்ய வலது ஸ்லைடு</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">படவில்லை தூங்கினால் விட்டு</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">பதவி நீக்கம் செய்ய வரை சரிய</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">உறக்கநிலையில் வைக்க கீழே இழுக்கவும்</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">கலர் பிரஸ் விண்ணப்பிக்க</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">நீங்கள் வயர்லெஸ் காட்சி ஆன் போது , HDMI அணைக்கப்பட்டு . நீங்கள் தொடர விரும்புகிறீர்களா ?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">நீங்கள் HDMI ஆன் போது வயர்லெஸ் காட்சி அணைக்கப்பட்டு . நீங்கள் தொடர விரும்புகிறீர்களா ?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">நீங்கள் வயர்லெஸ் காட்சி சாதனம் இணைக்க போது தற்போதைய Wi-Fi நேரடி இணைப்பு துண்டிக்கப்படும். நீங்கள் தொடர விரும்புகிறீர்களா ?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">நிலையற்ற இணைப்பு</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">வயர்லெஸ் காட்சி தற்போதைய இணைப்பு நிலையாக இல்லை.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">வயர்லெஸ் காட்சி தற்போதைய இணைப்பு நிலையான அல்ல, உங்கள் காட்சி சாதனம் நெருக்கமாக பெற முயற்சி செய்யுங்கள்.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">மீண்டும் இணை</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">வயர்லெஸ் காட்சி துண்டிக்க . நீங்கள் மீண்டும் இணைக்க வேண்டும் என்று நீங்கள் விரும்புகிறீர்களா?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">வயர்லெஸ் காட்சி துண்டிக்கப்பட்டது.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">"இன்னொரு WPS அமர்வு கண்டறியப்பட்டது. சில நிமிடங்களுக்குப் பிறகு மீண்டும் முயற்சிக்கவும்."</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">அது இணைக்கப்பட்டிருக்கும் போது தொலைபேசி தற்காலிகமாக , Wi-Fi துண்டிக்கப்படும்<xliff:g id="device_name">%1$s</xliff:g>  ( மட்டுமே சேனல் இசைக்குழு மற்றும் தற்போதைய வைஃபை அணுகல் புள்ளிகள் ஐடி மாற்றுவதன் என்றால் <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">வயர்லெஸ் காட்சி மற்றும் வைஃபைதிரும்பியது .</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">மற்றும் மல்டிமீடியா ஒலி உங்கள் ஹெட்செட் இருந்து விளையாட மாட்டேன்.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">தீர்மானம் மாற்றம் தானாக வயர்லெஸ் காட்சி மீண்டும்.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">மீண்டும் நினைவுபடுத்த வேண்டாம்.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">தற்போதைய Wi-Fi ஆந்திர வயர்லெஸ் காட்சி தரத்தை பாதிக்கலாம் .</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">பிற சாதனங்களில் இருந்து இணைப்பு அழைப்புகள் காத்திருக்கிறது.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">நீங்கள் தொடர்பாக கட்ட வேண்டும் .</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">கட்டிடம் இணைப்பு</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">வைஃபை நெட்வொர்க்கை இணைக்கப்பட்டுள்ளது <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">வைஃபை நெட்வொர்க்கை <xliff:g id="wifi_ap_name">%1$s</xliff:g>  துண்டிக்கப்பட்ட .</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">சேனல் நடக்குமோ</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Current Wi-Fi network can\’t coexist with cast screen connection.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">SD அட்டை தயாராக</string>
+    <string name="sdcard_select_default_path">நீங்கள் இயல்புநிலை எழுத வட்டு மாற்ற விரும்புகிறீர்களா?</string>
+    <string name="sdcard_default_path_change">இயல்புநிலை எழுத வட்டு மாற்றப்பட்டது</string>
+    <string name="usb_storage_ready_title">வெளிப்புற USB சேமிப்பு தயாராக</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">தொலைபேசியில் மற்றொரு தான் முயற்சி உங்கள் காதணிகள் ஏற்றதாக இல்லை</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">ஒரு தானியங்கு குறுவட்டு இணைக்கப்பட்டது</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">HDMI கேபிள் இணைக்கப்பட்டுள்ளது</string>
+    <string name="hdmi_notification_content">எச்டிஎம்ஐ வடிவமைக்கவும் க்ளிக் செய்யவும்</string>
+    <string name="hdmi_hdvideo_toast">எச்டிஎம்ஐ 4K வீடியோ விளையாட முடியாது , இணைப்பு தடைசெய்யப்பட்டது வேண்டும் .</string>
+    <string name="hdmi_mutex_call_content">மன்னிக்கவும், எச்டிஎம்ஐ காரணமாக தற்போதைய தொலைபேசி அழைப்பு நிறுத்தப்படவில்லை .</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">ஆடியோ வெளியீடு</string>
+    <string name="hdmi_audio_output_stereo">ஸ்டீரியோ</string>
+    <string name="hdmi_audio_output_multi_channel">மல்டி சேனல்</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">தரவு இணைப்பு மட்டும்</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">LTE நெட்வொர்க் கிடைக்கவில்லை.</string>
+    <string name="Suggest_To_Change_USIM">ஒரு 4G சிம் கார்டு மாற்ற பரிந்துரை .</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">இயல்புநிலை கணக்கு தேர்வு</string>
+    <string name="account_always_ask_title">"முதலில் கேள்"</string>
+    <string name="other_accounts">பிற கணக்குகள்</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">தடை</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">ஆடியோ இயக்குவதில் தோல்வி .</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"இந்த வீடியோ ஆதரிக்கப்படவில்லை."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"உறுதி செய்யவும்"</string>
+    <string name="save_password_message">"உலாவி இக்கடவுசொல்லை நினைவில்கொள்ள விரும்புகிறீர்களா?"</string>
+    <string name="save_password_notnow">"இப்போது வேண்டாம்"</string>
+    <string name="save_password_remember">"நினைவில்கொள்"</string>
+    <string name="save_password_never">"ஒருபோதுமில்லை"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">மாத்திரை எழுப்ப</string>
+    <string name="permlab_wake_device_sensorhub" product="default">எழுந்திருக்க தொலைபேசி</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">அது இருக்கும் போது சென்சார் மையமாக மூலம் முறையில் இடைநிறுத்த மாத்திரை இலவசம் உள்ளூர்த் தொலைபேசி , பயன்பாட்டை அனுமதிக்கிறது.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">அது இருக்கும் போது சென்சார் மையமாக மூலம் முறையில் இடைநிறுத்த தொலைபேசி இலவசம் உள்ளூர்த் தொலைபேசி , பயன்பாட்டை அனுமதிக்கிறது.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">தற்போது சர்வதேச ரோமிங்கில் இருக்கிறீர்கள், மொபைல் தரவு முடக்கப்பட்டது, உள்ளூர் கட்டணங்களைக் குறித்துக் கொள்ளுங்கள்.</string>
+    <string name="known">"எனக்கு தெரியும்"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">செயலி சின்னம் ஐகான்</string>
+    <string name="close">செயலியை மூடு</string>   
+    <string name="maximum">செயலியை பெரிதாக்கு</string>
+    <string name="minimize">செயலியை சிறிதாக்கு</string>
+    <string name="drag">செயலி சாளர அளவை இழு</string> 
+    <string name="gallery_camera_mutex">கேலரி, கேமரா அல்லது வீடியோ ப்ளேயரை ஒரே நேரத்தில் பயன்படுத்த முடியாது</string> 
+    <string name="mw_max_size_string">அதிகபட்சம் <xliff:g id="number">%d</xliff:g> மிதப்பு சாளரங்கள்</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">ஓஎம்ஏபிஐ அமைப்பு முனையத்தின்</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">இந்த அனுமதி பயன்பாட்டை அது அமைப்பு ஒரு ஓஎம்ஏபிஐ டெர்மினல் என்பதை குறிக்கிறது.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">ஓஎம்ஏபிஐ டெர்மினல் பிணைக்க</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">இந்த அனுமதி கணினியின் ஓஎம்ஏபிஐ டேர்மினல்சுக்கு பிணைக்க முடியாது . SmartcardService மட்டுமே அதை பயன்படுத்த வேண்டும்</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">பல-தரப்பு அழைப்புகளை துவங்கு</string>
+    <string name="permdesc_cta_conference_call">பல-தரப்பு அழைப்புகளைத் துவங்க செயலியை அனுமதிக்கிறது. இது, எதிர்பாரா கட்டணங்களை விளைவிக்கலாம். தீங்கான செயலிகள், உங்கள் ஒப்புதல் இல்லாமல் பல-தரப்பு அழைப்புகளைத் துவங்குவதன் மூலம் உங்கள் பணத்தை விரயமாக்கலாம்.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">அழைப்பு முன்னனுப்பல்</string>
+    <string name="permdesc_cta_call_forward">அழைப்பு முன்னனுப்பலுக்கு செயலியை அனுமதிக்கிறது.</string>
+    <string name="permlab_cta_send_mms">MMS அனுப்பு</string>
+    <string name="permdesc_cta_send_mms">MMS செய்திகளை அனுப்ப செயலியை அனுமதிக்கிறது. இது, எதிர்பாரா கட்டணங்களை விளைவிக்கலாம். தீங்கான செயலிகள், உங்கள் ஒப்புதல் இல்லாமல் செய்திகளை அனுப்புவதன் மூலம் உங்கள் பணத்தை விரயமாக்கலாம்.</string>
+    <string name="permlab_cta_send_email">மின்னஞ்சல்களை அனுப்பு</string>
+    <string name="permdesc_cta_send_email">மின்னஞ்சல்களை அனுப்ப செயலியை அனுமதிக்கிறது. இது, எதிர்பாரா செல்லுலார் தரவு நுகர்வை விளைவிக்கலாம். தீங்கான செயலிகள், உங்கள் ஒப்புதல் இல்லாமல் மின்னஞ்சல்களை அனுப்புவதன் மூலம் உங்கள் பணத்தை விரயமாக்கலாம்.</string>
+    <string name="permgrouplab_email">"மின்னஞ்சல்"</string>
+    <string name="permgroupdesc_email">மின்னஞ்சல்களை அனுப்பு</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\", <xliff:g id="permission_name">%2$s</xliff:g>-க்கு மறுத்துள்ளது. அனுமதியை அனுமதிக்கவா?</string>
+    <string name="aerr_application_permission_connectivity">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" -ஆல் <xliff:g id="permission_name">%2$s</xliff:g> முடியாது, நீங்கள் \"அமைப்புகள்\"-ல் <xliff:g id="permission_name2">%2$s</xliff:g> வழங்கலாம்</string>
+    <string name="aerr_application_unknown_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" -ஐ பயன்படுத்த முடியாது, அனுமதிகளை அனுமதிக்க முயற்சியுங்கள்.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">அமைப்புகள்</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">மவுண்ட் சர்வீஸ் வைப்</string>
+    <string name="permdesc_mount_service_wipe">ஃபோன் சேமிப்பகத்தையும் SD கார்டையும் ஃபார்மேட் செய்வதற்காக ஒளிபரப்பலை அனுப்ப செயலியை அனுமதிக்கிறது.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">IPO காத்திருப்பு</string>
+</resources>

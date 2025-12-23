@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">Thimu îkûrema gûtonya.</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">Huduma nîritwi.</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">Netiwaki ya gûtangasa ya China</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Androidi1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">Kandi ya laini îkûingwa</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">Îtîkîragîa aplikitioni kwamûkîra na kûthithia ntûmwa cia SMS cia rînjîsta ya DM. Aplikitioni cionthe tinga DM APP ibatere gûtumîra îjî</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Vindio</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Mwanya jûtîtumîrwi"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">Upakwa\u2026</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"Kûthondeka %d%%..."</string>
+   <string name="media_controller_live">"Îmwe kwa Îmwe"</string>
+   <string name="media_controller_playing">"Nîgûceetha"</string>
+   <string name="media_controller_connecting">"Kûgwatithania..."</string>
+
+   <string name="VideoView_error_text_bad_file">"Fairo înthûku, vindio îjî îtîûmba gûchetwa."</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"Îtiûmba kûgwatithania kîrî sava."</string>
+   <string name="VideoView_error_text_type_not_supported">"Mûthimba jwa fairo ya mindia jûtîîtîkîrîtue."</string>
+   <string name="VideoView_error_text_drm_not_supported">"Nîkarîtue ii DRM, vindio îjî îtîûmba gûchetwa."</string>
+   <string name="VideoView_error_text_invalid_connection">"Ûgwatithania bûtio. (403 Nîrigîrîtue)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">Laini înjerû</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Angura</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">Gûtega...</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">
+        Ûgûîkîra Pini îtîagîri maita <xliff:g id="number">%1$d</xliff:g>.
+        \n\nTafatharî geria kaîrî ndene ya <xliff:g id="number">%2$d</xliff:g> sekondi.
+    </string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">
+        Ûgûîkîra rîîtwa ria siri rîtîagîri maita <xliff:g id="number">%1$d</xliff:g>.
+        \n\nTafatharî geria kaîrî ndene ya <xliff:g id="number">%2$d</xliff:g> sekondi.
+    </string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Mwanya jwa sitoo jwa ndene ijûkûthîra, aplikitioni îkûrûngamua. Tafatharî eberia mwanya jûmwe na ûgerie kaîrî.</string>
+    <string name="aerr_process_lowstorage">Mwanya jwa sitoo jwa ndene ijûkûthîra, mûtaratara jûkûrungamua. Tafatharî eberia mwanya jûmwe na ûgerie kaîrî.</string>
+    <string name="low_internal_storage_view_title">Mwanya jwa sitoo ya ndene ijûkûthîra</string>
+    <string name="low_storage_warning_message">Tafatharî eberia mwanya jûmwe, kana aplikitioni imwe na ngûgî cia sistemu noîrege gwita ngûgî bwega.</string>
+    <string name="deleteMails">Tharia ntûmwa</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Hali ya ûkaria:</string>
+    <string name="drm_can_forward">Noûtûmwe kaîrî.</string>
+    <string name="drm_can_not_forward">Îtîûmba gûtumwa kaîrî.</string>
+    <string name="drm_no_limitation">Gûtî kîthimîri.</string>
+    <string name="drm_no_license">Gûtî laisensi îrio ya DRM.</string>
+    <string name="drm_begin">Mwambîrio:</string>
+    <string name="drm_end">Mûthia:</string>
+    <string name="drm_use_left">Matara jaria jatigere:</string>
+    <string name="drm_protectioninfo_renew">Erûia</string>
+    <string name="drm_protectioninfo_title">Maeleso ja ûkaria</string>
+    <string name="drm_licenseacquisition_title">Kûewa laisensi ya DRM</string>
+    <string name="drm_licenseacquisition_message">%1$s îtîna laisensi ya DRM. Noûinye mbatoni ya \"Erûia\" kûewa laisensi ya DRM.</string>
+    <string name="drm_toast_license_expired">Laisensi ya DRM îkûthûka.</string>
+    <string name="drm_forwardforbidden_title">Gûtûma kaîrî îkûrigîrîtue</string>
+    <string name="drm_forwardforbidden_message">Fairo imwe iria irigîritue îtîûmba gûtumwa.</string>
+    <string name="drm_license_install_success">Gûîkîra fairo ya DRM gûkûfaulu.</string>
+    <string name="drm_license_install_fail">Gûîkîra fairo ya DRM gûkûrema.</string>
+    <string name="drm_secure_timer_title">Thaa ya ûkaria ya DRM itio</string>
+    <string name="drm_secure_timer_message">Ûtîroomba gûtumîra fairo cia DRM ikaritue. Tafatharî hakikisha ûgwatithania bwa intaneti bûrio.</string>
+    <string name="drm_consume_title">Tumîra haki cia DRM</string>
+    <string name="drm_consume_message">Îthithia rîaku rîgatumîra haki cia DRM.</string>
+
+    <string name="drm_first_time_use">Kûû igûtumîra kwa mbere.</string>
+    <string name="drm_use_now">Ûmîtumîre nandî?</string>
+    <string name="drm_consume_interval">Fairo îjî îkeethîra îrio ndene ya %1$s nyuma ya kwambîria kûmîtumîra.</string>
+    <string name="drm_effective_duration">Îgîta ria gûtumîrwa:</string>
+    <string name="drm_expire_dialog_future">Kagîta ga gûitîkîrîka:</string>
+    <string name="validity_period">Yitikiiri mwanka:</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Hali ya ndegene nîgwetue</string>
+    <string name="confirm_flight_mode_msg">Gûtumîra namba, amba worie hali ya ndegene.</string>
+    <string name="confirm_radio_title">Laini îkûora</string>
+    <string name="confirm_radio_msg">Gûtumîra namba, amba ûmîrugûrîre.</string>
+    <string name="confirm_flight_mode_radio_title">Hali ya ndegene nîgwetue na laini nîori</string>
+    <string name="confirm_flight_mode_radio_msg">Gûtumîra namba, amba worie hali ya ndegene na ûrugûrîre laini.</string>
+    <string name="confirm_unlock_title">Laini nîingwi</string>
+    <string name="confirm_unlock_msg">Gûtumîra kandi ya laini, amba ûmîingûrîre.</string>
+    <string name="confirm_roaming_title">Onyo ya kûthîûrûka</string>
+    <string name="confirm_roaming_msg">Kandi ya laini nîkûthîûrûka. Wendelee kûmîtumîra?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">China Telecom VoLTE na huduma cia kûringa thimu itio nandî.Worie VoLTE?</string>
+
+    <string name="confirm_button_ok">SAWA</string>
+    <string name="confirm_button_cancel">Gitaria</string>
+    <string name="confirm_button_unlock">Ingûra</string>
+    <string name="confirm_button_turn_off">Oria</string>
+    <string name="confirm_button_turn_on">Rugûrîra</string>
+    <string name="confirm_button_yes">Ii</string>
+    <string name="confirm_button_no">Arî</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Hali ya ndegene nîgwetue na UIM nîoretue</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">Gûtumîra namba, amba worie hali ya ndegene na ûrugûrîre UIM.</string>
+    <string name="confirm_radio_title_UIM">UIM nîoretue</string>
+    <string name="confirm_radio_msg_UIM">Gûtumîra namba, amba ûmîrugûrîre.</string>
+    <string name="confirm_unlock_title_UIM">UIM nîingwi</string>
+    <string name="confirm_unlock_msg_UIM">Gûtumîra laini ya UIM, amba ûmîingûrîre.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Ntûmwa</string>
+    <string name="url_dialog_choice_message">Îkarugûra browsa, wendelee?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">Îka ntûmwa kûngî na weberie sitoo</string>
+
+    <string name="storage_withsd">Sitoo ya thimu îtîna mwanya jwa kung’ana. Tafatharî eberia sitoo imwe kana ûgarûre diski ya kûandîka ya kawainda kîrî mîseto.</string>
+    <string name="storage_withoutsd">Sitoo ya thimu îtîna mwanya jwa kung’ana. Tafatharî eberia sitoo imwe kana wîkîre kandi ya SD.</string>
+    <string name="storage_sd">Kandi ya SD îtîna mwanya jwa kûngana. Tafatharî eberia sitoo imwe kana ûgarûre diski ya kûandîka ya kawainda kîrî mîseto.</string>
+    <string name="usb_ums_notification_title">Îgwatithenue ja sitoo ya USB</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Chanji ya USB akî</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">Îkûremwa kwona thaa ya GPS iria iejenwe</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> nîgwatithenue, <xliff:g id="blocked">%2$d</xliff:g> nîingîrwi</string>
+    <string name="tethered_notification_message_bandwidth_set">Kîthimi kia intaneti igîkîrwi</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">Thaa thîta ûtukû</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">Kawainda</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">Tenderia ûrio kûrita</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">Tenderia ûmotho gûkîrîa</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">Tenderia îgûrû kûrita</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">Tenderia bwagaiti gûkîrîa</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Tonga rangi gûîkîra</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">HDMI îkoorua wagwatia ûgwatithania bûtîna waya. Winama nukwenda kuenderea?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">Wonania bûtîna waya bûkoorua warugûrîra HDMI. Winama nukwenda kuenderea?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">Ûgwatithania bwa thai bwa Wi-Fi Direct bûkagwatithanûkua wagwatithania na masini ya kwonania îtîna waya. Winama nukwenda kuenderea?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Ûgwatithania bûkûeba</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Ûgwatithania bwa thai bwa kionania gîtîna waya bûtîriki.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Ûgwatithania bwa thai bwa kionania gîtina waya bûtîriki, tafatharî îtaîta akuî na masini yaku ya kûonania.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Kûgwatithanua kaîrî</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Kûgwatithanukia kûonania gûtîna waya. Nûkwenda kûgwatithania kaîrî?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Kûonania gûtina waya gûkûgwatithanûkua.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">Gîpindi kingî kia WPS gîkwonwa. Tafatharî geria kaîrî nyuma ya ndaîka inkai.</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">Thimu îkagwatithanukua na Wi-Fi rîrîa îgwatithenue na <xliff:g id="device_name">%1$s</xliff:g> (tinga rîrîa akî ûkûgarûra mbandi ya chanelo na ID ya pointi cia ûkinyîri bwa Wi-Fi mwanka <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Kwonania gûtigûtumîra waya na Wi-Fi nîgwetue.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">Mûgambo jwa mindia inyingî jûtîcethera sipikene ciaku cia kîongo.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">Inya ya kugarûra îkagwatithania kwona gûtîna waya kîautomatiki.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">Ûkarikania kaîrî.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Wi-Fi AP ya thai noyaafekti ûthongi bwa kûonania îtîna waya.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">Nîeterete gwîtwa ii masini ingî igwatithania.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">Nîkwenda kûgîta ûgwatithania na ûgwe.</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">Kûgîta ûgwatithania.</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">Nîgwatithenue kîrî netiwaki ya Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Netiwaki ya Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g> îkûgwatithanûkua.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Nkûûcanio cia Chanelo</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Netiwaki ya Wi-Fi ya nandî îtîûmba gûtumîrwa amwe na ûgwatithania bwa kûonania kîoni.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">Kandi ya SD ii tayarî</string>
+    <string name="sdcard_select_default_path">Nûkwenda kûgarûra diski ya kûandîkîra ya kawainda?</string>
+    <string name="sdcard_default_path_change">Diski ya kûandîkîra ya kawainda îkûgarûka.</string>
+    <string name="usb_storage_ready_title">Sitoo ya oome ya USB ii tayarî</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Sipika ciaku cia matu îtîgwîtanîria na thimu. Tafatharî geria ingî</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">Îgwatithenue ja cd ya kiautomatiki</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">Waya ya HDMI îkûgwatithanua</string>
+    <string name="hdmi_notification_content">Inya gûseta HDMI</string>
+    <string name="hdmi_hdvideo_toast">HDMI îtîûmba gûcetha vindio ya 4K, ûgwatithania bûgatonyerwa.</string>
+    <string name="hdmi_mutex_call_content">Sori, HDMI îkûrûngama nîûntû bwa rwaria rwa thimu rwa thai.</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Utura kwa mugambo</string>
+    <string name="hdmi_audio_output_stereo">Ijîrî</string>
+    <string name="hdmi_audio_output_multi_channel">Chanelo inyingî</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Ûgwatithania bwa intaneti akî</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">Netiwaki ya LTE îtîo.</string>
+    <string name="Suggest_To_Change_USIM">Endekithia kûgarûra kandi ya laini ya 4G.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Gûtara akaunti kawainda</string>
+    <string name="account_always_ask_title">Ûria mbere</string>
+    <string name="other_accounts">Akaunti ingî</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">nîrigîrîtue</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">Îkûremwa gûchetha aundio.</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"Vindio îjî îtîtîkîrîtue."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Thibitisha"</string>
+    <string name="save_password_message">"Nûkwenda browsa îririkana rîîtwa rîrî ria siri?"</string>
+    <string name="save_password_notnow">"Tî thai"</string>
+    <string name="save_password_remember">"Ririkana"</string>
+    <string name="save_password_never">"Ûkaro"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">ûkîria tabuleti</string>
+    <string name="permlab_wake_device_sensorhub" product="default">Ûkîrîa thimu</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Îtîkîragîa app gûukîrîa tabuleti rîrîa iri kîrî hali ya kûlukîrîa gûkurukîra habu ya sensa.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Îtîkîragîa app gûukîrîa thimu rîrîa iri kîrî hali ya kûlukîrîa gûkurukîra habu ya sensa.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">Ûritumîra netiwaki ya kûthîûrûka kîmataifa, Intaneti ya Mobairo nîgwetue, tafatharî riikana marihi ja kawainda.</string>
+    <string name="known">"Inkûmenya"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">logo ya ikoni ya aplikationi</string>
+    <string name="close">Inga aplikationi</string>   
+    <string name="maximum">aplikationi inene</string>
+    <string name="minimize">nyiyia aplikationi</string>
+    <string name="drag">kuchia ûnene bwa ndirisha ya aplikationi</string> 
+    <string name="gallery_camera_mutex">Îtîûmba gûtumîra Ngaralî, Kamera kana Gîchethi kia Vindio oo rîmwe</string> 
+    <string name="mw_max_size_string">Ûnene bwa <xliff:g id="number">%d</xliff:g> ndirisha cia kûelea</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">Gîtuo kia OMAPI kia sistemu</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">App ina rûûtha rûrû îkwonania ii gîtuo kia OMAPI kia sistemu.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">Inga gîtuo kia OMAPI</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">App ina rûûtha rûrû noîinge sistemu cia gîtuo kia OMAPI. Huduma cia Kandi ya kînandî icio akî ibati kûmîtumîra.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">Ambîria thimu ya bîama bibingî</string>
+    <string name="permdesc_cta_conference_call">Îtîkîrîa app kwambîria thimu ya bîama bibingî. Ûju nogûtûme marihi jatîkwîrîgîrwi. App inthûku noikûrihie kwambîria thimu na bîama bingî ûtîtîkîrîtie.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">Kûndaivata thimu</string>
+    <string name="permdesc_cta_call_forward">Îtîkîrîa app kûndainvata thimu.</string>
+    <string name="permlab_cta_send_mms">Tûma MMS</string>
+    <string name="permdesc_cta_send_mms">Îtîkîragîa app gûtûma ntûmwa cia MMS. Ûju nogûtûme marihi jatîkwîrîgîrwi. App inthûku noikûrihie mbeca nîûntû bwa gûtûma ntûmwa ûtîtîkîrîtie.</string>
+    <string name="permlab_cta_send_email">Tûma email</string>
+    <string name="permdesc_cta_send_email">Îtîkîragîa app gûtûma email. Bûû nobûtûme ûtumîri bwa ndata bûtîgwirigîrwi. App inthûku noîkûrihie mbeca nîûntû bwa gûtûma email ûtîtîkîrîtie.</string>
+    <string name="permgrouplab_email">Imîru</string>
+    <string name="permgroupdesc_email">Tûma email</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" nîregerwi kîrî <xliff:g id="permission_name">%2$s</xliff:g>. Wîtîkîrîe rûûtha?</string>
+    <string name="aerr_application_permission_connectivity">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" îtîûmba <xliff:g id="permission_name">%2$s</xliff:g>, woomba <xliff:g id="permission_name2">%2$s</xliff:g> kîrî \"Mîseto\"</string>
+    <string name="aerr_application_unknown_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" îtîûmba gûtumîrwa, tafatharî geria gûîtîkîrîa ndûûtha.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Mîseto</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">Huduma cia gûîkîra</string>
+    <string name="permdesc_mount_service_wipe">Îtîkîragîa app gûtûma matangaso ja kûtharia sitoo ya thimu na kandi ya SD.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">Kurungama na weteera kwa IPO</string>
+</resources>

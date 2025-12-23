@@ -1,0 +1,35 @@
+java_library {
+    name: "mediatek-spm-sdk",
+    system_ext_specific: true,
+    installable: true,
+
+    srcs: [
+		"src/com/mediatek/smartplatform/*.java",
+		":smartplatform_aidl",
+    ],
+
+	libs: [
+    ],
+
+    aidl: {
+        include_dirs: [
+            "frameworks/native/aidl/gui",
+            "frameworks/av/camera/aidl",
+        ],
+        local_include_dirs: [
+            "src/",
+        ],
+    },
+
+}
+
+filegroup {
+    name: "smartplatform_aidl",
+    srcs: [
+        "src/com/mediatek/smartplatform/ICameraDeviceListener.aidl",
+        "src/com/mediatek/smartplatform/ICarCamDeviceUser.aidl",
+        "src/com/mediatek/smartplatform/ISmartPlatformEventListener.aidl",
+        "src/com/mediatek/smartplatform/ISmartPlatformService.aidl",
+		"src/com/mediatek/smartplatform/ISpmRecordListener.aidl",
+    ],
+}

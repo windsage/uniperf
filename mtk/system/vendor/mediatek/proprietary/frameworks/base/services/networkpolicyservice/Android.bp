@@ -1,0 +1,17 @@
+java_library {
+    name: "jxnetworkpolicyservice",
+    srcs: [
+        "java/**/*.java",
+    ],
+    libs: [
+        "services.core",
+        "mediatek-framework",
+        "mediatek-common",
+    ],
+    static_libs: [
+        "vendor.mediatek.hardware.nps.nos.fastswitch-V1-java",
+        "vendor.mediatek.hardware.netdagent-V1.0-java",
+        "vendor.mediatek.hardware.netdagent-V1-java",
+    ],
+    owner: "mtk",
+}

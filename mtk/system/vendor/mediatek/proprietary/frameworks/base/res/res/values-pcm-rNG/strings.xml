@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">E fail for Call Barring.</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">Service don set.</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">SIM card don lock</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">E allow app to get and handle DM Register SMS messages. No oda app except DM APP suppose use dis</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Video</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Free Space"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">E dey load\u2026</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"E dey load am %d%%…"</string>
+   <string name="media_controller_live">"Live"</string>
+   <string name="media_controller_playing">"E dey play"</string>
+   <string name="media_controller_connecting">"E dey connect…"</string>
+
+   <string name="VideoView_error_text_bad_file">"Video no fit play, file no correct"</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"E no fit connect to server."</string>
+   <string name="VideoView_error_text_type_not_supported">"Dis kind media file no dey work here"</string>
+   <string name="VideoView_error_text_drm_not_supported">"DRM don protect am, E no fit play this video."</string>
+   <string name="VideoView_error_text_invalid_connection">"Connection no dey. (403 Forbidden)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">New SIM</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Delete Am</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">E dey detect…</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">
+        You don put di wrong CODE <xliff:g id="number">%1$d</xliff:g> times.
+        \n\nTry am again after <xliff:g id="number">%2$d</xliff:g> seconds.
+    </string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">
+        You don put di wrong password <xliff:g id="number">%1$d</xliff:g> times.
+        \n\nTry am again after <xliff:g id="number">%2$d</xliff:g> seconds.
+    </string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Internal memory don dey full, dem don stop di process. Abeg, free some space den try am again.</string>
+    <string name="aerr_process_lowstorage">Internal memory don dey full, di process don stop. Abeg, free some space den try am again.</string>
+    <string name="low_internal_storage_view_title">Internal memory don dey full</string>
+    <string name="low_storage_warning_message">Abeg, free small space, or some apps and system fit no do well.</string>
+    <string name="deleteMails">Delete Mails</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Protection level:</string>
+    <string name="drm_can_forward">You fit forward am.</string>
+    <string name="drm_can_not_forward">You no fit forward am.</string>
+    <string name="drm_no_limitation">Limit no dey.</string>
+    <string name="drm_no_license">DRM license no dey.</string>
+    <string name="drm_begin">Begin:</string>
+    <string name="drm_end">End:</string>
+    <string name="drm_use_left">Count wey remain:</string>
+    <string name="drm_protectioninfo_renew">Renew am</string>
+    <string name="drm_protectioninfo_title">Protection Info</string>
+    <string name="drm_licenseacquisition_title">Get DRM License</string>
+    <string name="drm_licenseacquisition_message">%1$s no get DRM license. You fit Press “Renew” button make you collect DRM license.</string>
+    <string name="drm_toast_license_expired">DRM License don expire.</string>
+    <string name="drm_forwardforbidden_title">Dem No Allow Make You Forward Am</string>
+    <string name="drm_forwardforbidden_message">Di files wey dem guard no fit forward.</string>
+    <string name="drm_license_install_success">DRM License installation don set.</string>
+    <string name="drm_license_install_fail">DRM License installation don fail.</string>
+    <string name="drm_secure_timer_title">DRM secure clock no correct</string>
+    <string name="drm_secure_timer_message">You no fit use files wey DRM dey protect. Abeg make sure say data connection dey.</string>
+    <string name="drm_consume_title">Finish di DRM rights</string>
+    <string name="drm_consume_message">Di thing wey you dey do go finish DRM rights.</string>
+
+    <string name="drm_first_time_use">Na di first time wey you dey use am be dis.</string>
+    <string name="drm_use_now">You wan use am now?</string>
+    <string name="drm_consume_interval">Dis file go dey %1$s when you start to dey use am.</string>
+    <string name="drm_effective_duration">Time wey dey work:</string>
+    <string name="drm_expire_dialog_future">Di valid period:</string>
+    <string name="validity_period">How long e go last:</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Aeroplane mode dey on</string>
+    <string name="confirm_flight_mode_msg">You gats off aeroplane mode to use d numba.</string>
+    <string name="confirm_radio_title">SIM don off</string>
+    <string name="confirm_radio_msg">To use di numba, you gats on am.</string>
+    <string name="confirm_flight_mode_radio_title">Aeroplane mode dey on and SIM dey off</string>
+    <string name="confirm_flight_mode_radio_msg">You gats off aeroplane mode and on SIM before the numba go fit work.</string>
+    <string name="confirm_unlock_title">SIM don lock</string>
+    <string name="confirm_unlock_msg">If you wan use SIM, first thing na to unlock am.</string>
+    <string name="confirm_roaming_title">Roaming warning</string>
+    <string name="confirm_roaming_msg">Di SIM card dey Roam. You go still dey use am?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">China Telecom VoLTE and call services no dey available now. You wan OFF VoLTE?</string>
+
+    <string name="confirm_button_ok">OK</string>
+    <string name="confirm_button_cancel">Cancel Am</string>
+    <string name="confirm_button_unlock">Open am</string>
+    <string name="confirm_button_turn_off">Off am</string>
+    <string name="confirm_button_turn_on">On am</string>
+    <string name="confirm_button_yes">Yes</string>
+    <string name="confirm_button_no">No</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Aeroplane mode on and UIM off</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">You gats off aeroplane mode and on UIM before the numbea go fit work.</string>
+    <string name="confirm_radio_title_UIM">UIM don off</string>
+    <string name="confirm_radio_msg_UIM">To use di numba, you gats on am.</string>
+    <string name="confirm_unlock_title_UIM">UIM don lock</string>
+    <string name="confirm_unlock_msg_UIM">If you wan use UIM, first tin na to unlock am.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Messages Dem</string>
+    <string name="url_dialog_choice_message">E go open di browser, you wan continue?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">Keep mails one side and free space</string>
+
+    <string name="storage_withsd">Di fone memory no get space reach. Abeg free memory or change di \"original write disk\" in di settins.</string>
+    <string name="storage_withoutsd">Di fone memory no get space reach. Abeg free up space for memory or put Memory card.</string>
+    <string name="storage_sd">Memory card no get space. Abeg free memory or change di \"original write disk\" in di settins.</string>
+    <string name="usb_ums_notification_title">E don connect as USB memory</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Only USB Charge</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">E no fit get time from GPS</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> don connect, <xliff:g id="blocked">%2$d</xliff:g> don block</string>
+    <string name="tethered_notification_message_bandwidth_set">Bandwidth don set</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">Midnight</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">Normal Settins</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">Drag am go right to cancel</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">Drag am go left to delay</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">Drag am go up to cancel</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">Drag am down to delay</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Press color to use am</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">HDMI go off when you on wireless display. You wan continue?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">Wireless display go off when you on HDMI. You wan continue?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">Wi-Fi Direct wey dey now go disconnect if you join wireless display device. You wan continue?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Connection no stable</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Wireless display wey dey now no sure.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Wireless display wey dey now no sure, abeg move near your display device.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Connect Am Again</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Off wireless display. You wan connect again?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Wireless display don disconnect.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">Dem don see anoda WPS session. Try am again after small time.</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">For just small time, fone no go get Wi-Fi when e dey link to<xliff:g id="device_name">%1$s</xliff:g> (only if you dey switch channel band and ID for the Wi-Fi wey dey to <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Wireless display and Wi-Fi don on.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">Multimedia sound no go play from your headset.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">If you change resolution, e go connect your wireless display by itself.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">I no wan hear am again.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Di Wi-Fi AP wey dey now fit spoil wireless display quality.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">E dey wait for oda devices to send connection invite.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">e wan make una connect.</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">E dey set up connection.</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">E don connect to Wi-Fi network <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Wi-Fi network <xliff:g id="wifi_ap_name">%1$s</xliff:g> don disconnect.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Channel dey jam</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Wi-Fi network wey dey now no fit work with cast screen.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">Memory card don ready</string>
+    <string name="sdcard_select_default_path">You wan change di original write disk?</string>
+    <string name="sdcard_default_path_change">Default write disk don change.</string>
+    <string name="usb_storage_ready_title">External USB memory don ready</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Your earphones no fit work with di fone. Abeg try anoda one</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">E don join as cdrom wey dey run by itself</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">HDMI cable don connect</string>
+    <string name="hdmi_notification_content">Press to do settins for HDMI</string>
+    <string name="hdmi_hdvideo_toast">HDMI no fit play 4K video, connection go break.</string>
+    <string name="hdmi_mutex_call_content">Sorry, HDMI don stop because of fone call wey dey go on.</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Output for Audio</string>
+    <string name="hdmi_audio_output_stereo">Double sound</string>
+    <string name="hdmi_audio_output_multi_channel">Plenty Channels</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Na only data connection</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">LTE network no dey.</string>
+    <string name="Suggest_To_Change_USIM">Di advice na to get 4G SIM card.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Normal Account Selection</string>
+    <string name="account_always_ask_title">Ask first</string>
+    <string name="other_accounts">Oda Accounts Dem</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">dem ban am</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">E no gree play sound.</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"Dem no dey support dis video."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Confam"</string>
+    <string name="save_password_message">"You want make browser remember dis password?"</string>
+    <string name="save_password_notnow">"No be now"</string>
+    <string name="save_password_remember">"Keep am for mind"</string>
+    <string name="save_password_never">"Neva"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">wake di tablet up</string>
+    <string name="permlab_wake_device_sensorhub" product="default">wake di fone up</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Make the app fit wake the tablet when e dey sleep mode through sensor hub.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Make the app fit wake the fone when e dey sleep mode through sensor hub.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">As e be now, you dey roam internationally, your data dey on, remember say dem go charge you.</string>
+    <string name="known">"I Sabi"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">logo icon for application</string>
+    <string name="close">close app</string>   
+    <string name="maximum">make di app fill screen</string>
+    <string name="minimize">make di app small</string>
+    <string name="drag">drag di application window size</string> 
+    <string name="gallery_camera_mutex">You no fit use Gallery, Camera or Video Player for di same time</string> 
+    <string name="mw_max_size_string">Highest <xliff:g id="number">%d</xliff:g> floating windows don reach</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">OMAPI System Terminal</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">If app get dis kind permission, e mean say e be OMAPI Terminal.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">Join OMAPI Terminal</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">App wey get dis permission fit join to di System OMAPI Terminals. Na only SmartcardService suppose use am.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">start call wey plenty pipo dey inside</string>
+    <string name="permdesc_cta_conference_call">Allow di app to make call wey plenty pipo go dey inside. E fit cause spending wey you no expect. Bad belle apps fit spend your credit start call wey plenty pipo go dey without your go-ahead.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">call dey forward</string>
+    <string name="permdesc_cta_call_forward">App fit shift call to another line.</string>
+    <string name="permlab_cta_send_mms">send MMS</string>
+    <string name="permdesc_cta_send_mms">E allow di app to send MMS messages. E fit cause spending wey you no expect. Bad belle apps fit use your money by sending messages without your go-ahead.</string>
+    <string name="permlab_cta_send_email">send email dem</string>
+    <string name="permdesc_cta_send_email">E allow di app to send emails. E fit make your data finish when you no think am. Apps wey no good fit spend your credit send email without your permission.</string>
+    <string name="permgrouplab_email">Email</string>
+    <string name="permgroupdesc_email">send email dem</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" no dey allowed to <xliff:g id="permission_name">%2$s</xliff:g>. Allow di permission?</string>
+    <string name="aerr_application_permission_connectivity">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" no fit <xliff:g id="permission_name">%2$s</xliff:g>, you fit <xliff:g id="permission_name2">%2$s</xliff:g> for \"Settins\"</string>
+    <string name="aerr_application_unknown_permission">You no fit use \"<xliff:g id="err_ap_name">%1$s</xliff:g>\", abeg allow di permissions.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Settins</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">set up service wipe</string>
+    <string name="permdesc_mount_service_wipe">E allow app send message to format fone memory and memory card.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">IPO Standby</string>
+</resources>

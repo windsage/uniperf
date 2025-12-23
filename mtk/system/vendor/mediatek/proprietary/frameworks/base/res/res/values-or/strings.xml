@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">କଲ୍ ବ୍ୟାରିଂରେ ବିଫଳ।</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">ସେବା ବ୍ୟବସ୍ଥିତ ହୋଇଛି।</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">SIM କାର୍ଡ ବନ୍ଦ</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms"> ଏହି ଆପ୍ଲିକେସନ୍‌କୁ 
+       ଏବଂ  DM ରେଜିଷ୍ଟର୍ SMS ମେସେଜ ଗ୍ରହଣ କରିବା ପାଇଁ ଏବଂ ପ୍ରକ୍ରିୟାକରଣ କରିବା ପାଇଁ ଅନୁମତି ଦିଅନ୍ତୁ। DM APP ବ୍ୟତୀତ ଅନ୍ୟ କୌଣସି ଆପ୍ଲିକେସନ ଏହାକୁ
+      ବ୍ୟବହାର କରିବା ଅନୁଚିତ</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">ଭିଡିଓ</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">“ଖାଲି ସ୍ଥାନ”</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">ଲୋଡ ହେଉଛି\u2026</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"%d%% ବଫରିଙ୍ଗ୍ ହେଉଛି..."</string>
+   <string name="media_controller_live">"ଲାଇଭ୍"</string>
+   <string name="media_controller_playing">"ଚାଲୁ ଅଛି"</string>
+   <string name="media_controller_connecting">"ସଂଯୋଗ ହେଉଅଛି।.."</string>
+
+   <string name="VideoView_error_text_bad_file">"ଖରାପ ଫାଇଲ୍, ଏହି ଭିଡିଓ ଚାଲି ପାରିବ ନାହିଁ।"</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"ସର୍ଭର ସହିତ କନେକ୍ଟ ହୋଇ ପାରିବ ନାହିଁ।"</string>
+   <string name="VideoView_error_text_type_not_supported">"ମିଡିଆ ଫାଇଲ୍‌ଟି ସମର୍ଥନ କରୁନାହିଁ।"</string>
+   <string name="VideoView_error_text_drm_not_supported">"DRM ସୁରକ୍ଷିତ, ଏହି ଭିଡିଓ ଚାଲି ପାରିବ ନାହିଁ।"</string>
+   <string name="VideoView_error_text_invalid_connection">"ଅବୈଧ ସଂଯୋଗ। (403 ନିଷେଧ)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">ନୂଆ SIM</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">ବିଲୋପ କରନ୍ତୁ</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">ଠାବ କରୁଛି...</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">ଆପଣ  <xliff:g id="number">%1$d</xliff:g> ଥର ଆପଣଙ୍କର PIN ଭୁଲ୍ ଭାବରେ ଲେଖିଛନ୍ତି।
+        \n\nଦୟାକରି <xliff:g id="number">%2$d</xliff:g> ସେକେଣ୍ଡରେ ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">ଆପଣ  <xliff:g id="number">%1$d</xliff:g> ଥର ଆପଣଙ୍କର ପାସୱାର୍ଡ ଭୁଲ୍ ଭାବରେ ଲେଖିଛନ୍ତି।
+        \n\nଦୟାକରି <xliff:g id="number">%2$d</xliff:g> ସେକେଣ୍ଡରେ ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">ଆଭ୍ୟନ୍ତରୀଣ ଷ୍ଟୋରେଜ୍‍ରେ ଯଥେଷ୍ଟ ‍ସ୍ଥାନ ନାହିଁ, ଆପ୍ଲି୍କେସନ୍‍ ଅଟକିଯାଇଛି। ଦୟାକରି କିଛି ‍ସ୍ଥାନ ଖାଲି କରନ୍ତୁ ଓ ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।</string>
+    <string name="aerr_process_lowstorage">ଆଭ୍ୟନ୍ତରୀଣ ଷ୍ଟୋରେଜ୍‍ରେ ଯଥେଷ୍ଟ ‍ସ୍ଥାନ ନାହିଁ, ପ୍ରକ୍ରିୟା ଅଟକିଯାଇଛି। ଦୟାକରି କିଛି ‍ସ୍ଥାନ ଖାଲି କରନ୍ତୁ ଓ ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।</string>
+    <string name="low_internal_storage_view_title">ଆଭ୍ୟନ୍ତରୀଣ ଷ୍ଟୋରେଜ୍‍ରେ ଶେଷ ହେଉଛି</string>
+    <string name="low_storage_warning_message">ଦୟାକରି କିଛି ‍ସ୍ଥାନ ଖାଲି କରନ୍ତୁ, କିମ୍ବା କେତେକ ଆପ୍ଲିକେସନ ଏବଂ ସିଷ୍ଟମ ପ୍ରକାର୍ଯ୍ୟ କାମ କରିନପାରେ।</string>
+    <string name="deleteMails">ମେଲ୍ ଗୁଡ଼ିକ ବିଲୋପ କରି ଦିଅନ୍ତୁ</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">ସୁରକ୍ଷା ସ୍ଥିତି:</string>
+    <string name="drm_can_forward">ଆଗକୁ ନିଆଯାଇପାରିବ।</string>
+    <string name="drm_can_not_forward">ଆଗକୁ ନିଆଯାଇପାରିବ ନାହିଁ।</string>
+    <string name="drm_no_limitation">ସୀମା ନାହିଁ।</string>
+    <string name="drm_no_license">DRM ଲାଇସେନ୍ସ ଉପଲବ୍ଧ ନାହିଁ.</string>
+    <string name="drm_begin">ଆରମ୍ଭ:</string>
+    <string name="drm_end">ଶେଷ:</string>
+    <string name="drm_use_left">କାଉଣ୍ଟ ବାକି:</string>
+    <string name="drm_protectioninfo_renew">ନବୀକରଣ କରନ୍ତୁ</string>
+    <string name="drm_protectioninfo_title">ସୁରକ୍ଷା ସୂଚନା</string>
+    <string name="drm_licenseacquisition_title">DRM ଲାଇସେନ୍ସ ଅଧିଗ୍ରହଣ</string>
+    <string name="drm_licenseacquisition_message">%1$sରୁ କୌଣସି DRM ଲାଇସେନ୍ସ ଉପଲବ୍ଧ ନାହିଁ ଆପଣ “ନବୀକରଣ” ବଟନ୍ ଦବାଇ DRM  ଲାଇସେନ୍ସ ପାଇପାରିବେ</string>
+    <string name="drm_toast_license_expired">DRM ଲାଇସେନ୍ସ ତାରିଖ ଅତିକ୍ରାନ୍ତ ହୋଇଛି।</string>
+    <string name="drm_forwardforbidden_title">ଫରୱାର୍ଡ ନିଷିଦ୍ଧ</string>
+    <string name="drm_forwardforbidden_message">କେତେକ ସୁରକ୍ଷିତ ଫାଇଲ ଫରୱାର୍ଡ କରାଯାଇପାରିବ ନାହିଁ।</string>
+    <string name="drm_license_install_success">DRM ଲାଇସେନ୍ସ ସଂସ୍ଥାପନ ସଫଳ ହୋଇଛି।</string>
+    <string name="drm_license_install_fail">DRM ଲାଇସେନ୍ସ ସଂସ୍ଥାପନ ବିଫଳ ହୋଇଛି।</string>
+    <string name="drm_secure_timer_title">ଅବୈଧ DRM ନିରାପଦ ଘଣ୍ଟା</string>
+    <string name="drm_secure_timer_message">DRM ସୁରକ୍ଷିତ ଫାଇଲଗୁଡ଼ିକ ଆପଣ ବ୍ୟବହାର କରିପାରିବେ ନାହିଁ ନିଶ୍ଚିତ କରାନ୍ତୁ ଯେ ଡାଟା ସଂଯୋଗ ଉପଲବ୍ଧ ଅଛି</string>
+    <string name="drm_consume_title">DRM ଅଧିକାରର ଉପଭୋଗଗୁଡିକ</string>
+    <string name="drm_consume_message">ଆପଣଙ୍କ କାର୍ଯ୍ୟ DRM ଅଧିକାରର ଉପଭୋଗ କରିବ।</string>
+
+    <string name="drm_first_time_use">ଏହା ହେଉଛି ପ୍ରଥମ ଥର ବ୍ୟବହାର।</string>
+    <string name="drm_use_now">ବର୍ତ୍ତମାନ ଏହା  ବ୍ୟବହାର କରିବେ କି?</string>
+    <string name="drm_consume_interval">ଏହି ଫାଇଲ୍ ଆପଣ ଏହା ବ୍ୟବହାର କରିବା ଆରମ୍ଭ କରିବାର %1$s ପରେ ଉପଲବ୍ଧ ହେବ।</string>
+    <string name="drm_effective_duration">ପ୍ରଭାବଶାଳୀ ଅବଧି:</string>
+    <string name="drm_expire_dialog_future">ବୈଧ ଅବଧି:</string>
+    <string name="validity_period">ବୈଧତା:</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">ବିମାନ ମୋଡ୍ ଅନ୍ ଅଛି</string>
+    <string name="confirm_flight_mode_msg">ଏହି ନମ୍ବର ବ୍ୟବହାର କରିବା ପାଇଁ, ବିମାନ ମୋଡ ପ୍ରଥମେ ଅଫ୍ କରନ୍ତୁ।</string>
+    <string name="confirm_radio_title">SIM ଅଫ୍‌ କରନ୍ତୁ</string>
+    <string name="confirm_radio_msg">ଏହି ନମ୍ବର ବ୍ୟବହାର କରିବା ପାଇଁ, ପ୍ରଥମେ ଅନ୍ କରନ୍ତୁ।</string>
+    <string name="confirm_flight_mode_radio_title">ବିମାନ ମୋଡ୍ ଅନ୍ ଅଛି ଏବଂ SIM ଅଫ ଅଛି</string>
+    <string name="confirm_flight_mode_radio_msg">ଏହି ନମ୍ବର ବ୍ୟବହାର କରିବା ପାଇଁ, ବିମାନ ମୋଡ ପ୍ରଥମେ ଅଫ୍ କରନ୍ତୁ ଏବଂ SIM ଅନ୍ କରନ୍ତୁ।</string>
+    <string name="confirm_unlock_title">SIM ଲକ୍ ହୋଇଛି</string>
+    <string name="confirm_unlock_msg">ଏହି SIM କାର୍ଡ ବ୍ୟବହାର କରିବା ପାଇଁ, ପ୍ରଥମେ ଏହା ଅନଲକ୍ କରନ୍ତୁ।</string>
+    <string name="confirm_roaming_title">ରୋମିଂ ସତର୍କତା</string>
+    <string name="confirm_roaming_msg">SIM କାର୍ଡ ରୋମିଂରେ ଅଛି। ଏହା ବ୍ୟବହାର କରିବା ଜାରିରଖିବେ କି?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">ଚାଇନା ଟେଲିକମ୍ VoLTE ଏବଂ କଲ୍ ସର୍ଭିସ୍ ସମ୍ପ୍ରତି ଅନୁପଲବ୍ଧ ରହିଛି। VoLTE OFF କରିବେ କି?</string>
+
+    <string name="confirm_button_ok">ଓକେ</string>
+    <string name="confirm_button_cancel">ବାତିଲ୍ କରନ୍ତୁ</string>
+    <string name="confirm_button_unlock">ଅଣଲକ୍ କରନ୍ତୁ</string>
+    <string name="confirm_button_turn_off">ଦାମି |</string>
+    <string name="confirm_button_turn_on">ଉପରେ</string>
+    <string name="confirm_button_yes">ହଁ</string>
+    <string name="confirm_button_no">ନା</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">ବିମାନ ମୋଡ୍ ଅନ୍ ଅଛି ଏବଂ UIM ଅଫ ଅଛି</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">ଏହି ନମ୍ବର ବ୍ୟବହାର କରିବା ପାଇଁ, ବିମାନ ମୋଡ ପ୍ରଥମେ ଅଫ୍ କରନ୍ତୁ ଏବଂ UIM ଅନ୍ କରନ୍ତୁ।</string>
+    <string name="confirm_radio_title_UIM">UIM ଅଫ୍</string>
+    <string name="confirm_radio_msg_UIM">ଏହି ନମ୍ବର ବ୍ୟବହାର କରିବା ପାଇଁ, ପ୍ରଥମେ ଅନ୍ କରନ୍ତୁ।</string>
+    <string name="confirm_unlock_title_UIM">UIM  ଲକ୍ ହୋଇଛି</string>
+    <string name="confirm_unlock_msg_UIM">ଏହି UIM କାର୍ଡ ବ୍ୟବହାର କରିବା ପାଇଁ, ପ୍ରଥମେ ଏହା ଅନଲକ୍ କରନ୍ତୁ।</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">ବାର୍ତ୍ତାଗୁଡିକ</string>
+    <string name="url_dialog_choice_message">ଏହା ବ୍ରାଉଜରକୁ ଖୋଲିବ, ଜାରି ରଖିବେ?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">ମେଲଗୁଡ଼ିକର ବ୍ୟାକ୍‌ଅପ୍ ଏବଂ ସଂରକ୍ଷଣ ଛାଡ଼ିବା</string>
+
+    <string name="storage_withsd">ଏହି ଫୋନ୍ ସଂରକ୍ଷଣରେ ଯଥେଷ୍ଟ ଖାଲିସ୍ଥାନ ନାହିଁ. ଦୟାକରି କିଛି ସଂରକ୍ଷଣ ଖାଲି କରନ୍ତୁ କିମ୍ବା ଏହି ସେଟିଂଗୁଡିକରେ ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ ରାଇଟ୍ ଡିସ୍କ ବଦଳାନ୍ତୁ.</string>
+    <string name="storage_withoutsd">ଏହି ଫୋନ୍ ସଂରକ୍ଷଣରେ ଯଥେଷ୍ଟ ଖାଲିସ୍ଥାନ ନାହିଁ. ଦୟାକରି କିଛି ସଂରଷଣକୁ ଛାଡ଼ନ୍ତୁ କିମ୍ବା ଏକ SD କାର୍ଡ ଲଗାନ୍ତୁ</string>
+    <string name="storage_sd">SD କାର୍ଡରେ ଯଥେଷ୍ଟ ଖାଲି ସ୍ଥାନ ନାହିଁ ଦୟାକରି କିଛି ସଂରକ୍ଷଣ ଖାଲି କରନ୍ତୁ କିମ୍ବା ଏହି ସେଟିଂଗୁଡିକରେ ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ ରାଇଟ୍ ଡିସ୍କ ବଦଳାନ୍ତୁ.</string>
+    <string name="usb_ums_notification_title">USB ଷ୍ଟୋରେଜ୍ ଭାବେ ସଂଯୁକ୍ତ</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">କେବଳ USB ଚାର୍ଜ</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">GPS ପ୍ରଦତ୍ତ ସମୟ ପାଇବାରେ ବିଫଳ</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> ସଂଯୁକ୍ତ ହୋଇଛି, <xliff:g id="blocked">%2$d</xliff:g> ଅବରୋଧ ହୋଇଛି</string>
+    <string name="tethered_notification_message_bandwidth_set">ବ୍ୟାଣ୍ଡୱିଥ୍ ସେଟ୍ ହୋଇଛି</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">ମଧ୍ୟରାତ୍ରି</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">ଡିଫଲ୍ଟ</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">ଖାରଜ କରିବା ପାଇଁ ଡାହାଣକୁ ସ୍ଲାଇଡ୍ କରନ୍ତୁ</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">ସ୍ନୁଜ୍ କରିବା ପାଇଁ ବାମକୁ ସ୍ଲାଇଡ୍ କରନ୍ତୁ</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">ଖାରଜ କରିବା ପାଇଁ ଉପରକୁ ସ୍ଲାଇଡ୍ କରନ୍ତୁ</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">ସ୍ନୁଜ୍ କରିବା ପାଇଁ ତଳକୁ ସ୍ଲାଇଡ୍ କରନ୍ତୁ</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">ଲାଗୁ କରିବା ପାଇଁ କଲର୍ ଉପରେ ଦବାନ୍ତୁ</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">HDMI ଅଫ୍‍ ହୋଇଯିବ ଯେତେବେଳେ ଆପଣ ଓୟାର୍‍ଲେସ୍‍ ଡିସ୍‍ପ୍ଲେ ଅନ୍‍ କରିବେ। ଆପଣ ଜାରୀ ରଖିବାକୁ ଚାହାଁନ୍ତି କି?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">ଆପଣ HDMI ଅନ୍ କଲେ ଓୟାରଲେସ୍ ଡିସପ୍ଲେ ବନ୍ଦ ହେବ. ଆପଣ ଜାରୀ ରଖିବାକୁ ଚାହାଁନ୍ତି କି?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">ଆପଣ ଓୟାରଲେସ୍ ଡିସପ୍ଲେ ଉପକରଣ ସହିତ କନେକ୍ଟ କଲେ ଚଳିତ Wi-Fi ଡାଇରେକ୍ଟ ସଂଯୋଗ ବିଚ୍ଛିନ୍ନ ହେବ ଆପଣ ଜାରୀ ରଖିବାକୁ ଚାହାଁନ୍ତି କି?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">ଅସ୍ଥିର ସଂଯୋଗ</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">ସାମ୍ପ୍ରତିକ ଓୟାରଲେସ୍ ସଂଯୋଗ ପ୍ରଦର୍ଶନ ସ୍ଥିର ନାହିଁ।</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">ସାମ୍ପ୍ରତିକ ଓୟାରଲେସ୍ ସଂଯୋଗ ପ୍ରଦର୍ଶନ ସ୍ଥିର ନାହିଁ, ଦୟାକରି ଆପଣଙ୍କର ପ୍ରଦର୍ଶନ ଡିଭାଇସ୍‌ର ଅଧିକ ନିକଟକୁ ଯାଇ ଚେଷ୍ଟା କରନ୍ତୁ।</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">ପୁନଃ ସଂଯୁକ୍ତ କରନ୍ତୁ</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">ଓୟାରଲେସ୍ ଡିସପ୍ଲେ ବିଛିନ୍ନ। ଆପଣ ପୁନଃସଂଯୋଗ କରିବାକୁ ଚାହାଁନ୍ତି କି?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">ଓୟାରଲେସ୍ ଡିସପ୍ଲେ ବିଛିନ୍ନ ହୋଇଛି।</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">ଆଉ ଏକ WPS ଅଧିବେଶନ ଠାବ ହୋଇଛି. ଦୟା କରି କିଛି ମିନିଟ୍ ମଧ୍ୟରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ.</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">ଫୋନ Wi-Fiରୁ ଅସ୍ଥାୟୀ ଭାବେ ବିଛିନ୍ନ ହୋଇଯିବ। ଯେତେବେଳେ ଏହା <xliff:g id="device_name">%1$s</xliff:g> ସହିତ ସଂଯୁକ୍ତ ରହିବ (ଯଦି କେବଳ ପରିବର୍ତ୍ତନ ହେଉଥିବା ଚ୍ୟାନେଲ ବ୍ୟାଣ୍ଡ ଓ ID <xliff:g id="oper_freq">%2$s</xliff:g>) Wi-Fi ପାଇଁ ସମ୍ପ୍ରତି ଆକ୍‌ସେସ ପଏଣ୍ଟ ପାଇବ)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">ଓୟାରଲେସ୍ ପ୍ରଦର୍ଶନ ଏବଂ Wi-Fi  ଅନ୍ ରହିଛି।</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">ମଲ୍ଟିମେଡିଆ ସାଉଣ୍ଡ ଆପଣଙ୍କ ହେଡସେଟ୍‌ରୁ ଚାଳନ ହେବ ନାହିଁ।</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">ରିଜୋଲ୍ୟୁସନରେ ପରିବର୍ତ୍ତନ ସ୍ୱତଃ ଓୟାରଲେସ୍ ପ୍ରଦର୍ଶନକୁ ପୁନଃ ସଂଯୁକ୍ତ କରିବ।</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">ପୁନର୍ବାର ମୋତେ ମନେ ପକାନ୍ତୁ ନାହିଁ।</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">ସମ୍ପ୍ରତି Wi-Fi AP ଓୟାରଲେସ୍ ପ୍ରଦର୍ଶନର ଗୁଣବତ୍ତାକୁ ପ୍ରଭାବିତ କରିପାରେ।</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">ଅନ୍ୟ ଡିଭାଇସକୁ ସଂଯୋଗ ଆମନ୍ତ୍ରଣ ପାଇଁ ଅପେକ୍ଷା କରୁଛି।</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">ଆପଣଙ୍କ ସହିତ ସଂଯୋଗ ତିଆରି କରିବାକୁ ଚାହେଁ।</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">ସଂଯୋଗ ତିଆରି କରୁଛି।</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network"><xliff:g id="wifi_ap_name">%1$s</xliff:g>Wi-Fi ନେଟୱର୍କ ସହିତ ସଂଯୁକ୍ତ।</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected"><xliff:g id="wifi_ap_name">%1$s</xliff:g> Wi-Fi ନେଟୱର୍କ  ବିଚ୍ଛିନ୍ନ ହୋଇଛି।</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">ଚ୍ୟାନେଲ୍ କନଫ୍ଲିକସନ୍</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Current Wi-Fi network can\’t coexist with cast screen connection.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">SD କାର୍ଡ ପ୍ରସ୍ତୁତ</string>
+    <string name="sdcard_select_default_path">ଆପଣ ପୂର୍ବନିର୍ଦ୍ଧାରିତ ରାଇଟ୍ ଡିସ୍କ ବଦଳାଇବାକୁ ଚାହୁଁଛନ୍ତି?</string>
+    <string name="sdcard_default_path_change">ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ ରାଇଟ୍ ଡିସ୍କ ପରିବର୍ତ୍ତନ ହୋଇଥିଲା।</string>
+    <string name="usb_storage_ready_title">ବାହ୍ୟ USB ଷ୍ଟୋରେଜ୍ ପ୍ରସ୍ତୁତ</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">ଆପଣଙ୍କ ଇଅର୍‌ଫୋନ୍ ଫୋନ୍ ପ୍ରତି ସମର୍ଥିତ ନୁହେଁ, ଆଉ ଗୋଟିଏ ଲଗାଇ ଚେଷ୍ଟା କରନ୍ତୁ</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">ଏକ ଅଟୋରନ୍ cdrom ସହିତ ସଂଯୁକ୍ତ ହୋଇଛି</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">HDMI କେବୁଲ୍ ସଂଯୋଗ ହେଲା</string>
+    <string name="hdmi_notification_content">HDMI ବିନ୍ୟାସୀ କରିବାକୁ କ୍ଲିକ୍ କରନ୍ତୁ</string>
+    <string name="hdmi_hdvideo_toast">HDMI ଏହି 4K ଭିଡିଓ ଚାଳନ କରିପାରିବ ନାହିଁ, ସଂଯୋଗ ବାଧାପ୍ରାପ୍ତ ହେବ।</string>
+    <string name="hdmi_mutex_call_content">କ୍ଷମାକରିବେ, ସାମ୍ପ୍ରତିକ ଫୋନ୍ କଲ୍ କାରଣରୁ HDMIବନ୍ଦ ହୋଇଯାଇଛି।</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">ଅଡିଓ ଆଉଟପୁଟ୍‌</string>
+    <string name="hdmi_audio_output_stereo">ଷ୍ଟେରିଓ</string>
+    <string name="hdmi_audio_output_multi_channel">ମଲ୍ଟି ଚ୍ୟାନେଲ୍</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">ଡାଟା ସଂଯୋଜନ କେବଳ</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">LTE ନେଟୱାର୍କ ଉପଲବ୍ଧ ନାହିଁ।</string>
+    <string name="Suggest_To_Change_USIM">ଏକ 4G SIM  କାର୍ଡକୁ ପରିବର୍ତ୍ତନ ପାଇଁ ପରାମର୍ଶ ଦିଅନ୍ତୁ।</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">ପୂର୍ବ ନିର୍ଦ୍ଧାରିତ ଆକାଉଣ୍ଟ ଚୟନ</string>
+    <string name="account_always_ask_title">ପ୍ରଥମେ ପଚାରନ୍ତୁ</string>
+    <string name="other_accounts">ଅନ୍ୟାନ୍ୟ ଆକାଉଣ୍ଟ</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">ନିଷେଧ</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">ଅଡିଓ ଚଳାଇବାରେ ବିଫଳ ହେଲା।</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"ଏହି ଭିଡିଓକୁ ସମର୍ଥନ କରୁନାହିଁ।"</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"ସଂପୁଷ୍ଟ କରନ୍ତୁ"</string>
+    <string name="save_password_message">"ବ୍ରାଉଜର ଏହି ପାସୱାର୍ଡ ମନେ ରଖିବା ଆପଣ ଚାହାନ୍ତି କି?"</string>
+    <string name="save_password_notnow">"ବର୍ତ୍ତମାନ ନୁହେଁ"</string>
+    <string name="save_password_remember">"ମନେ ରଖନ୍ତୁ"</string>
+    <string name="save_password_never">"କେବେ ନୁହେଁ"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">ଟାବଲେଟକୁ ଜାଗ୍ରତ କରନ୍ତୁ</string>
+    <string name="permlab_wake_device_sensorhub" product="default">ଫୋନକୁ ଜାଗ୍ରତ କରନ୍ତୁ</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">ସେନସର୍ ହବ୍ ମାଧ୍ୟମରେ ଯେତେବେଳେ ଏହା ସସପେଣ୍ଡ ମୋଡ୍‌ରେ ରହିଥାଏ ଏହି ଆପ୍ଲିକେସନକୁ ଟାବଲେଟକୁ ଜାଗ୍ରତ କରିବାକୁ ଅନୁମତି ଦେଇଥାଏ।</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">ସେନସର୍ ହବ୍ ମାଧ୍ୟମରେ ଯେତେବେଳେ ଏହା ସସପେଣ୍ଡ ମୋଡ୍‌ରେ ରହିଥାଏ ଏହି ଆପ୍ଲିକେସନକୁ ଫୋନ୍‌କୁ ଜାଗ୍ରତ କରିବାକୁ ଅନୁମତି ଦେଇଥାଏ।</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">ଆପଣ ସମ୍ପ୍ରତି ଆନ୍ତର୍ଜାତୀୟ ରୋମିଂରେ ଅଛନ୍ତି, ମୋବାଇଲ ଡାଟା ଅନ୍ ରହିଛି, ଦୟାକରି ଧ୍ୟାନ ଦିଅନ୍ତୁ ଯେ ସ୍ଥାନୀୟ ଚାର୍ଜ ଲାଗୁ ହୋଇଥାଏ।</string>
+    <string name="known">"ମୁଁ ଜାଣିଛି"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">ଆପ୍ଲିକେସନ ଲୋଗୋ ଆଇକନ</string>
+    <string name="close">ଆପ୍ଲିକେସନ ବନ୍ଦ କରନ୍ତୁ</string>   
+    <string name="maximum">ସର୍ବାଧିକ ଆପ୍ଲିକେସନ</string>
+    <string name="minimize">ଆପ୍ଲିକେସନ ସର୍ବନିମ୍ନ ପର୍ଯ୍ୟନ୍ତ ହ୍ରାସ କରନ୍ତୁ</string>
+    <string name="drag">ଆପ୍ଲିକେସନ ୱିଣ୍ଡୋ ଆକାରର ଡ୍ରାଗ୍‌ କରନ୍ତୁ</string> 
+    <string name="gallery_camera_mutex">ସମାନ ସମୟରେ ଗ୍ୟାଲେରୀ, କ୍ୟାମେରା ବା ଭିଡିଓ ବ୍ୟବହାର କରାଯାଇପାରିବ ନାହିଁ</string> 
+    <string name="mw_max_size_string">ସର୍ବାଧିକ <xliff:g id="number">%d</xliff:g>ଫ୍ଲୋଟିଂ ୱିଣ୍ଡୋଜ୍</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">OMAPI ସିଷ୍ଟମ୍‍ ଟର୍ମିନାଲ୍‍</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">ଏହି ଅନୁମତି ସହିତ ଏକ ଆପ୍ଲିକେସନ୍‍ ଦର୍ଶାଉଛି ଯେ ଏହା ହେଉଛି ସିଷ୍ଟମ୍‍ର OMAPI ଟର୍ମିନାଲ୍‍।</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">OMAPI ଟର୍ମିନାଲ୍‍ ବାଇଣ୍ଡ କରନ୍ତୁ</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">ଏହି ଅନୁମତି ସହିତ ଏକ ଆପ୍ଲିକେସନ୍‍ ସିଷ୍ଟମ୍‍ ସହିତ OMAPI ଟର୍ମିନାଲ୍‍ ବାଇଣ୍ଡ କରିପାରିବ। କେବଳ ସ୍ମାର୍ଟକାର୍ଡ ସେବା ଏହା ବ୍ୟବହାର କରିବା ଉଚିତ୍‍</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">ମଲ୍ଟିପାର୍ଟି କଲ୍ ଆରମ୍ଭ କରନ୍ତୁ</string>
+    <string name="permdesc_cta_conference_call">ମଲ୍ଟିପାର୍ଟି କଲ୍ ଆରମ୍ଭ କରିବାକୁ ଏହି ଆପ୍ଲିକେସନକୁ ଅନୁମତି ଦିଅନ୍ତୁ। ଏହା ଅପ୍ରତ୍ୟାଶିତ ଶୁଳ୍କର କାରଣ ହୋଇପାରେ। ମନ୍ଦ ଉଦ୍ଦେଶ୍ୟ ପ୍ରଣୋଦିତ ଆପ୍ଲିକେସନଗୁଡ଼ିକ ଯୋଗୁଁ ଆପଣଙ୍କ ନିଶ୍ଚିତକରଣ ବ୍ୟତୀତ  ମଲଟ୍ଇପାର୍ଟି କଲ୍  ଆରମ୍ଭ କରି ମୂଲ୍ୟ ଦେବାକୁ ପଡ଼ିପାରେ।</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">କଲ୍ ଅଗ୍ରଗାମୀ କରୁଅଛି</string>
+    <string name="permdesc_cta_call_forward">କଲ୍‌ ଫରୱାର୍ଡ କରିବା ପାଇଁ ଏହି ଆପ୍ଲିକେସନକୁ ଅନୁମତି ଦିଏ।</string>
+    <string name="permlab_cta_send_mms">MMS ପଠାନ୍ତୁ</string>
+    <string name="permdesc_cta_send_mms">MMS ବାର୍ତ୍ତାଗୁଡିକ ପଠାଇବା ପାଇଁ ଆପ୍ଲିକେସନକୁ ଅନୁମତି ଦିଏ ଏହା ଅପ୍ରତ୍ୟାଶିତ ଶୁଳ୍କର କାରଣ ହୋଇପାରେ। ତ୍ରୁଟିପୂର୍ଣ୍ଣ ଆପ୍ଲିକେସନ ଗୁଡ଼ିକ ବିନା ଆପଣଙ୍କ ସମର୍ଥନରେ ବାର୍ତ୍ତା ପଠାଇ ଆପଣଙ୍କ ଖର୍ଚ୍ଚ କରାଇପାରେ</string>
+    <string name="permlab_cta_send_email">ଇମେଲ୍ ପଠାନ୍ତୁ</string>
+    <string name="permdesc_cta_send_email">ଇମେଲ୍  ପଠାଇବା ପାଇଁ ଆପ୍ଲିକେସନକୁ ଅନୁମତି ଦିଏ ଏହା ଅପ୍ରତ୍ୟାଶିତ ସେଲୁଲାର୍ ଡାଟା ଖର୍ଚ୍ଚ ହେବାର କାରଣ ହୋଇପାରେ। ମନ୍ଦ ଉଦ୍ଦେଶ୍ୟ ପ୍ରଣୋଦିତ ଆପ୍ଲିକେସନଗୁଡ଼ିକ  ଆପଣଙ୍କ ନିଶ୍ଚିତକରଣ ବ୍ୟତୀତ  ଇମେଲ ପ୍ରେରଣ କରିବା କାରଣରୁ ମୂଲ୍ୟ ଦେବାକୁ ପଡ଼ିପାରେ।</string>
+    <string name="permgrouplab_email">ଇମେଲ୍ କରନ୍ତୁ |</string>
+    <string name="permgroupdesc_email">ଇମେଲ୍ ପଠାନ୍ତୁ</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" କୁ <xliff:g id="permission_name">%2$s</xliff:g> ପାଇଁ ମନାକରାଯାଇଛି। ଅନୁମତି ମଞ୍ଜୁର କରିବେ କି?</string>
+    <string name="aerr_application_permission_connectivity">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\"  ପାରିବ ନାହିଁ <xliff:g id="permission_name">%2$s</xliff:g>, ଆପଣ ପାରିବେ <xliff:g id="permission_name2">%2$s</xliff:g> ରେ\"Settings\"</string>
+    <string name="aerr_application_unknown_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\"  ବ୍ୟବହାର କରାଯାଇପାରିବ ନାହିଁ, ଦୟାକରି ଅନୁମତି ଦେବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ।</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">ସେଟିଂସମୂହ</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">ମାଉଣ୍ଟ ସର୍ଭିସ୍ ୱାଇପ୍</string>
+    <string name="permdesc_mount_service_wipe">ଫୋନ୍ ଷ୍ଟୋରେଜ୍ ଏବଂ SD କାର୍ଡ ଫର୍ମାଟ କରିବା ପାଇଁ ବ୍ରଡକାଷ୍ଟ ପ୍ରେରଣ କରିବାକୁ ଆପ୍ଲିକେସନକୁ ଅନୁମତି ଦିଏ।</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">IPO ଷ୍ଟାଣ୍ଡବାଏ</string>
+</resources>

@@ -1,0 +1,33 @@
+cc_binary {
+    name: "perf_opcode_test",
+
+    srcs: [
+        "perf_opcode_test.cpp",
+    ],
+
+    include_dirs: [
+        "vendor/qcom/proprietary/perf-core/mp-ctl-client",
+        "vendor/qcom/proprietary/perf-core/perf-util",
+    ],
+
+    compile_multilib: "both",
+
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-DANDROID",
+    ],
+
+    cpp_std: "c++17",
+
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libutils",
+        "libdl",
+        "libqti-perfd-client",
+    ],
+
+    vendor: true,
+    proprietary: true,
+}

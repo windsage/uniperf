@@ -1,0 +1,17 @@
+cc_library_shared {
+    name: "libpowerhalwrap_jni",
+    system_ext_specific: true,
+    shared_libs: [
+        "libutils",
+        "libhidlbase",
+        "vendor.mediatek.hardware.pq@2.3",
+        "libcutils",
+        "libnativehelper",
+        "liblog",
+    ],
+    srcs: [
+        "com_mediatek_powerhalwrapper_PowerHalWrapper.cpp",
+        "com_mediatek_amsAal_AalUtils.cpp",
+        "com_mediatek_scnmodule_scnmodule.cpp",
+    ],
+}

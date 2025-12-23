@@ -1,0 +1,16 @@
+java_library {
+    name: "services.mbrainlocalservice",
+    srcs: [
+        "java/**/*.java",
+    ],
+    libs: [
+        "services.core",
+        "ims-common",
+        "telephony-common",
+    ],
+    static_libs: [
+        "vendor.mediatek.hardware.mbrain-V5-java",
+        "vendor.mediatek.hardware.mbrainj-V1-java",
+    ],
+    owner: "mmm",
+}

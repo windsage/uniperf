@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">Zvanu bloķēšana neizdevās.</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">Pakalpojums sniegts.</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">SIM kartes aizvērta</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">Atļauj lietotnei saņemt
+ un apstrādāt DM reģistrācijas īsziņas. Jebkura lietotne, izņemot DM APP, nedrīkst
+ izmantot šo</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Video</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Brīvā vieta"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">Notiek ielāde\u2026</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"Buferēšana %d%%..."</string>
+   <string name="media_controller_live">"Tiešraide"</string>
+   <string name="media_controller_playing">"Spēlē"</string>
+   <string name="media_controller_connecting">"Savienojuma izveide..."</string>
+
+   <string name="VideoView_error_text_bad_file">"Bojāts fails; šo video nevar atskaņot."</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"Nevar izveidot savienojumu ar serveri."</string>
+   <string name="VideoView_error_text_type_not_supported">"Multivides faila tips nav atbalstīts."</string>
+   <string name="VideoView_error_text_drm_not_supported">"aizsargāts ar DRM; šo video nevar atskaņot."</string>
+   <string name="VideoView_error_text_invalid_connection">"Nederīgs savienojums. (403 aizliegts)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">Jauna SIM karte</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Izdzēst</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">Noteikšana...</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">Jūs nepareizi ievadījāt savu PIN kodu <xliff:g id="number">%1$d</xliff:g> reizes.
+ \n\nLūdzu, mēģiniet vēlreiz pēc <xliff:g id="number">%2$d</xliff:g> sekundēm.</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">Jūs nepareizi ievadījāt savu paroli <xliff:g id="number">%1$d</xliff:g> reizes.
+ \n\nLūdzu, mēģiniet vēlreiz pēc <xliff:g id="number">%2$d</xliff:g> sekundēm.</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Iekšējā atmiņā sāk trūkt brīvas vietas, lietotne ir apturēta. Lūdzu, atbrīvojiet vietu un mēģiniet vēlreiz.</string>
+    <string name="aerr_process_lowstorage">Iekšējā atmiņā sāk trūkt brīvas vietas, process ir apturēts. Lūdzu, atbrīvojiet vietu un mēģiniet vēlreiz.</string>
+    <string name="low_internal_storage_view_title">Iekšējā atmiņā sāk trūkt brīvas vietas</string>
+    <string name="low_storage_warning_message">Lūdzu, atbrīvojiet vietu, citādi dažas lietotnes un sistēmas funkcijas var nedarboties pareizi.</string>
+    <string name="deleteMails">Dzēst e-pasta ziņojumus</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Aizsardzības statuss:</string>
+    <string name="drm_can_forward">Var pārsūtīt.</string>
+    <string name="drm_can_not_forward">Nevar pārsūtīt.</string>
+    <string name="drm_no_limitation">Bez ierobežojumiem.</string>
+    <string name="drm_no_license">Nav pieejamu DRM licenču.</string>
+    <string name="drm_begin">Sākums:</string>
+    <string name="drm_end">Beigas:</string>
+    <string name="drm_use_left">Atlikušais skaits:</string>
+    <string name="drm_protectioninfo_renew">Atjaunot</string>
+    <string name="drm_protectioninfo_title">Informācija par aizsardzību</string>
+    <string name="drm_licenseacquisition_title">DRM licences iegūšana</string>
+    <string name="drm_licenseacquisition_message">%1$s nav pieejamas DRM licences. Lai iegūtu DRM licenci, varat nospiest pogu \"Atjaunot\".</string>
+    <string name="drm_toast_license_expired">DRM licencei beidzies derīgums.</string>
+    <string name="drm_forwardforbidden_title">Pārsūtīšana aizliegta</string>
+    <string name="drm_forwardforbidden_message">Dažus aizsargātos failus nevar pārsūtīt.</string>
+    <string name="drm_license_install_success">DRM licences instalēšana izdevās.</string>
+    <string name="drm_license_install_fail">DRM licences instalēšana neizdevās.</string>
+    <string name="drm_secure_timer_title">Nederīgs DRM drošais pulkstenis</string>
+    <string name="drm_secure_timer_message">Nevarēja izmantot ar DRM aizsargātus failus. Pārliecinieties, vai ir pieejams datu savienojums.</string>
+    <string name="drm_consume_title">DRM tiesību patērēšana</string>
+    <string name="drm_consume_message">Veicot šo darbību tiks patērētas DRM tiesības.</string>
+
+    <string name="drm_first_time_use">Šī ir pirmā lietošanas reize.</string>
+    <string name="drm_use_now">Vai to izmantot tagad?</string>
+    <string name="drm_consume_interval">Šis fails būs pieejams %1$s pēc tam, kad sāksiet to izmantot.</string>
+    <string name="drm_effective_duration">Faktiskais derīgums:</string>
+    <string name="drm_expire_dialog_future">Derīguma periods:</string>
+    <string name="validity_period">Derīgums:</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Ieslēgts lidmašīnas režīms</string>
+    <string name="confirm_flight_mode_msg">Lai izmantotu šo numuru, vispirms izslēdziet lidmašīnas režīmu.</string>
+    <string name="confirm_radio_title">SIM izslēgta</string>
+    <string name="confirm_radio_msg">Lai izmantotu šo numuru, vispirms to ieslēdziet.</string>
+    <string name="confirm_flight_mode_radio_title">Ieslēgts lidmašīnas režīms un izslēgta SIM</string>
+    <string name="confirm_flight_mode_radio_msg">Lai izmantotu numuru, vispirms izslēdziet lidmašīnas režīmu un ieslēdziet SIM.</string>
+    <string name="confirm_unlock_title">SIM bloķēta</string>
+    <string name="confirm_unlock_msg">Lai izmantotu SIM karti, vispirms to atbloķējiet.</string>
+    <string name="confirm_roaming_title">Brīdinājums par viesabonēšanu</string>
+    <string name="confirm_roaming_msg">SIM karte darbojas viesabonēšanas režīmā. Vai turpināt to izmantot?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">China Telecom VoLTE un zvanu pakalpojumi pašlaik nav pieejami.Vai izslēgt VoLTE?</string>
+
+    <string name="confirm_button_ok">Labi</string>
+    <string name="confirm_button_cancel">Atcelt</string>
+    <string name="confirm_button_unlock">Atbloķēt</string>
+    <string name="confirm_button_turn_off">Izslēgt</string>
+    <string name="confirm_button_turn_on">Ieslēgt</string>
+    <string name="confirm_button_yes">Jā</string>
+    <string name="confirm_button_no">Nē</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Ieslēgts lidmašīnas režīms un izslēgts UIM</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">Lai izmantotu numuru, vispirms izslēdziet lidmašīnas režīmu un ieslēdziet UIM.</string>
+    <string name="confirm_radio_title_UIM">UIM izslēgts</string>
+    <string name="confirm_radio_msg_UIM">Lai izmantotu šo numuru, vispirms to ieslēdziet.</string>
+    <string name="confirm_unlock_title_UIM">UIM bloķēts</string>
+    <string name="confirm_unlock_msg_UIM">Lai izmantotu UIM karti, vispirms to atbloķējiet.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Ziņas</string>
+    <string name="url_dialog_choice_message">Tiks atvērta pārlūkprogramma, vai turpināt?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">Pasta dublēšana un atmiņas atbrīvošana</string>
+
+    <string name="storage_withsd">Tālruņa krātuvē nav pietiekami daudz vietas. Lūdzu, atbrīvojiet vietu krātuvē vai iestatījumu sadaļā mainiet noklusējuma rakstīšanas disku.</string>
+    <string name="storage_withoutsd">Tālruņa krātuvē nav pietiekami daudz vietas. Lūdzu, atbrīvojiet vietu krātuvē vai ievietojiet SD karti.</string>
+    <string name="storage_sd">SD kartē nav pietiekami daudz vietas. Lūdzu, atbrīvojiet vietu krātuvē vai iestatījumu sadaļā mainiet noklusējuma rakstīšanas disku.</string>
+    <string name="usb_ums_notification_title">Savienots kā USB krātuve</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Tikai USB uzlāde</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">Neizdevās iegūt GPS nodrošināto laiku</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> savienots, <xliff:g id="blocked">%2$d</xliff:g> bloķēts</string>
+    <string name="tethered_notification_message_bandwidth_set">Joslas platums ir iestatīts</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">Pusnakts</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">Noklusējuma</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">Lai noraidītu, pavelciet pa labi</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">Lai pārslēgtu snaudas režīmā, pavelciet pa kreisi</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">Lai noraidītu, pavelciet uz augšu</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">Lai pārslēgtu snaudas režīmā, pavelciet uz leju</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Nospiediet uz Krāsa, lai lietotu</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">HDMI tiks izslēgts, kad ieslēgsiet bezvadu displeju. Vai vēlaties turpināt?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">Bezvadu displejs tiks izslēgts, kad ieslēgsiet HDMI. Vai vēlaties turpināt?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">Pašreizējais Wi-Fi Direct savienojums tiks pārtraukts, kad izveidosiet savienojumu ar bezvadu displeja ierīci. Vai vēlaties turpināt?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Nestabils savienojums</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Pašreizējais bezvadu displeja savienojums nav stabils.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Pašreizējais bezvadu displeja savienojums nav stabils; lūdzu, mēģiniet pietuvoties displeja ierīcei.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Atkārtoti izveidot savienojumu</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Bezvadu displeja savienojums pārtraukts. Vai vēlaties savienojumu izveidot atkārtoti?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Bezvadu displeja savienojums pārtraukts.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">Tika noteikta vēl viena WPS sesija. Lūdzu, mēģiniet vēlreiz pēc dažām minūtēm.</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">Tālrunis uz laiku atvienosies no Wi-Fi, kamēr tas ir savienots ar <xliff:g id="device_name">%1$s</xliff:g> (tikai tad, ja pašreizējo Wi-Fi piekļuves punktu kanālu josla un ID tiek mainīti uz <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Ir ieslēgts bezvadu displejs un Wi-Fi.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">No austiņām netiek atskaņota multivides skaņa.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">Mainot izšķirtspēju, savienojums ar bezvadu displeju tiks automātiski atjaunots.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">Vairs neatgādināt.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Pašreizējais Wi-Fi AP var ietekmēt bezvadu displeja kvalitāti.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">Gaida savienojuma izveides uzaicinājumus no citām ierīcēm.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">vēlas izveidot savienojumu ar jūsu ierīci.</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">Notiek savienojuma izveide.</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">Savienots ar Wi-Fi tīklu <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Savienojums ar Wi-Fi tīklu <xliff:g id="wifi_ap_name">%1$s</xliff:g> pārtraukts.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Kanālu konflikts</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Current Wi-Fi network can\’t coexist with cast screen connection.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">SD karte gatava</string>
+    <string name="sdcard_select_default_path">Vai vēlaties mainīt noklusējuma rakstīšanas disku?</string>
+    <string name="sdcard_default_path_change">Tika nomainīts noklusējuma rakstīšanas disks.</string>
+    <string name="usb_storage_ready_title">Ārējā USB krātuve gatava</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Jūsu austiņas nav saderīgas ar tālruni. Lūdzu, izmēģiniet citas austiņas</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">Savienots kā automātiskās startēšanas CD-ROM</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">HDMI kabelis pievienots</string>
+    <string name="hdmi_notification_content">Noklikšķiniet, lai konfigurētu HDMI</string>
+    <string name="hdmi_hdvideo_toast">HDMI nevar atskaņot 4K video; savienojums tiks pārtraukts.</string>
+    <string name="hdmi_mutex_call_content">Diemžēl HDMI savienojums ir pārtraukts pašreizēja tālruņa zvana dēļ.</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Audio izvade</string>
+    <string name="hdmi_audio_output_stereo">Stereo</string>
+    <string name="hdmi_audio_output_multi_channel">Daudzkanālu</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Tikai datu savienojums</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">LTE tīkls nav pieejams.</string>
+    <string name="Suggest_To_Change_USIM">Ieteicams nomainīt 4G SIM karti.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Noklusējuma konta atlase</string>
+    <string name="account_always_ask_title">Vispirms jautāt</string>
+    <string name="other_accounts">Citi konti</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">aizliegts</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">Neizdevās atskaņot audio.</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"Šis video netiek atbalstīts."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Apstiprināt"</string>
+    <string name="save_password_message">"Vai vēlaties, lai pārlūks šo paroli atcerētos?"</string>
+    <string name="save_password_notnow">"Ne tagad"</string>
+    <string name="save_password_remember">"Atcerēties"</string>
+    <string name="save_password_never">"Nekad"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">pamodināt planšetdatoru</string>
+    <string name="permlab_wake_device_sensorhub" product="default">pamodināt tālruni</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Atļauj lietotnei pamodināt planšetdatoru, kad tas ir aizturēšanas režīmā, izmantojot sensoru centru.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Atļauj lietotnei pamodināt tālruni, kad tas ir aizturēšanas režīmā, izmantojot sensoru centru.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">Jūs pašlaik atrodaties starptautiskās viesabonēšanas zonā; mobilie dati ir ieslēgti; lūdzu, ņemiet vērā vietējās maksas piemērošanu.</string>
+    <string name="known">"Saprotu"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">lietotnes logotipa ikona</string>
+    <string name="close">aizvērt lietotni</string>   
+    <string name="maximum">maksimizēt lietotni</string>
+    <string name="minimize">minimizēt lietotni</string>
+    <string name="drag">velciet, lai mainītu lietotnes loga lielumu</string> 
+    <string name="gallery_camera_mutex">Vienlaikus nevar izmantot līdzekļu Galerija, Kamera un Video atskaņotājs</string> 
+    <string name="mw_max_size_string">Ne vairāk par <xliff:g id="number">%d</xliff:g> peldošajiem logiem</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">OMAPI sistēmas terminālis</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">Lietotne ar šo atļauju norāda, ka tā ir sistēmas OMAPI terminālis.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">Saistīt OMAPI termināli</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">Lietotne ar šo atļauju var saistīties ar sistēmas OMAPI termināļiem. To drīkst izmantot tikai SmartcardService.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">sākt vairāku pušu zvanus</string>
+    <string name="permdesc_cta_conference_call">Ļauj lietotnei sākt vairāku pušu zvanus. Tas var radīt neparedzētus izdevumus. Ļaunprātīgas lietotnes var iekasēt no jums naudu, uzsākot vairāku pušu zvanus bez jūsu apstiprinājuma.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">zvanu pāradresēšana</string>
+    <string name="permdesc_cta_call_forward">Ļauj lietotnei veikt zvanu pāradresēšanu.</string>
+    <string name="permlab_cta_send_mms">sūtīt MMS</string>
+    <string name="permdesc_cta_send_mms">Ļauj lietotnei sūtīt MMS ziņojumus. Tas var radīt neparedzētus izdevumus. Ļaunprātīgas lietotnes var iekasēt no jums naudu, nosūtot ziņojumus bez jūsu apstiprinājuma.</string>
+    <string name="permlab_cta_send_email">sūtīt e-pasta ziņojumus</string>
+    <string name="permdesc_cta_send_email">Ļauj lietotnei sūtīt e-pasta ziņojumus. Tas var izraisīt neparedzētu mobilo datu patēriņu. Ļaunprātīgas lietotnes var iekasēt no jums naudu, nosūtot e-pasta ziņojumus bez jūsu apstiprinājuma.</string>
+    <string name="permgrouplab_email">E-pasta adrese</string>
+    <string name="permgroupdesc_email">sūtīt e-pasta ziņojumus</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" ir liegta atļauja <xliff:g id="permission_name">%2$s</xliff:g>. Vai atļaut atļauju?</string>
+    <string name="aerr_application_permission_connectivity">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" nevar izmantot atļauju <xliff:g id="permission_name">%2$s</xliff:g>; atļauju <xliff:g id="permission_name2">%2$s</xliff:g> var iestatīt sadaļā Iestatījumi</string>
+    <string name="aerr_application_unknown_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" nevar izmantot; lūdzu, mēģiniet atļaut atļaujas.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Iestatījumi</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">montēt krātuves tīrīšanas pakalpojumu</string>
+    <string name="permdesc_mount_service_wipe">Ļauj lietotnei sūtīt apraidi, lai formatētu tālruņa krātuvi un SD karti.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">IPO gaidīšanas režīms</string>
+</resources>

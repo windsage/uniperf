@@ -1,0 +1,16 @@
+java_library {
+    name: "services.mtksearchengineservice",
+    srcs: [
+        "java/**/*.java",
+    ],
+    libs: [
+        "services.core",
+        "mediatek-framework",
+        "mediatek-common",
+    ],
+    owner: "mtk",
+    // Include AIDL files from mediatek-common.
+    //aidl: {
+    //    include_dirs: ["vendor/mediatek/proprietary/frameworks/common/src"],
+    //},
+}

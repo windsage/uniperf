@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">Napaka zapore za klice.</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">Storitev je omogočena.</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">Zapiranje SIM-kartice</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">Dovoli aplikaciji, da sprejme
+ in obdela sporočila SMS za register DM. Nobena aplikacija razen DM ne bi smela
+ uporabljati tega</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Videoposnetek</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Nezaseden prostor"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">Nalaganje\u2026</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"Medpomnjenje %d%%..."</string>
+   <string name="media_controller_live">"V živo"</string>
+   <string name="media_controller_playing">"Predvajanje"</string>
+   <string name="media_controller_connecting">"Vzpostavljanje povezave..."</string>
+
+   <string name="VideoView_error_text_bad_file">"Nepravilna datoteka, ta video se ne more predvajati"</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"Povezave s strežnikom ni mogoče vzpostaviti."</string>
+   <string name="VideoView_error_text_type_not_supported">"Vrsta medijske datoteke ni podprta."</string>
+   <string name="VideoView_error_text_drm_not_supported">"Zaščita DRM, videoposnetka ni mogoče predvajati."</string>
+   <string name="VideoView_error_text_invalid_connection">"Neveljavna povezava. (prepovedano 403)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">Nova kartica SIM</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Izbriši</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">Zaznavanje...</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message"><xliff:g id="number">%1$d</xliff:g>-krat ste nepravilno vnesli PIN.
+ \n\nPoskusite znova čez <xliff:g id="number">%2$d</xliff:g> s.</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message"><xliff:g id="number">%1$d</xliff:g>-krat ste nepravilno vnesli geslo.
+ \n\nPoskusite znova čez <xliff:g id="number">%2$d</xliff:g> s.</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Zmanjkuje notranjega pomnilnika, aplikacija se je ustavila. Sprostite nekaj prostora in poskusite znova.</string>
+    <string name="aerr_process_lowstorage">Zmanjkuje notranjega pomnilnika, proces se je ustavil. Sprostite nekaj prostora in poskusite znova.</string>
+    <string name="low_internal_storage_view_title">Zmanjkuje notranjega pomnilnika</string>
+    <string name="low_storage_warning_message">Sprostite nekaj prostora oz. nekatere aplikacije in funkcije sistema morda ne bodo delovale dobro.</string>
+    <string name="deleteMails">Izbriši pošto</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Stanje zaščite:</string>
+    <string name="drm_can_forward">Lahko se posreduje.</string>
+    <string name="drm_can_not_forward">Ne more se posredovati.</string>
+    <string name="drm_no_limitation">Brez omejitev.</string>
+    <string name="drm_no_license">Licenca DRM ni na voljo.</string>
+    <string name="drm_begin">Začetek</string>
+    <string name="drm_end">Konec</string>
+    <string name="drm_use_left">Preostalo število:</string>
+    <string name="drm_protectioninfo_renew">Obnovi</string>
+    <string name="drm_protectioninfo_title">Informacija o zaščiti</string>
+    <string name="drm_licenseacquisition_title">Pridobivanje licence DRM</string>
+    <string name="drm_licenseacquisition_message">%1$s nima razpoložljive licence DRM. Za pridobivanje licence DRM lahko pritisnete gumb »Obnovi«.</string>
+    <string name="drm_toast_license_expired">Licenca DRM je potekla.</string>
+    <string name="drm_forwardforbidden_title">Prepovedano posredovanje</string>
+    <string name="drm_forwardforbidden_message">Nekaterih zaščitenih datotek ni mogoče posredovati.</string>
+    <string name="drm_license_install_success">Namestitev licence DRM je uspela.</string>
+    <string name="drm_license_install_fail">Namestitev licence DRM ni uspela.</string>
+    <string name="drm_secure_timer_title">Neveljavna varna ura DRM</string>
+    <string name="drm_secure_timer_message">Datotek z zaščito DRM ne morete uporabljati. Zagotovite razpoložljivo podatkovno povezavo.</string>
+    <string name="drm_consume_title">Porabi pravice DRM</string>
+    <string name="drm_consume_message">Z vašim dejanjem boste porabili pravice DRM.</string>
+
+    <string name="drm_first_time_use">To je prva uporaba.</string>
+    <string name="drm_use_now">Želite uporabiti zdaj?</string>
+    <string name="drm_consume_interval">Datoteka bo na voljo v %1$s po začetku uporabe.</string>
+    <string name="drm_effective_duration">Trajanje veljavnosti:</string>
+    <string name="drm_expire_dialog_future">Veljavno obdobje:</string>
+    <string name="validity_period">Veljavnost:</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Letalski način je vklopljen</string>
+    <string name="confirm_flight_mode_msg">Za uporabo številke najprej izklopite letalski način.</string>
+    <string name="confirm_radio_title">Kartica SIM je izklopljena</string>
+    <string name="confirm_radio_msg">Za uporabo številke jo najprej vklopite.</string>
+    <string name="confirm_flight_mode_radio_title">Letalski način je vklopljen, kartica SIM je izklopljena</string>
+    <string name="confirm_flight_mode_radio_msg">Za uporabo številke najprej izklopite letalski način in vklopite kartico SIM.</string>
+    <string name="confirm_unlock_title">Kartica SIM je zaklenjena</string>
+    <string name="confirm_unlock_msg">Za uporabo kartice SIM jo najprej odklenite.</string>
+    <string name="confirm_roaming_title">Opozorilo na gostovanje</string>
+    <string name="confirm_roaming_msg">Kartica SIM je na gostovanju Jo želite še naprej uporabljati?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">China Telecom VoLTE in klicne storitve trenutno niso na voljo.Želite izklopiti VoLTE?</string>
+
+    <string name="confirm_button_ok">V redu</string>
+    <string name="confirm_button_cancel">Prekliči</string>
+    <string name="confirm_button_unlock">Odkleni</string>
+    <string name="confirm_button_turn_off">Izklopi</string>
+    <string name="confirm_button_turn_on">Vklopi</string>
+    <string name="confirm_button_yes">Da</string>
+    <string name="confirm_button_no">Ne</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Letalski način je vklopljen, kartica UIM je izklopljena</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">Za uporabo številke najprej izklopite letalski način in vklopite kartico UIM.</string>
+    <string name="confirm_radio_title_UIM">Kartica UIM je izklopljena</string>
+    <string name="confirm_radio_msg_UIM">Za uporabo številke jo najprej vklopite.</string>
+    <string name="confirm_unlock_title_UIM">Kartica UIM je zaklenjena</string>
+    <string name="confirm_unlock_msg_UIM">Za uporabo kartice UIM jo najprej odklenite.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Sporočila</string>
+    <string name="url_dialog_choice_message">Odprl se bo brskalnik. Želite nadaljevati?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">Varnostno kopiraj pošto in sprosti pomnilnik</string>
+
+    <string name="storage_withsd">V pomnilniku telefona ni dovolj prostora. Sprostite nekaj prostora ali v nastavitvah spremenite privzeti disk za zapisovanje.</string>
+    <string name="storage_withoutsd">V pomnilniku telefona ni dovolj prostora. Sprostite nekaj prostora ali vstavite kartico SD.</string>
+    <string name="storage_sd">Na kartici SD ni dovolj prostora. Sprostite nekaj prostora ali v nastavitvah spremenite privzeti disk za zapisovanje.</string>
+    <string name="usb_ums_notification_title">Priključen kot pomnilnik USB</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Samo polnjenje prek USB</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">Časa iz GPS-a ni uspelo dobiti</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> povezano, <xliff:g id="blocked">%2$d</xliff:g> blokirano</string>
+    <string name="tethered_notification_message_bandwidth_set">Pasovna širina je nastavljena</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">Polnoč</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">Privzeto</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">Podrsajte v desno za zavrnitev</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">Podrsajte v levo za dremež</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">Podrsajte gor za zavrnitev</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">Podrsajte dol za dremež</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Pritisnite »Barva« za uporabo</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">HDMI se bo izklopil, ko boste vklopili brezžični prikaz. Ali želite nadaljevati?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">Brezžični prikaz se bo izklopil, ko boste vklopili HDMI. Ali želite nadaljevati?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">Trenutna povezava Wi-Fi Direct se bo prekinila, ko boste vzpostavili povezavo z brezžičnim prikazom. Ali želite nadaljevati?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Nestabilna povezava</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Trenutna povezava brezžičnega prikaza ni stabilna.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Trenutna povezava brezžičnega prikaza ni stabilna. Poskusite se približati vaši prikazovalni napravi.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Znova poveži</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Brezžični prikaz je odklopljen. Ali ga želite znova povezati?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Brezžični prikaz je odklopljen.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">Zaznana je bila druga seja WPS. Poskusite znova čez nekaj minut.</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">Telefon se bo začasno odklopil iz omrežja Wi-Fi, medtem ko je povezan z <xliff:g id="device_name">%1$s</xliff:g> (samo, če spremenite pas kanala in ID trenutnih dostopnih točk Wi-Fi v <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Brezžični prikaz in Wi-Fi sta vklopljena.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">Večpredstavnostni zvok se ne predvaja na vaših slušalkah.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">Sprememba ločljivosti znova samodejno poveže brezžični prikaz.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">Ne opomni več.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Trenutna dostopna točka Wi-Fi lahko vpliva na kakovost brezžičnega prikaza.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">Čakanje na povabila za povezavo iz drugih naprav.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">želi vzpostaviti povezavo z vami.</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">Vzpostavljanje povezave</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">Povezano z omrežjem Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Omrežje Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g> je izklopljeno.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Kanal v protislovju</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Current Wi-Fi network can\’t coexist with cast screen connection.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">Kartica SD je pripravljena</string>
+    <string name="sdcard_select_default_path">Ali želite spremeniti privzeti disk za zapisovanje?</string>
+    <string name="sdcard_default_path_change">Privzeti disk za zapisovanje se je spremenil.</string>
+    <string name="usb_storage_ready_title">Zunanji pomnilnik USB je pripravljen</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Vaše slušalke niso združljive s telefonom. Poskusite druge slušalke</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">Priključen kot CD-ROM s samodejnim zagonom</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">Priključen kabel HDMI</string>
+    <string name="hdmi_notification_content">Kliknite za konfiguriranje HDMI</string>
+    <string name="hdmi_hdvideo_toast">HDMI ne more predvajati 4K videa, povezava bo prekinjena.</string>
+    <string name="hdmi_mutex_call_content">HDMI se je žal ustavil zaradi trenutnega telefonskega klica.</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Zvočni izhod</string>
+    <string name="hdmi_audio_output_stereo">Stereo</string>
+    <string name="hdmi_audio_output_multi_channel">Več kanalov</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Samo podatkovna povezava</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">Omrežje LTE ni na voljo.</string>
+    <string name="Suggest_To_Change_USIM">Predlagaj spremembo 4G kartice SIM.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Izbira privzetega računa</string>
+    <string name="account_always_ask_title">Najprej vprašaj</string>
+    <string name="other_accounts">Drugi računi</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">prepovedano</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">Predvajanje zvoka ni uspelo.</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"Ta video ni podprt."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Potrdi"</string>
+    <string name="save_password_message">"Ali želite, da si brskalnik zapomni to geslo?"</string>
+    <string name="save_password_notnow">"Ne zdaj"</string>
+    <string name="save_password_remember">"Zapomni"</string>
+    <string name="save_password_never">"Nikoli"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">zbudi tablico</string>
+    <string name="permlab_wake_device_sensorhub" product="default">zbudi telefon</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Dovoli aplikaciji, da zbudi tablico, ko je v začasno prekinjenem načinu prek senzorskega središča.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Dovoli aplikaciji, da zbudi telefon, ko je v začasno prekinjenem načinu prek senzorskega središča.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">Trenutno ste v mednarodnem gostovanju, mobilni podatki so vklopljeni, upoštevajte lokalne prispevke.</string>
+    <string name="known">"Vedel sem"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">ikona logotipa aplikacije</string>
+    <string name="close">zapri aplikacijo</string>   
+    <string name="maximum">povečaj aplikacijo</string>
+    <string name="minimize">zmanjšaj aplikacijo</string>
+    <string name="drag">povleci za velikost okna aplikacije</string> 
+    <string name="gallery_camera_mutex">Galerija, Kamera ali Video predvajalnik se ne morejo uporabljati istočasno</string> 
+    <string name="mw_max_size_string">Največ <xliff:g id="number">%d</xliff:g> plavajočih oken</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">Terminal OMAPI sistema</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">Aplikacija s tem dovoljenjem prikazuje, da je terminal OMAPI sistema.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">Poveži terminal OMAPI</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">Aplikacija s tem dovoljenjem se lahko poveže s terminali OMAPI sistema. To lahko uporablja samo storitev za pametno kartico.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">začni klice z več osebami</string>
+    <string name="permdesc_cta_conference_call">Dovoli aplikaciji, da začne klice z več osebami. To lahko povzroči nepričakovane stroške. Zlonamerne aplikacije lahko povzročijo stroške z začenjanjem klicev z več osebami brez vaše potrditve.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">posredovanje klica</string>
+    <string name="permdesc_cta_call_forward">Aplikaciji dovoli posredovanje klica.</string>
+    <string name="permlab_cta_send_mms">pošlji MMS</string>
+    <string name="permdesc_cta_send_mms">Dovoli aplikaciji, da pošilja sporočila MMS. To lahko povzroči nepričakovane stroške. Zlonamerne aplikacije lahko povzročijo stroške s pošiljanjem sporočil brez vaše potrditve.</string>
+    <string name="permlab_cta_send_email">pošlji e-poštna sporočila</string>
+    <string name="permdesc_cta_send_email">Dovoli aplikaciji, da pošilja e-poštna sporočila. To lahko povzroči nepričakovano porabo mobilnih podatkov. Zlonamerne aplikacije lahko povzročijo stroške s pošiljanjem e-poštnih sporočil brez vaše potrditve.</string>
+    <string name="permgrouplab_email">E-pošta</string>
+    <string name="permgroupdesc_email">pošlji e-poštna sporočila</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">»<xliff:g id="err_ap_name">%1$s</xliff:g>« nima dovoljenja za <xliff:g id="permission_name">%2$s</xliff:g>. Želite odobriti dovoljenje?</string>
+    <string name="aerr_application_permission_connectivity">»<xliff:g id="err_ap_name">%1$s</xliff:g>« ne more <xliff:g id="permission_name">%2$s</xliff:g>, vi lahko <xliff:g id="permission_name2">%2$s</xliff:g> v »Nastavitvah«</string>
+    <string name="aerr_application_unknown_permission">»<xliff:g id="err_ap_name">%1$s</xliff:g>« se ne more uporabljati, poskusite odobriti dovoljenja.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Nastavitve</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">vpni storitev brisanja</string>
+    <string name="permdesc_mount_service_wipe">Dovoli aplikaciji, da pošlje oddajo za formatiranje pomnilnika telefona in kartice SD.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">Pripravljenost na IPO</string>
+</resources>

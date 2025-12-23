@@ -1,0 +1,16 @@
+java_library {
+    name: "services.vow",
+    srcs: [
+        "java/**/*.java",
+    ],
+    libs: [
+        "services.core",
+        "services.voiceinteraction",
+        "mediatek-framework",
+        "mediatek-common",
+    ],
+    owner: "mtk",
+    aidl: {
+        include_dirs: ["vendor/mediatek/proprietary/frameworks/common/src"],
+    },
+}

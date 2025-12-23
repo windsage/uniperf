@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">Haujafaulu kwa uzuiaji wa wito.</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">Huduma imepeanwa</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">Kadi ya SIM imefungwa</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">Huruhusu programu kupokea na kuchakata jumbe za rejista ya DM ya SMS. Programu hasidi zinaweza  fuatilia jumbe zako au kuzifuta bila kukuonyesha.</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Video</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Nafasi huru"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">"Inapakia\u2026"</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"Bafaring %d%%..."</string>
+   <string name="media_controller_live">"Moja kwa moja"</string>
+   <string name="media_controller_playing">"Inacheza"</string>
+   <string name="media_controller_connecting">"Inaunganisha…"</string>
+
+   <string name="VideoView_error_text_bad_file">"Faili mbaya, video hii haiwezi kuchezwa."</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"Haiwezi unganisha kwa seva."</string>
+   <string name="VideoView_error_text_type_not_supported">"Aina ya faili ya midia haiauniwi."</string>
+   <string name="VideoView_error_text_drm_not_supported">"Imelindwa na DRM, video hii haiwezi chezwa."</string>
+   <string name="VideoView_error_text_invalid_connection">"Muunganisho batili. (403 Imepigwa marufuku)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">SIM Mpya</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Futa</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">Utafutaji…</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">Umeingiza PIN yako kimakosa mara <xliff:g id="number">%1$d</xliff:g>.
+        \n\nTafadhali jaribu tena baada ya sekunde  <xliff:g id="number">%2$d</xliff:g>.</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">Umeingiza nywila yako kimakosa mara <xliff:g id="number">%1$d</xliff:g>.
+        \n\nTafadhali jaribu tena baada ya sekunde <xliff:g id="number">%2$d</xliff:g> .</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Hifadhi ya ndani inaisha, programu imesimamishwa. Tafadhali weka huru baadhi ya nafasi na ujaribu tena.</string>
+    <string name="aerr_process_lowstorage">Hifadhi ya ndani inaisha, mchakato imesimamishwa. Tafadhali weka huru baadhi ya nafasi na ujaribu tena.</string>
+    <string name="low_internal_storage_view_title">Hifadhi ya ndani inaisha</string>
+    <string name="low_storage_warning_message">Tafadhali weka huru nafasi, au programu zingine na matumizi mengine ya mfumo haitafanya kazi vizuri.</string>
+    <string name="deleteMails">Futa barua pepe</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Hali ya ulinzi:</string>
+    <string name="drm_can_forward">Inaweza kuwekwa mbele.</string>
+    <string name="drm_can_not_forward">Haiweza kuwekwa mbele.</string>
+    <string name="drm_no_limitation">Hakuna kizuizi.</string>
+    <string name="drm_no_license">Hakuna kibali cha DRM inayopatikana</string>
+    <string name="drm_begin">Anza:</string>
+    <string name="drm_end">Isha:</string>
+    <string name="drm_use_left">Hesabu iliyobaki</string>
+    <string name="drm_protectioninfo_renew">Onesha upya</string>
+    <string name="drm_protectioninfo_title">Maelezo ya ulinzi</string>
+    <string name="drm_licenseacquisition_title">Uwezo wa kibali cha DRM</string>
+    <string name="drm_licenseacquisition_message">%1$s hauna kibali ya DRM inayopatikana</string>
+    <string name="drm_toast_license_expired">Kibali cha DRM umefika mwisho</string>
+    <string name="drm_forwardforbidden_title">Kupeleka mbele umepigwa marufuku</string>
+    <string name="drm_forwardforbidden_message">Fiali zingine ambazo zimelindwa haziwezi kupelekwa mbele.</string>
+    <string name="drm_license_install_success">Usakinishaji wa kibali cha DRM imefaulu.</string>
+    <string name="drm_license_install_fail">Usakinishaji wa kibali cha DRM haujafaulu.</string>
+    <string name="drm_secure_timer_title">Saa ya ulinzi batili ya DRM</string>
+    <string name="drm_secure_timer_message">Hauwezi kutumia faili za DRM zilizolindwa.  Tafdhali hakikisha unganishi wa mtandao unapatikana</string>
+    <string name="drm_consume_title">Tumia haki za DRM</string>
+    <string name="drm_consume_message">Utakayoyafanya itatumia haki za DRM</string>
+
+    <string name="drm_first_time_use">Hii ndio matumizi ya kwanza</string>
+    <string name="drm_use_now">Je, utatumia sasa?</string>
+    <string name="drm_consume_interval">Faili hii itapatikana ndani ya %1$s baada ya kuanza kuitumia.</string>
+    <string name="drm_effective_duration">Muda fanifu:</string>
+    <string name="drm_expire_dialog_future">Muda halali:</string>
+    <string name="validity_period">"Uhalali:"</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Hali ya ndege imewashwa</string>
+    <string name="confirm_flight_mode_msg">Ndio utumie nambari, kwanza zima hali-tumizi ya ndege.</string>
+    <string name="confirm_radio_title">SIM imezimwa</string>
+    <string name="confirm_radio_msg">Ndio utumie nambari, kwanza iwashe.</string>
+    <string name="confirm_flight_mode_radio_title">Hali ya ndege imewashwa na SIM imezimwa</string>
+    <string name="confirm_flight_mode_radio_msg">Ndio utumie nambari, Kwanza zima hali-tumizi ya ndege na uwshe SIM.</string>
+    <string name="confirm_unlock_title">SIM imefungwa</string>
+    <string name="confirm_unlock_msg">Ndio utumie kadi ya SIM, ifungue kwanza.</string>
+    <string name="confirm_roaming_title">Ilani ya kuzurura</string>
+    <string name="confirm_roaming_msg">Kadi ya SIM inazurura. Endelea kutumia?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">Huduma za VoLTE na za simu China Telecom hazipatikani kwa sasa. Utazima VoLTE?</string>
+
+    <string name="confirm_button_ok">SAWA</string>
+    <string name="confirm_button_cancel">Ghairi</string>
+    <string name="confirm_button_unlock">Fungua</string>
+    <string name="confirm_button_turn_off">"Zima"</string>
+    <string name="confirm_button_turn_on">Washa</string>
+    <string name="confirm_button_yes">Ndiyo</string>
+    <string name="confirm_button_no">Hapana</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Hali ya ndege imewashwa na UIM imezimwa</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">Ndio utumie nambari hii, kwanza zima hali - tumizi ya ndege na uwashe UIM.</string>
+    <string name="confirm_radio_title_UIM">UIM umezimwa</string>
+    <string name="confirm_radio_msg_UIM">Ndio utumie nambari, kwanza iwashe.</string>
+    <string name="confirm_unlock_title_UIM">UIM imefungwa</string>
+    <string name="confirm_unlock_msg_UIM">Ndio utumie kadi ya UIM, kwanza ifungue.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Jumbe</string>
+    <string name="url_dialog_choice_message">Nitafungua kivinjari, endelea?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">Hifadhi barua pepe na uachilie hifadhi</string>
+
+    <string name="storage_withsd">Hifadhi ya simu haina nafasi ya kutosha. Tafadhali weka huru baadhi ya hifadhi au badilisha chaguo-msingi ya kuandika diski kwenye mipangilio.</string>
+    <string name="storage_withoutsd">Hifadhi ya simu haina nafasi ya kutosha. Tafadhali weka huru baadhi ya hifadhi au ingiza kadi ya SD.</string>
+    <string name="storage_sd">Kadi ya SD haina nafasi ya kutosha. Tafadhali weka huru baadhi ya hifadhi au badilisha chaguo-msingi ya kuandika diski kwenye mipangilio.</string>
+    <string name="usb_ums_notification_title">Umeunganishwa kama hifadhi ya USB</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Inachaji kwa USB tu</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">Haujafaulu kupata wakati uliopewa na GPS</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> umeunganishwa, <xliff:g id="blocked">%2$d</xliff:g> zuiwa</string>
+    <string name="tethered_notification_message_bandwidth_set">Kipimo data kimesetiwa</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">"Usiku wa manane"</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">Chaguo-msingi</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">Telezesha kulia ili kukatiza</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">Telezesha kushoto kusinzia</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">Telezesha ju kukatiza</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">Telezesha chini kusinzia</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Donoa kwa Rangi kutekeleza</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">HDMI itazimwa wakati utawasha pasi waya ya kuonyesha. Je, unataka kuendelea?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">Onyesho la pasi waya itazimwa wakati utawasha HDMI. Je, unataka kuendelea?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">Muunganisho wa WI FI wa moja kwa moja uliopo utatenganishwa wakati utakapo unganisha kifaa pasi waya ya kuonyesha. Je, unataka kuendelea?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Muunganisho isiyo imara</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Muunganisho wa pasi waya wa kuonyesha uliopo haujaimarika.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Muunganisho wa pasi waya wa kuonyesha uliopo haujaimarika, tafadhali karibia kifaa chako cha kuonyesha.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Unganisha tena</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Pasi waya ya kuonyesha haujaunganishwa. Je, unataka kuunganisha tena?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Pasi waya ya kuonyesha umetenganishwa.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">"Kipindi kingine cha WPS kimegunduliwa. Tafadhali jaribu tena baada ya dakika chache."</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">Rununu itatenganishwa na Wi-Fi kwa muda mfupi wakati umeunganishwa kwa <xliff:g id="device_name">%1$s</xliff:g> ( tu kama tunabadilisha mkondo na kitambulisho cha mkondo wa ufukivu wa Wi-Fi wa sasa kwa  <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Onyesho la pasi waya na Wi-Fi itawashwa.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">Sauti ya midia-anuai hautacheza kwa spika.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">Ukibadilisha mwonekano utaunganisha tena  pasi waya kiotomatiki.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">Usinikumbushe tena.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Wi-Fi wa sasa unaweza kuadhiri ubora wa onyesho la pasi waya.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">Unangoja mwaliko wa muunganisho kutoka kwa vifaa vingine.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">Inataka kujenga muunganisho na wewe.</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">Inajenga muunganisho.</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">Umeunganishwa na mtandao wa Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Mtandao wa Wi-Fi  <xliff:g id="wifi_ap_name">%1$s</xliff:g> umetenganishwa.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Mgogoro wa mikondo</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Current Wi-Fi network can\’t coexist with cast screen connection.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">Kadi ya SD iko tayari</string>
+    <string name="sdcard_select_default_path">Je, unataka kubadilisha diski ya chaguo-msingi ya kuandika?</string>
+    <string name="sdcard_default_path_change">Diski ya chaguo-msingi ya kuandika imebadilishwa.</string>
+    <string name="usb_storage_ready_title">Hifadhi ya nje ya USB iko tayari</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Vipaza sauti zako ya maskio si tangamanifu  na rununu yako. Tafadhali jaribu zingine</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">Imeunganishwa kama autorun ya cdrom</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">Waya ya HDMI imeunganishwa</string>
+    <string name="hdmi_notification_content">Bonyeza kusanidi HDMI</string>
+    <string name="hdmi_hdvideo_toast">HDMI haiwezi kucheza filamu za 4K, muunganisho utakatizwa.</string>
+    <string name="hdmi_mutex_call_content">Pole, HDMI itasimama ju ya wito wa rununu wa sasa</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Tokezi la Sauti</string>
+    <string name="hdmi_audio_output_stereo">Stereo</string>
+    <string name="hdmi_audio_output_multi_channel">Ya Idhaa Mingi</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Muunganisho wa data pekee</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">Mtandao wa LTE haupatikani.</string>
+    <string name="Suggest_To_Change_USIM">Pendekeza kubadilisha kadi ya SIM ya 4G.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Uchaguzi wa Akaunti ya Chaguo-msingi</string>
+    <string name="account_always_ask_title">"Uliza kwanza"</string>
+    <string name="other_accounts">Akaunti zingine</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">Marufuku</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">Imeshindwa kucheza sauti</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"Video hii haiauniwi."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Thibitisha"</string>
+    <string name="save_password_message">"Je, unataka kivinjari kikumbuke nywila hii?"</string>
+    <string name="save_password_notnow">"Sio sasa"</string>
+    <string name="save_password_remember">"Kumbuka"</string>
+    <string name="save_password_never">"Kamwe"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">Amsha tableti</string>
+    <string name="permlab_wake_device_sensorhub" product="default">Amsha rununu</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Wezesha programu kuamsha tableti wakati itakuwa kwenye hali ya kusitishwa kupitia kihisio kitovu.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Inaruhusu programu kuamsha simu wakati iko katika hali tumizi ya kuahirisha kupitia kihisio cha kitovu.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">Kwa sasa uko katika uzururaji wa kimataifa,data ya simu imewashwa,tafadhali kumbuka utozwaji wa data.</string>
+    <string name="known">"Najua"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">Ikoni ya logo ya programu</string>
+    <string name="close">Funga programu</string>   
+    <string name="maximum">Panua programu</string>
+    <string name="minimize">Punguza programu</string>
+    <string name="drag">Kokota kupunguza ukubwa wa programu</string> 
+    <string name="gallery_camera_mutex">Haiwezi tumia matunzio,kamera au kichezesha video kwa wakati mmoja</string> 
+    <string name="mw_max_size_string">Panua  <xliff:g id="number">%d</xliff:g> onyesho linalo olea</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">Kiungo cha Mfumo wa OMAPI</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">Programu yenye hizi ruhusa inaonyesha kuwa ni ya kiungo cha OMAPI ya mfumo.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">Unganishaji wa kiungo cha OMAPI</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">Programu yenye hizi ruhusa inaweza unganishwa na mfumo wa kiungo cha OMAPI. Kadi maizi inafaa kutumia pekee.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">Anzilisha wito wa washirika wengi</string>
+    <string name="permdesc_cta_conference_call">Inakubali programu kuanzisha wito za watu wengi. Hii inaezapelekea malipo ambayo haukutarajia. Programu hasidi zinaweza kugharamisha pesa kwa kuanzisha wito za watu wengi bila kukuarifu.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">usambazaji wa wito</string>
+    <string name="permdesc_cta_call_forward">Ruhusu programu itume wito mbele.</string>
+    <string name="permlab_cta_send_mms">Tuma MMS</string>
+    <string name="permdesc_cta_send_mms">Inakubali programu kutuma jumbe za  wito za MMS. Hii inaezapelekea malipo ambayo haukutarajia. Programu hasidi zinaweza kugharamisha pesa kwa kutuma jumbe bila kukuarifu.</string>
+    <string name="permlab_cta_send_email">Tuma barua pepe</string>
+    <string name="permdesc_cta_send_email">Inakubali programu kutuma jumbe za  wito za MMS. Hii inaezapelekea malipo ambayo haukutarajia. Programu hasidi zinaweza kugharamisha pesa kwa kutuma jumbe bila kukuarifu.</string>
+    <string name="permgrouplab_email">Barua pepe</string>
+    <string name="permgroupdesc_email">Tuma barua pepe</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" imezuiwa ku <xliff:g id="permission_name">%2$s</xliff:g>. Utaruhusu?</string>
+    <string name="aerr_application_permission_connectivity">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" haiwezi <xliff:g id="permission_name">%2$s</xliff:g>, unaweza <xliff:g id="permission_name2">%2$s</xliff:g> kwenye \"Mipangilio\"</string>
+    <string name="aerr_application_unknown_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" haiwezi kutumika, tafadhali jaribu kuipa ruhusa.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Mipangilio</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">pachika huduma ya kufuta</string>
+    <string name="permdesc_mount_service_wipe">Inaruhusu programu kutuma tangazo ya kufuta hifadhi  ya simu na kadi ya SD.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">IPO Inasuburi</string>
+</resources>

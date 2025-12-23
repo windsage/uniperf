@@ -1,0 +1,21 @@
+cc_library_shared {
+    name: "libmediatek_exceptionlog",
+    system_ext_specific: true,
+    srcs: [
+        "com_mediatek_aee_exceptionlog.cpp",
+        "onload.cpp",
+    ],
+    shared_libs: [
+        "libcutils",
+        "libhardware",
+        "libhardware_legacy",
+        "libnativehelper",
+        "libutils",
+        "liblog",
+        "libui",
+    ],
+    header_libs: ["libaed_headers"],
+    defaults: [
+        "mssi_libaed_defaults",
+    ],
+}

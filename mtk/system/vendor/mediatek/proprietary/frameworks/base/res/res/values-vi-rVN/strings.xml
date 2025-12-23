@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">Lỗi chặn cuộc gọi.</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">Đã cung cấp dịch vụ</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">Đóng thẻ SIM</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">Cho phép ứng dụng nhận
+ và xử lý tin nhắn SMS của DM đăng ký. Bất kỳ ứng dụng nào ngoại trừ ỨNG DỤNG DM sẽ không sử dụng ứng dụng này</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Video</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Không gian trống"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">"Đang tải…"</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"Đang lưu vào %d%% …"</string>
+   <string name="media_controller_live">"Trực tiếp"</string>
+   <string name="media_controller_playing">"Đang phát"</string>
+   <string name="media_controller_connecting">"Đang kết nối …"</string>
+
+   <string name="VideoView_error_text_bad_file">"Tập tin kém, video này không thể phát."</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"Không thể kết nối với máy chủ."</string>
+   <string name="VideoView_error_text_type_not_supported">"Loại tập tin phương tiện không được hỗ trợ."</string>
+   <string name="VideoView_error_text_drm_not_supported">"DRM đã bảo vệ, video này không thể phát."</string>
+   <string name="VideoView_error_text_invalid_connection">"Kết nối không hợp lệ. (Điều cấm 403)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">SIM mới</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Xóa</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">Đang phát hiện...</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">Bạn đã nhập sai mã PIN <xliff:g id="number">%1$d</xliff:g> lần. \n\nVui lòng thử lại sau <xliff:g id="number">%2$d</xliff:g> giây.</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">Bạn đã nhập sai mật khẩu <xliff:g id="number">%1$d</xliff:g> lần. \n\nVui lòng thử lại sau <xliff:g id="number">%2$d</xliff:g> giây.</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Bộ nhớ trong đang hết, ứng dụng đã ngừng. Hãy giải phóng một số không gian và thử lại.</string>
+    <string name="aerr_process_lowstorage">Bộ nhớ trong hết dung lượng, tiến trình đã bị dừng. Hãy xóa bớt một số nội dung và thử lại.</string>
+    <string name="low_internal_storage_view_title">Bộ nhớ trong hết dung lượng</string>
+    <string name="low_storage_warning_message">Hãy giải phóng một số không gian hoặc một số ứng dụng và chức năng hệ thống có thể không hoạt động tốt.</string>
+    <string name="deleteMails">Xóa thư</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Tình trạng bảo vệ:</string>
+    <string name="drm_can_forward">Có thể  chuyển tiếp.</string>
+    <string name="drm_can_not_forward">Không thể ch.tiếp.</string>
+    <string name="drm_no_limitation">Không giới hạn.</string>
+    <string name="drm_no_license">Không có giấy phép DRM</string>
+    <string name="drm_begin">Bắt đầu:</string>
+    <string name="drm_end">Kết thúc:</string>
+    <string name="drm_use_left">Số đếm còn lại:</string>
+    <string name="drm_protectioninfo_renew">Gia hạn</string>
+    <string name="drm_protectioninfo_title">Thông tin bảo vệ</string>
+    <string name="drm_licenseacquisition_title">Mua lại giấy phép DRM</string>
+    <string name="drm_licenseacquisition_message">%1$s không có sẵn giấy phép DRM. Bạn có thể bấm nút "Gia hạn" để mua lại giấy phép DRM.</string>
+    <string name="drm_toast_license_expired">Giấy phép DRM đã hết hạn.</string>
+    <string name="drm_forwardforbidden_title">Cấm chuyển tiếp</string>
+    <string name="drm_forwardforbidden_message">Không thể chuyển tiếp một số tệp được bảo vệ.</string>
+    <string name="drm_license_install_success">Đã cài đặt thành công Giấy phép DRM.</string>
+    <string name="drm_license_install_fail">Không thể cài đặt Giấy phép DRM.</string>
+    <string name="drm_secure_timer_title">Đồng hồ bảo mật DRM không an toàn</string>
+    <string name="drm_secure_timer_message">Bạn k.thể dùng các file được b.vệ bởi DRM. Đảm bảo có sẵn kết nối dữ liệu.</string>
+    <string name="drm_consume_title">Tiêu thụ quyền DRM</string>
+    <string name="drm_consume_message">Thao tác của bạn sẽ sử dụng các bản quyền DRM.</string>
+
+    <string name="drm_first_time_use">Đây là lần sử dụng đầu tiên.</string>
+    <string name="drm_use_now">Sử dụng nó bây giờ?</string>
+    <string name="drm_consume_interval">Tập tin này sẽ có hiệu lực trong %1$s sau khi bạn bắt đầu sử dụng tập tin.</string>
+    <string name="drm_effective_duration">Thời hạn có hiệu lực:</string>
+    <string name="drm_expire_dialog_future">Thời hạn hiệu lực:</string>
+    <string name="validity_period">Tính hợp lệ:</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Chế độ máy bay bật</string>
+    <string name="confirm_flight_mode_msg">Để sử dụng số, trước tiên hãy tắt chế độ Máy bay.</string>
+    <string name="confirm_radio_title">SIM tắt</string>
+    <string name="confirm_radio_msg">Để sử dụng số, trước hết hãy bật.</string>
+    <string name="confirm_flight_mode_radio_title">Chế độ máy bay bật và SIM tắt</string>
+    <string name="confirm_flight_mode_radio_msg">Để dùng số ĐT này, hãy tắt chế độ máy bay trước và bật SIM.</string>
+    <string name="confirm_unlock_title">SIM
+ đã bị khoá</string>
+    <string name="confirm_unlock_msg">SIM vừa chọn hiện bị khóa. Hãy mở khóa trước.</string>
+    <string name="confirm_roaming_title">Cảnh báo chuyển vùng</string>
+    <string name="confirm_roaming_msg">Thẻ SIM đang chuyển vùng. Tiếp tục sử dụng nó?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">China Telecom VoLTE và các dịch vụ gọi hiện thời không có. Tắt VoLTE?</string>
+
+    <string name="confirm_button_ok">OK</string>
+    <string name="confirm_button_cancel">Hủy</string>
+    <string name="confirm_button_unlock">Mở khóa</string>
+    <string name="confirm_button_turn_off">Tắt</string>
+    <string name="confirm_button_turn_on">Bật</string>
+    <string name="confirm_button_yes">Có</string>
+    <string name="confirm_button_no">Không</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Chế độ trên máy bay và tắt UIM</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">Để sử dụng số, trước tiên hãy tắt chế độ Máy bay và bật UIM.</string>
+    <string name="confirm_radio_title_UIM">Tắt UIM</string>
+    <string name="confirm_radio_msg_UIM">Để sử dụng số, trước hết hãy bật.</string>
+    <string name="confirm_unlock_title_UIM">UIM đã khóa</string>
+    <string name="confirm_unlock_msg_UIM">Để sử dụng thẻ UIM, mở khóa nó trước.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Tin nhắn</string>
+    <string name="url_dialog_choice_message">Thao tác sẽ mở trình duyệt, tiếp tục?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">Sao lưu thư và làm trống bộ nhớ</string>
+
+    <string name="storage_withsd">Bộ nhớ điện thoại không đủ dung lượng. Hãy làm trống một số dung lượng bộ nhớ hoặc thay đổi đĩa ghi mặc định trong cài đặt.</string>
+    <string name="storage_withoutsd">Bộ nhớ điện thoại không đủ dung lượng. Hãy làm trống một số dung lượng bộ nhớ hoặc lắp thẻ SD.</string>
+    <string name="storage_sd">Thẻ SD không đủ dung lượng. Hãy làm trống một số dung lượng bộ nhớ hoặc thay đổi đĩa ghi mặc định trong cài đặt.</string>
+    <string name="usb_ums_notification_title">Đã kết nối như thiết bị lưu trữ USB</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Chỉ sạc qua USB</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">Không thể truy cập giờ được cấp bởi GPS</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot">Đã kết nối <xliff:g id="connected">%1$d</xliff:g>, đã chặn <xliff:g id="blocked">%2$d</xliff:g></string>
+    <string name="tethered_notification_message_bandwidth_set">Đã cài dải tần</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">Nửa đêm</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">Mặc định</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">Trượt sang phải để loại bỏ</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">Trượt sang bên trái để báo lại</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">Trượt lên để loại bỏ</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">Trượt xuống để báo lại</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Nhấn vào Màu để áp dụng</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">Bluetooth và HDMI sẽ tắt khi bật hiển thị không dây. Bạn muốn tiếp tục?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">Hiển thị không dây sẽ tắt khi bật HDMI. Bạn muốn tiếp tục?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">Kết nối Wi-Fi trực tiếp hiện hành sẽ bị ngắt khi bạn kết nối với thiết bị hiển thị không dây. Bạn muốn tiếp tục?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Kết nối không ổn định</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Kết nối hiện tại của màn hình không dây không ổn định.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Kết nối hiện tại của màn hình không dây không ổn định, hãy cố gắng gần gũi hơn với thiết bị hiển thị của bạn.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Kết nối lại</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Hiển thị không dây ngắt kết nối. Bạn có muốn kết nối lại không?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Màn hình không dây bị ngắt kết nối.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">Đã phát hiện một phiên WPS khác. Vui lòng thử lại sau ít phút.</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">Điện thoại sẽ tạm ngắt kết nối với Wi-Fi trong khi kết nối với <xliff:g id="device_name">%1$s</xliff:g> (chỉ khi nào thay đổi dải tần kênh và ID của các bộ thu phát ko dây Wi-Fi hiện hành sang <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Hiển thị không dây và Wi-Fi được bật.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">Âm thanh đa phương tiện sẽ không phát từ tai nghe của bạn.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">Thay đổi độ phân giải sẽ tự động kết nối lại hiển thị không dây.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">Đừng nhắc lại.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Bộ thu phát Wi-Fi có thể ảnh hưởng đến chất lượng của Hiển thị không dây.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">Đang đợi lời mời kết nối từ các thiết bị khác.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">muốn thiết lập kết nối với bạn</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">Xây dựng kết nối.</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">Đã kết nối mạng Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Đã ngắt kết nối mạng Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Xung đột kênh</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Current Wi-Fi network can\’t coexist with cast screen connection.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">Thẻ nhớ đã sẵn sàng</string>
+    <string name="sdcard_select_default_path">Bạn có muốn thay đổi đĩa mặc định ghi?</string>
+    <string name="sdcard_default_path_change">Mặc định ghi đĩa đã được thay đổi.</string>
+    <string name="usb_storage_ready_title">Bộ nhớ USB ngoài đã sẵn sàng</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Tai nghe của bạn ko tương thích với điện thoại. Hãy thử dùng tai nghe khác</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">Đã kết nối dưới dạng một CDROM tự chạy</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">Đã cắm cáp HDMI</string>
+    <string name="hdmi_notification_content">Click để định cấu hình HDMI</string>
+    <string name="hdmi_hdvideo_toast">HDMI không thể phát video 4K, kết nối sẽ bị gián đoạn.</string>
+    <string name="hdmi_mutex_call_content">Rất tiếc, HDMI đã ngừng hoạt động do cuộc gọi điện thoại hiện tại.</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Đầu ra âm thanh</string>
+    <string name="hdmi_audio_output_stereo">Âm thanh nổi</string>
+    <string name="hdmi_audio_output_multi_channel">Nhiều kênh</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Chỉ kết nối dữ liệu</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">Mạng LTE không có sẵn.</string>
+    <string name="Suggest_To_Change_USIM">Đề nghị thay đổi thẻ 4G.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Chọn tài khoản mặc định</string>
+    <string name="account_always_ask_title">Hỏi trước</string>
+    <string name="other_accounts">Tài khoản khác</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">Bị cấm</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">Không thể phát âm thanh.</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"Video này không được hỗ trợ."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Xác nhận"</string>
+    <string name="save_password_message">"Bạn có muốn trình duyệt nhớ mật khẩu này không?"</string>
+    <string name="save_password_notnow">"Không phải bây giờ"</string>
+    <string name="save_password_remember">"Ghi nhớ"</string>
+    <string name="save_password_never">"Không bao giờ"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">Khởi động máy tính bảng</string>
+    <string name="permlab_wake_device_sensorhub" product="default">Khởi động điện thoại</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Cho phép ứng dụng khởi động máy tính bảng khi ở chế độ tạm dừng qua cổng cảm biến.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Cho phép ứ.dụng khởi động ĐT khi ở chế độ tạm dừng qua cổng cảm biến.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">Bạn hiện đang sử dụng dịch vụ chuyển vùng quốc tế, dữ liệu di động được bật, xin lưu ý rằng các khoản phí địa phương.</string>
+    <string name="known">"Tôi biết"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">biểu tượng biểu tượng ứng dụng</string>
+    <string name="close">Đóng ứng dụng</string>   
+    <string name="maximum">ứng dụng tối đa</string>
+    <string name="minimize">giảm thiểu ứng dụng</string>
+    <string name="drag">kéo kích thước cửa sổ ứng dụng</string> 
+    <string name="gallery_camera_mutex">Không thể sử dụng Thư viện, Máy ảnh hoặc Trình phát video vào cùng một thời điểm</string> 
+    <string name="mw_max_size_string">Tối đa <xliff:g id="number">%d</xliff:g> cửa sổ nổi</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">Hệ thống thiết bị đầu cuối OMAPI</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">Ứng dụng với sự cho phép này chỉ ra rằng nó là một thiết bị đầu cuối OMPI của hệ thống.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">Thiết bị gắn kết đầu cuốiOMAPI</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">Ứng dụng với sự cho phép này có thể liên kết với thiết bị đầu cuối OMPI của hệ thống. Chỉ dịch vụ thẻ thông minh sẽ được sử dụng.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">Khởi tạo đa cuộc gọi</string>
+    <string name="permdesc_cta_conference_call">Cho phép ứng dụng khởi tạo cuộc gọi nhiều nhóm. Điều này có thể dẫn đến các khoản phí không mong muốn. Các ứng dụng độc hại có thể khiến bạn mất tiền bằng cách khởi tạo cuộc gọi nhiều nhóm mà không có sự xác nhận của bạn.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">chuyển tiếp cuộc gọi</string>
+    <string name="permdesc_cta_call_forward">Cho phép ứng dụng chuyển tiếp cuộc gọi.</string>
+    <string name="permlab_cta_send_mms">Gửi tin nhắn đa phương tiện</string>
+    <string name="permdesc_cta_send_mms">Cho phép ứng dụng gửi tin nhắn đa phương tiện MMS. Điều này có thể dẫn đến các khoản phí không mong muốn. Các ứng dụng độc hại có thể khiến bạn mất tiền bằng cách gửi tin nhắn mà không cần xác nhận của bạn.</string>
+    <string name="permlab_cta_send_email">Gửi email</string>
+    <string name="permdesc_cta_send_email">Cho phép ứng dụng gửi email. Điều này có thể dẫn đến tiêu tốn dữ liệu di động không mong muốn. Các ứng dụng độc hại có thể khiến bạn phải trả tiền bằng cách gửi email mà không có sự xác nhận của bạn.</string>
+    <string name="permgrouplab_email">Email</string>
+    <string name="permgroupdesc_email">Gửi email</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" đã bị từ chối bởi <xliff:g id="permission_name">%2$s</xliff:g>. Chấp nhận cấp phép?</string>
+    <string name="aerr_application_permission_connectivity">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" không thể <xliff:g id="permission_name">%2$s</xliff:g>, bạn có thể thiết lập tại <xliff:g id="permission_name2">%2$s</xliff:g> trong \"Cài đặt\"</string>
+    <string name="aerr_application_unknown_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" không thể sử dụng được, hãy thử cho phép quyền sử dụng.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Cài đặt</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">dọn dẹp bộ lưu trữ</string>
+    <string name="permdesc_mount_service_wipe">Cho phép ứng dụng gửi bản phát thanh để định dạng bộ lưu trữ điện thoại và Thẻ SD.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">Chế độ chờ IPO</string>
+</resources>

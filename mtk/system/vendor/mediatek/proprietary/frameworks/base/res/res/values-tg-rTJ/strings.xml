@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">Дар масдуд кардани зангҳо ноком шуд.</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">Хизматрасонӣ таъмин карда шуд.</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">Чин Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">SIM корт маҳкам гардид</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">Ба барнома барои қабул
+      ва коркарди паёмҳои SMS DM Register иҷозат медиҳад. Ҳама гуна барномаҳо ба истиснои DM APP
+      набояд аз ин истифода баранд</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Видео</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Фазои холӣ"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">Боркунӣ\u2026</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"Буферкунӣ %d%%..."</string>
+   <string name="media_controller_live">"Мустақим"</string>
+   <string name="media_controller_playing">"Пахш шуда истодааст"</string>
+   <string name="media_controller_connecting">"Пайваст шуда истодааст..."</string>
+
+   <string name="VideoView_error_text_bad_file">"Файли бад, ин видеоро пахш карда намешавад."</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"Ба сервер пайваст шуда наметавонад."</string>
+   <string name="VideoView_error_text_type_not_supported">"Намуди файли медиа дастгирӣ намешавад."</string>
+   <string name="VideoView_error_text_drm_not_supported">"DRM ҳифз шудааст, ин видеоро кушодан ғайриимкон аст."</string>
+   <string name="VideoView_error_text_invalid_connection">"Пайвасти нодуруст. (403 мамнӯъ)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">SIM нав</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Нест кардан</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">Муайянкунӣ...</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">
+        Шумо PIN -и худро <xliff:g id="number">%1$d</xliff:g> маротиба нодуруст ворид кардед.
+        \n\nЛутфан пас аз <xliff:g id="number">%2$d</xliff:g> сония дубора кӯшиш кунед.
+    </string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">
+        Шумо пароли худро <xliff:g id="number">%1$d</xliff:g> маротиба нодуруст ворид кардед.
+        \n\nЛутфан пас аз <xliff:g id="number">%2$d</xliff:g> сония дубора кӯшиш кунед.
+    </string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Захираи дохилӣ тамом мешавад, барнома қатъ карда шуд. Лутфан каме фазо холӣ кунед ва дубора кӯшиш кунед.</string>
+    <string name="aerr_process_lowstorage">Захираи дохилӣ тамом мешавад, раванд қатъ шудааст. Лутфан каме фазо холӣ кунед ва дубора кӯшиш кунед.</string>
+    <string name="low_internal_storage_view_title">Захираи дохилӣ тамом мешавад</string>
+    <string name="low_storage_warning_message">Лутфан каме фазо ё каме барономаҳоро холӣ кунед ва фуексияҳои система метавонад хуб кор накунад.</string>
+    <string name="deleteMails">Почтаҳоро нест кунед</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Ҳолати ҳифз:</string>
+    <string name="drm_can_forward">Интиқол додан мумкин аст.</string>
+    <string name="drm_can_not_forward">Интиқол додан мумкин нест.</string>
+    <string name="drm_no_limitation">Маҳдудият нест.</string>
+    <string name="drm_no_license">Иҷозатномаи DRM дастрас нест.</string>
+    <string name="drm_begin">Оғоз:</string>
+    <string name="drm_end">Охир:</string>
+    <string name="drm_use_left">Ҳисоби чап:</string>
+    <string name="drm_protectioninfo_renew">Навсозӣ</string>
+    <string name="drm_protectioninfo_title">Маълумоти ҳифз</string>
+    <string name="drm_licenseacquisition_title">Гирифтани иҷозатномаи DRM</string>
+    <string name="drm_licenseacquisition_message">%1$s иҷозатномаи дастраси DRM надорад. Барои гирифтани иҷозатномаи DRM, шумо метавонед тугмаи "Навсозӣ" -ро пахш кунед.</string>
+    <string name="drm_toast_license_expired">Мӯҳлати иҷозатномаи DRM гузаштааст.</string>
+    <string name="drm_forwardforbidden_title">Ирсол кардан манъ аст</string>
+    <string name="drm_forwardforbidden_message">Баъзе файлҳои ҳифзшуда наметавонанд интиқол дода шаванд.</string>
+    <string name="drm_license_install_success">Насби иҷозатномаи DRM бомуваффақият анҷом ёфт.</string>
+    <string name="drm_license_install_fail">Насби иҷозатномаи DRM ноком шуд.</string>
+    <string name="drm_secure_timer_title">Соати бехатарии DRM беэътибор аст</string>
+    <string name="drm_secure_timer_message">Шумо наметавонед ҳуҷҷатҳои бо DRM муҳофизатшударо истифода баред. Лутфан мутмаъин бошед ки пайвастшавии маълумот дастрас аст.</string>
+    <string name="drm_consume_title">Ҳуқуқҳои DRM-ро истифода баред</string>
+    <string name="drm_consume_message">Амали шумо ҳуқуқҳои DRM-ро истеъмол мекунад.</string>
+
+    <string name="drm_first_time_use">Ин бори аввал истифода шуда истодааст.</string>
+    <string name="drm_use_now">Ҳозир истифода мебаред?</string>
+    <string name="drm_consume_interval">Ин файл пас аз оғози %1$s истифодаи он дастрас мешавад.</string>
+    <string name="drm_effective_duration">Мӯҳлати амалӣ:</string>
+    <string name="drm_expire_dialog_future">Мӯҳлати эътибор:</string>
+    <string name="validity_period">Эътибор:</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Реҷаи ҳавопаймо фаъол</string>
+    <string name="confirm_flight_mode_msg">Барои истифодаи рақам, аввал реҷаи ҳавопайморо хомӯш кунед.</string>
+    <string name="confirm_radio_title">SIM хомӯш аст</string>
+    <string name="confirm_radio_msg">Барои истифодаи рақам, аввал онро фаъол созед.</string>
+    <string name="confirm_flight_mode_radio_title">Реҷаи ҳавопаймо фаъол ва SIM хомӯш</string>
+    <string name="confirm_flight_mode_radio_msg">Барои истифодаи рақам, аввал реҷаи ҳавопайморо хомӯш кунед ва SIM-ро фаъол созед.</string>
+    <string name="confirm_unlock_title">SIM баста гардид</string>
+    <string name="confirm_unlock_msg">Барои истифодаи SIM корт, аввал онро кушоед.</string>
+    <string name="confirm_roaming_title">Ҳушдоркунии роуминг</string>
+    <string name="confirm_roaming_msg">SIM корт дар роуминг аст. Барои истифодаи он идома медиҳед?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">China Telecom VoLTE ва хидматҳои занг дар ҳоли ҳозир дастнорасанд. VoLTE-ро ХОМӮШ Кунед?</string>
+
+    <string name="confirm_button_ok">OK</string>
+    <string name="confirm_button_cancel">Бекор кардан</string>
+    <string name="confirm_button_unlock">Кушодан</string>
+    <string name="confirm_button_turn_off">Хомӯш кардан</string>
+    <string name="confirm_button_turn_on">Фаъол кардан</string>
+    <string name="confirm_button_yes">Ҳа</string>
+    <string name="confirm_button_no">Не</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Реҷаи ҳавопаймо фаъол ва UIM хомӯш</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">Барои истифодаи рақам, аввал реҷаи ҳавопайморо хомӯш кунед ва UIM-ро фаъол созед.</string>
+    <string name="confirm_radio_title_UIM">UIM хомӯш</string>
+    <string name="confirm_radio_msg_UIM">Барои истифодаи рақам, аввал онро фаъол созед.</string>
+    <string name="confirm_unlock_title_UIM">UIM баста</string>
+    <string name="confirm_unlock_msg_UIM">Барои истифодаи UIM корт, аввал онро кушоед.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Паёмҳо</string>
+    <string name="url_dialog_choice_message">Он браузерро мекушояд, идома медиҳед?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">Нусхабардории захиравии почта ва захиракунии релизҳо</string>
+
+    <string name="storage_withsd">Махзани телефон фазои кофӣ надорад. Лутфан каме махзан холӣ кунед ё диски сабти пешфарзро дар танзимот тағйир диҳед.</string>
+    <string name="storage_withoutsd">Махзани телефон фазои кофӣ надорад. Лутфан каме махзан холӣ кунед ё SD кортро ворид кунед.</string>
+    <string name="storage_sd">SD корт фазои кофӣ надорад. Лутфан каме махзан холӣ кунед ё диски сабти пешфарзро дар танзимот тағйир диҳед.</string>
+    <string name="usb_ums_notification_title">Ҳамчун захираи USB пайваст карда шудааст</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Танҳо Қуввадиҳии USB</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">Вақти GPS пешниҳоднамударо гирифта нашуд</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> пайваст аст, <xliff:g id="blocked">%2$d</xliff:g> масдуд шуд</string>
+    <string name="tethered_notification_message_bandwidth_set">Зарфияти гузариш таъин карда шуд</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">Нимашаб</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">Пешфарз</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">Барои рад кардан ба тарафи рост кашед</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">Барои ба таъхир гузоштан ба тарафи чап кашед</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">Барои рад кардан ба боло кашед</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">Барои ба таъхир гузоштан ба поён кашед</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Рангро барои татбиқ кардан пахш кунед</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">Вақте ки шумо намоиши бесимро фаъол мекунед, HDMI хомӯш мешавад. Оё мехоҳед давом диҳед?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">Вақте ки шумо HDMI - ро фаъол мекунед, намоиши бесим хомӯш мешавад. Оё мехоҳед давом диҳед?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">Вақте ки шумо ба дастгоҳи намоиши бесим пайваст мешавед, пайвасти ҷории Wi-Fi Direct қатъ мешавад. Оё мехоҳед давом диҳед?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Пайвасти ноустувор</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Пайвасти ҳозираи намоиши бесими ноустувор аст.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Пайвасти ҳозираи намоиши бесими ноустувор аст, кӯшиш кунед, ки ба дастгоҳи намоиш наздиктар шавед.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Аз нав пайваст шудан</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Қатъ намоиши бесим. Мехоҳед аз нав пайваст шавед?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Намоиши бесим қатъ шуд.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">Сеанси дигари WPS муайян карда шуд. Лутфан, пас аз чанд дақиқа дубора кӯшиш кунед.</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">Телефон аз Wi-Fi муваққатан ҷудо мешавад ҳангоми пайвастшавӣ ба <xliff:g id="device_name">%1$s</xliff:g> (танҳо ҳангоми тағйир додани диапазони канал ва ID нуқтаҳои дастрасии ҷории Wi-Fi <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Намоиши бесим ва Wi-Fi фаъол ҳастанд.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">Садои мултимедиявӣ аз гӯшмонаки шумо садо намедиҳад.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">тағйир додани қарор дисплейи бесимро худкорона дубора пайваст мекунад.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">Боз хотиррасон Накунед.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Wi-Fi AP-и ҷорӣ метавонад ба сифати намоиши Бесим таъсир расонад.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">Мунтазири даъватномаҳои пайвастшавӣ аз дастгоҳҳои дигар.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">мехоҳад бо шумо робита барқарор кунад.</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">Сохтани пайвастшавӣ.</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">Пайваст шудааст Wi-Fi ба <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Шабакаи Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g> қатъ шуд.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Муноқишаи канал</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Шабакаи ҷории Wi-Fi наметавонад бо пайвасти экрани интиқолшуда вуҷуд дошта бошад.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">Корти SD омода аст</string>
+    <string name="sdcard_select_default_path">Мехоҳед навиштани диски пешфарзро тағйир диҳед?</string>
+    <string name="sdcard_default_path_change">Диски сабт аз рӯи муқаррарот иваз карда шуд.</string>
+    <string name="usb_storage_ready_title">Хотираи берунии USB омода аст</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Гӯшмонакҳои шумо бо телефон мувофиқ нестанд. Лутфан, дигарашро санҷед</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">Ҳамчун cdrom-и худкорона пайваст карда шудааст</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">Сими HDMI пайваст аст</string>
+    <string name="hdmi_notification_content">Барои танзим кардани HDMI пахш кунед</string>
+    <string name="hdmi_hdvideo_toast">HDMI наметавонад видеои 4K-ро пахш кунад, иртибот қатъ мешавад.</string>
+    <string name="hdmi_mutex_call_content">Бубахшед, HDMI бинобар занги ҷории телефонӣ қатъ гардид.</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Баромади аудио</string>
+    <string name="hdmi_audio_output_stereo">Стерео</string>
+    <string name="hdmi_audio_output_multi_channel">Чандканала</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Танҳо пайвасти маълумот</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">Шабакаи LTE дастрас нест.</string>
+    <string name="Suggest_To_Change_USIM">Пешниҳод кунед, ки SIM-корти 4G-ро иваз кунед.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Интихоби ҳисоб аз рӯи муқаррарот</string>
+    <string name="account_always_ask_title">Аввал пурсед</string>
+    <string name="other_accounts">Дигар ҳисобҳо</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">манъшуда</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">Аудио пахш нашуд.</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"Ин видео дастгирӣ намешавад."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Тасдиқ"</string>
+    <string name="save_password_message">"Мехоҳед, ки браузер ин паролро дар хотир нигоҳ дорад?"</string>
+    <string name="save_password_notnow">"Ҳозир не"</string>
+    <string name="save_password_remember">"Дар хотир доштан"</string>
+    <string name="save_password_never">"Ҳеҷ гоҳ"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">планшетро бедор кунед</string>
+    <string name="permlab_wake_device_sensorhub" product="default">телефонро бедор кунед</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Ба барнома барои бедор кардани планшет ҳангоми қарор доштан дар ҳолати интизорӣ тавассути маркази сенсорӣ иҷозат медиҳад.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Ба барнома барои бедор кардани телефон ҳангоми қарор доштан дар ҳолати интизорӣ тавассути маркази сенсорӣ иҷозат медиҳад.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">Шумо айни замон дар роуминги байналмилалӣ ҳастед, маълумоти мобилӣ фаъол аст, лутфан қайд кунед, ки пардохти маҳалӣ аст.</string>
+    <string name="known">"Ман медонам"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">Нишонаи логотипи барнома</string>
+    <string name="close">барномаро пӯшед</string>   
+    <string name="maximum">Тадбиқи максималӣ</string>
+    <string name="minimize">хурд кардани барнома</string>
+    <string name="drag">андозаи равзанаи барномаро кашед</string> 
+    <string name="gallery_camera_mutex">Нигористон, Камера ё Плейри видеоро ҳамзамон истифода бурдан мумкин нест</string> 
+    <string name="mw_max_size_string">Максимум равзанаҳои шиновар <xliff:g id="number">%d</xliff:g></string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">Терминали системаи OMAPI</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">Барнома бо ин иҷозат нишон медиҳад, ки он терминали OMAPI-и система аст.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">Пайваст кардани терминали OMAPI</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">Барнома бо ин иҷозат метавонад ба терминалҳои OMAPI-и система пайваст шавад. Танҳо SmartcardService бояд онро истифода барад.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">ташаббуси даъватхои бисёр-партиявӣ</string>
+    <string name="permdesc_cta_conference_call">Ба барнома барои барқарории зангҳои чанд тарафа иҷозат медиҳад. Ин метавонад боиси пардохтҳои ғайричашмдошт гардад. Барномаҳои зараровар метавонанд тавассути оғоз кардани зангҳои бисёрҷониба бидуни тасдиқи шумо пулро талаб кунанд.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">фиристодани занг</string>
+    <string name="permdesc_cta_call_forward">Ба барнома барои интиқоли занг иҷозат медиҳад.</string>
+    <string name="permlab_cta_send_mms">MMS-ро фиристед</string>
+    <string name="permdesc_cta_send_mms">Ба барнома барои ирсоли паёмҳои MMS иҷозат медиҳад. Ин метавонад боиси пардохтҳои ғайричашмдошт гардад. Барномаҳои зараровар метавонанд тавассути ирсоли паёмҳо бе тасдиқи шумо барои шумо зарари пулӣ биоранд.</string>
+    <string name="permlab_cta_send_email">фиристодани мактуби электронӣ</string>
+    <string name="permdesc_cta_send_email">Ба барнома барои ирсоли почтаи электронӣ иҷозат медиҳад. Ин метавонад боиси истеъмоли ғайричашмдошти маълумоти мобилӣ гардад. Барномаҳои зараровар метавонанд тавассути ирсоли почтаи электронӣ бе тасдиқи шумо барои шумо зарари пулӣ биоранд.</string>
+    <string name="permgrouplab_email">Почтаи электронӣ</string>
+    <string name="permgroupdesc_email">фиристодани мактуби электронӣ</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" барои <xliff:g id="permission_name">%2$s</xliff:g> рад карда шуд. Иҷозат медиҳед?</string>
+    <string name="aerr_application_permission_connectivity">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" наметавонад <xliff:g id="permission_name">%2$s</xliff:g>, шумо метавонед <xliff:g id="permission_name2">%2$s</xliff:g> дар \"Танзимот\"</string>
+    <string name="aerr_application_unknown_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" истифода бурда намешавад, лутфан кӯшиш кунед, ки иҷозатҳоро диҳед.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Танзимот</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">тоза кардани хизматрасонии насб</string>
+    <string name="permdesc_mount_service_wipe">Ба барнома барои ирсоли пахш барои формати захиракунии телефон ва корти SD иҷозат медиҳад.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">IPO Standby</string>
+</resources>

@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">ጥሪ ማገድ አልተሳካም</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">አገልግሎት ጸድቋል</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">አንድሮይድ1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">ሲም ካርድ ዝጋ</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">መተግበሪያው የDM  ምዝገባ የኤስኤምኤስ መልእክቶችን እንዲቀበል እና እንዲያካሂድ ያስችላል፡፡ከDM  መተግበሪያ ውጪ ማንኛውም መተግበሪያ ይሄንን እንዲጠቀም መፈቀድ የለበትም፡፡</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">ቪዲዮ</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"ባዶ ቦታ"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">በመጫን ላይ\u2026</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"በመክፈት ላይ %d%%..."</string>
+   <string name="media_controller_live">"በቀጥታ"</string>
+   <string name="media_controller_playing">"በማጫወት ላይ"</string>
+   <string name="media_controller_connecting">"በመገናኘት ላይ..."</string>
+
+   <string name="VideoView_error_text_bad_file">"መጥፎ ሰነድ፣ይህ ቪዲዮ መጫወት አይችልም"</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"ከአገልግሎት አቅራቢ መገናኘት አይችልም"</string>
+   <string name="VideoView_error_text_type_not_supported">"የማህደረ መረጃ ሰነድ አይነት አይደገፍም"</string>
+   <string name="VideoView_error_text_drm_not_supported">"DRM የተጠበቀ ነው፣ ይህ ቪዲዮ መጫወት አይችልም"</string>
+   <string name="VideoView_error_text_invalid_connection">"ተቀባይነት የሌለው ግንኙነት፡፡(403 የተከለከለ)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">አዲስ ሲም</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">አጥፋ</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">በመፈለግ ላይ…</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">የእርስዎን  PIN ለ<xliff:g id="number">%1$d</xliff:g>ጊዜያት በስህተት አስገብተዋል፡፡    \n\n እባክዎ  በ<xliff:g id="number">%2$d</xliff:g>  ሴኮንዶች ውስጥ በድጋሚ ይሞክሩ፡፡</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">የእርስዎን  የይለፍ ቃል ለ<xliff:g id="number">%1$d</xliff:g>  ጊዜያት በስህተት አስገብተዋል፡፡    \n\n እባክዎ በ <xliff:g id="number">%2$d</xliff:g>  ሴኮንዶች ውስጥ በድጋሚ ይሞክሩ፡፡</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">ውስጣዊ ማከማቻው ቦታ እያለቀ ነው፣ መተግበሪያው ቆሟል እባክዎ የተወሰነ ቦታ ያስለቅቁ እና በድጋሚ ይሞክሩ</string>
+    <string name="aerr_process_lowstorage">ውስጣዊ ማከማቻው ቦታ እያለቀ ነው፣ ሂደቱ ቆሟል እባክዎ የተወሰነ ቦታ ነጻ ያድርጉ እና በድጋሚ ይሞክሩ</string>
+    <string name="low_internal_storage_view_title">የውስጣዊ ማከማቻ ቦታ እያለቀ ነው</string>
+    <string name="low_storage_warning_message">እባክዎን የተወሰነ ቦታ ነፃ ያድርጉ ወይም የተወሰኑ መተግበሪያዎች እና የስርዓት ተግባራት በጥሩ ሁኔታ ላይሰሩ ይችላሉ</string>
+    <string name="deleteMails">መልዕክቶችን አጥፋ</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">የጥበቃ ሁኔታ፡</string>
+    <string name="drm_can_forward">መተላለፍ ይችላል</string>
+    <string name="drm_can_not_forward">መተላለፍ አይችልም</string>
+    <string name="drm_no_limitation">ወሰን የለውም</string>
+    <string name="drm_no_license">የሚገኝ DRM ፈቃድ የለም</string>
+    <string name="drm_begin">ጀምር፡</string>
+    <string name="drm_end">ጨርስ፡</string>
+    <string name="drm_use_left">የቀረ ቆጠራ፡</string>
+    <string name="drm_protectioninfo_renew">አድስ</string>
+    <string name="drm_protectioninfo_title">የጥበቃ መረጃ</string>
+    <string name="drm_licenseacquisition_title">DRM ፈቃድ ማግኘት</string>
+    <string name="drm_licenseacquisition_message">%1$s የሚገኝ DRM ፈቃድ የለውም የ DRM ፈቃድ ለማግኘት "አድስ" የሚለውን ቁልፍ ይጫኑ</string>
+    <string name="drm_toast_license_expired">DRM ፈቃድ ጊዜው አልፎበታል</string>
+    <string name="drm_forwardforbidden_title">ማስተላለፍ ተከልክሏል</string>
+    <string name="drm_forwardforbidden_message">አንዳንድ የተጠበቁ ሰነዶች መተላለፍ አይችሉም</string>
+    <string name="drm_license_install_success">DRM ፈቃድ ማስገባት ተሳክቷል</string>
+    <string name="drm_license_install_fail">DRM ፈቃድ መጫን አልተሳካም</string>
+    <string name="drm_secure_timer_title">ተቀባይነት የሌለው DRM መጠበቂያ ሰዓት</string>
+    <string name="drm_secure_timer_message">በ DRM የተጠበቁ ሰነዶችን መጠቀም አይችሉም እባክዎ የውሂብ ግንኙነት እንደሚገኝ ያረጋግጡ</string>
+    <string name="drm_consume_title">DRM መብቶችን ተጠቀም</string>
+    <string name="drm_consume_message">ድርጊቶ DRM መብት ይጠቀማል</string>
+
+    <string name="drm_first_time_use">ይህ የመጀመሪያ አጠቃቀም ነው</string>
+    <string name="drm_use_now">አሁን ይጠቀም?</string>
+    <string name="drm_consume_interval">እርሶ መጠቀም ከጀመሩ በኋላ ይህ ሰነድ  %1$s ውስጥ ይገኛል</string>
+    <string name="drm_effective_duration">ውጤታማ ቆይታ፡</string>
+    <string name="drm_expire_dialog_future">ትክክለኛ ጊዜ፡</string>
+    <string name="validity_period">ተቀባይነት፡</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">የአውሮፕላን ሁነታ በርቷል</string>
+    <string name="confirm_flight_mode_msg">ቁጥሩን ለመጠቀም፣ በመጀመሪያ የአውሮፕላን ሁነታን ያጥፉ</string>
+    <string name="confirm_radio_title">ሲም ጠፍቷል</string>
+    <string name="confirm_radio_msg">ቁጥሩን ለመጠቀም፣ በመጀመሪያ ያብሩት</string>
+    <string name="confirm_flight_mode_radio_title">የአውሮፕላን ሁነታ ስለበራ ሲም ጠፍቷል</string>
+    <string name="confirm_flight_mode_radio_msg">ይህን ቁጥር ለመጠቀም፣ መጀመሪያ የበረራ ሁነታን ያጥፉና ሲሙን ያብሩ</string>
+    <string name="confirm_unlock_title">ሲም ተቆልፏል</string>
+    <string name="confirm_unlock_msg">ይህን ሲም ለመጠቀም፣ መጀመሪያ ይክፈቱት</string>
+    <string name="confirm_roaming_title">ሮሚንግ ማስጠንቀቂያ</string>
+    <string name="confirm_roaming_msg">ሲም ካርዱ ሮሚንግ ነው መጠቀም ይቀጥል?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">በአሁኑ ጊዜ የቻይና ቴሌኮም VoLTE እና የጥሪ አገልግሎቶች ማግኘት አይቻልም VoLTE ይጥፋ?</string>
+
+    <string name="confirm_button_ok">እሺ</string>
+    <string name="confirm_button_cancel">ይሰርዙ</string>
+    <string name="confirm_button_unlock">ክፈት</string>
+    <string name="confirm_button_turn_off">አጥፋ</string>
+    <string name="confirm_button_turn_on">አብራ</string>
+    <string name="confirm_button_yes">አዎ</string>
+    <string name="confirm_button_no">አይ</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">የአውሮፕላን ሁነታ በርቷል እና UIM ጠፍቷል</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">ይህን ቁጥር ለመጠቀም፣ የአውሮፕላን ሁነታ ያጥፉ እና UIM ያብሩ</string>
+    <string name="confirm_radio_title_UIM">UIM ጠፍቷል</string>
+    <string name="confirm_radio_msg_UIM">ቁጥሩን ለመጠቀም፣ በመጀመሪያ ያብሩት</string>
+    <string name="confirm_unlock_title_UIM">UIM ተቆልፏል</string>
+    <string name="confirm_unlock_msg_UIM">UIM ካርድ ለመጠቀም፣ መጀመሪያ ይክፈቱት</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">መልዕክቶች</string>
+    <string name="url_dialog_choice_message">አሳሹን ይከፍታል፣ ይቀጥል?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">መልዕክቶችን መልስ እና ማከማቻውን ልቀቅ</string>
+
+    <string name="storage_withsd">የስልክ ማከማቻው በቂ ቦታ የለውም እባክዎ የተወሰነ ማከማቻ ያስለቅቁ ወይም ነባሩን የመጻፊያ ዲስክ በማስተካከያዎች ውስጥ ይቀይሩ</string>
+    <string name="storage_withoutsd">የስልክ ማከማቻው በቂ ቦታ የለውም እባክዎ የተወሰነ ማከማቻ ያስለቅቁ ወይም ኤስዲ ካርድ ያስገቡ</string>
+    <string name="storage_sd">ኤስዲ ካርድ በቂ ቦታ የለውም እባክዎ የተወሰነ ማከማቻ ያስለቅቁ ወይም ነባሩን የመጻፍያ ዲስክ በማስተካከያዎች ውስጥ ይለውጡ</string>
+    <string name="usb_ums_notification_title">እንደ ዩኤስቢ ማከማቻ ተገናኝቷል</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">ዩኤስቢ ቻርጅ ብቻ</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">በ GPS የቀረበ ሰአት ማግኘት አልተቻለም</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> ተገናኝቷል፣ <xliff:g id="blocked">%2$d</xliff:g> ታግዷል</string>
+    <string name="tethered_notification_message_bandwidth_set">መተላለፊያ ይዘት ተዘጋጅቷል</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">እኩለ ለሊት</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">ነባሪ</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">ለማጥፋት ወደ ቀኝ ያንሸራቱ</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">ለማሳረፍ ወደ ግራ ያንሸራቱ</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">ለመደምሰስ ወደ ላይ ያንሸራቱ</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">ለማሳረፍ ወደ ታች ያንሸራቱ</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">ተግባራዊ ለማድረግ ቀለሙን ይጫኑ</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">ሽቦ አልባ ማሳያ ሲያበሩ HDMI ይጠፋል መቀጠል ይፈልጋሉ?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">HDMI ሲያበሩ ሽቦ አልባ ማሳያ ይጠፋል መቀጠል ይፈልጋሉ?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">ሽቦ አልባ ማሳያ መሳሪያ ጋር በሚገናኙበት ወቅት የአሁኑ ዋይ-ፋይ ግንኙነት ይጠፋል መቀጠል ይፈልጋሉ?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">ያልተረጋጋ ግንኙነት</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">የአሁኑ ሽቦ አልባ ማሳያ ግንኙነት የተረጋጋ አይደለም</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">የአሁኑ ሽቦ አልባ ማሳያ ግንኙነት የተረጋጋ አይደለም፣ እባክዎ ወደ ማሳያ መሳሪያዎ በደንብ ለመጠጋት ይሞክሩ</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">ዳግም አገናኝ</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">ሽቦ አልባ ማሳያ ተቋርጧል በድጋሚ ማገናኘት ይፈልጋሉ?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">ሽቦ አልባ ማሳያ ተቋርጧል</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">ሌላ WPS ክፍለጊዜ ተገኝቷል እባክዎ በጥቂት ደቂቃዎች ውስጥ በድጋሚ ይሞክሩ</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">ስልኩ ከ <xliff:g id="device_name">%1$s</xliff:g> ጋር በሚገናኝበት ወቅት በጊዜያዊነት ከዋይፋይ ይቋረጣል (የጣቢያ ባንድ እና የአሁን ዋይፋይ ማዳረሻ ነጥቦች መለያ ወደ  <xliff:g id="oper_freq">%2$s</xliff:g>) የሚለወጥ ከሆነ ብቻ ነው)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">ሽቦ አልባ ማሳያ እና ዋይ-ፋይ በርተዋል</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">የማህደረ መረጃ ድምጽ ከጆሮ ማዳመጫዎ አይጫወትም</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">ጥራት መለወጥ ከሽቦ አልባ ማሳያው ጋር በራስሰር ይገናኛል</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">በድጋሚ አታስታውስ</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">የአሁኑ ዋይ-ፋይ AP የሽቦ አልባ ማሳያውን ጥራት ሊቀንስ ይችላል</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">ከሌሎች መሳሪያዎች የግንኙነት ግብዣዎችን በመጠበቅ ላይ</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">ከእርሶ ጋር ግንኙነት መገንባት ይፈልጋል</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">ግንኙነት በመገንባት ላይ</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">ከ <xliff:g id="wifi_ap_name">%1$s</xliff:g>  ዋይፋይ አውታር መረብ ጋር ተገናኝቷል</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">ዋይፋይ አውታር መረብ  <xliff:g id="wifi_ap_name">%1$s</xliff:g> ተቋርጧል</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">የጣቢያ ግጭት</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Current Wi-Fi network can\’t coexist with cast screen connection.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">ኤስዲ ካርድ ዝግጁ ነው</string>
+    <string name="sdcard_select_default_path">ነባሩን የመጻፊያ ዲስክ መለወጥ ይፈልጋሉ?</string>
+    <string name="sdcard_default_path_change">ነባሩ የመጻፊያ ዲስክ ተቀይሯል</string>
+    <string name="usb_storage_ready_title">ውጫዊ ዩኤስቢ ማከማቻ ተዘጋጅቷል</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">የጆሮ ማዳመጫዎ ከስልኩ ጋር ተስማሚ አይደለም እባክዎ ሌላ ይሞክሩ</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">እንደ በራስ የሚሰራ ሲዲሮም ተገናኝቷል</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">HDMI ኬብል ተገናኝቷል</string>
+    <string name="hdmi_notification_content">HDMI ለማዋቀር ጠቅ ያድርጉ</string>
+    <string name="hdmi_hdvideo_toast">HDMI 4K ቪዲዮ ማጫወት አይችልም፣ ግንኙነቱ ሊቋረጥ ይችላል</string>
+    <string name="hdmi_mutex_call_content">ይቅርታ፣ በአሁኑ ስልክ ጥሪ ምክኒያት HDMI ቆሟል</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">የኦዲዮ ውጤት</string>
+    <string name="hdmi_audio_output_stereo">ስቴሪዮ</string>
+    <string name="hdmi_audio_output_multi_channel">ብዙ ጣቢያ</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">ውሂብ ግንኙነት ብቻ</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">LTE አውታር መረብ ማግኘት አይቻልም</string>
+    <string name="Suggest_To_Change_USIM">4ጂ ሲም ካርድ ለመለወጥ ይጠቁሙ</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">ነባር መለያ መረጣ</string>
+    <string name="account_always_ask_title">በመጀመሪያ ጠይቅ</string>
+    <string name="other_accounts">ሌሎች መለያዎች</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">የተከለከለ</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">ኦዲዮውን ማጫወት አልተሳካም</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"ይህ ቪዲዮ አይደገፍም"</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"ያረጋግጡ"</string>
+    <string name="save_password_message">"አሳሹ ይህንን የይለፍ ቃል እንዲያስታውስ ይፈልጋሉ?"</string>
+    <string name="save_password_notnow">"አሁን አይደለም"</string>
+    <string name="save_password_remember">"አስታውስ"</string>
+    <string name="save_password_never">"በጭራሽ"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">ታብሌቱን አስነሳ</string>
+    <string name="permlab_wake_device_sensorhub" product="default">ስልኩን ያንቁ</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">መተግበሪያው ታብሌቱ በእገዳ ሁነታ ውስጥ ሲሆን በሴንሰር ሀብ በኩል እንዲያነቃው ይፈቅድለታል</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">መተግበሪያው በሴንሰር ሃብ በኩል በእገዳ ሁነታ ውስጥ በሚሆንበት ወቅት እንዲነቃ ይፈቅዳል</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">አሁን በአለምአቀፍ ሮሚንግ ላይ ኖት፣የሞባይል ውሂብ በርቷል፣እባክዎ የአካባቢ ክፍያዎችን ልብ ይበሉ፡፡</string>
+    <string name="known">"አውቃለው"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">የመተግበሪያ ምልክት አይከን</string>
+    <string name="close">መተግበሪያ ዝጋ</string>   
+    <string name="maximum">ከፍተኛ መተግበሪያ</string>
+    <string name="minimize">መተግበሪያ ቀንስ</string>
+    <string name="drag">የመተግበሪያ ዊንዶ መጠን ጎትት</string> 
+    <string name="gallery_camera_mutex">በተመሳሳይ ጊዜ ማእከለ ስእላት፣ ካሜራ ወይም ቪዲዮ መጠቀም አይቻልም</string> 
+    <string name="mw_max_size_string"><xliff:g id="number">%d</xliff:g> ከፍተኛ የዊንዶ መንሳፈፊያ</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">OMAPI ስርአት ተርሚናል</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">ይህ ፈቃድ ያለው መተግበሪያ ስርአቱ OMAPI ተርሚናል እንደሆነ ያመለክታል</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">OMAPI ተርሚናል አጣምር</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">ይህ ፈቃድ ያለው መተግበሪያ ከስርአት OMAPI ተርሚናል ጋር መጣመር ይችላል ስማርት ካርድ አገልግሎት ብቻ መጠቀም አለባቸው</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">ብዙ-ተሳታፊ ያሏቸውን ጥሪዎች አስጀምር</string>
+    <string name="permdesc_cta_conference_call">መተግበሪያው የብዙ ወገን ጥሪዎች ማስጀመር ይፈቅዳል ይህ ያልተጠበቁ ወጪዎችን ሊያስከትል ይችላል ተንኮል አዘል መተግበሪያዎች ያለ እርሶ ማረጋገጫ የብዙ ወገን ጥሪዎችን በማስጀመር ገንዘብ ሊያስወጣዎት ይችላል</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">ጥሪ ማስተላለፍ</string>
+    <string name="permdesc_cta_call_forward">መተግበሪያው ጥሪ እንዲያስተላልፍ ይፈቅዳል፡፡</string>
+    <string name="permlab_cta_send_mms">ኤምኤምኤስ ላክ</string>
+    <string name="permdesc_cta_send_mms">መተግበሪያው ኤምኤምኤስ መልእክቶችን ለመላክ ይፈቅዳል ይህ ያልተጠበቁ ወጪዎችን ሊያስከትል ይችላል ተንኮል አዘል መተግበሪያዎች ያለ እርሶ ማረጋገጫ መልእክቶችን በመላክ ገንዘብ ሊያስወጣዎት ይችላል</string>
+    <string name="permlab_cta_send_email">ኢሜሎች ላክ</string>
+    <string name="permdesc_cta_send_email">መተግበሪያው ኢሜሎችን እንዲልክ ይፈቅዳል ይህ ያልተጠበቀ የሴሉላር ውሂብ ፍጆታ ሊያስከትል ይችላል ተንኮል አዘል መተግበሪያዎች ያለ እርሶ ማረጋገጫ ኢሜሎችን በመላክ ገንዘብ ሊያስወጣዎት ይችላል</string>
+    <string name="permgrouplab_email">ኢሜል</string>
+    <string name="permgroupdesc_email">ኢሜሎች ላክ</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\"ለ <xliff:g id="permission_name">%2$s</xliff:g>ተከልክሏል፣ ፍቃድ ይፈቀድ?</string>
+    <string name="aerr_application_permission_connectivity">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\"የ<xliff:g id="permission_name">%2$s</xliff:g> ማድረግ አይችልም፣ይህንን በ <xliff:g id="permission_name2">%2$s</xliff:g> \"ማስተካከያዎች\"ውስጥ መለወጥ ይችላሉ፡፡</string>
+    <string name="aerr_application_unknown_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\"መጠቀም አይቻልም፣ እባክዎን ፍቃዶችን ለመፍቀድ ይሞክሩ</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">ማስተካከያዎች</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">የማውንት አገልግሎትን ማጽዳት</string>
+    <string name="permdesc_mount_service_wipe">የስልክ ማከማቻውን እና ኤስዲ ካርዱን ለማጽዳት ስርጭቶችን መተግበሪያው እንዲልክ ያስችላል፡፡</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">IPO መጠባበቅ</string>
+</resources>

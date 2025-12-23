@@ -1,0 +1,66 @@
+cc_library_shared {
+
+    srcs: [
+        "MemHalTest.cpp",
+    ],
+
+    header_libs: [
+        "libcutils_headers",
+        "MemHal_client_system_headers",
+    ],
+
+    shared_libs: [
+        "libcutils",
+        "libutils",
+        "liblog",
+        "libxml2",
+    ],
+
+    cflags: [
+        "-DCLIENT",
+        "-g0",
+        "-Wall",
+        "-Wno-unused-variable",
+        "-Wno-unused-parameter",
+        "-Wno-unused-function",
+        "-DVENDOR_DIR=\"/vendor/etc\"",
+        "-DQC_DEBUG=0",
+        "-Wextra",
+        "-Werror",
+    ],
+
+    cppflags: [
+        "-fexceptions",
+    ],
+
+    name: "libqti-MemHal-tests-system",
+    owner: "qti",
+    system_ext_specific: true,
+
+}
+
+cc_binary {
+    name: "MemHalTest-system",
+
+    srcs: ["MemHalTest.cpp"],
+
+    shared_libs: [
+        "libcutils",
+        "libdl",
+        "libutils",
+        "liblog",
+    ],
+
+    header_libs: [
+        "libcutils_headers",
+        "MemHal_client_system_headers",
+    ],
+
+    cflags: [
+        "-Wall",
+        "-DQC_DEBUG=0",
+    ],
+
+    system_ext_specific: true,
+}
+

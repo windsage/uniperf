@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <!-- MTK new add Strings -->
+    <!-- Displayed to prompt the user action fail by Call Barring-->
+    <string name="callBarringFailMmi">"Ошибка блокирования вызова."</string>
+    <!-- Displayed to tell the user that caller ID is provisioned for their SIM. -->
+    <string name="serviceProvisioned">"Услуга предоставлена."</string>
+
+    <!-- Add by MTK:Operator name mapping table, long name -->
+    <string name="oper_long_46000">CMCC</string>
+    <string name="oper_long_46001">CU</string>
+    <string name="oper_long_46003">China Telecom</string>
+    <string name="oper_long_46015">China Broadnet</string>
+    <string name="oper_long_46601">Far EasTone</string>
+    <string name="oper_long_46692">Chunghwa Telecom</string>
+    <string name="oper_long_46697">Taiwan Mobile</string>
+    <string name="oper_long_99998">Android1</string>
+    <string name="oper_long_99999">Android</string>
+
+    <!-- Add by MTK:Operator name mapping table, short name -->
+    <string name="oper_short_46000">CMCC</string>
+    <string name="oper_short_46001">CU-GSM</string>
+    <string name="oper_short_46003">China Telecom</string>
+    <string name="oper_short_46015">CBN</string>
+    <string name="oper_short_46601">FET</string>
+    <string name="oper_short_46692">Chunghwa</string>
+    <string name="oper_short_46697">TWN</string>
+    <string name="oper_short_99997">AD1</string>
+    <string name="oper_short_99999">AD</string>
+
+    <!-- activity thread used string -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- Add by MTK:Restricted Change Notification for Gemini -->
+
+    <!-- Instructions telling the user to enter their pin to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+
+    <string name="sim_close">"SIM-карта закрыта"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveDmRegisterSms">Позволяет приложению получать и обрабатывать SMS-сообщения о регистрации DM. Любое приложение за исключением DM APP не должно использовать этот</string>
+
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassVideo">Видео</string>
+
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+
+  <string name="free_memory_btn">"Освободите часть памяти"</string>
+
+   <!-- LockScreen -->
+
+  <!-- Contacts Widget -->
+
+  <string name="contact_widget_loading">"Загрузка…"</string>
+   <!-- Title of the dialog where the user is adjusting the audio volume fm -->
+
+   <!-- Title of the dialog where the user is adjusting the audio volume matv -->
+
+   <!-- add new style for mtk streaming video player start -->
+   <string name="media_controller_buffering">"Буферизация %d%%..."</string>
+   <string name="media_controller_live">"В режиме реального времени"</string>
+   <string name="media_controller_playing">"Воспроизведение"</string>
+   <string name="media_controller_connecting">"Подключение..."</string>
+
+   <string name="VideoView_error_text_bad_file">"Неправильный файл, невозможно воспроизвести этот видеоматериал."</string>
+   <string name="VideoView_error_text_cannot_connect_to_server">"Невозможно подключиться к серверу."</string>
+   <string name="VideoView_error_text_type_not_supported">"Тип медиафайла не поддерживается."</string>
+   <string name="VideoView_error_text_drm_not_supported">"Это видео защищено с помощью DRM и не может быть воспроизведено."</string>
+   <string name="VideoView_error_text_invalid_connection">"Недопустимое подключение. (403 Запрещено)"</string>
+   <!-- add new style for mtk streaming video player end -->
+
+   <!-- added new string for SearchDialog, used to indicate WikiPedia-->
+
+    <!-- support TextView undo tool bar -->
+
+    <string name="new_sim">Новая SIM-карта</string>
+
+    <!-- support RecipientsView recipient bar -->
+
+    <string name="delete">Удалить</string>
+
+    <!-- string for gemini enhancement-->
+
+    <string name="searching_simcard">Обнаружение...</string>
+
+     <!-- string for gemini enhancement end-->
+
+    <!-- add for lock screen,Alert Dialog title that telling the user that the SIM card is invalid.-->
+
+    <!-- add for lock screen,Alert Dialog message telling the user that the SIM card is invalid.-->
+
+     <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_pin_too_many_failed_attempts_dialog_message">"Вы ввели неправильный PIN-код <xliff:g id="NUMBER_0">%1$d</xliff:g> раз(а). "\n\n"Повторите попытку через <xliff:g id="NUMBER_1">%2$d</xliff:g> сек."</string>
+
+    <string name="lockscreen_password_too_many_failed_attempts_dialog_message">"Вы ввели неправильный пароль <xliff:g id="NUMBER_0">%1$d</xliff:g> раз(а). "\n\n"Повторите попытку через <xliff:g id="NUMBER_1">%2$d</xliff:g> сек."</string>
+
+   <!-- string for cmcc mobile search-->
+    <string name="wap_browser_pakcage" translatable="false">com.myriad.android.kunbrowser</string>
+    <string name="wap_browser_component" translatable="false">com.myriad.android.kunbrowser.BrowserActivity</string>
+    <string name="wap_browser_keyword" translatable="false">s.139.com</string>
+    <string name="wap_browser_url_flag" translatable="false">search_url</string>
+
+    <string name="aerr_application_lowstorage">Объем встроенной памяти недостаточен, приложение прекращает работу. Освободите память и повторите попытку.</string>
+    <string name="aerr_process_lowstorage">Объем встроенной памяти недостаточен, процесс прекращается. Освободите память и повторите попытку.</string>
+    <string name="low_internal_storage_view_title">Объем встроенной памяти недостаточен</string>
+    <string name="low_storage_warning_message">Освободите память, в противном случае некоторые приложения или функции системы не смогут работать надлежащим образом.</string>
+    <string name="deleteMails">Удалить почтовые сообщения</string>
+
+    <!-- string for external media-->
+
+    <!-- add for drm start -->
+    <string name="drm_protection_status">Статус защиты:</string>
+    <string name="drm_can_forward">Можно пересылать.</string>
+    <string name="drm_can_not_forward">Нельзя пересылать.</string>
+    <string name="drm_no_limitation">Нет ограничений.</string>
+    <string name="drm_no_license">Нет разрешения DRM.</string>
+    <string name="drm_begin">Начало:</string>
+    <string name="drm_end">Окончание:</string>
+    <string name="drm_use_left">Осталось:</string>
+    <string name="drm_protectioninfo_renew">Обновить</string>
+    <string name="drm_protectioninfo_title">Информация о защите</string>
+    <string name="drm_licenseacquisition_title">Получение разрешения DRM</string>
+    <string name="drm_licenseacquisition_message">%1$s не имеет разрешения DRM. Доя получения разрешение DRM можно нажать кнопку Renew (Обновить).</string>
+    <string name="drm_toast_license_expired">Срок действия разрешения DRM истек.</string>
+    <string name="drm_forwardforbidden_title">Пересылка запрещена</string>
+    <string name="drm_forwardforbidden_message">Некоторые защищенные файлы пересылать нельзя.</string>
+    <string name="drm_license_install_success">Установка разрешения DRM выполнена.</string>
+    <string name="drm_license_install_fail">Установка разрешения DRM не удалась.</string>
+    <string name="drm_secure_timer_title">Неверная синхронизация безопасности DRM</string>
+    <string name="drm_secure_timer_message">Нельзя использовать защищенные файлы DRM. Проверьте подключение данных.</string>
+    <string name="drm_consume_title">Права DRM утрачены</string>
+    <string name="drm_consume_message">Ваши действия приведут к утрате прав DRM.</string>
+
+    <string name="drm_first_time_use">Это будет впервые.</string>
+    <string name="drm_use_now">Использовать сейчас?</string>
+    <string name="drm_consume_interval">Этот файл будет доступным в течение %1$s после запуска телефона.</string>
+    <string name="drm_effective_duration">Эффективная длительность:</string>
+    <string name="drm_expire_dialog_future">Действующий период:</string>
+    <string name="validity_period">"Срок действия:"</string>
+    <!-- add for drm end -->
+
+
+    <!-- Cell conn service string [START] -->
+    <string name="confirm_flight_mode_title">Режим полета включен</string>
+    <string name="confirm_flight_mode_msg">Для использования номера отключите режим полета.</string>
+    <string name="confirm_radio_title">SIM-карта отключена</string>
+    <string name="confirm_radio_msg">Для использования номера включите ее.</string>
+    <string name="confirm_flight_mode_radio_title">Режим полета включен, SIM-карта отключена</string>
+    <string name="confirm_flight_mode_radio_msg">Для использования номера отключите режим полета и включите SIM-карту.</string>
+    <string name="confirm_unlock_title">SIM заблокирована</string>
+    <string name="confirm_unlock_msg">Выбранная SIM-карта заблокирована. Разблокируйте ее.</string>
+    <string name="confirm_roaming_title">Предупреждение: роуминг</string>
+    <string name="confirm_roaming_msg">SIM-карта в режиме роуминга. Продолжить ее использование?</string>
+    <string name="confirm_noimsreg_for_ctvolte_title"> </string>
+    <string name="confirm_noimsreg_for_ctvolte_msg">VoLTE и услуги звонков от China Telecom на данный момент не доступны. Выключить VoLTE?</string>
+
+    <string name="confirm_button_ok">ОК</string>
+    <string name="confirm_button_cancel">Отменить</string>
+    <string name="confirm_button_unlock">"Разблокировать."</string>
+    <string name="confirm_button_turn_off">Отключить</string>
+    <string name="confirm_button_turn_on">Включить</string>
+    <string name="confirm_button_yes">Да</string>
+    <string name="confirm_button_no">Нет</string>
+    <!-- Cell conn service string [END] -->
+
+    <!-- Cell conn service string for UIM [START] -->
+    <string name="confirm_flight_mode_radio_title_UIM">Режимполетавключен,UIM-картаотключена</string>
+    <string name="confirm_flight_mode_radio_msg_UIM">ДляиспользованияномераотключитережимполетаивключитеUIM-карту.</string>
+    <string name="confirm_radio_title_UIM">UIM-картаотключена</string>
+    <string name="confirm_radio_msg_UIM">Для использования номера включите ее.</string>
+    <string name="confirm_unlock_title_UIM">UIM-карта заблокирована</string>
+    <string name="confirm_unlock_msg_UIM">ДляиспользованияUIM-картыразблокируйтеее.</string>
+    <!-- Cell conn service string for UIM [END] -->
+
+    <string name="url_dialog_choice_title">Сообщения</string>
+    <string name="url_dialog_choice_message">Будет открыт веб-браузер, продолжить?</string>
+
+    <string name="wifi_tether_configure_ssid_default_for_cmcc" translatable="false">MTK Athens15</string>
+
+    <string name="deleteMail">Создайте резервную копию почты и освободите память</string>
+
+    <string name="storage_withsd">Недостаточный объем памяти телефона. Освободите память или измените диск для записи в настройках.</string>
+    <string name="storage_withoutsd">Недостаточный объем памяти телефона. Освободите память или установите SD-карту.</string>
+    <string name="storage_sd">Недостаточный объем памяти SD-карты. Освободите память или измените диск для записи в настройках.</string>
+    <string name="usb_ums_notification_title">Подключение к USB-накопителю</string>
+    <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in mass storage mode (for installer CD image).  This is the title -->
+    <string name="usb_charging_notification_title">Только зарядка USB</string>
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to USB charging only mode.  This is the title -->
+
+    <!-- The Toast hints for GPS time sync failure -->
+    <string name="gps_time_sync_fail_str">Сбой при получении времени, предоставленного GPS</string>
+
+    <!-- Shown when the phone does not download calibration data -->
+
+    <!-- The Toast hints for webview search -->
+
+    <string name="tethered_notification_message_for_hotspot"><xliff:g id="connected">%1$d</xliff:g> подключено,  <xliff:g id="blocked">%2$d</xliff:g> заблокировано</string>
+    <string name="tethered_notification_message_bandwidth_set">Полоса пропускания установлена</string>
+    <!--  Strings for Usb Internet -->
+
+    <string name="Midnight">"Полночь"</string>
+
+    <!-- add for showing current wallpaper name in Settings.-->
+    <string name="default_wallpaper_name">По умолчанию</string>
+
+    <!--   power-off alarm start  -->
+    <!-- Button labels on the alarm dialog: Dismiss -->
+    <!-- Description of the right direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_right">"Чтобы отключить будильник, проведите пальцем вправо"</string>
+    <!-- Button labels on the alarm dialog: Snooze -->
+    <!-- Description of the left direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_left">"Чтобы отложить сигнал, проведите пальцем влево"</string>
+    <!-- Description of the up direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_up">"Чтобы отключить будильник, проведите пальцем вверх"</string>
+    <!-- Description of the down direction in the alarm alert screen. [CHAR LIMIT=NONE] -->
+    <string name="description_direction_down">"Чтобы отложить сигнал, проведите пальцем вниз"</string>
+    <!-- Default label to display for an alarm -->
+    <!-- button to Dismiss and power on device -->
+
+    <!-- button to Dismiss and power off device -->
+
+    <!--   power-off alarm end  -->
+
+    <!-- voice unlock start -->
+    <!-- voice unlock end -->
+    <!-- voice ui start -->
+
+    <!-- Color Picker -->
+
+    <string name="press_color_to_apply">Нажмите на цвет для его выбора</string>
+    <string name="color_picker_select" translatable="false">-></string>
+
+    <!-- voice ui end -->
+
+    <!-- Content of a dialog to turn off BT and HDMI when WFD on. -->
+    <string name="wifi_display_bt_hdmi_off_wfd_on">При включении беспроводного дисплея Bluetooth и HDMI будут отключены. Продолжить?</string>
+    <!-- Content of a dialog to turn off WFD when HDMI on. -->
+    <string name="wifi_display_wfd_off_hdmi_on">При включении HDMI беспроводной дисплей будет отключен. Продолжить?</string>
+    <!-- Content of a dialog to turn off WFD when BT on. -->
+
+    <!-- Content of a dialog to disconnect previous Wi-Fi direct connection when WFD is connected. -->
+    <string name="wifi_display_wifi_p2p_disconnect_wfd_connect">При подключении беспроводного дисплея текущее подключение Wi-Fi Direct будет прервано. Продолжить?</string>
+    <!-- Title of a notification to notify user WIFI display connection is unstable  -->
+    <string name="wifi_display_unstable_connection">Неустойчивое соединение</string>
+    <!-- Content of a toast to notify user connection is not steady -->
+    <string name="wifi_display_connection_is_not_steady">Неустойчивое текущее подключение беспроводного дисплея.</string>
+
+    <!-- Content of a notification to suggest user to get closer to the display device -->
+    <string name="wifi_display_unstable_suggestion">Неустойчивое текущее подключение беспроводного дисплея, попробуйте приблизиться к дисплею.</string>
+    <!-- Title of a dialog to reconnect. -->
+    <string name="wifi_display_reconnect">Переподключить</string>
+    <!-- Content of a dialog to disconnect then connect. -->
+    <string name="wifi_display_disconnect_then_reconnect">Беспроводный дисплей отключен. Переподключить?</string>
+    <!-- Content of a toast to notify disconnected. -->
+    <string name="wifi_display_disconnected">Беспроводный дисплей отключен.</string>
+    <!-- Text displayed when WPS fails due to another session [CHAR LIMIT=150] -->
+    <string name="wifi_wps_failed_overlap">"Обнаружен другой сеанс WPS. Повторите попытку через несколько минут."</string>
+    <!-- Text displayed for channel conflict enhance [CHAR LIMIT=150] -->
+    <string name="wifi_p2p_frequency_conflict_message">Телефон будет временно отключен от соединения Wi-Fi, пока он подключен к <xliff:g id="device_name">%1$s</xliff:g> (только при смене диапазона и ID текущей точки доступа Wi-Fi на <xliff:g id="oper_freq">%2$s</xliff:g>)</string>
+    <!-- Content of a toast to notify user wifi display and wifi are turned on -->
+    <string name="wifi_display_wfd_and_wifi_are_turned_on">Беспроводной дисплей и Wi-Fi включены.</string>
+    <!-- Content of a dialog to notify user multimedia sound will not play from headset -->
+    <string name="wifi_display_sound_path_reminder">Звук мультимедийного источника не будет воспроизводиться через головные телефоны.</string>
+    <!-- Content of a dialog to notify user change resolution will reconnect wireless display -->
+    <string name="wifi_display_change_resolution_reminder">При изменении разрешения автоматически произойдет повторное подключение беспроводного дисплея.</string>
+    <!-- Content in a dialog to ask user if do not remind again -->
+    <string name="wifi_display_do_not_remind_again">Больше не напоминать.</string>
+    <!-- Content of a toast to notify user currenty Wi-Fi AP may affect the quality of wireless display -->
+    <string name="wifi_display_wifi_ap_affects_quality">Текущая точка доступа Wi-Fi может повлиять на качество беспроводного отображения.</string>
+    <!-- Content of a dialog to notify user WiFi Display is waiting for connection from other devices -->
+    <string name="wifi_display_wait_connection">Ожидание сигналов для подключения других устройств.</string>
+    <!-- Content of a dialog to notify user to confirm if he accepts connection from other devices -->
+    <string name="wifi_display_confirm_connection">желает установить соединение с вами.</string>
+    <!-- Content of a dialog to notify user current connection is building -->
+    <string name="wifi_display_build_connection">Установление соединения.</string>
+    <!-- Content of a toast to notify user connected to a new Wi-Fi network -->
+    <string name="wifi_display_connected_to_wifi_network">Подключен к сети Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g>.</string>
+    <!-- Content of a toast to notify user the current Wi-Fi network is disconnected -->
+    <string name="wifi_display_wifi_network_disconnected">Сеть Wi-Fi <xliff:g id="wifi_ap_name">%1$s</xliff:g> отключена.</string>
+    <!-- Content of a notification to notify user channel confliction -->
+    <string name="wifi_display_channel_confliction">Конфликт каналов</string>
+    <!-- Content of a notification to notify user WiFi network can't coexist with cast screen connection -->
+    <string name="wifi_display_wifi_network_cannot_coexist">Текущая сеть Wi-Fi не может работать с подключенным приложением Cast Screen.</string>
+
+    <!-- MountService start -->
+    <string name="sdcard_ready_title">SD-карта готова</string>
+    <string name="sdcard_select_default_path">Изменить память для записи по умолчанию?</string>
+    <string name="sdcard_default_path_change">Диск для записи по умолчанию изменен.</string>
+    <string name="usb_storage_ready_title">Внешний USB-накопитель готов к использованию</string>
+    <!-- MountService end -->
+
+    <!-- Add for AT&T to show toast when pass pin/puk lock -->
+
+    <!-- Add for Headset feature PIN recognition -->
+    <string name="headset_pin_recognition">Ваши головные телефоны несовместимы с телефоном. Попробуйте другие</string>
+
+    <!-- msensor toast text -->
+
+    <!-- sdcard&otg only for owner -->
+
+    <!-- USB_PREFERENCES: Notification for when the function has been changed to VIA cdrom mode.  This is the title -->
+    <string name="usb_autorun_cdrom_notification_title">Подключение в качестве компакт-диска с автозапуском</string>
+
+    <!-- This is CT customization info for APN -->
+    <string name="ct_net_name">"CTNET"</string>
+    <string name="ct_wap_name">"CTWAP"</string>
+
+    <!-- HDMI start -->
+    <string name="hdmi_notification_title">HDMI-кабель подключен</string>
+    <string name="hdmi_notification_content">Щелкните для настройки HDMI</string>
+    <string name="hdmi_hdvideo_toast">Стандарт HDMI не допускает вопроизведение 4K-видео, соединение будет прервано.</string>
+    <string name="hdmi_mutex_call_content">Режим HDMI остановлен из-за текущего телефонного вызова.</string>
+    <string name="hdmi_replace_hdmi" translatable="false">HDMI</string>
+    <string name="hdmi_replace_mhl" translatable="false">MHL</string>
+    <string name="hdmi_audio_output">Аудиовыход</string>
+    <string name="hdmi_audio_output_stereo">Стерео</string>
+    <string name="hdmi_audio_output_multi_channel">Многоканальный</string>
+    <!-- HDMI end -->
+
+    <!-- VolumePanel -->
+
+    <!-- For CS domain network not registered, PS is registered scenario -->
+    <string name="data_conn_only">Только подключение данных</string>
+    <!-- For WPS/P2P NFC start -->
+
+    <!-- For WPS/P2P NFC end -->
+
+    <!-- for notification when using some spcial icc card -->
+    <string name="Special_Card_Type_Title_Lte_Not_Available">LTE-сеть недоступна.</string>
+    <string name="Suggest_To_Change_USIM">Рекомендуется заменить 4G SIM-карту.</string>
+
+    <!--  For Default Account selection -->
+    <string name="Default_Account_Selection_Content">Выбор учетной записи по умолчанию</string>
+    <string name="account_always_ask_title">"Всегда спрашивать"</string>
+    <string name="other_accounts">Другиеучетныезаписи</string>
+
+    <!-- For Networklist add CU String forbidden -->
+    <string name="network_forbidden">Отключить</string>
+
+    <!--Toast when audio not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_audio_not_supported">Не удалось воспроизвести аудио.</string>
+    <!--Toast when video not supported [CHAR-LIMIT=NONE] -->
+    <string name="media_info_video_not_supported">"Данный формат видео не поддерживается."</string>
+    <!--for browser save password feature start -->
+    <string name="save_password_label">"Подтвердить"</string>
+    <string name="save_password_message">"Вы хотите, чтобы браузер запомнил этот пароль?"</string>
+    <string name="save_password_notnow">"Не сейчас"</string>
+    <string name="save_password_remember">"Запомнить"</string>
+    <string name="save_password_never">"Никогда"</string>
+    <!--for browser save password feature end -->
+
+    <!-- add for sensor hub permissions start -->
+    <string name="permlab_wake_device_sensorhub" product="tablet">активизировать планшет</string>
+    <string name="permlab_wake_device_sensorhub" product="default">Активизировать телефон</string>
+    <string name="permdesc_wake_device_sensorhub" product="tablet">Позволяет приложению активизировать планшет из режима ожидания с помощью датчика.</string>
+    <string name="permdesc_wake_device_sensorhub" product="default">Позволяет приложению активизировать телефон из режима ожидания с помощью датчика.</string>
+    <!-- add for sensor hub permissions end -->
+    <!-- CT customization -->
+    <string name="roaming_message">Вынаходитесьврежимемеждународногороуминга,мобильнаяслужбапередачиданныхвключена,приэтомдействуютместныетарифы.</string>
+    <string name="known">"Я знаю"</string>
+
+    <!--M: add for multi window@{-->
+    <string name="logo">значок логотипа приложения</string>
+    <string name="close">закрыть приложение</string>   
+    <string name="maximum">увеличить приложение</string>
+    <string name="minimize">уменьшить приложение</string>
+    <string name="drag">растяните для изменения размера окна приложения</string> 
+    <string name="gallery_camera_mutex">Нельзя одновременно использовать Галерею, Камеру или Видеоплейер</string> 
+    <string name="mw_max_size_string">Максимум <xliff:g id="number">%d</xliff:g> плавающих окон</string>            
+    <!--@}-->    
+    <string name="ct_name" translatable="false">中国电信</string>
+
+    <!-- M: SmartCardService (OMAPI) @{ -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemTerminal">Системный терминал OMAPI</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemTerminal">Приложение с таким разрешением указывает на то, что это терминал OMAPI  системы.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindTerminal">Привязать терминал OMAPI</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindTerminal">Приложение с таким разрешением может быть привязано к терминалам OMAPI системы. Только служба смарт-карты должна использовать его.</string>
+    <!-- M: SmartCardService (OMAPI) @} -->
+    <!-- M: CTA requirement - permission control -->
+    <string name="permlab_cta_conference_call">Инициировать многосторонние звонки</string>
+    <string name="permdesc_cta_conference_call">Позволяет приложению инициировать многосторонние вызовы. Это может привести к непредвиденным расходам. Вредоносные приложения могут стоить вам денег, инициируя многосторонние звонки без вашего подтверждения.</string>
+    <!--CTA permission: Call forwarding-->
+    <string name="permlab_cta_call_forward">переадресация вызовов</string>
+    <string name="permdesc_cta_call_forward">Разрешает приложению переадресовывать вызовы.</string>
+    <string name="permlab_cta_send_mms">Отправить MMS</string>
+    <string name="permdesc_cta_send_mms">Позволяет приложению отправлять  MMS-сообщения. Это может привести к непредвиденным расходам. Вредоносные приложения могут стоить вам денег, отправляя сообщения без вашего подтверждения.</string>
+    <string name="permlab_cta_send_email">Отправить электронные письма</string>
+    <string name="permdesc_cta_send_email">Позволяет приложению отправлять электронные письма. Это может привести к непредвиденнному расходу сотовых данных. Вредоносные приложения могут стоить вам денег, отправляя электронные письма без вашего подтверждения.</string>
+    <string name="permgrouplab_email">Адрес эл. почты</string>
+    <string name="permgroupdesc_email">Отправить электронные письма</string>
+    <!-- Permission exception dialog -->
+    <string name="aerr_application_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" отклонено <xliff:g id="permission_name">%2$s</xliff:g>. Позволить данное разрешение?</string>
+    <string name="aerr_application_permission_connectivity">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" не может <xliff:g id="permission_name">%2$s</xliff:g>, вы можете <xliff:g id="permission_name2">%2$s</xliff:g> в \ "Настройки \"</string>
+    <string name="aerr_application_unknown_permission">\"<xliff:g id="err_ap_name">%1$s</xliff:g>\" нельзя использовать, следует получить права на доступ.</string>
+    <!-- Button string for MTK permission error dialog -->
+    <string name="mtk_perm_err_dialog_ok">Настройки</string>
+    <!-- MtkStorageManager permission: mount serivce wipe -->
+    <string name="permlab_mount_service_wipe">стереть данные службы монтирования</string>
+    <string name="permdesc_mount_service_wipe">Позволяет приложению отправлять широковещательный сигнал для форматирования памяти телефона и карты SD.</string>
+    <!-- label for item that enter IPO standby -->
+    <string name="global_action_stand_by">Режим ожидания IPO</string>
+</resources>
