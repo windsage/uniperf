@@ -105,6 +105,12 @@ static void nativeInit(JNIEnv* env, jclass clazz) {
  * @param eventParam 事件参数
  * @return handle (>0 成功, <=0 失败)
  */
+/**
+ * 获取性能锁 (修改后)
+ * 
+ * 注意: AIDL 是异步的，无法返回真实 handle
+ * 我们返回一个本地生成的伪 handle 用于 Java 层管理
+ */
 static jint nativeAcquirePerfLock(JNIEnv* env, jclass clazz, 
                                    jint eventType, jint eventParam) {
     if (DEBUG) {
@@ -119,12 +125,10 @@ static jint nativeAcquirePerfLock(JNIEnv* env, jclass clazz,
         return -1;
     }
     
-    // 调用 Vendor AIDL 接口 (只传 eventType 和 eventParam)
-    int32_t handle = -1;
+    // 调用异步 AIDL 接口 (oneway, 立即返回)
     ScopedAStatus status = service->notifyEventStart(
         static_cast<int32_t>(eventType), 
-        static_cast<int32_t>(eventParam), 
-        &handle);
+        static_cast<int32_t>(eventParam));
     
     if (!status.isOk()) {
         ALOGE("notifyEventStart failed: %s", status.getDescription().c_str());
@@ -132,11 +136,13 @@ static jint nativeAcquirePerfLock(JNIEnv* env, jclass clazz,
         return -1;
     }
     
+    // 返回 eventType 作为伪 handle
+    // (Java 层用于管理，Vendor 层通过 eventType 查找真实 handle)
     if (DEBUG) {
-        ALOGD("Acquired perf lock: eventType=%d, handle=%d", eventType, handle);
+        ALOGD("Event sent: eventType=%d", eventType);
     }
     
-    return static_cast<jint>(handle);
+    return static_cast<jint>(eventType);
 }
 
 /**
@@ -163,11 +169,11 @@ static void nativeReleasePerfLock(JNIEnv* env, jclass clazz, jint handle) {
         return;
     }
     
-    // 注意: AIDL 接口传的是 eventType，不是 handle
-    // 这里需要维护 handle -> eventType 的反向映射
-    // 或者简化处理，假设 handle 就是 eventType (后续优化)
+    // handle 就是 eventType 参考上面
+    int32_t eventType = static_cast<int32_t>(handle);
     
-    ScopedAStatus status = service->notifyEventEnd(handle);
+    // 调用异步 AIDL 接口
+    ScopedAStatus status = service->notifyEventEnd(eventType);
     
     if (!status.isOk()) {
         ALOGE("notifyEventEnd failed: %s", status.getDescription().c_str());
@@ -176,7 +182,7 @@ static void nativeReleasePerfLock(JNIEnv* env, jclass clazz, jint handle) {
     }
     
     if (DEBUG) {
-        ALOGD("Released perf lock: handle=%d", handle);
+        ALOGD("Event ended: eventType=%d", eventType);
     }
 }
 

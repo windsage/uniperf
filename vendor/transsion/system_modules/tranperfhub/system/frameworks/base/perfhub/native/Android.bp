@@ -1,0 +1,65 @@
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
+}
+
+// ==================== libtranperfhub-client.so ====================
+// Native 层客户端库 (供 C++ 代码调用)
+
+cc_library_shared {
+    name: "libtranperfhub-client",
+    
+    // System_ext 分区
+    system_ext_specific: true,
+    
+    srcs: [
+        "TranPerfEvent.cpp",
+    ],
+    
+    // 导出头文件
+    export_include_dirs: [
+        "../include",
+    ],
+    
+    local_include_dirs: [
+        "../include",
+    ],
+    
+    header_libs: [
+        "libutils_headers",
+        "liblog_headers",
+    ],
+    
+    shared_libs: [
+        "liblog",
+        "libutils",
+        "libcutils",
+        "libbase",
+        "libbinder_ndk",
+        
+        // Vendor AIDL 接口
+        "vendor.transsion.hardware.perfhub-V1-ndk",
+    ],
+    
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
+    
+    cppflags: [
+        "-std=c++17",
+    ],
+}
+
+// ==================== 头文件导出 ====================
+
+cc_library_headers {
+    name: "libtranperfhub_headers",
+    
+    export_include_dirs: [
+        "../include",
+    ],
+    
+    vendor_available: true,
+    host_supported: true,
+}

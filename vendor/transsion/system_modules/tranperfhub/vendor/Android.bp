@@ -14,6 +14,11 @@ cc_library_shared {
         "service/TranPerfHubService.cpp",
         "adapter/PlatformAdapter.cpp",
         "init/register.cpp",
+        "client/TranPerfEvent.cpp",
+    ],
+
+    export_include_dirs: [
+        "include",
     ],
     
     local_include_dirs: [
@@ -51,6 +56,16 @@ cc_library_shared {
     
     cppflags: [
         "-std=c++17",
+    ],
+}
+
+cc_library_headers {
+    name: "libtranperfhub_vendor_headers",
+    
+    vendor: true,
+    
+    export_include_dirs: [
+        "include",
     ],
 }
 
