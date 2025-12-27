@@ -1,0 +1,6 @@
+java_library {
+    name: "tranperfhub",
+    srcs: ["perfhub/java/com/transsion/perfhub/TranPerfHub.java"],
+    installable: true,
+    sdk_version: "core_platform",
+}
