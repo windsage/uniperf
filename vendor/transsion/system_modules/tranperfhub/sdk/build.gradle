@@ -1,0 +1,59 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'com.transsion.perfhub'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+// 生成 Javadoc JAR
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+// 生成 Sources JAR
+task sourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            
+            artifact sourcesJar
+            artifact javadocJar
+            
+            groupId = 'com.transsion.perfhub'
+            artifactId = 'transcenehint'
+            version = '1.0.0'
+            
+            pom {
+                name = 'TranSceneHint'
+                description = 'Transsion Performance Scene Hint API'
+                url = 'https://www.transsion.com'
+                
+                licenses {
+                    license {
+                        name = 'Proprietary'
+                        url = 'https://www.transsion.com/license'
+                    }
+                }
+            }
+        }
+    }
+    
+    repositories {
+        maven {
+            name = 'TranssionInternal'
+            url = uri("${rootProject.projectDir}/maven-repo")
+        }
+    }
+}

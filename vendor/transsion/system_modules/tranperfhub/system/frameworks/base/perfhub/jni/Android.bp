@@ -1,0 +1,45 @@
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
+}
+
+// ==================== libtranperfhub-system.so ====================
+
+cc_library_shared {
+    name: "libtranperfhub-system",
+    
+    // System_ext 分区
+    system_ext_specific: true,
+    
+    srcs: [
+        "com_transsion_perfhub_TranPerfHub.cpp",
+        "onload.cpp",
+    ],
+    
+    header_libs: [
+        "jni_headers",
+        "libutils_headers",
+        "liblog_headers",
+    ],
+    
+    shared_libs: [
+        "liblog",
+        "libutils",
+        "libcutils",
+        "libnativehelper",
+        "libandroid_runtime",
+        "libbinder_ndk",
+        
+        // 依赖 Vendor AIDL 接口库
+        "vendor.transsion.hardware.perfhub-V1-ndk",
+    ],
+    
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
+    
+    cppflags: [
+        "-std=c++17",
+    ],
+}
