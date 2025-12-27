@@ -1,5 +1,0 @@
-com.mediatek.vnet
-com.iflytek.inputmethod
-com.hugeland.cdsplus
-com.google.android.apps.docs
-com.google.android.videos

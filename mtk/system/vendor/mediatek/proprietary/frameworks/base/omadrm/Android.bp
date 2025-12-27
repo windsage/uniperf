@@ -1,9 +1,0 @@
-java_library {
-    name: "com.mediatek.omadrm.common",
-    libs: [
-        "mediatek-framework",
-    ],
-    srcs: [
-        "java/**/*.java",
-    ],
-}
