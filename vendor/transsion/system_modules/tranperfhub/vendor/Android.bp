@@ -1,0 +1,90 @@
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
+}
+
+// ==================== libtranperfhub-vendor.so ====================
+
+cc_library_shared {
+    name: "libtranperfhub-vendor",
+    
+    // Vendor 分区
+    vendor: true,
+    
+    srcs: [
+        "service/TranPerfHubService.cpp",
+        "adapter/PlatformAdapter.cpp",
+        "init/register.cpp",
+    ],
+    
+    local_include_dirs: [
+        "service",
+        "adapter",
+        "init",
+    ],
+    
+    header_libs: [
+        "libutils_headers",
+        "liblog_headers",
+    ],
+    
+    shared_libs: [
+        "liblog",
+        "libutils",
+        "libcutils",
+        "libbase",
+        "libbinder_ndk",
+        
+        // Vendor AIDL 接口
+        "vendor.transsion.hardware.perfhub-V1-ndk",
+    ],
+    
+    // 平台特定库 (条件编译)
+    target: {
+        vendor: {
+            shared_libs: [
+                // QCOM 平台库
+                "libqti-perfd-client",
+                
+                // MTK 平台库
+                "libpowerhal",
+            ],
+        },
+    },
+    
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
+    
+    cppflags: [
+        "-std=c++17",
+    ],
+}
+
+// ==================== 独立服务 (可选，暂不启用) ====================
+
+cc_binary {
+    name: "vendor.transsion.hardware.perfhub-service",
+    
+    vendor: true,
+    relative_install_path: "hw",
+    
+    srcs: [
+        "init/service_main.cpp",  // 独立服务入口 (后续实现)
+    ],
+    
+    shared_libs: [
+        "liblog",
+        "libutils",
+        "libbinder_ndk",
+        "libtranperfhub-vendor",
+    ],
+    
+    init_rc: [
+        "init/vendor.transsion.hardware.perfhub-service.rc",
+    ],
+    
+    // 暂不启用，优先使用插件模式
+    enabled: false,
+}

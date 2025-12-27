@@ -41,11 +41,7 @@ aidl_interface {
             version: "1",  // 首个稳定版本
             imports: [],   // 无依赖其他 AIDL
         },
-        // 未来可以添加 version: "2"
     ],
-    
-    // 冻结版本 (发布后不可修改)
-    frozen: true,
     
     // 所有者
     owner: "transsion",
