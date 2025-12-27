@@ -18,7 +18,7 @@ using aidl::vendor::transsion::hardware::perfhub::ITranPerfHub;
  * 
  * 职责:
  * 1. 实现 ITranPerfHub AIDL 接口
- * 2. 管理场景到句柄的映射 (sceneId -> handle)
+ * 2. 管理事件到句柄的映射 (eventType -> handle)
  * 3. 调用平台适配器进行性能优化
  */
 class TranPerfHubService : public BnTranPerfHub {
@@ -27,17 +27,17 @@ public:
     ~TranPerfHubService();
     
     // AIDL 接口实现
-    ndk::ScopedAStatus notifySceneStart(
-        int32_t sceneId, 
-        int32_t param, 
+    ndk::ScopedAStatus notifyEventStart(
+        int32_t eventType, 
+        int32_t eventParam, 
         int32_t* _aidl_return) override;
     
-    ndk::ScopedAStatus notifySceneEnd(int32_t sceneId) override;
+    ndk::ScopedAStatus notifyEventEnd(int32_t eventType) override;
 
 private:
-    // 场景句柄映射 (sceneId -> handle)
-    std::map<int32_t, int32_t> mSceneHandles;
-    android::Mutex mSceneLock;
+    // 事件句柄映射 (eventType -> handle)
+    std::map<int32_t, int32_t> mEventHandles;
+    android::Mutex mEventLock;
 };
 
 } // namespace perfhub

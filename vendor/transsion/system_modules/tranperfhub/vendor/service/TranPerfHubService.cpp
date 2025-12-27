@@ -22,82 +22,82 @@ TranPerfHubService::~TranPerfHubService() {
 }
 
 /**
- * 场景开始
+ * Performance event start
  * 
- * 流程:
- * 1. 调用平台适配器获取性能锁
- * 2. 记录 sceneId -> handle 映射
- * 3. 返回 handle
+ * Flow:
+ * 1. Call platform adapter to acquire performance lock
+ * 2. Record eventType -> handle mapping
+ * 3. Return handle
  */
-ndk::ScopedAStatus TranPerfHubService::notifySceneStart(
-    int32_t sceneId, 
-    int32_t param, 
+ndk::ScopedAStatus TranPerfHubService::notifyEventStart(
+    int32_t eventType, 
+    int32_t eventParam, 
     int32_t* _aidl_return) {
     
-    ALOGD("notifySceneStart: sceneId=%d, param=%d", sceneId, param);
+    ALOGD("notifyEventStart: eventType=%d, eventParam=%d", eventType, eventParam);
     
-    // 1. 调用平台适配器
+    // 1. Call platform adapter
     PlatformAdapter& adapter = PlatformAdapter::getInstance();
-    int32_t handle = adapter.acquirePerfLock(sceneId, param);
+    int32_t handle = adapter.acquirePerfLock(eventType, eventParam);
     
     if (handle <= 0) {
-        ALOGE("Failed to acquire perf lock: sceneId=%d", sceneId);
+        ALOGE("Failed to acquire perf lock: eventType=%d", eventType);
         *_aidl_return = -1;
         return ndk::ScopedAStatus::ok();
     }
     
-    // 2. 记录映射
+    // 2. Record mapping
     {
-        AutoMutex _l(mSceneLock);
+        AutoMutex _l(mEventLock);
         
-        // 如果该场景已有句柄，先释放旧的
-        auto it = mSceneHandles.find(sceneId);
-        if (it != mSceneHandles.end()) {
+        // If this event already has a handle, release the old one first
+        auto it = mEventHandles.find(eventType);
+        if (it != mEventHandles.end()) {
             int32_t oldHandle = it->second;
-            ALOGD("Releasing old handle: %d for sceneId: %d", oldHandle, sceneId);
+            ALOGD("Releasing old handle: %d for eventType: %d", oldHandle, eventType);
             adapter.releasePerfLock(oldHandle);
         }
         
-        // 更新映射
-        mSceneHandles[sceneId] = handle;
+        // Update mapping
+        mEventHandles[eventType] = handle;
     }
     
-    ALOGD("Scene started: sceneId=%d, handle=%d", sceneId, handle);
+    ALOGD("Event started: eventType=%d, handle=%d", eventType, handle);
     
     *_aidl_return = handle;
     return ndk::ScopedAStatus::ok();
 }
 
 /**
- * 场景结束
+ * Performance event end
  * 
- * 流程:
- * 1. 根据 sceneId 查找对应的 handle
- * 2. 调用平台适配器释放性能锁
- * 3. 删除映射记录
+ * Flow:
+ * 1. Find corresponding handle by eventType
+ * 2. Call platform adapter to release performance lock
+ * 3. Remove mapping record
  */
-ndk::ScopedAStatus TranPerfHubService::notifySceneEnd(int32_t sceneId) {
-    ALOGD("notifySceneEnd: sceneId=%d", sceneId);
+ndk::ScopedAStatus TranPerfHubService::notifyEventEnd(int32_t eventType) {
+    ALOGD("notifyEventEnd: eventType=%d", eventType);
     
-    AutoMutex _l(mSceneLock);
+    AutoMutex _l(mEventLock);
     
-    // 查找场景对应的句柄
-    auto it = mSceneHandles.find(sceneId);
-    if (it == mSceneHandles.end()) {
-        ALOGW("No handle found for sceneId: %d", sceneId);
+    // Find handle corresponding to event type
+    auto it = mEventHandles.find(eventType);
+    if (it == mEventHandles.end()) {
+        ALOGW("No handle found for eventType: %d", eventType);
         return ndk::ScopedAStatus::ok();
     }
     
     int32_t handle = it->second;
     
-    // 释放性能锁
+    // Release performance lock
     PlatformAdapter& adapter = PlatformAdapter::getInstance();
     adapter.releasePerfLock(handle);
     
-    // 删除映射
-    mSceneHandles.erase(it);
+    // Remove mapping
+    mEventHandles.erase(it);
     
-    ALOGD("Scene ended: sceneId=%d, handle=%d", sceneId, handle);
+    ALOGD("Event ended: eventType=%d, handle=%d", eventType, handle);
     
     return ndk::ScopedAStatus::ok();
 }

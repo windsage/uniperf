@@ -141,13 +141,13 @@ bool PlatformAdapter::initMtk() {
 /**
  * 获取性能锁
  */
-int32_t PlatformAdapter::acquirePerfLock(int32_t sceneId, int32_t param) {
-    ALOGD("acquirePerfLock: sceneId=%d, param=%d", sceneId, param);
+int32_t PlatformAdapter::acquirePerfLock(int32_t eventType, int32_t eventParam) {
+    ALOGD("acquirePerfLock: eventType=%d, eventParam=%d", eventType, eventParam);
     
     if (mPlatform == PLATFORM_QCOM) {
-        return qcomAcquirePerfLock(sceneId, param);
+        return qcomAcquirePerfLock(eventType, eventParam);
     } else if (mPlatform == PLATFORM_MTK) {
-        return mtkAcquirePerfLock(sceneId, param);
+        return mtkAcquirePerfLock(eventType, eventParam);
     }
     
     ALOGE("Unsupported platform");
@@ -170,15 +170,15 @@ void PlatformAdapter::releasePerfLock(int32_t handle) {
 /**
  * QCOM 平台获取性能锁
  */
-int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t sceneId, int32_t param) {
-    // TODO: 后续实现参数映射 (从 XML 读取配置)
-    // 现在先用简单的测试参数
+int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventType, int32_t eventParam) {
+    // TODO: Later implement parameter mapping (read from XML config)
+    // For now use simple test parameters
     
     int list[4] = {
         0x40800000, 1400000,  // CPU Cluster0 Min Freq
         0x40800100, 1800000   // CPU Cluster1 Min Freq
     };
-    int duration = 3000;  // 3 秒
+    int duration = 3000;  // 3 seconds
     
     qcom_perf_lock_acq_t perf_lock_acq = 
         (qcom_perf_lock_acq_t)dlsym(mQcomLibHandle, "perf_lock_acq");
@@ -189,7 +189,8 @@ int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t sceneId, int32_t param) {
     }
     
     int handle = perf_lock_acq(0, duration, list, 4);
-    ALOGD("QCOM perf_lock_acq returned handle: %d", handle);
+    ALOGD("QCOM perf_lock_acq returned handle: %d for eventType: %d", 
+        handle, eventType);
     
     return handle;
 }
@@ -213,7 +214,7 @@ void PlatformAdapter::qcomReleasePerfLock(int32_t handle) {
 /**
  * MTK 平台获取性能锁
  */
-int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t sceneId, int32_t param) {
+int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventType, int32_t eventParam) {
     // TODO: 后续实现参数映射
     
     int list[4] = {

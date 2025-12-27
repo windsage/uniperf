@@ -99,16 +99,17 @@ static void nativeInit(JNIEnv* env, jclass clazz) {
 /**
  * 获取性能锁
  * 
- * Java 调用: TranPerfHub.nativeAcquirePerfLock(sceneId, param)
+ * Java 调用: TranPerfHub.nativeAcquirePerfLock(eventType, eventParam)
  * 
- * @param sceneId 场景ID
- * @param param 场景参数
+ * @param eventType 事件类型
+ * @param eventParam 事件参数
  * @return handle (>0 成功, <=0 失败)
  */
 static jint nativeAcquirePerfLock(JNIEnv* env, jclass clazz, 
-                                   jint sceneId, jint param) {
+                                   jint eventType, jint eventParam) {
     if (DEBUG) {
-        ALOGD("nativeAcquirePerfLock: sceneId=%d, param=%d", sceneId, param);
+        ALOGD("nativeAcquirePerfLock: eventType=%d, eventParam=%d", 
+            eventType, eventParam);
     }
     
     // 获取 Vendor 服务
@@ -118,21 +119,21 @@ static jint nativeAcquirePerfLock(JNIEnv* env, jclass clazz,
         return -1;
     }
     
-    // 调用 Vendor AIDL 接口 (只传 sceneId 和 param)
+    // 调用 Vendor AIDL 接口 (只传 eventType 和 eventParam)
     int32_t handle = -1;
-    ScopedAStatus status = service->notifySceneStart(
-        static_cast<int32_t>(sceneId), 
-        static_cast<int32_t>(param), 
+    ScopedAStatus status = service->notifyEventStart(
+        static_cast<int32_t>(eventType), 
+        static_cast<int32_t>(eventParam), 
         &handle);
     
     if (!status.isOk()) {
-        ALOGE("notifySceneStart failed: %s", status.getDescription().c_str());
+        ALOGE("notifyEventStart failed: %s", status.getDescription().c_str());
         resetVendorService();
         return -1;
     }
     
     if (DEBUG) {
-        ALOGD("Acquired perf lock: sceneId=%d, handle=%d", sceneId, handle);
+        ALOGD("Acquired perf lock: eventType=%d, handle=%d", eventType, handle);
     }
     
     return static_cast<jint>(handle);
@@ -162,15 +163,14 @@ static void nativeReleasePerfLock(JNIEnv* env, jclass clazz, jint handle) {
         return;
     }
     
-    // 注意: AIDL 接口传的是 sceneId，不是 handle
-    // 需要在 Vendor 层维护 handle -> sceneId 的反向映射
-    // 或者修改接口设计
+    // 注意: AIDL 接口传的是 eventType，不是 handle
+    // 这里需要维护 handle -> eventType 的反向映射
+    // 或者简化处理，假设 handle 就是 eventType (后续优化)
     
-    // 这里先简化处理，假设 handle 就是 sceneId (后续优化)
-    ScopedAStatus status = service->notifySceneEnd(handle);
+    ScopedAStatus status = service->notifyEventEnd(handle);
     
     if (!status.isOk()) {
-        ALOGE("notifySceneEnd failed: %s", status.getDescription().c_str());
+        ALOGE("notifyEventEnd failed: %s", status.getDescription().c_str());
         resetVendorService();
         return;
     }

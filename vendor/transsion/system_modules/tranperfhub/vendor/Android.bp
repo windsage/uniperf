@@ -38,18 +38,10 @@ cc_library_shared {
         "vendor.transsion.hardware.perfhub-V1-ndk",
     ],
     
-    // 平台特定库 (条件编译)
-    target: {
-        vendor: {
-            shared_libs: [
-                // QCOM 平台库
-                "libqti-perfd-client",
-                
-                // MTK 平台库
-                "libpowerhal",
-            ],
-        },
-    },
+    runtime_libs: [
+        "libqti-perfd-client",
+        "libpowerhal",
+    ],
     
     cflags: [
         "-Wall",

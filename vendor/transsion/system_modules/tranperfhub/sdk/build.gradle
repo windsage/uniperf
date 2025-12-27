@@ -32,12 +32,12 @@ publishing {
             artifact javadocJar
             
             groupId = 'com.transsion.perfhub'
-            artifactId = 'transcenehint'
+            artifactId = 'tranperfevent'
             version = '1.0.0'
             
             pom {
-                name = 'TranSceneHint'
-                description = 'Transsion Performance Scene Hint API'
+                name = 'TranPerfEvent'
+                description = 'Transsion Performance Event API'
                 url = 'https://www.transsion.com'
                 
                 licenses {
