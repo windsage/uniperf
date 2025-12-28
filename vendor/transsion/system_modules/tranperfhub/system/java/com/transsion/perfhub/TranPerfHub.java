@@ -33,7 +33,7 @@ public class TranPerfHub {
     // Load native library
     static {
         try {
-            System.loadLibrary("tranperfhub-system");
+            System.loadLibrary("tranperfhub-jni");
             nativeInit();
             sNativeLoaded = true;
             if (DEBUG) {

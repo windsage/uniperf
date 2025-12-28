@@ -100,9 +100,10 @@ int32_t TranPerfEvent::notifyEventStart(int32_t eventType, int32_t eventParam) {
         return -1;
     }
     
-    // Call Vendor AIDL interface
-    int32_t handle = -1;
-    ScopedAStatus status = service->notifyEventStart(eventType, eventParam, &handle);
+    // Call Vendor AIDL interface (oneway, no return value)
+    ScopedAStatus status = service->notifyEventStart(
+        static_cast<int32_t>(eventType), 
+        static_cast<int32_t>(eventParam));
     
     if (!status.isOk()) {
         ALOGE("notifyEventStart failed: %s", status.getDescription().c_str());
@@ -110,33 +111,13 @@ int32_t TranPerfEvent::notifyEventStart(int32_t eventType, int32_t eventParam) {
         return -1;
     }
     
-    if (handle > 0) {
-        // Record event type -> handle mapping
-        AutoMutex _l(sEventLock);
-        
-        // Remove old handle if exists
-        for (size_t i = 0; i < sEventHandles.size(); i++) {
-            if (sEventHandles[i].first == eventType) {
-                int32_t oldHandle = sEventHandles[i].second;
-                ALOGD("Releasing old handle: %d for eventType: %d", oldHandle, eventType);
-                
-                // Release old handle (best effort, ignore errors)
-                service->notifyEventEnd(eventType);
-                
-                sEventHandles.removeAt(i);
-                break;
-            }
-        }
-        
-        // Add new mapping
-        sEventHandles.add(std::make_pair(eventType, handle));
-    }
-    
+    // Return eventType as pseudo-handle
+    // (Vendor layer manages real handles internally)
     if (DEBUG) {
-        ALOGD("Event started: eventType=%d, handle=%d", eventType, handle);
+        ALOGD("Event sent: eventType=%d", eventType);
     }
     
-    return handle;
+    return static_cast<int32_t>(eventType);
 }
 
 /**
