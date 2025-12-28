@@ -1,0 +1,18 @@
+// vendor/transsion/build/flags/release/aconfig_declarations/PFM/Android.bp
+
+aconfig_declarations {
+    name: "com.transsion.perfhub.flags-aconfig",
+    package: "com.transsion.perfhub.flags",
+    container: "system",
+    srcs: [
+        "tranperfhub.aconfig",
+    ],
+}
+
+// Generate a Java library
+java_aconfig_library {
+    name: "com.transsion.perfhub.flags-aconfig-java",
+    aconfig_declarations: "com.transsion.perfhub.flags-aconfig",
+    min_sdk_version: "current",
+    apex_available: ["com.transsion.thub.core"],
+}

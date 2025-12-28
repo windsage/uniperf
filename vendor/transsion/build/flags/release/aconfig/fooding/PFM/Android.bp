@@ -1,0 +1,16 @@
+// 配置 bleeding_edge 状态的 flag values
+
+aconfig_value_set {
+    name: "aconfig-value-set-platform_vendor_transsion_build_flags_release-bleeding_edge-com.transsion.perfhub.flags",
+    values: [
+        "tranperfhub_flag_values.textproto",
+    ],
+}
+
+aconfig_values {
+    name: "aconfig-values-platform_vendor_transsion_build_flags_release-bleeding_edge-com.transsion.perfhub.flags",
+    package: "com.transsion.perfhub.flags",
+    srcs: [
+        ":aconfig-value-set-platform_vendor_transsion_build_flags_release-bleeding_edge-com.transsion.perfhub.flags",
+    ],
+}
