@@ -1,11 +1,11 @@
 #define LOG_TAG "TranPerfHub-Register"
 
-#include "TranPerfHubService.h"
-
+#include <android-base/logging.h>
 #include <android/binder_manager.h>
 #include <android/binder_process.h>
 #include <utils/Log.h>
-#include <android-base/logging.h>
+
+#include "TranPerfHubService.h"
 
 using namespace vendor::transsion::hardware::perfhub;
 
@@ -18,16 +18,13 @@ extern "C" void TranPerfHub_RegisterService() {
     ALOGI("TranPerfHub_RegisterService called");
 
     // 创建服务实例
-    std::shared_ptr<TranPerfHubService> service =
-        ndk::SharedRefBase::make<TranPerfHubService>();
+    std::shared_ptr<TranPerfHubService> service = ndk::SharedRefBase::make<TranPerfHubService>();
 
     // 注册服务
-    const std::string instance = std::string() +
-        ITranPerfHub::descriptor + "/default";
+    const std::string instance = std::string() + ITranPerfHub::descriptor + "/default";
 
-    binder_status_t status = AServiceManager_addService(
-        service->asBinder().get(),
-        instance.c_str());
+    binder_status_t status =
+        AServiceManager_addService(service->asBinder().get(), instance.c_str());
 
     if (status == STATUS_OK) {
         ALOGI("TranPerfHub service registered: %s", instance.c_str());
@@ -41,8 +38,7 @@ extern "C" void TranPerfHub_RegisterService() {
  *
  * 当 libtranperfhub-vendor.so 被加载时自动执行
  */
-__attribute__((constructor))
-static void TranPerfHub_AutoInit() {
+__attribute__((constructor)) static void TranPerfHub_AutoInit() {
     ALOGI("TranPerfHub plugin loaded, auto-registering service...");
     TranPerfHub_RegisterService();
 }

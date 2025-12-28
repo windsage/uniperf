@@ -2,10 +2,10 @@
 
 #include "PlatformAdapter.h"
 
-#include <dlfcn.h>
-#include <cutils/properties.h>
-#include <utils/Log.h>
 #include <android-base/logging.h>
+#include <cutils/properties.h>
+#include <dlfcn.h>
+#include <utils/Log.h>
 
 namespace vendor {
 namespace transsion {
@@ -17,13 +17,14 @@ typedef int (*qcom_perf_lock_acq_t)(int handle, int duration, int list[], int nu
 typedef int (*qcom_perf_lock_rel_t)(int handle);
 
 // MTK 函数指针类型
-typedef int (*mtk_perf_lock_acq_t)(int handle, int duration, int list[], int numArgs, int pid, int tid);
+typedef int (*mtk_perf_lock_acq_t)(int handle, int duration, int list[], int numArgs, int pid,
+                                   int tid);
 typedef void (*mtk_perf_lock_rel_t)(int handle);
 
 // 全局单例
-static PlatformAdapter* sInstance = nullptr;
+static PlatformAdapter *sInstance = nullptr;
 
-PlatformAdapter& PlatformAdapter::getInstance() {
+PlatformAdapter &PlatformAdapter::getInstance() {
     if (sInstance == nullptr) {
         sInstance = new PlatformAdapter();
     }
@@ -31,10 +32,7 @@ PlatformAdapter& PlatformAdapter::getInstance() {
 }
 
 PlatformAdapter::PlatformAdapter()
-    : mPlatform(PLATFORM_UNKNOWN)
-    , mQcomLibHandle(nullptr)
-    , mMtkLibHandle(nullptr) {
-
+    : mPlatform(PLATFORM_UNKNOWN), mQcomLibHandle(nullptr), mMtkLibHandle(nullptr) {
     ALOGI("PlatformAdapter initializing...");
 
     // 检测平台
@@ -122,10 +120,8 @@ bool PlatformAdapter::initMtk() {
     }
 
     // 获取函数指针
-    mtk_perf_lock_acq_t perfLockAcq =
-        (mtk_perf_lock_acq_t)dlsym(mMtkLibHandle, "perfLockAcq");
-    mtk_perf_lock_rel_t perfLockRel =
-        (mtk_perf_lock_rel_t)dlsym(mMtkLibHandle, "perfLockRel");
+    mtk_perf_lock_acq_t perfLockAcq = (mtk_perf_lock_acq_t)dlsym(mMtkLibHandle, "perfLockAcq");
+    mtk_perf_lock_rel_t perfLockRel = (mtk_perf_lock_rel_t)dlsym(mMtkLibHandle, "perfLockRel");
 
     if (!perfLockAcq || !perfLockRel) {
         ALOGE("Failed to get MTK function pointers");
@@ -175,10 +171,10 @@ int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventType, int32_t eventPar
     // For now use simple test parameters
 
     int list[4] = {
-        0x40800000, 1400000,  // CPU Cluster0 Min Freq
-        0x40800100, 1800000   // CPU Cluster1 Min Freq
+        0x40800000, 1400000,    // CPU Cluster0 Min Freq
+        0x40800100, 1800000     // CPU Cluster1 Min Freq
     };
-    int duration = 3000;  // 3 seconds
+    int duration = 3000;    // 3 seconds
 
     qcom_perf_lock_acq_t perf_lock_acq =
         (qcom_perf_lock_acq_t)dlsym(mQcomLibHandle, "perf_lock_acq");
@@ -189,8 +185,7 @@ int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventType, int32_t eventPar
     }
 
     int handle = perf_lock_acq(0, duration, list, 4);
-    ALOGD("QCOM perf_lock_acq returned handle: %d for eventType: %d",
-        handle, eventType);
+    ALOGD("QCOM perf_lock_acq returned handle: %d for eventType: %d", handle, eventType);
 
     return handle;
 }
@@ -218,13 +213,12 @@ int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventType, int32_t eventPara
     // TODO: 后续实现参数映射
 
     int list[4] = {
-        0x00001100, 1400000,  // CPU Cluster0 Min Freq
-        0x00001200, 1800000   // CPU Cluster1 Min Freq
+        0x00001100, 1400000,    // CPU Cluster0 Min Freq
+        0x00001200, 1800000     // CPU Cluster1 Min Freq
     };
     int duration = 3000;
 
-    mtk_perf_lock_acq_t perfLockAcq =
-        (mtk_perf_lock_acq_t)dlsym(mMtkLibHandle, "perfLockAcq");
+    mtk_perf_lock_acq_t perfLockAcq = (mtk_perf_lock_acq_t)dlsym(mMtkLibHandle, "perfLockAcq");
 
     if (!perfLockAcq) {
         ALOGE("perfLockAcq not found");
@@ -241,8 +235,7 @@ int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventType, int32_t eventPara
  * MTK 平台释放性能锁
  */
 void PlatformAdapter::mtkReleasePerfLock(int32_t handle) {
-    mtk_perf_lock_rel_t perfLockRel =
-        (mtk_perf_lock_rel_t)dlsym(mMtkLibHandle, "perfLockRel");
+    mtk_perf_lock_rel_t perfLockRel = (mtk_perf_lock_rel_t)dlsym(mMtkLibHandle, "perfLockRel");
 
     if (!perfLockRel) {
         ALOGE("perfLockRel not found");
@@ -253,7 +246,7 @@ void PlatformAdapter::mtkReleasePerfLock(int32_t handle) {
     ALOGD("MTK perfLockRel called for handle: %d", handle);
 }
 
-} // namespace perfhub
-} // namespace hardware
-} // namespace transsion
-} // namespace vendor
+}    // namespace perfhub
+}    // namespace hardware
+}    // namespace transsion
+}    // namespace vendor

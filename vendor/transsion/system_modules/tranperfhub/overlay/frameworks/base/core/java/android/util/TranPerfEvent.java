@@ -2,7 +2,9 @@ package android.util;
 
 import android.util.Log;
 import android.util.SparseIntArray;
+
 import com.transsion.perfhub.flags.Flags;
+
 import java.lang.reflect.Method;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -33,13 +35,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @hide
  */
 public final class TranPerfEvent {
-
     private static final String TAG = "TranPerfEvent";
     private static final boolean DEBUG = false;
 
     // TranPerfHub class name for reflection
-    private static final String PERF_HUB_CLASS =
-        "com.transsion.perfhub.TranPerfHub";
+    private static final String PERF_HUB_CLASS = "com.transsion.perfhub.TranPerfHub";
 
     // ==================== Event Type Constants ====================
 
@@ -95,7 +95,7 @@ public final class TranPerfEvent {
 
     // Event listeners (thread-safe)
     private static final CopyOnWriteArrayList<TrEventListener> sListeners =
-        new CopyOnWriteArrayList<>();
+            new CopyOnWriteArrayList<>();
 
     // Event handle mapping (eventType -> handle)
     private static final SparseIntArray sEventHandles = new SparseIntArray();
@@ -126,13 +126,7 @@ public final class TranPerfEvent {
         }
 
         if (DEBUG) {
-            Log.d(
-                TAG,
-                "notifyEventStart: eventType=" +
-                    eventType +
-                    ", eventParam=" +
-                    eventParam
-            );
+            Log.d(TAG, "notifyEventStart: eventType=" + eventType + ", eventParam=" + eventParam);
         }
 
         // 1. Call underlying performance optimization
@@ -210,13 +204,7 @@ public final class TranPerfEvent {
         if (!sListeners.contains(listener)) {
             sListeners.add(listener);
             if (DEBUG) {
-                Log.d(
-                    TAG,
-                    "registerListener: " +
-                        listener +
-                        ", total=" +
-                        sListeners.size()
-                );
+                Log.d(TAG, "registerListener: " + listener + ", total=" + sListeners.size());
             }
         }
     }
@@ -230,13 +218,7 @@ public final class TranPerfEvent {
         if (listener != null) {
             sListeners.remove(listener);
             if (DEBUG) {
-                Log.d(
-                    TAG,
-                    "unregisterListener: " +
-                        listener +
-                        ", remaining=" +
-                        sListeners.size()
-                );
+                Log.d(TAG, "unregisterListener: " + listener + ", remaining=" + sListeners.size());
             }
         }
     }
@@ -247,40 +229,29 @@ public final class TranPerfEvent {
      * Initialize reflection (lazy, thread-safe)
      */
     private static void ensureReflectionInitialized() {
-        if (sReflectionInitialized) return;
+        if (sReflectionInitialized)
+            return;
 
         synchronized (TranPerfEvent.class) {
-            if (sReflectionInitialized) return;
+            if (sReflectionInitialized)
+                return;
 
             try {
                 // Load TranPerfHub class
                 sPerfHubClass = Class.forName(PERF_HUB_CLASS);
 
                 // Get acquirePerfLock method
-                sAcquireMethod = sPerfHubClass.getMethod(
-                    "acquirePerfLock",
-                    int.class,
-                    int.class
-                );
+                sAcquireMethod = sPerfHubClass.getMethod("acquirePerfLock", int.class, int.class);
 
                 // Get releasePerfLock method
-                sReleaseMethod = sPerfHubClass.getMethod(
-                    "releasePerfLock",
-                    int.class
-                );
+                sReleaseMethod = sPerfHubClass.getMethod("releasePerfLock", int.class);
 
                 sReflectionInitialized = true;
                 if (DEBUG) {
-                    Log.d(
-                        TAG,
-                        "TranPerfHub reflection initialized successfully"
-                    );
+                    Log.d(TAG, "TranPerfHub reflection initialized successfully");
                 }
             } catch (ClassNotFoundException e) {
-                Log.w(
-                    TAG,
-                    "TranPerfHub not found, performance optimization disabled"
-                );
+                Log.w(TAG, "TranPerfHub not found, performance optimization disabled");
             } catch (Exception e) {
                 Log.e(TAG, "Failed to initialize TranPerfHub reflection", e);
             }
@@ -301,11 +272,7 @@ public final class TranPerfEvent {
             Object result = sAcquireMethod.invoke(null, eventType, eventParam);
             return (result instanceof Integer) ? (Integer) result : -1;
         } catch (Exception e) {
-            Log.e(
-                TAG,
-                "Failed to acquire perf lock: eventType=" + eventType,
-                e
-            );
+            Log.e(TAG, "Failed to acquire perf lock: eventType=" + eventType, e);
             return -1;
         }
     }

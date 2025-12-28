@@ -5,12 +5,14 @@
 #define LOG_TAG "TranPerfEvent-Vendor"
 
 #include "TranPerfEvent.h"
-#include "PlatformAdapter.h"
 
+#include <com_transsion_perfhub_flags.h>
 #include <utils/Log.h>
 #include <utils/Mutex.h>
+
 #include <map>
-#include <com_transsion_perfhub_flags.h>
+
+#include "PlatformAdapter.h"
 
 namespace vendor {
 namespace transsion {
@@ -44,7 +46,7 @@ int32_t TranPerfEvent::notifyEventStart(int32_t eventType, int32_t eventParam) {
     }
 
     // Directly call PlatformAdapter (in-process call)
-    PlatformAdapter& adapter = PlatformAdapter::getInstance();
+    PlatformAdapter &adapter = PlatformAdapter::getInstance();
     int32_t handle = adapter.acquirePerfLock(eventType, eventParam);
 
     if (handle <= 0) {
@@ -99,7 +101,7 @@ void TranPerfEvent::notifyEventEnd(int32_t eventType) {
     int32_t handle = it->second;
 
     // Release performance lock
-    PlatformAdapter& adapter = PlatformAdapter::getInstance();
+    PlatformAdapter &adapter = PlatformAdapter::getInstance();
     adapter.releasePerfLock(handle);
 
     // Remove mapping
@@ -124,7 +126,7 @@ void TranPerfEvent::releaseHandle(int32_t handle) {
     }
 
     // Release performance lock
-    PlatformAdapter& adapter = PlatformAdapter::getInstance();
+    PlatformAdapter &adapter = PlatformAdapter::getInstance();
     adapter.releasePerfLock(handle);
 
     // Remove from mapping (find by value)
@@ -144,6 +146,6 @@ void TranPerfEvent::releaseHandle(int32_t handle) {
     }
 }
 
-} // namespace perfhub
-} // namespace transsion
-} // namespace vendor
+}    // namespace perfhub
+}    // namespace transsion
+}    // namespace vendor

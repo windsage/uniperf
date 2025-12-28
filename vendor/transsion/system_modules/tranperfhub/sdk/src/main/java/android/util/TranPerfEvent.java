@@ -15,7 +15,6 @@ package android.util;
  * @hide
  */
 public final class TranPerfEvent {
-
     // ==================== Event Type Constants ====================
 
     /** App launch event */

@@ -1,11 +1,12 @@
 #define LOG_TAG "TranPerfHub-Service"
 
 #include "TranPerfHubService.h"
-#include "PlatformAdapter.h"
 
-#include <utils/Log.h>
 #include <android-base/logging.h>
 #include <com_transsion_perfhub_flags.h>
+#include <utils/Log.h>
+
+#include "PlatformAdapter.h"
 
 namespace vendor {
 namespace transsion {
@@ -31,10 +32,8 @@ TranPerfHubService::~TranPerfHubService() {
  * 2. Record eventType -> handle mapping
  * 3. Return handle
  */
-ndk::ScopedAStatus TranPerfHubService::notifyEventStart(
-    int32_t eventType,
-    int32_t eventParam,
-    int32_t* _aidl_return) {
+ndk::ScopedAStatus TranPerfHubService::notifyEventStart(int32_t eventType, int32_t eventParam,
+                                                        int32_t *_aidl_return) {
     if (!com::transsion::perfhub::flags::enable_tranperfhub()) {
         ALOGD("TranPerfHub disabled, skip event processing");
         return ndk::ScopedAStatus::ok();
@@ -43,7 +42,7 @@ ndk::ScopedAStatus TranPerfHubService::notifyEventStart(
     ALOGD("notifyEventStart: eventType=%d, eventParam=%d", eventType, eventParam);
 
     // 1. Call platform adapter
-    PlatformAdapter& adapter = PlatformAdapter::getInstance();
+    PlatformAdapter &adapter = PlatformAdapter::getInstance();
     int32_t handle = adapter.acquirePerfLock(eventType, eventParam);
 
     if (handle <= 0) {
@@ -101,7 +100,7 @@ ndk::ScopedAStatus TranPerfHubService::notifyEventEnd(int32_t eventType) {
     int32_t handle = it->second;
 
     // Release performance lock
-    PlatformAdapter& adapter = PlatformAdapter::getInstance();
+    PlatformAdapter &adapter = PlatformAdapter::getInstance();
     adapter.releasePerfLock(handle);
 
     // Remove mapping
@@ -112,7 +111,7 @@ ndk::ScopedAStatus TranPerfHubService::notifyEventEnd(int32_t eventType) {
     return ndk::ScopedAStatus::ok();
 }
 
-} // namespace perfhub
-} // namespace hardware
-} // namespace transsion
-} // namespace vendor
+}    // namespace perfhub
+}    // namespace hardware
+}    // namespace transsion
+}    // namespace vendor

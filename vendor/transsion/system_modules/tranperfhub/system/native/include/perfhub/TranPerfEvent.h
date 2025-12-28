@@ -76,7 +76,7 @@ private:
     ~TranPerfEvent() = delete;
 };
 
-} // namespace transsion
-} // namespace android
+}    // namespace transsion
+}    // namespace android
 
-#endif // TRANSSION_TRANPERFEVENT_H
+#endif    // TRANSSION_TRANPERFEVENT_H

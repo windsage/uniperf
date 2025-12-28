@@ -3,6 +3,7 @@
 
 #include <aidl/vendor/transsion/hardware/perfhub/BnTranPerfHub.h>
 #include <utils/Mutex.h>
+
 #include <map>
 
 namespace vendor {
@@ -27,10 +28,8 @@ public:
     ~TranPerfHubService();
 
     // AIDL 接口实现
-    ndk::ScopedAStatus notifyEventStart(
-        int32_t eventType,
-        int32_t eventParam,
-        int32_t* _aidl_return) override;
+    ndk::ScopedAStatus notifyEventStart(int32_t eventType, int32_t eventParam,
+                                        int32_t *_aidl_return) override;
 
     ndk::ScopedAStatus notifyEventEnd(int32_t eventType) override;
 
@@ -40,9 +39,9 @@ private:
     android::Mutex mEventLock;
 };
 
-} // namespace perfhub
-} // namespace hardware
-} // namespace transsion
-} // namespace vendor
+}    // namespace perfhub
+}    // namespace hardware
+}    // namespace transsion
+}    // namespace vendor
 
-#endif // TRANPERFHUB_SERVICE_H
+#endif    // TRANPERFHUB_SERVICE_H

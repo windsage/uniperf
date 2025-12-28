@@ -64,8 +64,8 @@ public class TranPerfHub {
 
         int handle = nativeAcquirePerfLock(eventType, eventParam);
         if (DEBUG) {
-            Log.d(TAG, "acquirePerfLock: eventType=" + eventType +
-                ", eventParam=" + eventParam + ", handle=" + handle);
+            Log.d(TAG, "acquirePerfLock: eventType=" + eventType + ", eventParam=" + eventParam
+                               + ", handle=" + handle);
         }
         return handle;
     }

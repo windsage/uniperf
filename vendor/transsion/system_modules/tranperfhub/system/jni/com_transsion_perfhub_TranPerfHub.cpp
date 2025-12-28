@@ -6,10 +6,9 @@
 
 #define LOG_TAG "TranPerfHub-JNI"
 
+#include <android_runtime/AndroidRuntime.h>
 #include <jni.h>
 #include <nativehelper/JNIHelp.h>
-#include <android_runtime/AndroidRuntime.h>
-
 #include <utils/Log.h>
 #include <utils/Mutex.h>
 
@@ -20,8 +19,8 @@
 using namespace android;
 
 using aidl::vendor::transsion::hardware::perfhub::ITranPerfHub;
-using ::ndk::SpAIBinder;
 using ::ndk::ScopedAStatus;
+using ::ndk::SpAIBinder;
 
 // ==================== 全局变量 ====================
 
@@ -32,8 +31,7 @@ static std::shared_ptr<ITranPerfHub> gVendorService = nullptr;
 static Mutex gServiceLock;
 
 // Vendor 服务名称
-static const char* VENDOR_SERVICE_NAME =
-    "vendor.transsion.hardware.perfhub.ITranPerfHub/default";
+static const char *VENDOR_SERVICE_NAME = "vendor.transsion.hardware.perfhub.ITranPerfHub/default";
 
 // Debug 开关
 static constexpr bool DEBUG = false;
@@ -51,8 +49,7 @@ static std::shared_ptr<ITranPerfHub> getVendorService() {
     }
 
     // 获取 Vendor AIDL 服务
-    SpAIBinder binder = SpAIBinder(
-        AServiceManager_checkService(VENDOR_SERVICE_NAME));
+    SpAIBinder binder = SpAIBinder(AServiceManager_checkService(VENDOR_SERVICE_NAME));
 
     if (binder.get() == nullptr) {
         ALOGE("Failed to get vendor service: %s", VENDOR_SERVICE_NAME);
@@ -87,7 +84,7 @@ static void resetVendorService() {
  *
  * Java 调用: TranPerfHub.nativeInit()
  */
-static void nativeInit(JNIEnv* env, jclass clazz) {
+static void nativeInit(JNIEnv *env, jclass clazz) {
     if (DEBUG) {
         ALOGD("nativeInit called");
     }
@@ -111,11 +108,9 @@ static void nativeInit(JNIEnv* env, jclass clazz) {
  * 注意: AIDL 是异步的，无法返回真实 handle
  * 我们返回一个本地生成的伪 handle 用于 Java 层管理
  */
-static jint nativeAcquirePerfLock(JNIEnv* env, jclass clazz,
-                                   jint eventType, jint eventParam) {
+static jint nativeAcquirePerfLock(JNIEnv *env, jclass clazz, jint eventType, jint eventParam) {
     if (DEBUG) {
-        ALOGD("nativeAcquirePerfLock: eventType=%d, eventParam=%d",
-            eventType, eventParam);
+        ALOGD("nativeAcquirePerfLock: eventType=%d, eventParam=%d", eventType, eventParam);
     }
 
     // 获取 Vendor 服务
@@ -126,9 +121,8 @@ static jint nativeAcquirePerfLock(JNIEnv* env, jclass clazz,
     }
 
     // 调用异步 AIDL 接口 (oneway, 立即返回)
-    ScopedAStatus status = service->notifyEventStart(
-        static_cast<int32_t>(eventType),
-        static_cast<int32_t>(eventParam));
+    ScopedAStatus status = service->notifyEventStart(static_cast<int32_t>(eventType),
+                                                     static_cast<int32_t>(eventParam));
 
     if (!status.isOk()) {
         ALOGE("notifyEventStart failed: %s", status.getDescription().c_str());
@@ -152,7 +146,7 @@ static jint nativeAcquirePerfLock(JNIEnv* env, jclass clazz,
  *
  * @param handle 性能锁句柄
  */
-static void nativeReleasePerfLock(JNIEnv* env, jclass clazz, jint handle) {
+static void nativeReleasePerfLock(JNIEnv *env, jclass clazz, jint handle) {
     if (DEBUG) {
         ALOGD("nativeReleasePerfLock: handle=%d", handle);
     }
@@ -189,28 +183,16 @@ static void nativeReleasePerfLock(JNIEnv* env, jclass clazz, jint handle) {
 // ==================== JNI 方法注册 ====================
 
 static const JNINativeMethod gMethods[] = {
-    {
-        "nativeInit",
-        "()V",
-        (void*)nativeInit
-    },
-    {
-        "nativeAcquirePerfLock",
-        "(II)I",
-        (void*)nativeAcquirePerfLock
-    },
-    {
-        "nativeReleasePerfLock",
-        "(I)V",
-        (void*)nativeReleasePerfLock
-    },
+    {"nativeInit", "()V", (void *)nativeInit},
+    {"nativeAcquirePerfLock", "(II)I", (void *)nativeAcquirePerfLock},
+    {"nativeReleasePerfLock", "(I)V", (void *)nativeReleasePerfLock},
 };
 
 /**
  * 注册 JNI 方法
  */
-int register_com_transsion_perfhub_TranPerfHub(JNIEnv* env) {
-    const char* className = "com/transsion/perfhub/TranPerfHub";
+int register_com_transsion_perfhub_TranPerfHub(JNIEnv *env) {
+    const char *className = "com/transsion/perfhub/TranPerfHub";
 
     jclass clazz = env->FindClass(className);
     if (clazz == NULL) {

@@ -15,7 +15,7 @@ namespace perfhub {
  */
 class PlatformAdapter {
 public:
-    static PlatformAdapter& getInstance();
+    static PlatformAdapter &getInstance();
 
     /**
      * Acquire performance lock
@@ -38,8 +38,8 @@ private:
     ~PlatformAdapter();
 
     // 禁止拷贝
-    PlatformAdapter(const PlatformAdapter&) = delete;
-    PlatformAdapter& operator=(const PlatformAdapter&) = delete;
+    PlatformAdapter(const PlatformAdapter &) = delete;
+    PlatformAdapter &operator=(const PlatformAdapter &) = delete;
 
     // 平台检测
     enum Platform {
@@ -63,13 +63,13 @@ private:
     void mtkReleasePerfLock(int32_t handle);
 
     Platform mPlatform;
-    void* mQcomLibHandle;
-    void* mMtkLibHandle;
+    void *mQcomLibHandle;
+    void *mMtkLibHandle;
 };
 
-} // namespace perfhub
-} // namespace hardware
-} // namespace transsion
-} // namespace vendor
+}    // namespace perfhub
+}    // namespace hardware
+}    // namespace transsion
+}    // namespace vendor
 
-#endif // PLATFORM_ADAPTER_H
+#endif    // PLATFORM_ADAPTER_H

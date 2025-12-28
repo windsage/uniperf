@@ -89,8 +89,8 @@ private:
     ~TranPerfEvent() = delete;
 };
 
-} // namespace perfhub
-} // namespace transsion
-} // namespace vendor
+}    // namespace perfhub
+}    // namespace transsion
+}    // namespace vendor
 
-#endif // VENDOR_TRANSSION_TRANPERFEVENT_H
+#endif    // VENDOR_TRANSSION_TRANPERFEVENT_H

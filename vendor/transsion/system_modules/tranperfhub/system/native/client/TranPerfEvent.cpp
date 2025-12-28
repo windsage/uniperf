@@ -4,12 +4,11 @@
 
 #define LOG_TAG "TranPerfEvent-Native"
 
+#include <com_transsion_perfhub_flags.h>
 #include <perfhub/TranPerfEvent.h>
 #include <utils/Log.h>
 #include <utils/Mutex.h>
 #include <utils/SortedVector.h>
-
-#include <com_transsion_perfhub_flags.h>
 
 // Vendor AIDL interface
 #include <aidl/vendor/transsion/hardware/perfhub/ITranPerfHub.h>
@@ -18,8 +17,8 @@
 using namespace android;
 
 using aidl::vendor::transsion::hardware::perfhub::ITranPerfHub;
-using ::ndk::SpAIBinder;
 using ::ndk::ScopedAStatus;
+using ::ndk::SpAIBinder;
 
 namespace android {
 namespace transsion {
@@ -37,8 +36,7 @@ static SortedVector<std::pair<int32_t, int32_t>> sEventHandles;
 static Mutex sEventLock;
 
 // Vendor service name
-static const char* VENDOR_SERVICE_NAME =
-    "vendor.transsion.hardware.perfhub.ITranPerfHub/default";
+static const char *VENDOR_SERVICE_NAME = "vendor.transsion.hardware.perfhub.ITranPerfHub/default";
 
 // Debug flag
 static constexpr bool DEBUG = false;
@@ -56,8 +54,7 @@ static std::shared_ptr<ITranPerfHub> getVendorService() {
     }
 
     // Get Vendor AIDL service
-    SpAIBinder binder = SpAIBinder(
-        AServiceManager_checkService(VENDOR_SERVICE_NAME));
+    SpAIBinder binder = SpAIBinder(AServiceManager_checkService(VENDOR_SERVICE_NAME));
 
     if (binder.get() == nullptr) {
         ALOGE("Failed to get vendor service: %s", VENDOR_SERVICE_NAME);
@@ -110,9 +107,8 @@ int32_t TranPerfEvent::notifyEventStart(int32_t eventType, int32_t eventParam) {
     }
 
     // Call Vendor AIDL interface (oneway, no return value)
-    ScopedAStatus status = service->notifyEventStart(
-        static_cast<int32_t>(eventType),
-        static_cast<int32_t>(eventParam));
+    ScopedAStatus status = service->notifyEventStart(static_cast<int32_t>(eventType),
+                                                     static_cast<int32_t>(eventParam));
 
     if (!status.isOk()) {
         ALOGE("notifyEventStart failed: %s", status.getDescription().c_str());
@@ -177,5 +173,5 @@ void TranPerfEvent::notifyEventEnd(int32_t eventType) {
     }
 }
 
-} // namespace transsion
-} // namespace android
+}    // namespace transsion
+}    // namespace android
