@@ -92,7 +92,7 @@ static void nativeInit(JNIEnv* env, jclass clazz) {
         ALOGD("nativeInit called");
     }
     
-    // 预加载服务 (可选)
+    // 预加载服务
     getVendorService();
 }
 
@@ -106,7 +106,7 @@ static void nativeInit(JNIEnv* env, jclass clazz) {
  * @return handle (>0 成功, <=0 失败)
  */
 /**
- * 获取性能锁 (修改后)
+ * 获取性能锁
  * 
  * 注意: AIDL 是异步的，无法返回真实 handle
  * 我们返回一个本地生成的伪 handle 用于 Java 层管理

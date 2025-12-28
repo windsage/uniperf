@@ -1,0 +1,19 @@
+// frameworks/base/Android.bp
+
+filegroup {
+    name: "framework-core-sources",
+    srcs: [
+        "core/java/**/*.java",
+        "core/java/**/*.aidl",
+        
+        ":transsion_framework_sources",
+    ],
+}
+
+filegroup {
+    name: "transsion_framework_sources",
+    srcs: [
+        "../../vendor/transsion/system_modules/tranperfhub/system/frameworks/base/core/java/android/util/TranPerfEvent.java",
+    ],
+    path: "core/java",
+}
