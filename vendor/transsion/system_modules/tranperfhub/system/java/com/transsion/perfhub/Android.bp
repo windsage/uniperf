@@ -1,6 +1,12 @@
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
+}
+
 java_library {
-    name: "tranperfhub",
-    srcs: ["perfhub/java/com/transsion/perfhub/TranPerfHub.java"],
+    name: "tranperfhub_impl",
+    system_ext_specific: true,
+    srcs: ["com/transsion/perfhub/TranPerfHub.java"],
     installable: true,
     sdk_version: "core_platform",
+    required: ["libtranperfhub-jni"],
 }

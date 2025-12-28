@@ -1,19 +1,30 @@
-// frameworks/base/Android.bp
-
-filegroup {
-    name: "framework-core-sources",
-    srcs: [
-        "core/java/**/*.java",
-        "core/java/**/*.aidl",
-        
-        ":transsion_framework_sources",
-    ],
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
 }
 
+// ==================== Transsion Framework Overlay ====================
+
 filegroup {
-    name: "transsion_framework_sources",
+    name: "transsion_framework_overlay_sources",
     srcs: [
-        "../../vendor/transsion/system_modules/tranperfhub/system/frameworks/base/core/java/android/util/TranPerfEvent.java",
+        // ✅ 正确: 相对于当前 Android.bp 的路径
+        "core/java/android/util/TranPerfEvent.java",
     ],
     path: "core/java",
+}
+
+java_library {
+    name: "transsion_framework_overlay",
+    
+    srcs: [
+        ":transsion_framework_overlay_sources",
+    ],
+    
+    installable: false,
+    
+    sdk_version: "core_platform",
+    
+    static_libs: [
+        "tranperfhub_impl",  // TranPerfHub.java 实现
+    ],
 }

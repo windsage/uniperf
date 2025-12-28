@@ -7,7 +7,6 @@ package {
 cc_library_shared {
     name: "libtranperfhub-vendor",
     
-    // Vendor 分区
     vendor: true,
     
     srcs: [
@@ -22,9 +21,11 @@ cc_library_shared {
     ],
     
     local_include_dirs: [
+        "include",
         "service",
         "adapter",
         "init",
+        "client",
     ],
     
     header_libs: [
@@ -38,11 +39,10 @@ cc_library_shared {
         "libcutils",
         "libbase",
         "libbinder_ndk",
-        
-        // Vendor AIDL 接口
         "vendor.transsion.hardware.perfhub-V1-ndk",
     ],
     
+    // 运行时依赖
     runtime_libs: [
         "libqti-perfd-client",
         "libpowerhal",
@@ -59,6 +59,8 @@ cc_library_shared {
     ],
 }
 
+// ==================== 头文件导出 ====================
+
 cc_library_headers {
     name: "libtranperfhub_vendor_headers",
     
@@ -69,7 +71,7 @@ cc_library_headers {
     ],
 }
 
-// ==================== 独立服务 (可选，暂不启用) ====================
+// ==================== 独立服务 (可选) ====================
 
 cc_binary {
     name: "vendor.transsion.hardware.perfhub-service",
@@ -78,7 +80,7 @@ cc_binary {
     relative_install_path: "hw",
     
     srcs: [
-        "init/service_main.cpp",  // 独立服务入口 (后续实现)
+        "init/service_main.cpp",
     ],
     
     shared_libs: [
@@ -92,6 +94,5 @@ cc_binary {
         "init/vendor.transsion.hardware.perfhub-service.rc",
     ],
     
-    // 暂不启用，优先使用插件模式
-    enabled: false,
+    enabled: false,  // 暂不启用
 }
