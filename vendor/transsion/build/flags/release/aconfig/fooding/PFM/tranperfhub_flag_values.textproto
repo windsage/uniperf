@@ -3,6 +3,6 @@
 flag_value {
     package: "com.transsion.perfhub.flags"
     name: "enable_tranperfhub"
-    state: ENABLED           # 开启功能 (灰度阶段)
-    permission: READ_WRITE   # 可远程开关控制灰度范围
+    state: DISENABLED           # 开启功能 (灰度阶段)
+    permission: READ_WRITE      # 可远程开关控制灰度范围
 }

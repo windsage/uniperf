@@ -27,19 +27,19 @@ publishing {
     publications {
         maven(MavenPublication) {
             from components.java
-            
+
             artifact sourcesJar
             artifact javadocJar
-            
+
             groupId = 'com.transsion.perfhub'
             artifactId = 'tranperfevent'
             version = '1.0.0'
-            
+
             pom {
                 name = 'TranPerfEvent'
                 description = 'Transsion Performance Event API'
                 url = 'https://www.transsion.com'
-                
+
                 licenses {
                     license {
                         name = 'Proprietary'
@@ -49,7 +49,7 @@ publishing {
             }
         }
     }
-    
+
     repositories {
         maven {
             name = 'TranssionInternal'

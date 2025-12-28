@@ -3,6 +3,6 @@
 flag_value {
     package: "com.transsion.perfhub.flags"
     name: "enable_tranperfhub"
-    state: ENABLED           # 开启功能
-    permission: READ_WRITE   # 保留远程开关能力 (紧急关闭)
+    state: DISENABLED           # 开启功能
+    permission: READ_WRITE      # 保留远程开关能力 (紧急关闭)
 }

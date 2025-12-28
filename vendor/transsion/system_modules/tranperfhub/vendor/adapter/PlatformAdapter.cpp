@@ -30,16 +30,16 @@ PlatformAdapter& PlatformAdapter::getInstance() {
     return *sInstance;
 }
 
-PlatformAdapter::PlatformAdapter() 
+PlatformAdapter::PlatformAdapter()
     : mPlatform(PLATFORM_UNKNOWN)
     , mQcomLibHandle(nullptr)
     , mMtkLibHandle(nullptr) {
-    
+
     ALOGI("PlatformAdapter initializing...");
-    
+
     // 检测平台
     mPlatform = detectPlatform();
-    
+
     // 初始化平台
     if (mPlatform == PLATFORM_QCOM) {
         initQcom();
@@ -63,9 +63,9 @@ PlatformAdapter::~PlatformAdapter() {
 PlatformAdapter::Platform PlatformAdapter::detectPlatform() {
     char platform[PROP_VALUE_MAX] = {0};
     property_get("ro.board.platform", platform, "");
-    
+
     ALOGI("Detected board platform: %s", platform);
-    
+
     if (strstr(platform, "qcom") || strstr(platform, "msm")) {
         ALOGI("Platform: QCOM");
         return PLATFORM_QCOM;
@@ -73,7 +73,7 @@ PlatformAdapter::Platform PlatformAdapter::detectPlatform() {
         ALOGI("Platform: MTK");
         return PLATFORM_MTK;
     }
-    
+
     ALOGW("Platform: UNKNOWN");
     return PLATFORM_UNKNOWN;
 }
@@ -83,27 +83,27 @@ PlatformAdapter::Platform PlatformAdapter::detectPlatform() {
  */
 bool PlatformAdapter::initQcom() {
     ALOGI("Initializing QCOM platform...");
-    
+
     // 加载 QCOM Client 库
     mQcomLibHandle = dlopen("libqti-perfd-client.so", RTLD_NOW);
     if (!mQcomLibHandle) {
         ALOGE("Failed to load libqti-perfd-client.so: %s", dlerror());
         return false;
     }
-    
+
     // 获取函数指针
-    qcom_perf_lock_acq_t perf_lock_acq = 
+    qcom_perf_lock_acq_t perf_lock_acq =
         (qcom_perf_lock_acq_t)dlsym(mQcomLibHandle, "perf_lock_acq");
-    qcom_perf_lock_rel_t perf_lock_rel = 
+    qcom_perf_lock_rel_t perf_lock_rel =
         (qcom_perf_lock_rel_t)dlsym(mQcomLibHandle, "perf_lock_rel");
-    
+
     if (!perf_lock_acq || !perf_lock_rel) {
         ALOGE("Failed to get QCOM function pointers");
         dlclose(mQcomLibHandle);
         mQcomLibHandle = nullptr;
         return false;
     }
-    
+
     ALOGI("QCOM platform initialized successfully");
     return true;
 }
@@ -113,27 +113,27 @@ bool PlatformAdapter::initQcom() {
  */
 bool PlatformAdapter::initMtk() {
     ALOGI("Initializing MTK platform...");
-    
+
     // 加载 MTK Client 库
     mMtkLibHandle = dlopen("libpowerhal.so", RTLD_NOW);
     if (!mMtkLibHandle) {
         ALOGE("Failed to load libpowerhal.so: %s", dlerror());
         return false;
     }
-    
+
     // 获取函数指针
-    mtk_perf_lock_acq_t perfLockAcq = 
+    mtk_perf_lock_acq_t perfLockAcq =
         (mtk_perf_lock_acq_t)dlsym(mMtkLibHandle, "perfLockAcq");
-    mtk_perf_lock_rel_t perfLockRel = 
+    mtk_perf_lock_rel_t perfLockRel =
         (mtk_perf_lock_rel_t)dlsym(mMtkLibHandle, "perfLockRel");
-    
+
     if (!perfLockAcq || !perfLockRel) {
         ALOGE("Failed to get MTK function pointers");
         dlclose(mMtkLibHandle);
         mMtkLibHandle = nullptr;
         return false;
     }
-    
+
     ALOGI("MTK platform initialized successfully");
     return true;
 }
@@ -143,13 +143,13 @@ bool PlatformAdapter::initMtk() {
  */
 int32_t PlatformAdapter::acquirePerfLock(int32_t eventType, int32_t eventParam) {
     ALOGD("acquirePerfLock: eventType=%d, eventParam=%d", eventType, eventParam);
-    
+
     if (mPlatform == PLATFORM_QCOM) {
         return qcomAcquirePerfLock(eventType, eventParam);
     } else if (mPlatform == PLATFORM_MTK) {
         return mtkAcquirePerfLock(eventType, eventParam);
     }
-    
+
     ALOGE("Unsupported platform");
     return -1;
 }
@@ -159,7 +159,7 @@ int32_t PlatformAdapter::acquirePerfLock(int32_t eventType, int32_t eventParam) 
  */
 void PlatformAdapter::releasePerfLock(int32_t handle) {
     ALOGD("releasePerfLock: handle=%d", handle);
-    
+
     if (mPlatform == PLATFORM_QCOM) {
         qcomReleasePerfLock(handle);
     } else if (mPlatform == PLATFORM_MTK) {
@@ -173,25 +173,25 @@ void PlatformAdapter::releasePerfLock(int32_t handle) {
 int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventType, int32_t eventParam) {
     // TODO: Later implement parameter mapping (read from XML config)
     // For now use simple test parameters
-    
+
     int list[4] = {
         0x40800000, 1400000,  // CPU Cluster0 Min Freq
         0x40800100, 1800000   // CPU Cluster1 Min Freq
     };
     int duration = 3000;  // 3 seconds
-    
-    qcom_perf_lock_acq_t perf_lock_acq = 
+
+    qcom_perf_lock_acq_t perf_lock_acq =
         (qcom_perf_lock_acq_t)dlsym(mQcomLibHandle, "perf_lock_acq");
-    
+
     if (!perf_lock_acq) {
         ALOGE("perf_lock_acq not found");
         return -1;
     }
-    
+
     int handle = perf_lock_acq(0, duration, list, 4);
-    ALOGD("QCOM perf_lock_acq returned handle: %d for eventType: %d", 
+    ALOGD("QCOM perf_lock_acq returned handle: %d for eventType: %d",
         handle, eventType);
-    
+
     return handle;
 }
 
@@ -199,14 +199,14 @@ int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventType, int32_t eventPar
  * QCOM 平台释放性能锁
  */
 void PlatformAdapter::qcomReleasePerfLock(int32_t handle) {
-    qcom_perf_lock_rel_t perf_lock_rel = 
+    qcom_perf_lock_rel_t perf_lock_rel =
         (qcom_perf_lock_rel_t)dlsym(mQcomLibHandle, "perf_lock_rel");
-    
+
     if (!perf_lock_rel) {
         ALOGE("perf_lock_rel not found");
         return;
     }
-    
+
     perf_lock_rel(handle);
     ALOGD("QCOM perf_lock_rel called for handle: %d", handle);
 }
@@ -216,24 +216,24 @@ void PlatformAdapter::qcomReleasePerfLock(int32_t handle) {
  */
 int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventType, int32_t eventParam) {
     // TODO: 后续实现参数映射
-    
+
     int list[4] = {
         0x00001100, 1400000,  // CPU Cluster0 Min Freq
         0x00001200, 1800000   // CPU Cluster1 Min Freq
     };
     int duration = 3000;
-    
-    mtk_perf_lock_acq_t perfLockAcq = 
+
+    mtk_perf_lock_acq_t perfLockAcq =
         (mtk_perf_lock_acq_t)dlsym(mMtkLibHandle, "perfLockAcq");
-    
+
     if (!perfLockAcq) {
         ALOGE("perfLockAcq not found");
         return -1;
     }
-    
+
     int handle = perfLockAcq(0, duration, list, 4, 0, 0);
     ALOGD("MTK perfLockAcq returned handle: %d", handle);
-    
+
     return handle;
 }
 
@@ -241,14 +241,14 @@ int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventType, int32_t eventPara
  * MTK 平台释放性能锁
  */
 void PlatformAdapter::mtkReleasePerfLock(int32_t handle) {
-    mtk_perf_lock_rel_t perfLockRel = 
+    mtk_perf_lock_rel_t perfLockRel =
         (mtk_perf_lock_rel_t)dlsym(mMtkLibHandle, "perfLockRel");
-    
+
     if (!perfLockRel) {
         ALOGE("perfLockRel not found");
         return;
     }
-    
+
     perfLockRel(handle);
     ALOGD("MTK perfLockRel called for handle: %d", handle);
 }

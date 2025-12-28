@@ -7,7 +7,6 @@ package {
 filegroup {
     name: "transsion_framework_overlay_sources",
     srcs: [
-        // ✅ 正确: 相对于当前 Android.bp 的路径
         "core/java/android/util/TranPerfEvent.java",
     ],
     path: "core/java",
@@ -15,16 +14,17 @@ filegroup {
 
 java_library {
     name: "transsion_framework_overlay",
-    
+
     srcs: [
         ":transsion_framework_overlay_sources",
     ],
-    
+
     installable: false,
-    
+
     sdk_version: "core_platform",
-    
+
     static_libs: [
-        "tranperfhub_impl",  // TranPerfHub.java 实现
+        "tranperfhub_impl",
+        "com.transsion.perfhub.flags-aconfig-java",
     ],
 }

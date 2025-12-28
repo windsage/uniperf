@@ -1,4 +1,8 @@
-// vendor/transsion/build/flags/release/aconfig_declarations/PFM/Android.bp
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
+}
+
+// ==================== Aconfig 声明 ====================
 
 aconfig_declarations {
     name: "com.transsion.perfhub.flags-aconfig",
@@ -9,10 +13,31 @@ aconfig_declarations {
     ],
 }
 
-// Generate a Java library
+// ==================== Java 库 (System 层使用) ====================
+
 java_aconfig_library {
     name: "com.transsion.perfhub.flags-aconfig-java",
     aconfig_declarations: "com.transsion.perfhub.flags-aconfig",
+
+    // SDK 版本
     min_sdk_version: "current",
-    apex_available: ["com.transsion.thub.core"],
+
+    // 可在 APEX 中使用
+    apex_available: [
+        "//apex_available:platform",
+        "com.android.apex.cts.shim",
+    ],
+}
+
+// ==================== C++ 库 (System Native 和 Vendor 都可用) ====================
+
+cc_aconfig_library {
+    name: "libtranperfhub_flags_c",
+    aconfig_declarations: "com.transsion.perfhub.flags-aconfig",
+
+    // vendor_available 允许 Vendor 层使用
+    vendor_available: true,
+
+    // 支持主机编译 (测试用)
+    host_supported: true,
 }

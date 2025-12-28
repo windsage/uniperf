@@ -15,7 +15,7 @@ using aidl::vendor::transsion::hardware::perfhub::ITranPerfHub;
 
 /**
  * TranPerfHub AIDL 服务实现
- * 
+ *
  * 职责:
  * 1. 实现 ITranPerfHub AIDL 接口
  * 2. 管理事件到句柄的映射 (eventType -> handle)
@@ -25,13 +25,13 @@ class TranPerfHubService : public BnTranPerfHub {
 public:
     TranPerfHubService();
     ~TranPerfHubService();
-    
+
     // AIDL 接口实现
     ndk::ScopedAStatus notifyEventStart(
-        int32_t eventType, 
-        int32_t eventParam, 
+        int32_t eventType,
+        int32_t eventParam,
         int32_t* _aidl_return) override;
-    
+
     ndk::ScopedAStatus notifyEventEnd(int32_t eventType) override;
 
 private:

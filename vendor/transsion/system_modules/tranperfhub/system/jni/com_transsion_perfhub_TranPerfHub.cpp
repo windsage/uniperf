@@ -1,6 +1,6 @@
 /*
  * TranPerfHub JNI Implementation
- * 
+ *
  * 职责: 纯 AIDL 客户端，透传调用到 Vendor 层
  */
 
@@ -32,7 +32,7 @@ static std::shared_ptr<ITranPerfHub> gVendorService = nullptr;
 static Mutex gServiceLock;
 
 // Vendor 服务名称
-static const char* VENDOR_SERVICE_NAME = 
+static const char* VENDOR_SERVICE_NAME =
     "vendor.transsion.hardware.perfhub.ITranPerfHub/default";
 
 // Debug 开关
@@ -45,30 +45,30 @@ static constexpr bool DEBUG = false;
  */
 static std::shared_ptr<ITranPerfHub> getVendorService() {
     AutoMutex _l(gServiceLock);
-    
+
     if (gVendorService != nullptr) {
         return gVendorService;
     }
-    
+
     // 获取 Vendor AIDL 服务
     SpAIBinder binder = SpAIBinder(
         AServiceManager_checkService(VENDOR_SERVICE_NAME));
-    
+
     if (binder.get() == nullptr) {
         ALOGE("Failed to get vendor service: %s", VENDOR_SERVICE_NAME);
         return nullptr;
     }
-    
+
     gVendorService = ITranPerfHub::fromBinder(binder);
     if (gVendorService == nullptr) {
         ALOGE("Failed to convert binder to ITranPerfHub");
         return nullptr;
     }
-    
+
     if (DEBUG) {
         ALOGD("Vendor service connected");
     }
-    
+
     return gVendorService;
 }
 
@@ -84,103 +84,103 @@ static void resetVendorService() {
 
 /**
  * 初始化
- * 
+ *
  * Java 调用: TranPerfHub.nativeInit()
  */
 static void nativeInit(JNIEnv* env, jclass clazz) {
     if (DEBUG) {
         ALOGD("nativeInit called");
     }
-    
+
     // 预加载服务
     getVendorService();
 }
 
 /**
  * 获取性能锁
- * 
+ *
  * Java 调用: TranPerfHub.nativeAcquirePerfLock(eventType, eventParam)
- * 
+ *
  * @param eventType 事件类型
  * @param eventParam 事件参数
  * @return handle (>0 成功, <=0 失败)
  */
 /**
  * 获取性能锁
- * 
+ *
  * 注意: AIDL 是异步的，无法返回真实 handle
  * 我们返回一个本地生成的伪 handle 用于 Java 层管理
  */
-static jint nativeAcquirePerfLock(JNIEnv* env, jclass clazz, 
+static jint nativeAcquirePerfLock(JNIEnv* env, jclass clazz,
                                    jint eventType, jint eventParam) {
     if (DEBUG) {
-        ALOGD("nativeAcquirePerfLock: eventType=%d, eventParam=%d", 
+        ALOGD("nativeAcquirePerfLock: eventType=%d, eventParam=%d",
             eventType, eventParam);
     }
-    
+
     // 获取 Vendor 服务
     std::shared_ptr<ITranPerfHub> service = getVendorService();
     if (service == nullptr) {
         ALOGE("Vendor service not available");
         return -1;
     }
-    
+
     // 调用异步 AIDL 接口 (oneway, 立即返回)
     ScopedAStatus status = service->notifyEventStart(
-        static_cast<int32_t>(eventType), 
+        static_cast<int32_t>(eventType),
         static_cast<int32_t>(eventParam));
-    
+
     if (!status.isOk()) {
         ALOGE("notifyEventStart failed: %s", status.getDescription().c_str());
         resetVendorService();
         return -1;
     }
-    
+
     // 返回 eventType 作为伪 handle
     // (Java 层用于管理，Vendor 层通过 eventType 查找真实 handle)
     if (DEBUG) {
         ALOGD("Event sent: eventType=%d", eventType);
     }
-    
+
     return static_cast<jint>(eventType);
 }
 
 /**
  * 释放性能锁
- * 
+ *
  * Java 调用: TranPerfHub.nativeReleasePerfLock(handle)
- * 
+ *
  * @param handle 性能锁句柄
  */
 static void nativeReleasePerfLock(JNIEnv* env, jclass clazz, jint handle) {
     if (DEBUG) {
         ALOGD("nativeReleasePerfLock: handle=%d", handle);
     }
-    
+
     if (handle <= 0) {
         ALOGW("Invalid handle: %d", handle);
         return;
     }
-    
+
     // 获取 Vendor 服务
     std::shared_ptr<ITranPerfHub> service = getVendorService();
     if (service == nullptr) {
         ALOGE("Vendor service not available");
         return;
     }
-    
+
     // handle 就是 eventType 参考上面
     int32_t eventType = static_cast<int32_t>(handle);
-    
+
     // 调用异步 AIDL 接口
     ScopedAStatus status = service->notifyEventEnd(eventType);
-    
+
     if (!status.isOk()) {
         ALOGE("notifyEventEnd failed: %s", status.getDescription().c_str());
         resetVendorService();
         return;
     }
-    
+
     if (DEBUG) {
         ALOGD("Event ended: eventType=%d", eventType);
     }
@@ -211,19 +211,19 @@ static const JNINativeMethod gMethods[] = {
  */
 int register_com_transsion_perfhub_TranPerfHub(JNIEnv* env) {
     const char* className = "com/transsion/perfhub/TranPerfHub";
-    
+
     jclass clazz = env->FindClass(className);
     if (clazz == NULL) {
         ALOGE("Can't find class: %s", className);
         return JNI_ERR;
     }
-    
+
     int result = env->RegisterNatives(clazz, gMethods, NELEM(gMethods));
     if (result != JNI_OK) {
         ALOGE("Failed to register native methods");
         return result;
     }
-    
+
     ALOGD("JNI registered: %s", className);
     return JNI_OK;
 }

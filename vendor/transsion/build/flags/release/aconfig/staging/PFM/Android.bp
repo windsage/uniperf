@@ -1,16 +1,20 @@
-// 配置 bleeding_edge 状态的 flag values
+// 配置 staging 状态的 flag values
+
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
+}
 
 aconfig_value_set {
-    name: "aconfig-value-set-platform_vendor_transsion_build_flags_release-bleeding_edge-com.transsion.perfhub.flags",
+    name: "aconfig_value_set_perfhub_staging",
     values: [
         "tranperfhub_flag_values.textproto",
     ],
 }
 
 aconfig_values {
-    name: "aconfig-values-platform_vendor_transsion_build_flags_release-bleeding_edge-com.transsion.perfhub.flags",
+    name: "aconfig_values_perfhub_staging",
     package: "com.transsion.perfhub.flags",
     srcs: [
-        ":aconfig-value-set-platform_vendor_transsion_build_flags_release-bleeding_edge-com.transsion.perfhub.flags",
+        ":aconfig_value_set_perfhub_staging",
     ],
 }
