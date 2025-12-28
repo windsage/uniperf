@@ -137,7 +137,7 @@ void TranPerfEvent::notifyEventEnd(int32_t eventType) {
         if (DEBUG) {
             ALOGD("TranPerfHub disabled by flag");
         }
-        return -1;
+        return;
     }
 
     if (DEBUG) {

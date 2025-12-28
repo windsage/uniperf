@@ -27,6 +27,10 @@ cc_library_shared {
         "vendor.transsion.hardware.perfhub-V1-ndk",
     ],
 
+    static_libs: [
+        "libtranperfhub_flags_c",
+    ],
+
     cflags: ["-Wall", "-Werror", "-Wno-unused-parameter"],
     cppflags: ["-std=c++17"],
 }
