@@ -28,10 +28,14 @@ public:
     ~TranPerfHubService();
 
     // AIDL 接口实现
-    ndk::ScopedAStatus notifyEventStart(int32_t eventType, int32_t eventParam,
-                                        int32_t *_aidl_return) override;
+    ndk::ScopedAStatus notifyEventStart(int32_t eventId,
+    int64_t timestamp,
+    int32_t numParams,
+    const std::vector<int32_t>& intParams,
+    const std::string& extraStrings)) override;
 
-    ndk::ScopedAStatus notifyEventEnd(int32_t eventType) override;
+    ndk::ScopedAStatus notifyEventEnd(int32_t eventId, int64_t timestamp,
+                                      const std::string &extraStrings) override;
 
 private:
     // 事件句柄映射 (eventType -> handle)

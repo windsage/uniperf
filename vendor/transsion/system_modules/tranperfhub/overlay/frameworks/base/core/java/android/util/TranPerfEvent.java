@@ -1,45 +1,27 @@
 package android.util;
 
+import android.os.SystemClock;
 import android.util.Log;
-import android.util.SparseIntArray;
 
 import com.transsion.perfhub.flags.Flags;
 
-import java.lang.reflect.Method;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * TranPerfEvent - Performance Event Management
+ * TranPerfEvent - Unified Performance Event API
  *
- * Features:
- * 1. Send performance events (via reflection to TranPerfHub for optimization)
- * 2. Event listening (in-process observer pattern)
- *
- * Usage:
- * <pre>
- * // Send event
- * TranPerfEvent.notifyEventStart(TranPerfEvent.EVENT_APP_LAUNCH, 0);
- * TranPerfEvent.notifyEventEnd(TranPerfEvent.EVENT_APP_LAUNCH);
- *
- * // Listen to events (framework/system only)
- * TranPerfEvent.registerListener(new TranPerfEvent.TrEventListener() {
- *     public void onEventStart(int eventType, int eventParam) {
- *         // Handle event start
- *     }
- *     public void onEventEnd(int eventType) {
- *         // Handle event end
- *     }
- * });
- * </pre>
- *
- * @hide
+ * Provides a unified interface for performance optimization across different
+ * chipset platforms (QCOM, MTK, UNISOC).
  */
 public final class TranPerfEvent {
     private static final String TAG = "TranPerfEvent";
     private static final boolean DEBUG = false;
 
-    // TranPerfHub class name for reflection
-    private static final String PERF_HUB_CLASS = "com.transsion.perfhub.TranPerfHub";
+    // String separator for extraStrings
+    private static final char STRING_SEPARATOR = '\u001F'; // ASCII Unit Separator
+
+    // Performance monitoring threshold (1ms)
+    private static final long LATENCY_THRESHOLD_NS = 1_000_000L; // 1ms in nanoseconds
 
     // ==================== Event Type Constants ====================
 
@@ -69,55 +51,139 @@ public final class TranPerfEvent {
     /** Warm start for app launch */
     public static final int PARAM_WARM_START = 1;
 
-    // ==================== Event Listener Interface ====================
+    // ==================== Event Listeners ====================
 
     /**
-     * Listener interface for performance events.
+     * Listener interface for performance events
      */
     public interface TrEventListener {
-        /**
-         * Called when a performance event starts.
-         *
-         * @param eventType Event type (EVENT_*)
-         * @param eventParam Event-specific parameter
-         */
-        void onEventStart(int eventType, int eventParam);
-
-        /**
-         * Called when a performance event ends.
-         *
-         * @param eventType Event type (EVENT_*)
-         */
-        void onEventEnd(int eventType);
+        void onEventStart(int eventId, long timestamp, int eventParam);
+        void onEventEnd(int eventId, long timestamp);
     }
 
-    // ==================== Internal State ====================
-
-    // Event listeners (thread-safe)
     private static final CopyOnWriteArrayList<TrEventListener> sListeners =
             new CopyOnWriteArrayList<>();
-
-    // Event handle mapping (eventType -> handle)
-    private static final SparseIntArray sEventHandles = new SparseIntArray();
-
-    // Reflection cache
-    private static Class<?> sPerfHubClass;
-    private static Method sAcquireMethod;
-    private static Method sReleaseMethod;
-    private static boolean sReflectionInitialized = false;
 
     // Prevent instantiation
     private TranPerfEvent() {}
 
-    // ==================== Public API ====================
+    // ==================== Overloaded API Methods ====================
 
     /**
-     * Notify that a performance event has started.
+     * Overload 1: Timestamp only (no parameters)
      *
-     * @param eventType Event type (use EVENT_* constants)
-     * @param eventParam Event-specific parameter
+     * Usage: Simple events without any parameters
+     * Example:
+     *   long ts = SystemClock.elapsedRealtimeNanos();
+     *   TranPerfEvent.notifyEventStart(EVENT_TOUCH, ts);
      */
-    public static void notifyEventStart(int eventType, int eventParam) {
+    public static void notifyEventStart(int eventId, long timestamp) {
+        notifyEventStartInternal(eventId, timestamp, 0, null, null);
+    }
+
+    /**
+     * Overload 2: Timestamp + single int parameter
+     *
+     * Usage: Events with one integer parameter
+     * Example:
+     *   long ts = SystemClock.elapsedRealtimeNanos();
+     *   TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts, PARAM_COLD_START);
+     */
+    public static void notifyEventStart(int eventId, long timestamp, int param) {
+        notifyEventStartInternal(eventId, timestamp, 1, new int[] {param}, null);
+    }
+
+    /**
+     * Overload 3: Timestamp + int array parameters
+     *
+     * Usage: Events with multiple integer parameters
+     * Example:
+     *   long ts = SystemClock.elapsedRealtimeNanos();
+     *   TranPerfEvent.notifyEventStart(EVENT_SCROLL, ts, new int[]{velocity, duration});
+     */
+    public static void notifyEventStart(int eventId, long timestamp, int[] intParams) {
+        notifyEventStartInternal(
+                eventId, timestamp, intParams != null ? intParams.length : 0, intParams, null);
+    }
+
+    /**
+     * Overload 4: Timestamp + single string parameter
+     *
+     * Usage: Events with one string parameter (e.g., packageName)
+     * Example:
+     *   long ts = SystemClock.elapsedRealtimeNanos();
+     *   TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts, "com.android.settings");
+     */
+    public static void notifyEventStart(int eventId, long timestamp, String stringParam) {
+        notifyEventStartInternal(eventId, timestamp, 0, null, stringParam);
+    }
+
+    /**
+     * Overload 5: Timestamp + string array parameters
+     *
+     * Usage: Events with multiple string parameters
+     * Example:
+     *   long ts = SystemClock.elapsedRealtimeNanos();
+     *   TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts,
+     *       new String[]{"com.android.settings", ".MainActivity", "cold_start"});
+     */
+    public static void notifyEventStart(int eventId, long timestamp, String[] stringParams) {
+        notifyEventStartInternal(eventId, timestamp, 0, null, joinStrings(stringParams));
+    }
+
+    /**
+     * Overload 6: Timestamp + int parameter + string parameter
+     *
+     * Usage: Events with both int and string parameters
+     * Example:
+     *   long ts = SystemClock.elapsedRealtimeNanos();
+     *   TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts,
+     *       PARAM_COLD_START, "com.android.settings");
+     */
+    public static void notifyEventStart(
+            int eventId, long timestamp, int intParam, String stringParam) {
+        notifyEventStartInternal(eventId, timestamp, 1, new int[] {intParam}, stringParam);
+    }
+
+    /**
+     * Overload 7: Timestamp + int array + string parameter
+     *
+     * Usage: Events with int array and one string
+     * Example:
+     *   long ts = SystemClock.elapsedRealtimeNanos();
+     *   TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts,
+     *       new int[]{PARAM_COLD_START, pid}, "com.android.settings");
+     */
+    public static void notifyEventStart(
+            int eventId, long timestamp, int[] intParams, String stringParam) {
+        notifyEventStartInternal(eventId, timestamp, intParams != null ? intParams.length : 0,
+                intParams, stringParam);
+    }
+
+    /**
+     * Overload 8: Timestamp + int array + string array (Full parameters)
+     *
+     * Usage: Events with both int array and string array
+     * Example:
+     *   long ts = SystemClock.elapsedRealtimeNanos();
+     *   TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts,
+     *       new int[]{PARAM_COLD_START, pid, uid},
+     *       new String[]{"com.android.settings", ".MainActivity"});
+     */
+    public static void notifyEventStart(
+            int eventId, long timestamp, int[] intParams, String[] stringParams) {
+        notifyEventStartInternal(eventId, timestamp, intParams != null ? intParams.length : 0,
+                intParams, joinStrings(stringParams));
+    }
+
+    // ==================== Internal Implementation ====================
+
+    /**
+     * Internal implementation - All overloads route here
+     */
+    private static void notifyEventStartInternal(
+            int eventId, long timestamp, int numParams, int[] intParams, String extraStrings) {
+        // Check aconfig flag
         if (!Flags.enableTranperfhub()) {
             if (DEBUG) {
                 Log.d(TAG, "TranPerfHub disabled by flag");
@@ -125,27 +191,25 @@ public final class TranPerfEvent {
             return;
         }
 
-        if (DEBUG) {
-            Log.d(TAG, "notifyEventStart: eventType=" + eventType + ", eventParam=" + eventParam);
+        // Record receive timestamp for latency monitoring
+        long receiveTimestamp = SystemClock.elapsedRealtimeNanos();
+        long latency = receiveTimestamp - timestamp;
+
+        if (DEBUG || latency > LATENCY_THRESHOLD_NS) {
+            Log.d(TAG, String.format("notifyEventStart: eventId=%d, timestamp=%d, latency=%d ns "
+                                             + "(%.2f ms), "
+                                             + "numParams=%d, extraStrings=%s",
+                               eventId, timestamp, latency, latency / 1_000_000.0, numParams,
+                               extraStrings));
         }
 
-        // 1. Call underlying performance optimization
-        int handle = acquirePerfLock(eventType, eventParam);
-        if (handle > 0) {
-            synchronized (sEventHandles) {
-                // If this event already has a handle, release the old one first
-                int oldHandle = sEventHandles.get(eventType, -1);
-                if (oldHandle > 0) {
-                    releasePerfLock(oldHandle);
-                }
-                sEventHandles.put(eventType, handle);
-            }
-        }
+        // Call TranPerfHub via reflection
+        int handle = acquirePerfLock(eventId, timestamp, numParams, intParams, extraStrings);
 
-        // 2. Notify all listeners
+        // Notify listeners
         for (TrEventListener listener : sListeners) {
             try {
-                listener.onEventStart(eventType, eventParam);
+                listener.onEventStart(eventId, timestamp, numParams > 0 ? intParams[0] : 0);
             } catch (Exception e) {
                 Log.e(TAG, "Listener callback failed", e);
             }
@@ -153,35 +217,95 @@ public final class TranPerfEvent {
     }
 
     /**
-     * Notify that a performance event has ended.
-     *
-     * @param eventType Event type
+     * Join string array with separator
      */
-    public static void notifyEventEnd(int eventType) {
+    private static String joinStrings(String[] strings) {
+        if (strings == null || strings.length == 0) {
+            return null;
+        }
+
+        if (strings.length == 1) {
+            return strings[0];
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < strings.length; i++) {
+            if (i > 0) {
+                sb.append(STRING_SEPARATOR);
+            }
+            sb.append(strings[i] != null ? strings[i] : "");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Acquire performance lock (calls TranPerfHub)
+     */
+    private static int acquirePerfLock(
+            int eventId, long timestamp, int numParams, int[] intParams, String extraStrings) {
+        // Ensure intParams is not null
+        if (intParams == null) {
+            intParams = new int[0];
+        }
+
+        // Call TranPerfHub via reflection
+        try {
+            // Lazy initialization of reflection
+            if (!initReflection()) {
+                return -1;
+            }
+
+            // TranPerfHub.acquirePerfLock(eventId, timestamp, numParams, intParams, extraStrings)
+            return (int) sAcquireMethod.invoke(null, // static method
+                    eventId, timestamp, numParams, intParams, extraStrings);
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to acquire perf lock", e);
+            return -1;
+        }
+    }
+
+    // ==================== Event End Methods ====================
+
+    /**
+     * Notify event end (with timestamp)
+     *
+     * Usage:
+     *   long ts = SystemClock.elapsedRealtimeNanos();
+     *   TranPerfEvent.notifyEventEnd(EVENT_APP_LAUNCH, ts);
+     */
+    public static void notifyEventEnd(int eventId, long timestamp) {
+        notifyEventEnd(eventId, timestamp, null);
+    }
+
+    /**
+     * Notify event end with timestamp and string parameter
+     *
+     * Usage:
+     *   long ts = SystemClock.elapsedRealtimeNanos();
+     *   TranPerfEvent.notifyEventEnd(EVENT_APP_LAUNCH, ts, "com.android.settings");
+     */
+    public static void notifyEventEnd(int eventId, long timestamp, String extraStrings) {
         if (!Flags.enableTranperfhub()) {
-            if (DEBUG) {
-                Log.d(TAG, "TranPerfHub disabled by flag");
-            }
             return;
         }
 
-        if (DEBUG) {
-            Log.d(TAG, "notifyEventEnd: eventType=" + eventType);
+        // Record receive timestamp for latency monitoring
+        long receiveTimestamp = SystemClock.elapsedRealtimeNanos();
+        long latency = receiveTimestamp - timestamp;
+
+        if (DEBUG || latency > LATENCY_THRESHOLD_NS) {
+            Log.d(TAG, String.format(
+                               "notifyEventEnd: eventId=%d, timestamp=%d, latency=%d ns (%.2f ms)",
+                               eventId, timestamp, latency, latency / 1_000_000.0));
         }
 
-        // 1. Release performance lock
-        synchronized (sEventHandles) {
-            int handle = sEventHandles.get(eventType, -1);
-            if (handle > 0) {
-                releasePerfLock(handle);
-                sEventHandles.delete(eventType);
-            }
-        }
+        releasePerfLock(eventId, timestamp, extraStrings);
 
-        // 2. Notify all listeners
+        // Notify listeners
         for (TrEventListener listener : sListeners) {
             try {
-                listener.onEventEnd(eventType);
+                listener.onEventEnd(eventId, timestamp);
             } catch (Exception e) {
                 Log.e(TAG, "Listener callback failed", e);
             }
@@ -189,106 +313,90 @@ public final class TranPerfEvent {
     }
 
     /**
-     * Register an event listener.
-     *
-     * Note: Listener callbacks are executed on the thread that calls
-     * notifyEventStart/End.
-     *
-     * @param listener Event listener
+     * Release performance lock (calls TranPerfHub)
      */
-    public static void registerListener(TrEventListener listener) {
-        if (listener == null) {
-            throw new IllegalArgumentException("listener cannot be null");
-        }
-
-        if (!sListeners.contains(listener)) {
-            sListeners.add(listener);
-            if (DEBUG) {
-                Log.d(TAG, "registerListener: " + listener + ", total=" + sListeners.size());
+    private static void releasePerfLock(int eventId, long timestamp, String extraStrings) {
+        try {
+            if (!initReflection()) {
+                return;
             }
+
+            // TranPerfHub.releasePerfLock(eventId, timestamp, extraStrings)
+            sReleaseMethod.invoke(null, eventId, timestamp, extraStrings);
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to release perf lock", e);
         }
     }
 
-    /**
-     * Unregister an event listener.
-     *
-     * @param listener Event listener to remove
-     */
-    public static void unregisterListener(TrEventListener listener) {
-        if (listener != null) {
-            sListeners.remove(listener);
-            if (DEBUG) {
-                Log.d(TAG, "unregisterListener: " + listener + ", remaining=" + sListeners.size());
-            }
+    // ==================== Reflection Initialization ====================
+
+    private static Class<?> sPerfHubClass;
+    private static java.lang.reflect.Method sAcquireMethod;
+    private static java.lang.reflect.Method sReleaseMethod;
+    private static boolean sReflectionInitialized = false;
+
+    private static boolean initReflection() {
+        if (sReflectionInitialized) {
+            return sPerfHubClass != null;
         }
-    }
-
-    // ==================== Reflection Implementation ====================
-
-    /**
-     * Initialize reflection (lazy, thread-safe)
-     */
-    private static void ensureReflectionInitialized() {
-        if (sReflectionInitialized)
-            return;
 
         synchronized (TranPerfEvent.class) {
-            if (sReflectionInitialized)
-                return;
+            if (sReflectionInitialized) {
+                return sPerfHubClass != null;
+            }
 
             try {
-                // Load TranPerfHub class
-                sPerfHubClass = Class.forName(PERF_HUB_CLASS);
+                sPerfHubClass = Class.forName("com.transsion.perfhub.TranPerfHub");
 
-                // Get acquirePerfLock method
-                sAcquireMethod = sPerfHubClass.getMethod("acquirePerfLock", int.class, int.class);
+                sAcquireMethod = sPerfHubClass.getDeclaredMethod("acquirePerfLock",
+                        int.class, // eventId
+                        long.class, // timestamp
+                        int.class, // numParams
+                        int[].class, // intParams
+                        String.class // extraStrings
+                );
 
-                // Get releasePerfLock method
-                sReleaseMethod = sPerfHubClass.getMethod("releasePerfLock", int.class);
+                sReleaseMethod = sPerfHubClass.getDeclaredMethod("releasePerfLock",
+                        int.class, // eventId
+                        long.class, // timestamp
+                        String.class // extraStrings
+                );
 
                 sReflectionInitialized = true;
-                if (DEBUG) {
-                    Log.d(TAG, "TranPerfHub reflection initialized successfully");
-                }
-            } catch (ClassNotFoundException e) {
-                Log.w(TAG, "TranPerfHub not found, performance optimization disabled");
+                return true;
+
             } catch (Exception e) {
                 Log.e(TAG, "Failed to initialize TranPerfHub reflection", e);
+                sReflectionInitialized = true;
+                return false;
             }
         }
     }
 
-    /**
-     * Acquire performance lock
-     */
-    private static int acquirePerfLock(int eventType, int eventParam) {
-        ensureReflectionInitialized();
+    // ==================== Listener Management ====================
 
-        if (sAcquireMethod == null) {
-            return -1;
-        }
-
-        try {
-            Object result = sAcquireMethod.invoke(null, eventType, eventParam);
-            return (result instanceof Integer) ? (Integer) result : -1;
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to acquire perf lock: eventType=" + eventType, e);
-            return -1;
+    public static void registerListener(TrEventListener listener) {
+        if (listener != null && !sListeners.contains(listener)) {
+            sListeners.add(listener);
         }
     }
 
-    /**
-     * Release performance lock
-     */
-    private static void releasePerfLock(int handle) {
-        if (sReleaseMethod == null) {
-            return;
-        }
+    public static void unregisterListener(TrEventListener listener) {
+        sListeners.remove(listener);
+    }
 
-        try {
-            sReleaseMethod.invoke(null, handle);
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to release perf lock: handle=" + handle, e);
-        }
+    // ==================== Helper Methods ====================
+
+    /**
+     * Get current timestamp in nanoseconds
+     *
+     * Usage: Helper method for callers who need a timestamp
+     * Example:
+     *   long ts = TranPerfEvent.now();
+     *   TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts);
+     */
+    public static long now() {
+        return SystemClock.elapsedRealtimeNanos();
     }
 }

@@ -1,94 +1,106 @@
 package com.transsion.perfhub;
 
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.util.Log;
 
+import vendor.transsion.hardware.perfhub.ITranPerfHub;
+
 /**
- * TranPerfHub - Performance Optimization Implementation
+ * TranPerfHub - Performance Hub Implementation
  *
- * Responsibilities:
- * - Call native layer via JNI
- * - Native layer calls vendor layer via AIDL
- * - Vendor layer handles platform adaptation and parameter mapping
- *
- * Note: This class does not include listener mechanism.
- * Listeners are implemented in TranPerfEvent.
- *
- * @hide
+ * This class provides the bridge between Framework API and Vendor AIDL service.
  */
 public class TranPerfHub {
     private static final String TAG = "TranPerfHub";
     private static final boolean DEBUG = false;
 
-    // Event type constants (must match TranPerfEvent)
-    public static final int EVENT_APP_LAUNCH = 1;
-    public static final int EVENT_SCROLL = 2;
-    public static final int EVENT_ANIMATION = 3;
-    public static final int EVENT_WINDOW_SWITCH = 4;
-    public static final int EVENT_TOUCH = 5;
-    public static final int EVENT_APP_SWITCH = 6;
+    private static final String SERVICE_NAME =
+            "vendor.transsion.hardware.perfhub.ITranPerfHub/default";
 
-    // Native library loading status
-    private static boolean sNativeLoaded = false;
-
-    // Load native library
-    static {
-        try {
-            System.loadLibrary("tranperfhub-jni");
-            nativeInit();
-            sNativeLoaded = true;
-            if (DEBUG) {
-                Log.d(TAG, "Native library loaded successfully");
-            }
-        } catch (UnsatisfiedLinkError e) {
-            Log.e(TAG, "Failed to load native library", e);
-        }
-    }
-
-    // Prevent instantiation
-    private TranPerfHub() {}
+    private static ITranPerfHub sService;
+    private static final Object sLock = new Object();
 
     /**
      * Acquire performance lock
      *
-     * @param eventType Event type
-     * @param eventParam Event parameter
-     * @return Performance lock handle (>0 success, <=0 failure)
+     * Called by TranPerfEvent via reflection
      */
-    public static int acquirePerfLock(int eventType, int eventParam) {
-        if (!sNativeLoaded) {
-            if (DEBUG) {
-                Log.w(TAG, "Native library not loaded");
-            }
+    public static int acquirePerfLock(
+            int eventId, long timestamp, int numParams, int[] intParams, String extraStrings) {
+        if (DEBUG) {
+            Log.d(TAG, String.format("acquirePerfLock: eventId=%d, numParams=%d, extraStrings=%s",
+                               eventId, numParams, extraStrings));
+        }
+
+        ITranPerfHub service = getService();
+        if (service == null) {
+            Log.e(TAG, "TranPerfHub service not available");
             return -1;
         }
 
-        int handle = nativeAcquirePerfLock(eventType, eventParam);
-        if (DEBUG) {
-            Log.d(TAG, "acquirePerfLock: eventType=" + eventType + ", eventParam=" + eventParam
-                               + ", handle=" + handle);
+        try {
+            service.notifyEventStart(eventId, timestamp, numParams, intParams, extraStrings);
+            return eventId; // Return eventId as pseudo-handle
+
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to notify event start", e);
+            return -1;
         }
-        return handle;
     }
 
     /**
      * Release performance lock
      *
-     * @param handle Performance lock handle
+     * Called by TranPerfEvent via reflection
      */
-    public static void releasePerfLock(int handle) {
-        if (!sNativeLoaded) {
+    public static void releasePerfLock(int eventId, long timestamp, String extraStrings) {
+        if (DEBUG) {
+            Log.d(TAG, String.format("releasePerfLock: eventId=%d", eventId));
+        }
+
+        ITranPerfHub service = getService();
+        if (service == null) {
+            Log.e(TAG, "TranPerfHub service not available");
             return;
         }
 
-        nativeReleasePerfLock(handle);
-        if (DEBUG) {
-            Log.d(TAG, "releasePerfLock: handle=" + handle);
+        try {
+            service.notifyEventEnd(eventId, timestamp, extraStrings);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to notify event end", e);
         }
     }
 
-    // ==================== Native Methods ====================
+    /**
+     * Get AIDL service instance
+     */
+    private static ITranPerfHub getService() {
+        synchronized (sLock) {
+            if (sService != null) {
+                return sService;
+            }
 
-    private static native void nativeInit();
-    private static native int nativeAcquirePerfLock(int eventType, int eventParam);
-    private static native void nativeReleasePerfLock(int handle);
+            try {
+                IBinder binder = ServiceManager.getService(SERVICE_NAME);
+                if (binder == null) {
+                    Log.e(TAG, "Service not found: " + SERVICE_NAME);
+                    return null;
+                }
+
+                sService = ITranPerfHub.Stub.asInterface(binder);
+
+                if (DEBUG) {
+                    Log.d(TAG, "Service connected: " + SERVICE_NAME);
+                }
+
+                return sService;
+
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to get service", e);
+                return null;
+            }
+        }
+    }
 }

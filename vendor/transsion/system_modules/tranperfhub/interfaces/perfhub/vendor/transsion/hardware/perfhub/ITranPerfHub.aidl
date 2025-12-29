@@ -1,50 +1,41 @@
 package vendor.transsion.hardware.perfhub;
 
 /**
- * TranPerfHub Vendor AIDL Interface
- *
- * Version: 1
- * Stability: vintf (frozen after release)
- *
- * Design Principles:
- * 1. System layer only passes business semantics (eventType + eventParam)
- * 2. Vendor layer handles platform adaptation and parameter mapping
- * 3. Use oneway for performance-critical event notifications
- * 4. Use synchronous only when return value is necessary
- *
- * Compatibility:
- * - System: Android 16+
- * - Vendor: Android 14+
+ * TranPerfHub AIDL Interface
+ * 
+ * Performance event notification interface for cross-process communication
+ * between System and Vendor partitions.
  */
 interface ITranPerfHub {
     /**
-     * Notify performance event start (asynchronous, fire-and-forget)
+     * Notify performance event start
      *
-     * This method uses oneway for minimal latency. The caller will not wait
-     * for vendor processing. Event tracking is managed internally by the
-     * vendor service.
-     *
-     * Performance: <100μs (just Binder send, no wait)
-     *
-     * @param eventType Event type
-     *        1 = EVENT_APP_LAUNCH
-     *        2 = EVENT_SCROLL
-     *        3 = EVENT_ANIMATION
-     *        4 = EVENT_WINDOW_SWITCH
-     *        5 = EVENT_TOUCH
-     *        6 = EVENT_APP_SWITCH
-     *
-     * @param eventParam Event parameter
-     *        - EVENT_APP_LAUNCH: 0=cold start, 1=warm start
-     *        - EVENT_SCROLL: scroll velocity (0-100)
-     *        - Others: reserved
+     * @param eventId Event type identifier (EVENT_APP_LAUNCH, EVENT_SCROLL, etc.)
+     * @param timestamp Event timestamp in nanoseconds (SystemClock.elapsedRealtimeNanos())
+     * @param numParams Number of integer parameters (intParams.length)
+     * @param intParams Integer parameters array (max 10 elements recommended)
+     * @param extraStrings Optional string parameters separated by '\x1F' (ASCII Unit Separator)
+     *                     Example: "com.android.settings\x1F.MainActivity\x1Fcold_start"
+     *                     Can be null if no string parameters needed.
      */
-    oneway void notifyEventStart(int eventType, int eventParam);
+    oneway void notifyEventStart(
+        int eventId,
+        long timestamp,
+        int numParams,
+        in int[] intParams,
+        @nullable @utf8InCpp String extraStrings
+    );
 
     /**
-     * Notify performance event end (asynchronous, fire-and-forget)
+     * Notify performance event end
      *
-     * @param eventType Event type
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds
+     * @param extraStrings Optional string parameters (usually packageName)
      */
-    oneway void notifyEventEnd(int eventType);
+    oneway void notifyEventEnd(
+        int eventId,
+        long timestamp,
+        @nullable @utf8InCpp String extraStrings
+    );
 }

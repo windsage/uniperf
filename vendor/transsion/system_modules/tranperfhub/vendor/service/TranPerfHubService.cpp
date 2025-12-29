@@ -2,11 +2,11 @@
 
 #include "TranPerfHubService.h"
 
-#include <android-base/logging.h>
 #include <com_transsion_perfhub_flags.h>
 #include <utils/Log.h>
 
 #include "PlatformAdapter.h"
+#include "StringUtils.h"
 
 namespace vendor {
 namespace transsion {
@@ -14,6 +14,7 @@ namespace hardware {
 namespace perfhub {
 
 using android::AutoMutex;
+using namespace vendor::transsion::perfhub::utils;
 
 TranPerfHubService::TranPerfHubService() {
     bool enabled = com::transsion::perfhub::flags::enable_tranperfhub();
@@ -25,88 +26,96 @@ TranPerfHubService::~TranPerfHubService() {
 }
 
 /**
- * Performance event start
- *
- * Flow:
- * 1. Call platform adapter to acquire performance lock
- * 2. Record eventType -> handle mapping
- * 3. Return handle
+ * Notify event start
  */
-ndk::ScopedAStatus TranPerfHubService::notifyEventStart(int32_t eventType, int32_t eventParam,
-                                                        int32_t *_aidl_return) {
+ndk::ScopedAStatus TranPerfHubService::notifyEventStart(int32_t eventId, int64_t timestamp,
+                                                        int32_t numParams,
+                                                        const std::vector<int32_t> &intParams,
+                                                        const std::string &extraStrings) {
+    // Check flag
     if (!com::transsion::perfhub::flags::enable_tranperfhub()) {
         ALOGD("TranPerfHub disabled, skip event processing");
         return ndk::ScopedAStatus::ok();
     }
 
-    ALOGD("notifyEventStart: eventType=%d, eventParam=%d", eventType, eventParam);
+    // Record receive timestamp for latency analysis
+    int64_t receiveTimestamp = android::elapsedRealtimeNano();
+    int64_t latency = receiveTimestamp - timestamp;
 
-    // 1. Call platform adapter
+    // Parse extraStrings
+    std::vector<std::string> strings = splitStrings(extraStrings);
+
+    ALOGD(
+        "Event start: id=%d, timestamp=%lld, latency=%lld ns (%.2f ms), numParams=%d, "
+        "numStrings=%zu",
+        eventId, (long long)timestamp, (long long)latency, latency / 1000000.0, numParams,
+        strings.size());
+
+    // Warning if latency is too high
+    if (latency > 5000000) {    // 5ms
+        ALOGW("High latency detected: %lld ns (%.2f ms) for eventId=%d", (long long)latency,
+              latency / 1000000.0, eventId);
+    }
+
+    // Extract common parameters
+    std::string packageName = getStringAt(strings, 0);
+
+    // Call PlatformAdapter
     PlatformAdapter &adapter = PlatformAdapter::getInstance();
-    int32_t handle = adapter.acquirePerfLock(eventType, eventParam);
+    int32_t handle =
+        adapter.acquirePerfLock(eventId, timestamp, numParams, intParams.data(), strings);
 
     if (handle <= 0) {
-        ALOGE("Failed to acquire perf lock: eventType=%d", eventType);
-        *_aidl_return = -1;
+        ALOGE("Failed to acquire perf lock: eventId=%d", eventId);
         return ndk::ScopedAStatus::ok();
     }
 
-    // 2. Record mapping
+    // Record mapping
     {
         AutoMutex _l(mEventLock);
 
-        // If this event already has a handle, release the old one first
-        auto it = mEventHandles.find(eventType);
+        auto it = mEventHandles.find(eventId);
         if (it != mEventHandles.end()) {
             int32_t oldHandle = it->second;
-            ALOGD("Releasing old handle: %d for eventType: %d", oldHandle, eventType);
+            ALOGD("Releasing old handle: %d for eventId: %d", oldHandle, eventId);
             adapter.releasePerfLock(oldHandle);
         }
 
-        // Update mapping
-        mEventHandles[eventType] = handle;
+        mEventHandles[eventId] = handle;
     }
 
-    ALOGD("Event started: eventType=%d, handle=%d", eventType, handle);
+    ALOGD("Event started: eventId=%d, handle=%d", eventId, handle);
 
-    *_aidl_return = handle;
     return ndk::ScopedAStatus::ok();
 }
 
 /**
- * Performance event end
- *
- * Flow:
- * 1. Find corresponding handle by eventType
- * 2. Call platform adapter to release performance lock
- * 3. Remove mapping record
+ * Notify event end
  */
-ndk::ScopedAStatus TranPerfHubService::notifyEventEnd(int32_t eventType) {
+ndk::ScopedAStatus TranPerfHubService::notifyEventEnd(int32_t eventId, int64_t timestamp,
+                                                      const std::string &extraStrings) {
     if (!com::transsion::perfhub::flags::enable_tranperfhub()) {
         return ndk::ScopedAStatus::ok();
     }
 
-    ALOGD("notifyEventEnd: eventType=%d", eventType);
+    ALOGD("Event end: id=%d, timestamp=%lld", eventId, (long long)timestamp);
 
     AutoMutex _l(mEventLock);
 
-    // Find handle corresponding to event type
-    auto it = mEventHandles.find(eventType);
+    auto it = mEventHandles.find(eventId);
     if (it == mEventHandles.end()) {
-        ALOGW("No handle found for eventType: %d", eventType);
+        ALOGW("No handle found for eventId: %d", eventId);
         return ndk::ScopedAStatus::ok();
     }
 
     int32_t handle = it->second;
 
-    // Release performance lock
     PlatformAdapter &adapter = PlatformAdapter::getInstance();
     adapter.releasePerfLock(handle);
 
-    // Remove mapping
     mEventHandles.erase(it);
 
-    ALOGD("Event ended: eventType=%d, handle=%d", eventType, handle);
+    ALOGD("Event ended: eventId=%d, handle=%d", eventId, handle);
 
     return ndk::ScopedAStatus::ok();
 }
