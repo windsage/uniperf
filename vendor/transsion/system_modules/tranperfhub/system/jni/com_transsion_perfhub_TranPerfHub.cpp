@@ -96,9 +96,9 @@ static void nativeInit(JNIEnv *env, jclass clazz) {
 /**
  * 获取性能锁
  *
- * Java 调用: TranPerfHub.nativeAcquirePerfLock(eventType, eventParam)
+ * Java 调用: TranPerfHub.nativeAcquirePerfLock(eventId, eventParam)
  *
- * @param eventType 事件类型
+ * @param eventId 事件类型
  * @param eventParam 事件参数
  * @return handle (>0 成功, <=0 失败)
  */
@@ -108,9 +108,9 @@ static void nativeInit(JNIEnv *env, jclass clazz) {
  * 注意: AIDL 是异步的，无法返回真实 handle
  * 我们返回一个本地生成的伪 handle 用于 Java 层管理
  */
-static jint nativeAcquirePerfLock(JNIEnv *env, jclass clazz, jint eventType, jint eventParam) {
+static jint nativeAcquirePerfLock(JNIEnv *env, jclass clazz, jint eventId, jint eventParam) {
     if (DEBUG) {
-        ALOGD("nativeAcquirePerfLock: eventType=%d, eventParam=%d", eventType, eventParam);
+        ALOGD("nativeAcquirePerfLock: eventId=%d, eventParam=%d", eventId, eventParam);
     }
 
     // 获取 Vendor 服务
@@ -121,8 +121,8 @@ static jint nativeAcquirePerfLock(JNIEnv *env, jclass clazz, jint eventType, jin
     }
 
     // 调用异步 AIDL 接口 (oneway, 立即返回)
-    ScopedAStatus status = service->notifyEventStart(static_cast<int32_t>(eventType),
-                                                     static_cast<int32_t>(eventParam));
+    ScopedAStatus status =
+        service->notifyEventStart(static_cast<int32_t>(eventId), static_cast<int32_t>(eventParam));
 
     if (!status.isOk()) {
         ALOGE("notifyEventStart failed: %s", status.getDescription().c_str());
@@ -130,13 +130,13 @@ static jint nativeAcquirePerfLock(JNIEnv *env, jclass clazz, jint eventType, jin
         return -1;
     }
 
-    // 返回 eventType 作为伪 handle
-    // (Java 层用于管理，Vendor 层通过 eventType 查找真实 handle)
+    // 返回 eventId 作为伪 handle
+    // (Java 层用于管理，Vendor 层通过 eventId 查找真实 handle)
     if (DEBUG) {
-        ALOGD("Event sent: eventType=%d", eventType);
+        ALOGD("Event sent: eventId=%d", eventId);
     }
 
-    return static_cast<jint>(eventType);
+    return static_cast<jint>(eventId);
 }
 
 /**
@@ -163,11 +163,11 @@ static void nativeReleasePerfLock(JNIEnv *env, jclass clazz, jint handle) {
         return;
     }
 
-    // handle 就是 eventType 参考上面
-    int32_t eventType = static_cast<int32_t>(handle);
+    // handle 就是 eventId 参考上面
+    int32_t eventId = static_cast<int32_t>(handle);
 
     // 调用异步 AIDL 接口
-    ScopedAStatus status = service->notifyEventEnd(eventType);
+    ScopedAStatus status = service->notifyEventEnd(eventId);
 
     if (!status.isOk()) {
         ALOGE("notifyEventEnd failed: %s", status.getDescription().c_str());
@@ -176,7 +176,7 @@ static void nativeReleasePerfLock(JNIEnv *env, jclass clazz, jint handle) {
     }
 
     if (DEBUG) {
-        ALOGD("Event ended: eventType=%d", eventType);
+        ALOGD("Event ended: eventId=%d", eventId);
     }
 }
 

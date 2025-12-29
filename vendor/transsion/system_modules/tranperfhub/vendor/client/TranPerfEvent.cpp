@@ -35,22 +35,22 @@ static constexpr bool DEBUG = false;
 /**
  * Notify event start
  */
-int32_t TranPerfEvent::notifyEventStart(int32_t eventType, int32_t eventParam) {
+int32_t TranPerfEvent::notifyEventStart(int32_t eventId, int32_t eventParam) {
     if (!com::transsion::perfhub::flags::enable_tranperfhub()) {
         ALOGD("TranPerfHub disabled, skip event");
         return -1;
     }
 
     if (DEBUG) {
-        ALOGD("notifyEventStart: eventType=%d, eventParam=%d", eventType, eventParam);
+        ALOGD("notifyEventStart: eventId=%d, eventParam=%d", eventId, eventParam);
     }
 
     // Directly call PlatformAdapter (in-process call)
     PlatformAdapter &adapter = PlatformAdapter::getInstance();
-    int32_t handle = adapter.acquirePerfLock(eventType, eventParam);
+    int32_t handle = adapter.acquirePerfLock(eventId, eventParam);
 
     if (handle <= 0) {
-        ALOGE("Failed to acquire perf lock: eventType=%d", eventType);
+        ALOGE("Failed to acquire perf lock: eventId=%d", eventId);
         return -1;
     }
 
@@ -59,19 +59,19 @@ int32_t TranPerfEvent::notifyEventStart(int32_t eventType, int32_t eventParam) {
         AutoMutex _l(sEventLock);
 
         // If this event already has a handle, release the old one first
-        auto it = sEventHandles.find(eventType);
+        auto it = sEventHandles.find(eventId);
         if (it != sEventHandles.end()) {
             int32_t oldHandle = it->second;
-            ALOGD("Releasing old handle: %d for eventType: %d", oldHandle, eventType);
+            ALOGD("Releasing old handle: %d for eventId: %d", oldHandle, eventId);
             adapter.releasePerfLock(oldHandle);
         }
 
         // Update mapping
-        sEventHandles[eventType] = handle;
+        sEventHandles[eventId] = handle;
     }
 
     if (DEBUG) {
-        ALOGD("Event started: eventType=%d, handle=%d", eventType, handle);
+        ALOGD("Event started: eventId=%d, handle=%d", eventId, handle);
     }
 
     return handle;
@@ -80,21 +80,21 @@ int32_t TranPerfEvent::notifyEventStart(int32_t eventType, int32_t eventParam) {
 /**
  * Notify event end
  */
-void TranPerfEvent::notifyEventEnd(int32_t eventType) {
+void TranPerfEvent::notifyEventEnd(int32_t eventId) {
     if (!com::transsion::perfhub::flags::enable_tranperfhub()) {
         return;
     }
 
     if (DEBUG) {
-        ALOGD("notifyEventEnd: eventType=%d", eventType);
+        ALOGD("notifyEventEnd: eventId=%d", eventId);
     }
 
     AutoMutex _l(sEventLock);
 
     // Find handle by event type
-    auto it = sEventHandles.find(eventType);
+    auto it = sEventHandles.find(eventId);
     if (it == sEventHandles.end()) {
-        ALOGW("No handle found for eventType: %d", eventType);
+        ALOGW("No handle found for eventId: %d", eventId);
         return;
     }
 
@@ -108,7 +108,7 @@ void TranPerfEvent::notifyEventEnd(int32_t eventType) {
     sEventHandles.erase(it);
 
     if (DEBUG) {
-        ALOGD("Event ended: eventType=%d, handle=%d", eventType, handle);
+        ALOGD("Event ended: eventId=%d, handle=%d", eventId, handle);
     }
 }
 

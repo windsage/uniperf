@@ -20,11 +20,11 @@ public:
     /**
      * Acquire performance lock
      *
-     * @param eventType Event type
+     * @param eventId Event type
      * @param eventParam Event parameter
      * @return handle (>0 success, <=0 failure)
      */
-    int32_t acquirePerfLock(int32_t eventType, int32_t eventParam);
+    int32_t acquirePerfLock(int32_t eventId, int32_t eventParam);
 
     /**
      * 释放性能锁
@@ -55,11 +55,11 @@ private:
     bool initMtk();
 
     // QCOM 平台调用
-    int32_t qcomAcquirePerfLock(int32_t eventType, int32_t eventParam);
+    int32_t qcomAcquirePerfLock(int32_t eventId, int32_t eventParam);
     void qcomReleasePerfLock(int32_t handle);
 
     // MTK 平台调用
-    int32_t mtkAcquirePerfLock(int32_t eventType, int32_t eventParam);
+    int32_t mtkAcquirePerfLock(int32_t eventId, int32_t eventParam);
     void mtkReleasePerfLock(int32_t handle);
 
     Platform mPlatform;

@@ -19,7 +19,7 @@ using aidl::vendor::transsion::hardware::perfhub::ITranPerfHub;
  *
  * 职责:
  * 1. 实现 ITranPerfHub AIDL 接口
- * 2. 管理事件到句柄的映射 (eventType -> handle)
+ * 2. 管理事件到句柄的映射 (eventId -> handle)
  * 3. 调用平台适配器进行性能优化
  */
 class TranPerfHubService : public BnTranPerfHub {
@@ -38,7 +38,7 @@ public:
                                       const std::string &extraStrings) override;
 
 private:
-    // 事件句柄映射 (eventType -> handle)
+    // 事件句柄映射 (eventId -> handle)
     std::map<int32_t, int32_t> mEventHandles;
     android::Mutex mEventLock;
 };

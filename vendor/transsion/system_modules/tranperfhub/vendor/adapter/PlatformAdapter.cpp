@@ -137,13 +137,13 @@ bool PlatformAdapter::initMtk() {
 /**
  * 获取性能锁
  */
-int32_t PlatformAdapter::acquirePerfLock(int32_t eventType, int32_t eventParam) {
-    ALOGD("acquirePerfLock: eventType=%d, eventParam=%d", eventType, eventParam);
+int32_t PlatformAdapter::acquirePerfLock(int32_t eventId, int32_t eventParam) {
+    ALOGD("acquirePerfLock: eventId=%d, eventParam=%d", eventId, eventParam);
 
     if (mPlatform == PLATFORM_QCOM) {
-        return qcomAcquirePerfLock(eventType, eventParam);
+        return qcomAcquirePerfLock(eventId, eventParam);
     } else if (mPlatform == PLATFORM_MTK) {
-        return mtkAcquirePerfLock(eventType, eventParam);
+        return mtkAcquirePerfLock(eventId, eventParam);
     }
 
     ALOGE("Unsupported platform");
@@ -166,7 +166,7 @@ void PlatformAdapter::releasePerfLock(int32_t handle) {
 /**
  * QCOM 平台获取性能锁
  */
-int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventType, int32_t eventParam) {
+int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventId, int32_t eventParam) {
     // TODO: Later implement parameter mapping (read from XML config)
     // For now use simple test parameters
 
@@ -185,7 +185,7 @@ int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventType, int32_t eventPar
     }
 
     int handle = perf_lock_acq(0, duration, list, 4);
-    ALOGD("QCOM perf_lock_acq returned handle: %d for eventType: %d", handle, eventType);
+    ALOGD("QCOM perf_lock_acq returned handle: %d for eventId: %d", handle, eventId);
 
     return handle;
 }
@@ -209,7 +209,7 @@ void PlatformAdapter::qcomReleasePerfLock(int32_t handle) {
 /**
  * MTK 平台获取性能锁
  */
-int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventType, int32_t eventParam) {
+int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventId, int32_t eventParam) {
     // TODO: 后续实现参数映射
 
     int list[4] = {

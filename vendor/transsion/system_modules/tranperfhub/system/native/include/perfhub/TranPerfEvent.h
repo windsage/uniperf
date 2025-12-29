@@ -57,18 +57,18 @@ public:
     /**
      * Notify that a performance event has started.
      *
-     * @param eventType Event type (EVENT_*)
+     * @param eventId Event type (EVENT_*)
      * @param eventParam Event parameter (default 0)
      * @return handle (>0 success, <=0 failure)
      */
-    static int32_t notifyEventStart(int32_t eventType, int32_t eventParam = 0);
+    static int32_t notifyEventStart(int32_t eventId, int32_t eventParam = 0);
 
     /**
      * Notify that a performance event has ended.
      *
-     * @param eventType Event type (EVENT_*)
+     * @param eventId Event type (EVENT_*)
      */
-    static void notifyEventEnd(int32_t eventType);
+    static void notifyEventEnd(int32_t eventId);
 
 private:
     // Prevent instantiation
