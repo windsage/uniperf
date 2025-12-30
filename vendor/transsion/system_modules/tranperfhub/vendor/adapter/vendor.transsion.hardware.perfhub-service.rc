@@ -1,0 +1,14 @@
+service tranperfhub /vendor/bin/hw/vendor.transsion.hardware.perfhub-service
+    class hal
+    user system
+    group system
+    
+    # Do NOT start by default
+    # Will be started dynamically when needed
+    disabled
+    
+    # Restart on crash
+    oneshot
+    
+    # Memory limits
+    rlimit memlock 67108864 67108864

@@ -1,249 +1,323 @@
-#define LOG_TAG "TranPerfHub-Adapter"
+#define LOG_TAG "TranPerfHub-Platform"
 
 #include "PlatformAdapter.h"
 
 #include <android-base/logging.h>
-#include <cutils/properties.h>
+#include <android-base/properties.h>
 #include <dlfcn.h>
-#include <utils/Log.h>
+#include <unistd.h>
+
+#include <cstring>
+
+// QCOM mpctl_msg_t structure (simplified)
+// Full definition should match mp-ctl/VendorIPerf.h
+#define MAX_ARGS_PER_REQUEST 64
+#define MAX_MSG_APP_NAME_LEN 128
+
+struct mpctl_msg_t {
+    uint16_t data;                             // Number of parameters
+    int32_t pl_handle;                         // Performance lock handle
+    uint8_t req_type;                          // Command type
+    int32_t pl_time;                           // Duration in milliseconds
+    int32_t pl_args[MAX_ARGS_PER_REQUEST];     // Parameter array
+    int32_t reservedArgs[32];                  // Reserved arguments
+    int32_t numRArgs;                          // Number of reserved args
+    pid_t client_pid;                          // Client PID
+    pid_t client_tid;                          // Client TID
+    uint32_t hint_id;                          // Hint ID
+    int32_t hint_type;                         // Hint type
+    void *userdata;                            // User data pointer
+    char usrdata_str[MAX_MSG_APP_NAME_LEN];    // Package name
+    char propDefVal[92];                       // Property default value
+    bool renewFlag;                            // Renew flag
+    bool offloadFlag;                          // Offload flag
+    int32_t app_workload_type;                 // App workload type
+    int32_t app_pid;                           // App PID
+    int16_t version;                           // Message version
+    int16_t size;                              // Message size
+};
+
+#define MPCTL_CMD_PERFLOCKACQ 0
+#define MPCTL_CMD_PERFLOCKREL 1
 
 namespace vendor {
 namespace transsion {
 namespace hardware {
 namespace perfhub {
 
-// QCOM 函数指针类型
-typedef int (*qcom_perf_lock_acq_t)(int handle, int duration, int list[], int numArgs);
-typedef int (*qcom_perf_lock_rel_t)(int handle);
-
-// MTK 函数指针类型
-typedef int (*mtk_perf_lock_acq_t)(int handle, int duration, int list[], int numArgs, int pid,
-                                   int tid);
-typedef void (*mtk_perf_lock_rel_t)(int handle);
-
-// 全局单例
-static PlatformAdapter *sInstance = nullptr;
-
-PlatformAdapter &PlatformAdapter::getInstance() {
-    if (sInstance == nullptr) {
-        sInstance = new PlatformAdapter();
-    }
-    return *sInstance;
+PlatformAdapter::PlatformAdapter() : mPlatform(PlatformType::UNKNOWN) {
+    memset(&mQcomFuncs, 0, sizeof(mQcomFuncs));
+    memset(&mMtkFuncs, 0, sizeof(mMtkFuncs));
 }
 
-PlatformAdapter::PlatformAdapter()
-    : mPlatform(PLATFORM_UNKNOWN), mQcomLibHandle(nullptr), mMtkLibHandle(nullptr) {
-    ALOGI("PlatformAdapter initializing...");
+PlatformAdapter::~PlatformAdapter() {}
 
-    // 检测平台
+bool PlatformAdapter::init() {
+    // Detect platform
     mPlatform = detectPlatform();
 
-    // 初始化平台
-    if (mPlatform == PLATFORM_QCOM) {
-        initQcom();
-    } else if (mPlatform == PLATFORM_MTK) {
-        initMtk();
+    switch (mPlatform) {
+        case PlatformType::QCOM:
+            return initQcom();
+        case PlatformType::MTK:
+            return initMtk();
+        case PlatformType::UNISOC:
+            return initUnisoc();
+        default:
+            LOG(ERROR) << "Unknown platform";
+            return false;
     }
 }
 
-PlatformAdapter::~PlatformAdapter() {
-    if (mQcomLibHandle) {
-        dlclose(mQcomLibHandle);
+PlatformType PlatformAdapter::detectPlatform() {
+    std::string platform = android::base::GetProperty("ro.board.platform", "");
+
+    LOG(INFO) << "Detected ro.board.platform: " << platform;
+
+    // QCOM platform detection
+    if (platform.find("qcom") != std::string::npos || platform.find("msm") != std::string::npos ||
+        platform.find("sm") != std::string::npos || platform.find("sdm") != std::string::npos ||
+        platform.find("kona") != std::string::npos ||
+        platform.find("lahaina") != std::string::npos ||
+        platform.find("taro") != std::string::npos ||
+        platform.find("kalama") != std::string::npos ||
+        platform.find("volcano") != std::string::npos ||
+        platform.find("pineapple") != std::string::npos) {
+        LOG(INFO) << "Platform: QCOM";
+        return PlatformType::QCOM;
     }
-    if (mMtkLibHandle) {
-        dlclose(mMtkLibHandle);
+
+    // MTK platform detection
+    if (platform.find("mt") != std::string::npos) {
+        LOG(INFO) << "Platform: MTK";
+        return PlatformType::MTK;
     }
+
+    // UNISOC platform detection
+    if (platform.find("unisoc") != std::string::npos || platform.find("ums") != std::string::npos ||
+        platform.find("sp") != std::string::npos) {
+        LOG(INFO) << "Platform: UNISOC";
+        return PlatformType::UNISOC;
+    }
+
+    LOG(WARNING) << "Platform: UNKNOWN";
+    return PlatformType::UNKNOWN;
 }
 
-/**
- * 检测平台
- */
-PlatformAdapter::Platform PlatformAdapter::detectPlatform() {
-    char platform[PROP_VALUE_MAX] = {0};
-    property_get("ro.board.platform", platform, "");
-
-    ALOGI("Detected board platform: %s", platform);
-
-    if (strstr(platform, "qcom") || strstr(platform, "msm")) {
-        ALOGI("Platform: QCOM");
-        return PLATFORM_QCOM;
-    } else if (strstr(platform, "mt")) {
-        ALOGI("Platform: MTK");
-        return PLATFORM_MTK;
-    }
-
-    ALOGW("Platform: UNKNOWN");
-    return PLATFORM_UNKNOWN;
-}
-
-/**
- * 初始化 QCOM 平台
- */
 bool PlatformAdapter::initQcom() {
-    ALOGI("Initializing QCOM platform...");
+    LOG(INFO) << "Initializing QCOM platform...";
 
-    // 加载 QCOM Client 库
-    mQcomLibHandle = dlopen("libqti-perfd-client.so", RTLD_NOW);
-    if (!mQcomLibHandle) {
-        ALOGE("Failed to load libqti-perfd-client.so: %s", dlerror());
+    // Use dlsym(RTLD_DEFAULT) to find function in current process
+    // perf-hal-service has already linked libqti-perfd.so
+    mQcomFuncs.submitRequest = dlsym(RTLD_DEFAULT, "perfmodule_submit_request");
+
+    if (!mQcomFuncs.submitRequest) {
+        LOG(ERROR) << "Failed to find perfmodule_submit_request: " << dlerror();
         return false;
     }
 
-    // 获取函数指针
-    qcom_perf_lock_acq_t perf_lock_acq =
-        (qcom_perf_lock_acq_t)dlsym(mQcomLibHandle, "perf_lock_acq");
-    qcom_perf_lock_rel_t perf_lock_rel =
-        (qcom_perf_lock_rel_t)dlsym(mQcomLibHandle, "perf_lock_rel");
-
-    if (!perf_lock_acq || !perf_lock_rel) {
-        ALOGE("Failed to get QCOM function pointers");
-        dlclose(mQcomLibHandle);
-        mQcomLibHandle = nullptr;
-        return false;
-    }
-
-    ALOGI("QCOM platform initialized successfully");
+    LOG(INFO) << "QCOM platform initialized successfully (direct call)";
     return true;
 }
 
-/**
- * 初始化 MTK 平台
- */
 bool PlatformAdapter::initMtk() {
-    ALOGI("Initializing MTK platform...");
+    LOG(INFO) << "Initializing MTK platform...";
 
-    // 加载 MTK Client 库
-    mMtkLibHandle = dlopen("libpowerhal.so", RTLD_NOW);
-    if (!mMtkLibHandle) {
-        ALOGE("Failed to load libpowerhal.so: %s", dlerror());
+    // Use dlsym(RTLD_DEFAULT) to find functions in current process
+    // mtkpower-service has already linked libpowerhal.so
+    mMtkFuncs.lockAcq = dlsym(RTLD_DEFAULT, "libpowerhal_LockAcq");
+    mMtkFuncs.lockRel = dlsym(RTLD_DEFAULT, "libpowerhal_LockRel");
+
+    if (!mMtkFuncs.lockAcq || !mMtkFuncs.lockRel) {
+        LOG(ERROR) << "Failed to find MTK functions: " << dlerror();
         return false;
     }
 
-    // 获取函数指针
-    mtk_perf_lock_acq_t perfLockAcq = (mtk_perf_lock_acq_t)dlsym(mMtkLibHandle, "perfLockAcq");
-    mtk_perf_lock_rel_t perfLockRel = (mtk_perf_lock_rel_t)dlsym(mMtkLibHandle, "perfLockRel");
-
-    if (!perfLockAcq || !perfLockRel) {
-        ALOGE("Failed to get MTK function pointers");
-        dlclose(mMtkLibHandle);
-        mMtkLibHandle = nullptr;
-        return false;
-    }
-
-    ALOGI("MTK platform initialized successfully");
+    LOG(INFO) << "MTK platform initialized successfully (direct call)";
     return true;
 }
 
-/**
- * 获取性能锁
- */
-int32_t PlatformAdapter::acquirePerfLock(int32_t eventId, int32_t eventParam) {
-    ALOGD("acquirePerfLock: eventId=%d, eventParam=%d", eventId, eventParam);
+bool PlatformAdapter::initUnisoc() {
+    LOG(INFO) << "Initializing UNISOC platform...";
 
-    if (mPlatform == PLATFORM_QCOM) {
-        return qcomAcquirePerfLock(eventId, eventParam);
-    } else if (mPlatform == PLATFORM_MTK) {
-        return mtkAcquirePerfLock(eventId, eventParam);
-    }
-
-    ALOGE("Unsupported platform");
-    return -1;
+    // TODO: Implement UNISOC initialization
+    LOG(WARNING) << "UNISOC platform not yet implemented";
+    return false;
 }
 
-/**
- * 释放性能锁
- */
+int32_t PlatformAdapter::acquirePerfLock(int32_t eventId, int32_t duration,
+                                         const std::vector<int32_t> &intParams,
+                                         const std::string &packageName) {
+    switch (mPlatform) {
+        case PlatformType::QCOM:
+            return qcomAcquirePerfLock(eventId, duration, intParams, packageName);
+        case PlatformType::MTK:
+            return mtkAcquirePerfLock(eventId, duration, intParams, packageName);
+        case PlatformType::UNISOC:
+            LOG(ERROR) << "UNISOC not implemented";
+            return -1;
+        default:
+            LOG(ERROR) << "Unknown platform";
+            return -1;
+    }
+}
+
 void PlatformAdapter::releasePerfLock(int32_t handle) {
-    ALOGD("releasePerfLock: handle=%d", handle);
-
-    if (mPlatform == PLATFORM_QCOM) {
-        qcomReleasePerfLock(handle);
-    } else if (mPlatform == PLATFORM_MTK) {
-        mtkReleasePerfLock(handle);
+    switch (mPlatform) {
+        case PlatformType::QCOM:
+            qcomReleasePerfLock(handle);
+            break;
+        case PlatformType::MTK:
+            mtkReleasePerfLock(handle);
+            break;
+        default:
+            LOG(ERROR) << "Unknown platform";
+            break;
     }
 }
 
-/**
- * QCOM 平台获取性能锁
- */
-int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventId, int32_t eventParam) {
-    // TODO: Later implement parameter mapping (read from XML config)
-    // For now use simple test parameters
+int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventId, int32_t duration,
+                                             const std::vector<int32_t> &intParams,
+                                             const std::string &packageName) {
+    typedef int (*perfmodule_submit_request_t)(mpctl_msg_t *);
+    auto submitRequest = reinterpret_cast<perfmodule_submit_request_t>(mQcomFuncs.submitRequest);
 
-    int list[4] = {
-        0x40800000, 1400000,    // CPU Cluster0 Min Freq
-        0x40800100, 1800000     // CPU Cluster1 Min Freq
-    };
-    int duration = 3000;    // 3 seconds
-
-    qcom_perf_lock_acq_t perf_lock_acq =
-        (qcom_perf_lock_acq_t)dlsym(mQcomLibHandle, "perf_lock_acq");
-
-    if (!perf_lock_acq) {
-        ALOGE("perf_lock_acq not found");
+    if (!submitRequest) {
+        LOG(ERROR) << "QCOM submitRequest function not initialized";
         return -1;
     }
 
-    int handle = perf_lock_acq(0, duration, list, 4);
-    ALOGD("QCOM perf_lock_acq returned handle: %d for eventId: %d", handle, eventId);
+    // Prepare mpctl message
+    mpctl_msg_t msg;
+    memset(&msg, 0, sizeof(mpctl_msg_t));
+
+    msg.req_type = MPCTL_CMD_PERFLOCKACQ;
+    msg.pl_handle = 0;    // 0 means create new lock
+    msg.pl_time = duration;
+    msg.client_pid = getpid();
+    msg.client_tid = gettid();
+    msg.version = 1;
+    msg.size = sizeof(mpctl_msg_t);
+
+    // Copy package name
+    if (!packageName.empty()) {
+        strncpy(msg.usrdata_str, packageName.c_str(), MAX_MSG_APP_NAME_LEN - 1);
+        msg.usrdata_str[MAX_MSG_APP_NAME_LEN - 1] = '\0';
+    }
+
+    // TODO: Map eventId to QCOM opcodes and fill msg.pl_args
+    // For now, use hardcoded test values
+    std::vector<int32_t> opcodes;
+    mapEventToOpcodes(eventId, opcodes);
+
+    // Copy opcodes to message
+    size_t numOpcodes = std::min(opcodes.size(), static_cast<size_t>(MAX_ARGS_PER_REQUEST));
+    for (size_t i = 0; i < numOpcodes; i++) {
+        msg.pl_args[i] = opcodes[i];
+    }
+    msg.data = static_cast<uint16_t>(numOpcodes);
+
+    LOG(INFO) << "QCOM acquirePerfLock: eventId=" << eventId << ", duration=" << duration
+              << ", numParams=" << msg.data << ", pkg=" << packageName;
+
+    // Direct function call (in-process)
+    int32_t handle = submitRequest(&msg);
+
+    LOG(INFO) << "QCOM perfmodule_submit_request returned: " << handle;
 
     return handle;
 }
 
-/**
- * QCOM 平台释放性能锁
- */
 void PlatformAdapter::qcomReleasePerfLock(int32_t handle) {
-    qcom_perf_lock_rel_t perf_lock_rel =
-        (qcom_perf_lock_rel_t)dlsym(mQcomLibHandle, "perf_lock_rel");
+    typedef int (*perfmodule_submit_request_t)(mpctl_msg_t *);
+    auto submitRequest = reinterpret_cast<perfmodule_submit_request_t>(mQcomFuncs.submitRequest);
 
-    if (!perf_lock_rel) {
-        ALOGE("perf_lock_rel not found");
+    if (!submitRequest) {
+        LOG(ERROR) << "QCOM submitRequest function not initialized";
         return;
     }
 
-    perf_lock_rel(handle);
-    ALOGD("QCOM perf_lock_rel called for handle: %d", handle);
+    mpctl_msg_t msg;
+    memset(&msg, 0, sizeof(mpctl_msg_t));
+
+    msg.req_type = MPCTL_CMD_PERFLOCKREL;
+    msg.pl_handle = handle;
+    msg.client_pid = getpid();
+    msg.client_tid = gettid();
+    msg.version = 1;
+    msg.size = sizeof(mpctl_msg_t);
+
+    LOG(INFO) << "QCOM releasePerfLock: handle=" << handle;
+
+    submitRequest(&msg);
 }
 
-/**
- * MTK 平台获取性能锁
- */
-int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventId, int32_t eventParam) {
-    // TODO: 后续实现参数映射
+int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventId, int32_t duration,
+                                            const std::vector<int32_t> &intParams,
+                                            const std::string &packageName) {
+    typedef int (*mtk_perf_lock_acq_t)(int *, int, int, int, int, int);
+    auto lockAcq = reinterpret_cast<mtk_perf_lock_acq_t>(mMtkFuncs.lockAcq);
 
-    int list[4] = {
-        0x00001100, 1400000,    // CPU Cluster0 Min Freq
-        0x00001200, 1800000     // CPU Cluster1 Min Freq
-    };
-    int duration = 3000;
-
-    mtk_perf_lock_acq_t perfLockAcq = (mtk_perf_lock_acq_t)dlsym(mMtkLibHandle, "perfLockAcq");
-
-    if (!perfLockAcq) {
-        ALOGE("perfLockAcq not found");
+    if (!lockAcq) {
+        LOG(ERROR) << "MTK lockAcq function not initialized";
         return -1;
     }
 
-    int handle = perfLockAcq(0, duration, list, 4, 0, 0);
-    ALOGD("MTK perfLockAcq returned handle: %d", handle);
+    // TODO: Map eventId to MTK opcodes
+    std::vector<int32_t> opcodes;
+    mapEventToOpcodes(eventId, opcodes);
+
+    LOG(INFO) << "MTK acquirePerfLock: eventId=" << eventId << ", duration=" << duration
+              << ", numParams=" << opcodes.size() << ", pkg=" << packageName;
+
+    // Direct function call (in-process)
+    int32_t handle = lockAcq(opcodes.data(),
+                             0,                                   // handle (0 = new)
+                             static_cast<int>(opcodes.size()),    // numArgs
+                             0,                                   // pid
+                             0,                                   // tid
+                             duration);
+
+    LOG(INFO) << "MTK libpowerhal_LockAcq returned: " << handle;
 
     return handle;
 }
 
-/**
- * MTK 平台释放性能锁
- */
 void PlatformAdapter::mtkReleasePerfLock(int32_t handle) {
-    mtk_perf_lock_rel_t perfLockRel = (mtk_perf_lock_rel_t)dlsym(mMtkLibHandle, "perfLockRel");
+    typedef int (*mtk_perf_lock_rel_t)(int);
+    auto lockRel = reinterpret_cast<mtk_perf_lock_rel_t>(mMtkFuncs.lockRel);
 
-    if (!perfLockRel) {
-        ALOGE("perfLockRel not found");
+    if (!lockRel) {
+        LOG(ERROR) << "MTK lockRel function not initialized";
         return;
     }
 
-    perfLockRel(handle);
-    ALOGD("MTK perfLockRel called for handle: %d", handle);
+    LOG(INFO) << "MTK releasePerfLock: handle=" << handle;
+
+    lockRel(handle);
+}
+
+void PlatformAdapter::mapEventToOpcodes(int32_t eventId, std::vector<int32_t> &opcodes) {
+    // TODO: Implement event ID to opcode mapping
+    // This will be filled in later with actual opcode tables
+
+    // Placeholder: Use hardcoded test values
+    if (mPlatform == PlatformType::QCOM) {
+        // QCOM test opcodes
+        opcodes.push_back(0x40800000);    // CPU Cluster0 Min Freq opcode
+        opcodes.push_back(1400000);       // 1.4GHz
+        opcodes.push_back(0x40800100);    // CPU Cluster1 Min Freq opcode
+        opcodes.push_back(1800000);       // 1.8GHz
+    } else if (mPlatform == PlatformType::MTK) {
+        // MTK test opcodes
+        opcodes.push_back(0x00001100);    // CPU Cluster0 Min Freq opcode
+        opcodes.push_back(1400000);       // 1.4GHz
+        opcodes.push_back(0x00001200);    // CPU Cluster1 Min Freq opcode
+        opcodes.push_back(1800000);       // 1.8GHz
+    }
+
+    LOG(INFO) << "mapEventToOpcodes: eventId=" << eventId << ", mapped to " << opcodes.size()
+              << " opcodes (placeholder)";
 }
 
 }    // namespace perfhub

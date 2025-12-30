@@ -1,149 +1,112 @@
-/*
- * TranPerfEvent Vendor Implementation
- */
-
 #define LOG_TAG "TranPerfEvent-Vendor"
 
 #include "TranPerfEvent.h"
 
-#include <com_transsion_perfhub_flags.h>
-#include <utils/Log.h>
-#include <utils/Mutex.h>
+#include <aidl/vendor/transsion/hardware/perfhub/ITranPerfHub.h>
+#include <android-base/logging.h>
+#include <android/binder_manager.h>
+#include <time.h>
 
-#include <map>
-
-#include "PlatformAdapter.h"
+using aidl::vendor::transsion::hardware::perfhub::ITranPerfHub;
 
 namespace vendor {
 namespace transsion {
 namespace perfhub {
 
-using android::AutoMutex;
-using android::Mutex;
+// 获取 AIDL 服务 (懒加载 + 缓存)
+static std::shared_ptr<ITranPerfHub> getService() {
+    static std::shared_ptr<ITranPerfHub> sService = nullptr;
 
-// ==================== Internal State ====================
+    if (sService == nullptr) {
+        const std::string instance = std::string() + ITranPerfHub::descriptor + "/default";
 
-// Event type to handle mapping
-static std::map<int32_t, int32_t> sEventHandles;
-static Mutex sEventLock;
-
-// Debug flag
-static constexpr bool DEBUG = false;
-
-// ==================== Public API Implementation ====================
-
-/**
- * Notify event start
- */
-int32_t TranPerfEvent::notifyEventStart(int32_t eventId, int32_t eventParam) {
-    if (!com::transsion::perfhub::flags::enable_tranperfhub()) {
-        ALOGD("TranPerfHub disabled, skip event");
-        return -1;
-    }
-
-    if (DEBUG) {
-        ALOGD("notifyEventStart: eventId=%d, eventParam=%d", eventId, eventParam);
-    }
-
-    // Directly call PlatformAdapter (in-process call)
-    PlatformAdapter &adapter = PlatformAdapter::getInstance();
-    int32_t handle = adapter.acquirePerfLock(eventId, eventParam);
-
-    if (handle <= 0) {
-        ALOGE("Failed to acquire perf lock: eventId=%d", eventId);
-        return -1;
-    }
-
-    // Record mapping
-    {
-        AutoMutex _l(sEventLock);
-
-        // If this event already has a handle, release the old one first
-        auto it = sEventHandles.find(eventId);
-        if (it != sEventHandles.end()) {
-            int32_t oldHandle = it->second;
-            ALOGD("Releasing old handle: %d for eventId: %d", oldHandle, eventId);
-            adapter.releasePerfLock(oldHandle);
+        ndk::SpAIBinder binder(AServiceManager_checkService(instance.c_str()));
+        if (binder.get() == nullptr) {
+            LOG(ERROR) << "Failed to get TranPerfHub service";
+            return nullptr;
         }
 
-        // Update mapping
-        sEventHandles[eventId] = handle;
+        sService = ITranPerfHub::fromBinder(binder);
+        LOG(INFO) << "TranPerfHub service connected";
     }
 
-    if (DEBUG) {
-        ALOGD("Event started: eventId=%d, handle=%d", eventId, handle);
-    }
-
-    return handle;
+    return sService;
 }
 
-/**
- * Notify event end
- */
-void TranPerfEvent::notifyEventEnd(int32_t eventId) {
-    if (!com::transsion::perfhub::flags::enable_tranperfhub()) {
+long TranPerfEvent::getCurrentTimestampNs() {
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (long)ts.tv_sec * 1000000000LL + ts.tv_nsec;
+}
+
+// ========================================
+// AIDL 原始接口实现
+// ========================================
+
+void TranPerfEvent::notifyEventStart(int eventId, long timestamp, int numParams,
+                                     const std::vector<int> &intParams,
+                                     const std::string &extraStrings) {
+    auto service = getService();
+    if (!service) {
+        LOG(ERROR) << "Service not available";
         return;
     }
 
-    if (DEBUG) {
-        ALOGD("notifyEventEnd: eventId=%d", eventId);
-    }
-
-    AutoMutex _l(sEventLock);
-
-    // Find handle by event type
-    auto it = sEventHandles.find(eventId);
-    if (it == sEventHandles.end()) {
-        ALOGW("No handle found for eventId: %d", eventId);
+    // 验证参数
+    if (static_cast<int>(intParams.size()) != numParams) {
+        LOG(ERROR) << "numParams mismatch: expected=" << numParams
+                   << ", actual=" << intParams.size();
         return;
     }
 
-    int32_t handle = it->second;
+    LOG(INFO) << "notifyEventStart: eventId=" << eventId << ", timestamp=" << timestamp
+              << ", numParams=" << numParams << ", extraStrings=" << extraStrings;
 
-    // Release performance lock
-    PlatformAdapter &adapter = PlatformAdapter::getInstance();
-    adapter.releasePerfLock(handle);
+    // 调用 AIDL 接口
+    auto status = service->notifyEventStart(
+        eventId, timestamp, numParams, intParams,
+        extraStrings.empty() ? std::nullopt : std::make_optional(extraStrings));
 
-    // Remove mapping
-    sEventHandles.erase(it);
-
-    if (DEBUG) {
-        ALOGD("Event ended: eventId=%d, handle=%d", eventId, handle);
+    if (!status.isOk()) {
+        LOG(ERROR) << "AIDL call failed: " << status.getMessage();
     }
 }
 
-/**
- * Release by handle
- */
-void TranPerfEvent::releaseHandle(int32_t handle) {
-    if (DEBUG) {
-        ALOGD("releaseHandle: handle=%d", handle);
-    }
-
-    if (handle <= 0) {
-        ALOGW("Invalid handle: %d", handle);
+void TranPerfEvent::notifyEventEnd(int eventId, long timestamp, const std::string &extraStrings) {
+    auto service = getService();
+    if (!service) {
+        LOG(ERROR) << "Service not available";
         return;
     }
 
-    // Release performance lock
-    PlatformAdapter &adapter = PlatformAdapter::getInstance();
-    adapter.releasePerfLock(handle);
+    LOG(INFO) << "notifyEventEnd: eventId=" << eventId << ", timestamp=" << timestamp
+              << ", extraStrings=" << extraStrings;
 
-    // Remove from mapping (find by value)
-    {
-        AutoMutex _l(sEventLock);
+    // 调用 AIDL 接口
+    auto status = service->notifyEventEnd(
+        eventId, timestamp, extraStrings.empty() ? std::nullopt : std::make_optional(extraStrings));
 
-        for (auto it = sEventHandles.begin(); it != sEventHandles.end(); ++it) {
-            if (it->second == handle) {
-                sEventHandles.erase(it);
-                break;
-            }
-        }
+    if (!status.isOk()) {
+        LOG(ERROR) << "AIDL call failed: " << status.getMessage();
     }
+}
 
-    if (DEBUG) {
-        ALOGD("Handle released: %d", handle);
-    }
+// ========================================
+// 便捷接口实现
+// ========================================
+
+void TranPerfEvent::notifyEventStartAuto(int eventId, const std::vector<int> &intParams,
+                                         const std::string &extraStrings) {
+    long timestamp = getCurrentTimestampNs();
+    int numParams = static_cast<int>(intParams.size());
+
+    notifyEventStart(eventId, timestamp, numParams, intParams, extraStrings);
+}
+
+void TranPerfEvent::notifyEventEndAuto(int eventId, const std::string &extraStrings) {
+    long timestamp = getCurrentTimestampNs();
+
+    notifyEventEnd(eventId, timestamp, extraStrings);
 }
 
 }    // namespace perfhub
