@@ -1,106 +1,148 @@
 package com.transsion.perfhub;
 
-import android.os.IBinder;
-import android.os.RemoteException;
-import android.os.ServiceManager;
+import android.os.SystemClock;
 import android.util.Log;
 
-import vendor.transsion.hardware.perfhub.ITranPerfHub;
-
 /**
- * TranPerfHub - Performance Hub Implementation
+ * TranPerfHub - Unified Performance Event Notification
  *
- * This class provides the bridge between Framework API and Vendor AIDL service.
+ * This class provides a unified interface for performance event notifications
+ * across System and Vendor partitions. All calls are delegated to Vendor layer
+ * via JNI and AIDL.
+ *
+ * Thread Safety: All methods are thread-safe.
  */
-public class TranPerfHub {
+public final class TranPerfHub {
     private static final String TAG = "TranPerfHub";
     private static final boolean DEBUG = false;
 
-    private static final String SERVICE_NAME =
-            "vendor.transsion.hardware.perfhub.ITranPerfHub/default";
+    // Native library name (matches libtranperfhub-jni.so)
+    private static final String JNI_LIBRARY = "tranperfhub-jni";
 
-    private static ITranPerfHub sService;
-    private static final Object sLock = new Object();
-
-    /**
-     * Acquire performance lock
-     *
-     * Called by TranPerfEvent via reflection
-     */
-    public static int acquirePerfLock(
-            int eventId, long timestamp, int numParams, int[] intParams, String extraStrings) {
-        if (DEBUG) {
-            Log.d(TAG, String.format("acquirePerfLock: eventId=%d, numParams=%d, extraStrings=%s",
-                               eventId, numParams, extraStrings));
-        }
-
-        ITranPerfHub service = getService();
-        if (service == null) {
-            Log.e(TAG, "TranPerfHub service not available");
-            return -1;
-        }
-
+    // Load native library
+    static {
         try {
-            service.notifyEventStart(eventId, timestamp, numParams, intParams, extraStrings);
-            return eventId; // Return eventId as pseudo-handle
-
-        } catch (RemoteException e) {
-            Log.e(TAG, "Failed to notify event start", e);
-            return -1;
+            System.loadLibrary(JNI_LIBRARY);
+            if (DEBUG) {
+                Log.d(TAG, "Native library loaded: " + JNI_LIBRARY);
+            }
+        } catch (UnsatisfiedLinkError e) {
+            Log.e(TAG, "Failed to load native library: " + JNI_LIBRARY, e);
         }
     }
 
+    // Private constructor to prevent instantiation
+    private TranPerfHub() {
+        throw new AssertionError("TranPerfHub cannot be instantiated");
+    }
+
     /**
-     * Release performance lock
+     * Notify performance event start
      *
-     * Called by TranPerfEvent via reflection
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds (use SystemClock.elapsedRealtimeNanos())
+     * @param numParams Number of valid parameters in intParams array
+     * @param intParams Integer parameters array
+     *                  intParams[0] = duration (ms), 0 means manual release
+     *                  intParams[1..n] = event-specific parameters
+     * @param extraStrings Optional string parameter (usually packageName), can be null
      */
-    public static void releasePerfLock(int eventId, long timestamp, String extraStrings) {
+    public static void notifyEventStart(
+            int eventId, long timestamp, int numParams, int[] intParams, String extraStrings) {
         if (DEBUG) {
-            Log.d(TAG, String.format("releasePerfLock: eventId=%d", eventId));
+            Log.d(TAG, String.format("notifyEventStart: eventId=%d, timestamp=%d, numParams=%d, "
+                                     + "extraStrings=%s",
+                               eventId, timestamp, numParams, extraStrings));
         }
 
-        ITranPerfHub service = getService();
-        if (service == null) {
-            Log.e(TAG, "TranPerfHub service not available");
+        // Validate parameters
+        if (intParams == null || intParams.length != numParams) {
+            Log.e(TAG, "Invalid parameters: intParams.length="
+                               + (intParams != null ? intParams.length : "null")
+                               + ", numParams=" + numParams);
+            return;
+        }
+
+        if (numParams < 1) {
+            Log.e(TAG, "Invalid numParams: " + numParams + " (must be >= 1)");
             return;
         }
 
         try {
-            service.notifyEventEnd(eventId, timestamp, extraStrings);
-        } catch (RemoteException e) {
+            // Call native method
+            nativeNotifyEventStart(eventId, timestamp, numParams, intParams, extraStrings);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to notify event start", e);
+        }
+    }
+
+    /**
+     * Notify performance event start (auto-fill timestamp)
+     *
+     * @param eventId Event type identifier
+     * @param numParams Number of valid parameters in intParams array
+     * @param intParams Integer parameters array
+     * @param extraStrings Optional string parameter (usually packageName), can be null
+     */
+    public static void notifyEventStart(
+            int eventId, int numParams, int[] intParams, String extraStrings) {
+        long timestamp = SystemClock.elapsedRealtimeNanos();
+        notifyEventStart(eventId, timestamp, numParams, intParams, extraStrings);
+    }
+
+    /**
+     * Notify performance event end
+     *
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds
+     * @param extraStrings Optional string parameter (usually packageName), can be null
+     */
+    public static void notifyEventEnd(int eventId, long timestamp, String extraStrings) {
+        if (DEBUG) {
+            Log.d(TAG, String.format("notifyEventEnd: eventId=%d, timestamp=%d, extraStrings=%s",
+                               eventId, timestamp, extraStrings));
+        }
+
+        try {
+            // Call native method
+            nativeNotifyEventEnd(eventId, timestamp, extraStrings);
+        } catch (Exception e) {
             Log.e(TAG, "Failed to notify event end", e);
         }
     }
 
     /**
-     * Get AIDL service instance
+     * Notify performance event end (auto-fill timestamp)
+     *
+     * @param eventId Event type identifier
+     * @param extraStrings Optional string parameter (usually packageName), can be null
      */
-    private static ITranPerfHub getService() {
-        synchronized (sLock) {
-            if (sService != null) {
-                return sService;
-            }
-
-            try {
-                IBinder binder = ServiceManager.getService(SERVICE_NAME);
-                if (binder == null) {
-                    Log.e(TAG, "Service not found: " + SERVICE_NAME);
-                    return null;
-                }
-
-                sService = ITranPerfHub.Stub.asInterface(binder);
-
-                if (DEBUG) {
-                    Log.d(TAG, "Service connected: " + SERVICE_NAME);
-                }
-
-                return sService;
-
-            } catch (Exception e) {
-                Log.e(TAG, "Failed to get service", e);
-                return null;
-            }
-        }
+    public static void notifyEventEnd(int eventId, String extraStrings) {
+        long timestamp = SystemClock.elapsedRealtimeNanos();
+        notifyEventEnd(eventId, timestamp, extraStrings);
     }
+
+    // ==================== Native Methods ====================
+
+    /**
+     * Native method: Notify event start
+     *
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds
+     * @param numParams Number of valid parameters in intParams
+     * @param intParams Integer parameters array
+     * @param extraStrings Optional string parameter
+     */
+    private static native void nativeNotifyEventStart(
+            int eventId, long timestamp, int numParams, int[] intParams, String extraStrings);
+
+    /**
+     * Native method: Notify event end
+     *
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds
+     * @param extraStrings Optional string parameter
+     */
+    private static native void nativeNotifyEventEnd(
+            int eventId, long timestamp, String extraStrings);
 }
