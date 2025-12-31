@@ -1,18 +1,12 @@
-package com.transsion.perfhub;
+package android.util;
 
 /**
- * TranPerfEvent - SDK API Definition
+ * TranPerfEvent - Performance Event API (SDK Stub)
  *
- * This is a stub API for third-party applications.
- * The actual implementation is provided by the system.
+ * This is a stub implementation for SDK compilation.
+ * The actual implementation is provided by the system overlay.
  *
- * Usage:
- *   Add dependency in build.gradle:
- *     compileOnly 'com.transsion.perfhub:perfhub-sdk:1.0.0'
- *
- *   In your code:
- *     long ts = TranPerfEvent.now();
- *     TranPerfEvent.notifyEventStart(TranPerfEvent.EVENT_APP_LAUNCH, ts, packageName);
+ * @hide
  */
 public final class TranPerfEvent {
     // ==================== Event Type Constants ====================
@@ -20,106 +14,102 @@ public final class TranPerfEvent {
     /** App launch event */
     public static final int EVENT_APP_LAUNCH = 1;
 
+    /** App switch event */
+    public static final int EVENT_APP_SWITCH = 2;
+
     /** Scroll event */
-    public static final int EVENT_SCROLL = 2;
+    public static final int EVENT_SCROLL = 3;
+
+    /** Camera open event */
+    public static final int EVENT_CAMERA_OPEN = 4;
+
+    /** Game start event */
+    public static final int EVENT_GAME_START = 5;
+
+    /** Video play event */
+    public static final int EVENT_VIDEO_PLAY = 6;
 
     /** Animation event */
-    public static final int EVENT_ANIMATION = 3;
+    public static final int EVENT_ANIMATION = 7;
 
-    /** Window switch event */
-    public static final int EVENT_WINDOW_SWITCH = 4;
-
-    /** Touch event */
-    public static final int EVENT_TOUCH = 5;
-
-    /** App switch event */
-    public static final int EVENT_APP_SWITCH = 6;
-
-    // ==================== Event Parameter Constants ====================
-
-    /** Cold start for app launch */
-    public static final int PARAM_COLD_START = 0;
-
-    /** Warm start for app launch */
-    public static final int PARAM_WARM_START = 1;
-
-    // Prevent instantiation
-    private TranPerfEvent() {}
-
-    // ==================== API Methods (Stub) ====================
+    // ==================== Listener Interface ====================
 
     /**
-     * Notify event start with timestamp only
+     * Listener interface for performance events
+     */
+    public interface TrEventListener {
+        void onEventStart(int eventId, long timestamp, int duration);
+        void onEventEnd(int eventId, long timestamp);
+    }
+
+    // ==================== Listener Management (Stub) ====================
+
+    /**
+     * Register an event listener
+     */
+    public static void registerListener(TrEventListener listener) {
+        throw new RuntimeException("Stub! System implementation required.");
+    }
+
+    /**
+     * Unregister an event listener
+     */
+    public static void unregisterListener(TrEventListener listener) {
+        throw new RuntimeException("Stub! System implementation required.");
+    }
+
+    // ==================== Event Start Methods ====================
+
+    /**
+     * Overload 1: eventId + timestamp
      */
     public static void notifyEventStart(int eventId, long timestamp) {
         throw new RuntimeException("Stub! System implementation required.");
     }
 
     /**
-     * Notify event start with timestamp + int parameter
+     * Overload 2: eventId + timestamp + string
      */
-    public static void notifyEventStart(int eventId, long timestamp, int param) {
+    public static void notifyEventStart(int eventId, long timestamp, String extraString) {
         throw new RuntimeException("Stub! System implementation required.");
     }
 
     /**
-     * Notify event start with timestamp + int array
-     */
-    public static void notifyEventStart(int eventId, long timestamp, int[] intParams) {
-        throw new RuntimeException("Stub! System implementation required.");
-    }
-
-    /**
-     * Notify event start with timestamp + string parameter
-     */
-    public static void notifyEventStart(int eventId, long timestamp, String stringParam) {
-        throw new RuntimeException("Stub! System implementation required.");
-    }
-
-    /**
-     * Notify event start with timestamp + string array
+     * Overload 3: eventId + timestamp + string[]
      */
     public static void notifyEventStart(int eventId, long timestamp, String[] stringParams) {
         throw new RuntimeException("Stub! System implementation required.");
     }
 
     /**
-     * Notify event start with timestamp + int + string
+     * Overload 4: eventId + timestamp + numParams + int[]
      */
     public static void notifyEventStart(
-            int eventId, long timestamp, int intParam, String stringParam) {
+            int eventId, long timestamp, int numParams, int[] intParams) {
         throw new RuntimeException("Stub! System implementation required.");
     }
 
     /**
-     * Notify event start with timestamp + int array + string
+     * Overload 5: eventId + timestamp + numParams + int[] + string[]
      */
     public static void notifyEventStart(
-            int eventId, long timestamp, int[] intParams, String stringParam) {
-        throw new RuntimeException("Stub! System implementation required.");
-    }
-
-    /**
-     * Notify event start with timestamp + int array + string array
-     */
-    public static void notifyEventStart(
-            int eventId, long timestamp, int[] intParams, String[] stringParams) {
+            int eventId, long timestamp, int numParams, int[] intParams, String[] stringParams) {
         throw new RuntimeException("Stub! System implementation required.");
     }
 
     // ==================== Event End Methods ====================
 
     /**
-     * Notify event end with timestamp
+     * Notify event end (minimal)
      */
     public static void notifyEventEnd(int eventId, long timestamp) {
         throw new RuntimeException("Stub! System implementation required.");
     }
 
     /**
-     * Notify event end with timestamp and string parameter
+     * Notify event end with string parameter
      */
-    public static void notifyEventEnd(int eventId, long timestamp, String extraStrings) {
+    public static void notifyEventEnd(int eventId, long timestamp, String extraString) {
         throw new RuntimeException("Stub! System implementation required.");
     }
 
@@ -130,5 +120,10 @@ public final class TranPerfEvent {
      */
     public static long now() {
         throw new RuntimeException("Stub! System implementation required.");
+    }
+
+    // Private constructor to prevent instantiation
+    private TranPerfEvent() {
+        throw new AssertionError("TranPerfEvent cannot be instantiated");
     }
 }
