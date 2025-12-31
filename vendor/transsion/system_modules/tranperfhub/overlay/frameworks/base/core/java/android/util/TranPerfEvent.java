@@ -2,7 +2,7 @@ package android.util;
 
 import android.os.SystemClock;
 
-import com.transsion.perfhub.aconfig.Flags;
+import com.transsion.perfhub.flags.Flags;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.CopyOnWriteArrayList;

@@ -14,14 +14,8 @@
 
 // ==================== Aconfig Flag Handling ====================
 
-#ifdef __ANDROID_VENDOR__
-// Vendor 分区: 无 aconfig，默认启用
-#define CHECK_FLAG() (true)
-#else
-// System 分区: 使用 aconfig
 #include <com_transsion_perfhub_flags.h>
 #define CHECK_FLAG() (com::transsion::perfhub::flags::enable_tranperfhub())
-#endif
 
 // ==================== Constants ====================
 

@@ -39,15 +39,6 @@ cc_library_shared {
         "vendor.transsion.hardware.perfhub-V1-ndk",
     ],
 
-//     // Aconfig flags 只在 System 分区可用??
-//     target: {
-//         platform: {
-//             static_libs: [
-//                 "libtranperfhub_flags_c",
-//             ],
-//         },
-//     },
-    
     static_libs: [
         "libtranperfhub_flags_c",
    ],
