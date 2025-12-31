@@ -1,0 +1,33 @@
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
+}
+
+// ==================== Native Demo 可执行文件 ====================
+
+cc_binary {
+    name: "perfhub_listener_demo",
+
+    vendor: true,
+    
+    srcs: [
+        "PerfHubListenerDemo.cpp",
+    ],
+    
+    shared_libs: [
+        "libbase",
+        "libbinder_ndk",
+        "liblog",
+        "libutils",
+        "vendor.transsion.hardware.perfhub-V1-ndk",
+    ],
+    
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
+    
+    cppflags: [
+        "-std=c++17",
+    ],
+}
