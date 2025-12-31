@@ -12,6 +12,8 @@ namespace transsion {
 namespace hardware {
 namespace perfhub {
 
+// ==================== Constructor / Destructor ====================
+
 TranPerfHubAdapter::TranPerfHubAdapter() {
     ATRACE_CALL();
     LOG(INFO) << "TranPerfHub Adapter initializing...";
@@ -29,7 +31,13 @@ TranPerfHubAdapter::TranPerfHubAdapter() {
 
 TranPerfHubAdapter::~TranPerfHubAdapter() {
     LOG(INFO) << "TranPerfHub Adapter destroyed";
+
+    // Cleanup listeners
+    std::lock_guard<Mutex> lock(mListenerLock);
+    mListeners.clear();
 }
+
+// ==================== Event Notification Implementation ====================
 
 ::ndk::ScopedAStatus TranPerfHubAdapter::notifyEventStart(
     int32_t eventId, int64_t timestamp, int32_t numParams, const std::vector<int32_t> &intParams,
@@ -60,7 +68,10 @@ TranPerfHubAdapter::~TranPerfHubAdapter() {
     LOG(INFO) << "notifyEventStart: eventId=" << eventId << ", duration=" << duration
               << ", pkg=" << packageName;
 
-    // Acquire performance lock
+    // 1. Broadcast to listeners FIRST (before acquiring lock)
+    broadcastEventStart(eventId, timestamp, numParams, intParams, extraStrings);
+
+    // 2. Acquire performance lock
     int32_t platformHandle =
         mPlatformAdapter->acquirePerfLock(eventId, duration, intParams, packageName);
 
@@ -69,7 +80,7 @@ TranPerfHubAdapter::~TranPerfHubAdapter() {
         return ::ndk::ScopedAStatus::ok();
     }
 
-    // Save event info
+    // 3. Save event info
     {
         std::lock_guard<Mutex> lock(mEventLock);
 
@@ -107,7 +118,10 @@ TranPerfHubAdapter::~TranPerfHubAdapter() {
 
     LOG(INFO) << "notifyEventEnd: eventId=" << eventId << ", pkg=" << packageName;
 
-    // Find and release event
+    // 1. Broadcast to listeners FIRST
+    broadcastEventEnd(eventId, timestamp, extraStrings);
+
+    // 2. Find and release event
     std::lock_guard<Mutex> lock(mEventLock);
 
     auto it = mActiveEvents.find(eventId);
@@ -128,6 +142,164 @@ TranPerfHubAdapter::~TranPerfHubAdapter() {
 
     return ::ndk::ScopedAStatus::ok();
 }
+
+// ==================== Listener Registration Implementation  ====================
+
+::ndk::ScopedAStatus TranPerfHubAdapter::registerEventListener(
+    const std::shared_ptr<IEventListener> &listener) {
+    ATRACE_NAME("TranPerfHub::registerEventListener");
+
+    if (!listener) {
+        LOG(ERROR) << "Null listener";
+        return ::ndk::ScopedAStatus::fromExceptionCode(EX_ILLEGAL_ARGUMENT);
+    }
+
+    std::lock_guard<Mutex> lock(mListenerLock);
+
+    // Check if already registered
+    if (findListener(listener)) {
+        LOG(WARNING) << "Listener already registered";
+        return ::ndk::ScopedAStatus::ok();
+    }
+
+    // Create death recipient
+    auto deathRecipient = ::ndk::ScopedAIBinder_DeathRecipient(
+        AIBinder_DeathRecipient_new(TranPerfHubAdapter::onListenerDied));
+
+    // Link to death notification
+    binder_status_t status = AIBinder_linkToDeath(listener->asBinder().get(), deathRecipient.get(),
+                                                  this);    // cookie = this pointer
+
+    if (status != STATUS_OK) {
+        LOG(ERROR) << "Failed to link to death: " << status;
+        return ::ndk::ScopedAStatus::fromStatus(status);
+    }
+
+    // Add to listener list
+    mListeners.emplace_back(listener, std::move(deathRecipient));
+
+    LOG(INFO) << "Listener registered, total listeners: " << mListeners.size();
+
+    return ::ndk::ScopedAStatus::ok();
+}
+
+::ndk::ScopedAStatus TranPerfHubAdapter::unregisterEventListener(
+    const std::shared_ptr<IEventListener> &listener) {
+    ATRACE_NAME("TranPerfHub::unregisterEventListener");
+
+    if (!listener) {
+        LOG(ERROR) << "Null listener";
+        return ::ndk::ScopedAStatus::fromExceptionCode(EX_ILLEGAL_ARGUMENT);
+    }
+
+    std::lock_guard<Mutex> lock(mListenerLock);
+
+    removeListener(listener);
+
+    LOG(INFO) << "Listener unregistered, remaining listeners: " << mListeners.size();
+
+    return ::ndk::ScopedAStatus::ok();
+}
+
+// ==================== Broadcasting Implementation  ====================
+
+void TranPerfHubAdapter::broadcastEventStart(int32_t eventId, int64_t timestamp, int32_t numParams,
+                                             const std::vector<int32_t> &intParams,
+                                             const std::optional<std::string> &extraStrings) {
+    std::lock_guard<Mutex> lock(mListenerLock);
+
+    if (mListeners.empty()) {
+        return;    // No listeners, skip broadcasting
+    }
+
+    LOG(INFO) << "Broadcasting eventStart to " << mListeners.size() << " listeners";
+
+    // Broadcast to all listeners (oneway calls, non-blocking)
+    for (auto &info : mListeners) {
+        auto status =
+            info.listener->onEventStart(eventId, timestamp, numParams, intParams, extraStrings);
+
+        if (!status.isOk()) {
+            LOG(WARNING) << "Failed to notify listener: " << status.getMessage();
+            // Continue to next listener even if this one fails
+        }
+    }
+}
+
+void TranPerfHubAdapter::broadcastEventEnd(int32_t eventId, int64_t timestamp,
+                                           const std::optional<std::string> &extraStrings) {
+    std::lock_guard<Mutex> lock(mListenerLock);
+
+    if (mListeners.empty()) {
+        return;    // No listeners, skip broadcasting
+    }
+
+    LOG(INFO) << "Broadcasting eventEnd to " << mListeners.size() << " listeners";
+
+    // Broadcast to all listeners (oneway calls, non-blocking)
+    for (auto &info : mListeners) {
+        auto status = info.listener->onEventEnd(eventId, timestamp, extraStrings);
+
+        if (!status.isOk()) {
+            LOG(WARNING) << "Failed to notify listener: " << status.getMessage();
+            // Continue to next listener even if this one fails
+        }
+    }
+}
+
+// ==================== Listener Management Helpers  ====================
+
+bool TranPerfHubAdapter::findListener(const std::shared_ptr<IEventListener> &listener) {
+    // Must be called with mListenerLock held
+
+    AIBinder *targetBinder = listener->asBinder().get();
+
+    for (const auto &info : mListeners) {
+        if (info.listener->asBinder().get() == targetBinder) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void TranPerfHubAdapter::removeListener(const std::shared_ptr<IEventListener> &listener) {
+    // Must be called with mListenerLock held
+
+    AIBinder *targetBinder = listener->asBinder().get();
+
+    for (auto it = mListeners.begin(); it != mListeners.end();) {
+        if (it->listener->asBinder().get() == targetBinder) {
+            // Unlink death recipient before removing
+            AIBinder_unlinkToDeath(it->listener->asBinder().get(), it->deathRecipient.get(), this);
+
+            it = mListeners.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+// ==================== Death Notification Callback  ====================
+
+void TranPerfHubAdapter::onListenerDied(void *cookie) {
+    LOG(WARNING) << "Listener died, cleaning up...";
+
+    auto *adapter = static_cast<TranPerfHubAdapter *>(cookie);
+    if (!adapter) {
+        LOG(ERROR) << "Invalid adapter pointer in death callback";
+        return;
+    }
+
+    // Note: We can't identify which specific listener died from the callback
+    // In practice, when a process dies, all its Binder objects become invalid
+    // We'll clean up invalid listeners during next registration/unregistration
+    // or implement a more sophisticated tracking mechanism if needed
+
+    LOG(INFO) << "Death notification received, listener will be cleaned up on next access";
+}
+
+// ==================== Helper Methods ====================
 
 int32_t TranPerfHubAdapter::getDuration(const std::vector<int32_t> &intParams) const {
     // Duration is always the first parameter

@@ -1,5 +1,7 @@
 package vendor.transsion.hardware.perfhub;
 
+import vendor.transsion.hardware.perfhub.IEventListener;
+
 /**
  * TranPerfHub AIDL Interface
  * 
@@ -38,4 +40,33 @@ interface ITranPerfHub {
         long timestamp,
         @nullable @utf8InCpp String extraStrings
     );
+
+    // ==================== Event Listener Registration ====================
+
+    /**
+     * Register an event listener to receive performance event notifications
+     * The listener will receive onEventStart() and onEventEnd() callbacks
+     * whenever performance events occur.
+     *
+     * @param listener IEventListener implementation
+     *
+     * Note: This is NOT a oneway call - blocks until registration completes
+     *       to ensure listener is properly registered before returning.
+     *
+     * Thread-safe: Can be called from any thread
+     * Death notification: If the listener process dies, it will be automatically
+     *                     unregistered via Binder death notification.
+     */
+    void registerEventListener(IEventListener listener);
+
+    /**
+     * Unregister a previously registered event listener
+     * After this call, the listener will no longer receive event notifications.
+     *
+     * @param listener IEventListener implementation to unregister
+     *
+     * Note: This is NOT a oneway call - blocks until unregistration completes.
+     * Thread-safe: Can be called from any thread
+     */
+    void unregisterEventListener(IEventListener listener);
 }

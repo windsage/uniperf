@@ -1,11 +1,16 @@
+// vendor/transsion/system_modules/tranperfhub/vendor/adapter/include/TranPerfHubAdapter.h
+
 #ifndef TRANPERFHUB_ADAPTER_H
 #define TRANPERFHUB_ADAPTER_H
 
 #include <aidl/vendor/transsion/hardware/perfhub/BnTranPerfHub.h>
+#include <aidl/vendor/transsion/hardware/perfhub/IEventListener.h>
+#include <android/binder_auto_utils.h>
 #include <utils/Mutex.h>
 
 #include <map>
 #include <memory>
+#include <vector>
 
 namespace vendor {
 namespace transsion {
@@ -13,6 +18,7 @@ namespace hardware {
 namespace perfhub {
 
 using ::aidl::vendor::transsion::hardware::perfhub::BnTranPerfHub;
+using ::aidl::vendor::transsion::hardware::perfhub::IEventListener;
 using ::android::Mutex;
 
 class PlatformAdapter;
@@ -24,9 +30,10 @@ class PlatformAdapter;
  *  - Implement ITranPerfHub AIDL interface
  *  - Manage event-to-handle mapping
  *  - Delegate platform-specific calls to PlatformAdapter
+ *  - Manage event listener registration and broadcasting
  *
  * Thread Safety:
- *  - AIDL methods are oneway (asynchronous)
+ *  - AIDL methods are oneway (asynchronous) except registration methods
  *  - Internal state protected by mutex
  */
 class TranPerfHubAdapter : public BnTranPerfHub {
@@ -34,7 +41,8 @@ public:
     TranPerfHubAdapter();
     ~TranPerfHubAdapter() override;
 
-    // AIDL interface implementation
+    // ==================== AIDL Event Notification Interface ====================
+
     ::ndk::ScopedAStatus notifyEventStart(int32_t eventId, int64_t timestamp, int32_t numParams,
                                           const std::vector<int32_t> &intParams,
                                           const std::optional<std::string> &extraStrings) override;
@@ -42,8 +50,29 @@ public:
     ::ndk::ScopedAStatus notifyEventEnd(int32_t eventId, int64_t timestamp,
                                         const std::optional<std::string> &extraStrings) override;
 
+    // ==================== AIDL Listener Registration Interface  ====================
+
+    /**
+     * Register an event listener
+     *
+     * Thread-safe: Can be called from any thread
+     * Blocking call: Waits until registration completes
+     */
+    ::ndk::ScopedAStatus registerEventListener(
+        const std::shared_ptr<IEventListener> &listener) override;
+
+    /**
+     * Unregister an event listener
+     *
+     * Thread-safe: Can be called from any thread
+     * Blocking call: Waits until unregistration completes
+     */
+    ::ndk::ScopedAStatus unregisterEventListener(
+        const std::shared_ptr<IEventListener> &listener) override;
+
 private:
-    // Event handle management
+    // ==================== Event Handle Management ====================
+
     struct EventInfo {
         int32_t platformHandle;     // Platform-specific handle
         int64_t startTime;          // Event start timestamp
@@ -55,9 +84,41 @@ private:
 
     std::unique_ptr<PlatformAdapter> mPlatformAdapter;
 
-    // Helper methods
+    // ==================== Listener Management  ====================
+
+    /**
+     * Listener information including death recipient
+     */
+    struct ListenerInfo {
+        std::shared_ptr<IEventListener> listener;
+        ::ndk::ScopedAIBinder_DeathRecipient deathRecipient;
+
+        ListenerInfo(std::shared_ptr<IEventListener> l, ::ndk::ScopedAIBinder_DeathRecipient dr)
+            : listener(std::move(l)), deathRecipient(std::move(dr)) {}
+    };
+
+    std::vector<ListenerInfo> mListeners;
+    Mutex mListenerLock;
+
+    // ==================== Helper Methods ====================
+
     int32_t getDuration(const std::vector<int32_t> &intParams) const;
     void cleanupExpiredEvents();
+
+    // Listener 管理辅助方法
+    bool findListener(const std::shared_ptr<IEventListener> &listener);
+    void removeListener(const std::shared_ptr<IEventListener> &listener);
+
+    // 广播事件给所有订阅者
+    void broadcastEventStart(int32_t eventId, int64_t timestamp, int32_t numParams,
+                             const std::vector<int32_t> &intParams,
+                             const std::optional<std::string> &extraStrings);
+
+    void broadcastEventEnd(int32_t eventId, int64_t timestamp,
+                           const std::optional<std::string> &extraStrings);
+
+    // 死亡通知回调
+    static void onListenerDied(void *cookie);
 };
 
 }    // namespace perfhub
