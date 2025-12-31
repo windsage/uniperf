@@ -1,59 +1,193 @@
 plugins {
-    id 'java-library'
+    id 'com.android.library'
     id 'maven-publish'
+    id 'signing'  // 如果需要签名
 }
 
-group = 'com.transsion.perfhub'
-version = '1.0.0'
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+android {
+    namespace 'com.transsion.perfhub.sdk'
+    compileSdkVersion 34
+    
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 34
+        
+        // 库版本信息
+        versionCode 1
+        versionName "1.0.0"
+        
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+    
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    
+    // 配置 libs 目录
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java']
+        }
+    }
 }
 
-// 生成 Javadoc JAR
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier = 'javadoc'
-    from javadoc.destinationDir
+dependencies {
+    // compileOnly 依赖 AIDL JAR
+    compileOnly files('libs/vendor.transsion.hardware.perfhub-V1-java.jar')
 }
 
-// 生成 Sources JAR
-task sourcesJar(type: Jar) {
-    archiveClassifier = 'sources'
-    from sourceSets.main.allSource
+// ==================== Maven 发布配置 ====================
+
+// 读取版本信息
+def libraryVersion = android.defaultConfig.versionName
+def libraryGroupId = 'com.transsion.perfhub'
+def libraryArtifactId = 'tranperfevent'
+
+// 在 AAR 中包含 AIDL JAR
+task copyAidlJarToAar(type: Copy) {
+    from 'libs/vendor.transsion.hardware.perfhub-V1-java.jar'
+    into "${buildDir}/intermediates/library_jar_classes_jar/release"
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from components.java
+tasks.withType(Jar) {
+    dependsOn copyAidlJarToAar
+}
 
-            artifact sourcesJar
-            artifact javadocJar
-
-            groupId = 'com.transsion.perfhub'
-            artifactId = 'tranperfevent'
-            version = '1.0.0'
-
-            pom {
-                name = 'TranPerfEvent'
-                description = 'Transsion Performance Event API'
-                url = 'https://www.transsion.com'
-
-                licenses {
-                    license {
-                        name = 'Proprietary'
-                        url = 'https://www.transsion.com/license'
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                // 使用 Android Library 组件
+                from components.release
+                
+                // Maven 坐标
+                groupId = libraryGroupId
+                artifactId = libraryArtifactId
+                version = libraryVersion
+                
+                // 生成源码 JAR (可选)
+                artifact androidSourcesJar
+                
+                // 生成 Javadoc JAR (可选)
+                artifact androidJavadocsJar
+                
+                // 配置 POM
+                pom {
+                    name = 'TranPerfEvent SDK'
+                    description = 'Performance event notification SDK for Transsion devices'
+                    url = 'https://github.com/transsion/tranperfhub'
+                    
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    
+                    developers {
+                        developer {
+                            id = 'transsion'
+                            name = 'Transsion Holdings'
+                            email = 'developer@transsion.com'
+                        }
+                    }
+                    
+                    scm {
+                        connection = 'scm:git:git://github.com/transsion/tranperfhub.git'
+                        developerConnection = 'scm:git:ssh://github.com/transsion/tranperfhub.git'
+                        url = 'https://github.com/transsion/tranperfhub'
+                    }
+                    
+                    // 声明 AIDL JAR 为 provided 依赖
+                    withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+                        
+                        // AIDL JAR 依赖
+                        def aidlDep = dependenciesNode.appendNode('dependency')
+                        aidlDep.appendNode('groupId', 'vendor.transsion.hardware')
+                        aidlDep.appendNode('artifactId', 'perfhub-aidl')
+                        aidlDep.appendNode('version', '1.0.0')
+                        aidlDep.appendNode('scope', 'provided')  // compileOnly
                     }
                 }
             }
         }
-    }
-
-    repositories {
-        maven {
-            name = 'TranssionInternal'
-            url = uri("${rootProject.projectDir}/maven-repo")
+        
+        repositories {
+            // ==================== 本地 Maven 仓库 ====================
+            maven {
+                name = "Local"
+                url = uri("${rootProject.projectDir}/maven-repo")
+            }
+            
+            // ==================== 远程 Maven 仓库 ====================
+            maven {
+                name = "Release"
+                url = uri("https://your-maven-repo.com/releases")
+                credentials {
+                    username = findProperty("maven.username") ?: System.getenv("MAVEN_USERNAME")
+                    password = findProperty("maven.password") ?: System.getenv("MAVEN_PASSWORD")
+                }
+            }
+            
+            // ==================== Nexus / Artifactory 示例 ====================
+            /*
+            maven {
+                name = "Nexus"
+                def releasesRepoUrl = "https://nexus.example.com/repository/maven-releases/"
+                def snapshotsRepoUrl = "https://nexus.example.com/repository/maven-snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = findProperty("nexus.username")
+                    password = findProperty("nexus.password")
+                }
+            }
+            */
         }
     }
+}
+
+// ==================== 源码 JAR ====================
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+// ==================== Javadoc JAR ====================
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += files('libs/vendor.transsion.hardware.perfhub-V1-java.jar')
+    
+    // 排除错误
+    failOnError false
+    
+    options {
+        encoding = 'UTF-8'
+        charSet = 'UTF-8'
+        links "http://docs.oracle.com/javase/8/docs/api/"
+    }
+}
+
+task androidJavadocsJar(type: Jar) {
+    dependsOn androidJavadocs
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+
+// ==================== 签名配置 (可选) ====================
+
+signing {
+    // 使用 GPG 签名
+    sign publishing.publications.release
 }

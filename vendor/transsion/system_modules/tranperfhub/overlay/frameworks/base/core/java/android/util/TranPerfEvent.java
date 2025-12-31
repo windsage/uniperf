@@ -1,11 +1,15 @@
 package android.util;
 
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.os.SystemClock;
 
 import com.transsion.perfhub.flags.Flags;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import vendor.transsion.hardware.perfhub.IEventListener;
 
 /**
  * TranPerfEvent - Performance Event API
@@ -14,6 +18,34 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * This class is part of the Android Framework overlay.
  *
  * Thread-safe.
+ *
+ * Usage:
+ * <pre>
+ * // Send event
+ * long ts = TranPerfEvent.now();
+ * TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts, 3000, "com.android.settings");
+ *
+ * // Register simplified listener (Framework internal use)
+ * TranPerfEvent.registerListener(new TrEventListener() {
+ *     public void onEventStart(int eventId, long timestamp, int duration) {
+ *         // Handle event
+ *     }
+ *     public void onEventEnd(int eventId, long timestamp) {
+ *         // Handle event
+ *     }
+ * });
+ *
+ * // Register full AIDL listener (Advanced use)
+ * TranPerfEvent.registerEventListener(new IEventListener.Stub() {
+ *     public void onEventStart(int eventId, long timestamp, int numParams,
+ *                              int[] intParams, String extraStrings) {
+ *         // Handle full event data
+ *     }
+ *     public void onEventEnd(int eventId, long timestamp, String extraStrings) {
+ *         // Handle event end
+ *     }
+ * });
+ * </pre>
  */
 public final class TranPerfEvent {
     private static final String TAG = "TranPerfEvent";
@@ -48,10 +80,12 @@ public final class TranPerfEvent {
     /** Animation event */
     public static final int EVENT_ANIMATION = 7;
 
-    // ==================== Listener Interface ====================
+    // ==================== Listener Interfaces ====================
 
     /**
-     * Listener interface for performance events
+     * Simplified listener interface for Framework internal use
+     *
+     * Provides only essential event information for performance monitoring.
      */
     public interface TrEventListener {
         /**
@@ -74,23 +108,111 @@ public final class TranPerfEvent {
 
     // ==================== Listener Management ====================
 
-    private static final CopyOnWriteArrayList<TrEventListener> sListeners =
+    // Simplified listeners (Framework internal)
+    private static final CopyOnWriteArrayList<TrEventListener> sSimplifiedListeners =
+            new CopyOnWriteArrayList<>();
+
+    // Full AIDL listeners (Advanced use)
+    private static final CopyOnWriteArrayList<IEventListener> sAidlListeners =
             new CopyOnWriteArrayList<>();
 
     /**
-     * Register an event listener
+     * Register a simplified event listener (Framework internal use)
+     *
+     * This listener receives only essential event information.
+     *
+     * @param listener TrEventListener implementation
      */
     public static void registerListener(TrEventListener listener) {
-        if (listener != null && !sListeners.contains(listener)) {
-            sListeners.add(listener);
+        if (listener != null && !sSimplifiedListeners.contains(listener)) {
+            sSimplifiedListeners.add(listener);
+            if (DEBUG) {
+                Log.d(TAG, "Simplified listener registered, total: " + sSimplifiedListeners.size());
+            }
         }
     }
 
     /**
-     * Unregister an event listener
+     * Unregister a simplified event listener
+     *
+     * @param listener TrEventListener implementation to remove
      */
     public static void unregisterListener(TrEventListener listener) {
-        sListeners.remove(listener);
+        sSimplifiedListeners.remove(listener);
+        if (DEBUG) {
+            Log.d(TAG,
+                    "Simplified listener unregistered, remaining: " + sSimplifiedListeners.size());
+        }
+    }
+
+    /**
+     * Register a full AIDL event listener (Advanced use)
+     *
+     * This listener receives complete event information including all parameters.
+     * The listener will also be registered to TranPerfHub for remote events.
+     *
+     * @param listener IEventListener implementation
+     */
+    public static void registerEventListener(IEventListener listener) {
+        if (listener == null) {
+            Log.e(TAG, "Cannot register null AIDL listener");
+            return;
+        }
+
+        if (sAidlListeners.contains(listener)) {
+            Log.w(TAG, "AIDL listener already registered");
+            return;
+        }
+
+        // Add to local list
+        sAidlListeners.add(listener);
+
+        // Register to TranPerfHub for remote events
+        try {
+            if (!initReflection()) {
+                Log.e(TAG, "Failed to initialize TranPerfHub reflection");
+                return;
+            }
+
+            if (sRegisterListenerMethod != null) {
+                sRegisterListenerMethod.invoke(null, listener);
+                if (DEBUG) {
+                    Log.d(TAG, "AIDL listener registered, total: " + sAidlListeners.size());
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to register AIDL listener to TranPerfHub", e);
+        }
+    }
+
+    /**
+     * Unregister a full AIDL event listener
+     *
+     * @param listener IEventListener implementation to remove
+     */
+    public static void unregisterEventListener(IEventListener listener) {
+        if (listener == null) {
+            return;
+        }
+
+        // Remove from local list
+        sAidlListeners.remove(listener);
+
+        // Unregister from TranPerfHub
+        try {
+            if (!initReflection()) {
+                return;
+            }
+
+            if (sUnregisterListenerMethod != null) {
+                sUnregisterListenerMethod.invoke(null, listener);
+                if (DEBUG) {
+                    Log.d(TAG, "AIDL listener unregistered, remaining: " + sAidlListeners.size());
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to unregister AIDL listener from TranPerfHub", e);
+        }
     }
 
     // ==================== Reflection to TranPerfHub ====================
@@ -99,6 +221,8 @@ public final class TranPerfEvent {
     private static Class<?> sPerfHubClass = null;
     private static Method sNotifyStartMethod = null;
     private static Method sNotifyEndMethod = null;
+    private static Method sRegisterListenerMethod = null;
+    private static Method sUnregisterListenerMethod = null;
 
     /**
      * Initialize reflection to TranPerfHub (lazy)
@@ -116,19 +240,39 @@ public final class TranPerfEvent {
             try {
                 sPerfHubClass = Class.forName("com.transsion.perfhub.TranPerfHub");
 
-                sNotifyStartMethod = sPerfHubClass.getDeclaredMethod("notifyEventStart",
-                        int.class, // eventId
-                        long.class, // timestamp
-                        int.class, // numParams
-                        int[].class, // intParams
-                        String.class // extraStrings
-                );
+                // Event notification methods
+                sNotifyStartMethod =
+                        sPerfHubClass.getDeclaredMethod("notifyEventStart", int.class, // eventId
+                                long.class, // timestamp
+                                int.class, // numParams
+                                int[].class, // intParams
+                                String.class // extraStrings
+                        );
 
-                sNotifyEndMethod = sPerfHubClass.getDeclaredMethod("notifyEventEnd",
-                        int.class, // eventId
-                        long.class, // timestamp
-                        String.class // extraStrings
-                );
+                sNotifyEndMethod =
+                        sPerfHubClass.getDeclaredMethod("notifyEventEnd", int.class, // eventId
+                                long.class, // timestamp
+                                String.class // extraStrings
+                        );
+
+                // Listener registration methods (新增)
+                try {
+                    Class<?> listenerClass =
+                            Class.forName("vendor.transsion.hardware.perfhub.IEventListener");
+
+                    sRegisterListenerMethod =
+                            sPerfHubClass.getDeclaredMethod("registerEventListener", listenerClass);
+
+                    sUnregisterListenerMethod = sPerfHubClass.getDeclaredMethod(
+                            "unregisterEventListener", listenerClass);
+
+                    if (DEBUG) {
+                        Log.d(TAG, "Listener registration methods found");
+                    }
+                } catch (Exception e) {
+                    Log.w(TAG, "Listener registration methods not available: " + e.getMessage());
+                    // Not fatal - event notification still works
+                }
 
                 sReflectionInitialized = true;
                 return true;
@@ -207,7 +351,30 @@ public final class TranPerfEvent {
                             extraStrings));
         }
 
-        // Call TranPerfHub via reflection
+        // 1. Notify local AIDL listeners (完整参数)
+        if (!sAidlListeners.isEmpty()) {
+            for (IEventListener listener : sAidlListeners) {
+                try {
+                    listener.onEventStart(eventId, timestamp, numParams, intParams, extraStrings);
+                } catch (RemoteException e) {
+                    Log.e(TAG, "AIDL listener callback failed", e);
+                }
+            }
+        }
+
+        // 2. Notify local simplified listeners (精简参数)
+        if (!sSimplifiedListeners.isEmpty()) {
+            int duration = (intParams != null && intParams.length > 0) ? intParams[0] : 0;
+            for (TrEventListener listener : sSimplifiedListeners) {
+                try {
+                    listener.onEventStart(eventId, timestamp, duration);
+                } catch (Exception e) {
+                    Log.e(TAG, "Simplified listener callback failed", e);
+                }
+            }
+        }
+
+        // 3. Call TranPerfHub via reflection (远程通知)
         try {
             if (!initReflection()) {
                 return;
@@ -217,18 +384,6 @@ public final class TranPerfEvent {
 
         } catch (Exception e) {
             Log.e(TAG, "Failed to call TranPerfHub.notifyEventStart", e);
-        }
-
-        // Notify listeners
-        if (!sListeners.isEmpty()) {
-            int duration = (intParams != null && intParams.length > 0) ? intParams[0] : 0;
-            for (TrEventListener listener : sListeners) {
-                try {
-                    listener.onEventStart(eventId, timestamp, duration);
-                } catch (Exception e) {
-                    Log.e(TAG, "Listener callback failed", e);
-                }
-            }
         }
     }
 
@@ -261,7 +416,29 @@ public final class TranPerfEvent {
                                eventId, timestamp, latency, latency / 1_000_000.0, extraString));
         }
 
-        // Call TranPerfHub via reflection
+        // 1. Notify local AIDL listeners (完整参数)
+        if (!sAidlListeners.isEmpty()) {
+            for (IEventListener listener : sAidlListeners) {
+                try {
+                    listener.onEventEnd(eventId, timestamp, extraString);
+                } catch (RemoteException e) {
+                    Log.e(TAG, "AIDL listener callback failed", e);
+                }
+            }
+        }
+
+        // 2. Notify local simplified listeners
+        if (!sSimplifiedListeners.isEmpty()) {
+            for (TrEventListener listener : sSimplifiedListeners) {
+                try {
+                    listener.onEventEnd(eventId, timestamp);
+                } catch (Exception e) {
+                    Log.e(TAG, "Simplified listener callback failed", e);
+                }
+            }
+        }
+
+        // 3. Call TranPerfHub via reflection (远程通知)
         try {
             if (!initReflection()) {
                 return;
@@ -271,17 +448,6 @@ public final class TranPerfEvent {
 
         } catch (Exception e) {
             Log.e(TAG, "Failed to call TranPerfHub.notifyEventEnd", e);
-        }
-
-        // Notify listeners
-        if (!sListeners.isEmpty()) {
-            for (TrEventListener listener : sListeners) {
-                try {
-                    listener.onEventEnd(eventId, timestamp);
-                } catch (Exception e) {
-                    Log.e(TAG, "Listener callback failed", e);
-                }
-            }
         }
     }
 

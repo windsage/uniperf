@@ -1,7 +1,11 @@
 package com.transsion.perfhub;
 
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
+
+import vendor.transsion.hardware.perfhub.IEventListener;
 
 /**
  * TranPerfHub - Unified Performance Event Notification
@@ -35,6 +39,8 @@ public final class TranPerfHub {
     private TranPerfHub() {
         throw new AssertionError("TranPerfHub cannot be instantiated");
     }
+
+    // ==================== Event Notification Methods ====================
 
     /**
      * Notify performance event start
@@ -122,6 +128,105 @@ public final class TranPerfHub {
         notifyEventEnd(eventId, timestamp, extraStrings);
     }
 
+    // ==================== Event Listener Registration Methods ====================
+
+    /**
+     * Register an event listener to receive performance event notifications
+     *
+     * The listener will receive onEventStart() and onEventEnd() callbacks
+     * whenever performance events occur.
+     *
+     * @param listener IEventListener implementation (must not be null)
+     * @throws IllegalArgumentException if listener is null
+     * @throws RemoteException if registration fails
+     *
+     * Usage:
+     * <pre>
+     * IEventListener listener = new IEventListener.Stub() {
+     *     @Override
+     *     public void onEventStart(int eventId, long timestamp, int numParams,
+     *                              int[] intParams, String extraStrings) {
+     *         // Handle event start
+     *     }
+     *
+     *     @Override
+     *     public void onEventEnd(int eventId, long timestamp, String extraStrings) {
+     *         // Handle event end
+     *     }
+     * };
+     *
+     * TranPerfHub.registerEventListener(listener);
+     * </pre>
+     */
+    public static void registerEventListener(IEventListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Listener cannot be null");
+        }
+
+        if (DEBUG) {
+            Log.d(TAG, "registerEventListener: " + listener);
+        }
+
+        try {
+            // Get binder object
+            IBinder binder = listener.asBinder();
+            if (binder == null) {
+                Log.e(TAG, "Failed to get binder from listener");
+                throw new IllegalArgumentException("Listener binder is null");
+            }
+
+            // Call native method
+            nativeRegisterEventListener(binder);
+
+            if (DEBUG) {
+                Log.d(TAG, "Listener registered successfully");
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to register event listener", e);
+            throw new RuntimeException("Failed to register event listener", e);
+        }
+    }
+
+    /**
+     * Unregister a previously registered event listener
+     *
+     * After this call, the listener will no longer receive event notifications.
+     *
+     * @param listener IEventListener implementation to unregister (must not be null)
+     * @throws IllegalArgumentException if listener is null
+     * @throws RemoteException if unregistration fails
+     */
+    public static void unregisterEventListener(IEventListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Listener cannot be null");
+        }
+
+        if (DEBUG) {
+            Log.d(TAG, "unregisterEventListener: " + listener);
+        }
+
+        try {
+            // Get binder object
+            IBinder binder = listener.asBinder();
+            if (binder == null) {
+                Log.e(TAG, "Failed to get binder from listener");
+                throw new IllegalArgumentException("Listener binder is null");
+            }
+
+            // Call native method
+            nativeUnregisterEventListener(binder);
+
+            if (DEBUG) {
+                Log.d(TAG, "Listener unregistered successfully");
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to unregister event listener", e);
+            throw new RuntimeException("Failed to unregister event listener", e);
+        }
+    }
+
     // ==================== Native Methods ====================
 
     /**
@@ -145,4 +250,18 @@ public final class TranPerfHub {
      */
     private static native void nativeNotifyEventEnd(
             int eventId, long timestamp, String extraStrings);
+
+    /**
+     * Native method: Register event listener
+     *
+     * @param listenerBinder Binder object of IEventListener
+     */
+    private static native void nativeRegisterEventListener(IBinder listenerBinder);
+
+    /**
+     * Native method: Unregister event listener
+     *
+     * @param listenerBinder Binder object of IEventListener
+     */
+    private static native void nativeUnregisterEventListener(IBinder listenerBinder);
 }

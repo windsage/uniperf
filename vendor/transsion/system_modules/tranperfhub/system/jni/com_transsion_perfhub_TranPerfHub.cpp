@@ -1,7 +1,7 @@
 /*
  * TranPerfHub JNI Implementation
  *
- * 职责: 纯 AIDL 客户端，透传调用到 Vendor 层
+ * 职责: AIDL 客户端，透传调用到 Vendor 层 TranPerfHubAdapter
  */
 
 #define LOG_TAG "TranPerfHub-JNI"
@@ -13,11 +13,15 @@
 #include <utils/Mutex.h>
 
 // Vendor AIDL 接口
+#include <aidl/vendor/transsion/hardware/perfhub/IEventListener.h>
 #include <aidl/vendor/transsion/hardware/perfhub/ITranPerfHub.h>
+#include <android/binder_ibinder.h>
+#include <android/binder_ibinder_jni.h>
 #include <android/binder_manager.h>
 
 using namespace android;
 
+using aidl::vendor::transsion::hardware::perfhub::IEventListener;
 using aidl::vendor::transsion::hardware::perfhub::ITranPerfHub;
 using ::ndk::ScopedAStatus;
 using ::ndk::SpAIBinder;
@@ -75,85 +79,92 @@ static std::shared_ptr<ITranPerfHub> getVendorService() {
 static void resetVendorService() {
     AutoMutex _l(gServiceLock);
     gVendorService = nullptr;
+    ALOGW("Vendor service reset");
 }
 
-// ==================== JNI 方法实现 ====================
+// ==================== JNI 方法实现 - Event Notification ====================
 
 /**
- * 初始化
- *
- * Java 调用: TranPerfHub.nativeInit()
+ * Notify event start
  */
-static void nativeInit(JNIEnv *env, jclass clazz) {
+static void nativeNotifyEventStart(JNIEnv *env, jclass clazz, jint eventId, jlong timestamp,
+                                   jint numParams, jintArray intParams, jstring extraStrings) {
     if (DEBUG) {
-        ALOGD("nativeInit called");
+        ALOGD("nativeNotifyEventStart: eventId=%d, timestamp=%lld, numParams=%d", eventId,
+              (long long)timestamp, numParams);
     }
 
-    // 预加载服务
-    getVendorService();
-}
+    // Validate parameters
+    if (intParams == nullptr) {
+        ALOGE("intParams is null");
+        return;
+    }
 
-/**
- * 获取性能锁
- *
- * Java 调用: TranPerfHub.nativeAcquirePerfLock(eventId, eventParam)
- *
- * @param eventId 事件类型
- * @param eventParam 事件参数
- * @return handle (>0 成功, <=0 失败)
- */
-/**
- * 获取性能锁
- *
- * 注意: AIDL 是异步的，无法返回真实 handle
- * 我们返回一个本地生成的伪 handle 用于 Java 层管理
- */
-static jint nativeAcquirePerfLock(JNIEnv *env, jclass clazz, jint eventId, jint eventParam) {
-    if (DEBUG) {
-        ALOGD("nativeAcquirePerfLock: eventId=%d, eventParam=%d", eventId, eventParam);
+    jsize arrayLength = env->GetArrayLength(intParams);
+    if (arrayLength != numParams) {
+        ALOGE("Parameter count mismatch: expected=%d, actual=%d", numParams, arrayLength);
+        return;
+    }
+
+    if (numParams < 1) {
+        ALOGE("Invalid numParams: %d", numParams);
+        return;
     }
 
     // 获取 Vendor 服务
     std::shared_ptr<ITranPerfHub> service = getVendorService();
     if (service == nullptr) {
         ALOGE("Vendor service not available");
-        return -1;
+        return;
     }
 
-    // 调用异步 AIDL 接口 (oneway, 立即返回)
+    // 转换 intParams
+    std::vector<int32_t> params;
+    params.reserve(numParams);
+
+    jint *paramsArray = env->GetIntArrayElements(intParams, nullptr);
+    if (paramsArray != nullptr) {
+        for (int i = 0; i < numParams; i++) {
+            params.push_back(static_cast<int32_t>(paramsArray[i]));
+        }
+        env->ReleaseIntArrayElements(intParams, paramsArray, JNI_ABORT);
+    } else {
+        ALOGE("Failed to get intParams array");
+        return;
+    }
+
+    // 转换 extraStrings
+    std::optional<std::string> extraStr = std::nullopt;
+    if (extraStrings != nullptr) {
+        const char *str = env->GetStringUTFChars(extraStrings, nullptr);
+        if (str != nullptr) {
+            extraStr = std::string(str);
+            env->ReleaseStringUTFChars(extraStrings, str);
+        }
+    }
+
+    // 调用 AIDL 接口 (oneway, 不阻塞)
     ScopedAStatus status =
-        service->notifyEventStart(static_cast<int32_t>(eventId), static_cast<int32_t>(eventParam));
+        service->notifyEventStart(eventId, timestamp, numParams, params, extraStr);
 
     if (!status.isOk()) {
-        ALOGE("notifyEventStart failed: %s", status.getDescription().c_str());
+        ALOGE("notifyEventStart failed: %s", status.getMessage());
         resetVendorService();
-        return -1;
+        return;
     }
 
-    // 返回 eventId 作为伪 handle
-    // (Java 层用于管理，Vendor 层通过 eventId 查找真实 handle)
     if (DEBUG) {
-        ALOGD("Event sent: eventId=%d", eventId);
+        ALOGD("Event started: eventId=%d", eventId);
     }
-
-    return static_cast<jint>(eventId);
 }
 
 /**
- * 释放性能锁
- *
- * Java 调用: TranPerfHub.nativeReleasePerfLock(handle)
- *
- * @param handle 性能锁句柄
+ * Notify event end
  */
-static void nativeReleasePerfLock(JNIEnv *env, jclass clazz, jint handle) {
+static void nativeNotifyEventEnd(JNIEnv *env, jclass clazz, jint eventId, jlong timestamp,
+                                 jstring extraStrings) {
     if (DEBUG) {
-        ALOGD("nativeReleasePerfLock: handle=%d", handle);
-    }
-
-    if (handle <= 0) {
-        ALOGW("Invalid handle: %d", handle);
-        return;
+        ALOGD("nativeNotifyEventEnd: eventId=%d, timestamp=%lld", eventId, (long long)timestamp);
     }
 
     // 获取 Vendor 服务
@@ -163,14 +174,21 @@ static void nativeReleasePerfLock(JNIEnv *env, jclass clazz, jint handle) {
         return;
     }
 
-    // handle 就是 eventId 参考上面
-    int32_t eventId = static_cast<int32_t>(handle);
+    // 转换 extraStrings
+    std::optional<std::string> extraStr = std::nullopt;
+    if (extraStrings != nullptr) {
+        const char *str = env->GetStringUTFChars(extraStrings, nullptr);
+        if (str != nullptr) {
+            extraStr = std::string(str);
+            env->ReleaseStringUTFChars(extraStrings, str);
+        }
+    }
 
-    // 调用异步 AIDL 接口
-    ScopedAStatus status = service->notifyEventEnd(eventId);
+    // 调用 AIDL 接口 (oneway, 不阻塞)
+    ScopedAStatus status = service->notifyEventEnd(eventId, timestamp, extraStr);
 
     if (!status.isOk()) {
-        ALOGE("notifyEventEnd failed: %s", status.getDescription().c_str());
+        ALOGE("notifyEventEnd failed: %s", status.getMessage());
         resetVendorService();
         return;
     }
@@ -180,12 +198,129 @@ static void nativeReleasePerfLock(JNIEnv *env, jclass clazz, jint handle) {
     }
 }
 
+// ==================== JNI 方法实现 - Listener Registration ====================
+
+/**
+ * Register event listener
+ */
+static void nativeRegisterEventListener(JNIEnv *env, jclass clazz, jobject listenerBinder) {
+    if (DEBUG) {
+        ALOGD("nativeRegisterEventListener");
+    }
+
+    // Validate parameter
+    if (listenerBinder == nullptr) {
+        ALOGE("listenerBinder is null");
+        jniThrowException(env, "java/lang/IllegalArgumentException", "Listener binder is null");
+        return;
+    }
+
+    // 获取 Vendor 服务
+    std::shared_ptr<ITranPerfHub> service = getVendorService();
+    if (service == nullptr) {
+        ALOGE("Vendor service not available");
+        jniThrowException(env, "java/lang/RuntimeException", "Vendor service not available");
+        return;
+    }
+
+    // 将 Java Binder 转换为 Native AIBinder
+    AIBinder *aiBinder = AIBinder_fromJavaBinder(env, listenerBinder);
+    if (aiBinder == nullptr) {
+        ALOGE("Failed to convert Java binder to AIBinder");
+        jniThrowException(env, "java/lang/RuntimeException", "Failed to convert binder");
+        return;
+    }
+
+    // 转换为 IEventListener
+    SpAIBinder spBinder(aiBinder);    // Takes ownership
+    std::shared_ptr<IEventListener> listener = IEventListener::fromBinder(spBinder);
+
+    if (listener == nullptr) {
+        ALOGE("Failed to convert AIBinder to IEventListener");
+        jniThrowException(env, "java/lang/RuntimeException", "Failed to convert to IEventListener");
+        return;
+    }
+
+    // 调用 AIDL 接口注册监听器
+    ScopedAStatus status = service->registerEventListener(listener);
+
+    if (!status.isOk()) {
+        ALOGE("registerEventListener failed: %s", status.getMessage());
+        jniThrowException(env, "android/os/RemoteException", status.getMessage());
+        return;
+    }
+
+    if (DEBUG) {
+        ALOGD("Listener registered successfully");
+    }
+}
+
+/**
+ * Unregister event listener
+ */
+static void nativeUnregisterEventListener(JNIEnv *env, jclass clazz, jobject listenerBinder) {
+    if (DEBUG) {
+        ALOGD("nativeUnregisterEventListener");
+    }
+
+    // Validate parameter
+    if (listenerBinder == nullptr) {
+        ALOGE("listenerBinder is null");
+        jniThrowException(env, "java/lang/IllegalArgumentException", "Listener binder is null");
+        return;
+    }
+
+    // 获取 Vendor 服务
+    std::shared_ptr<ITranPerfHub> service = getVendorService();
+    if (service == nullptr) {
+        ALOGE("Vendor service not available");
+        jniThrowException(env, "java/lang/RuntimeException", "Vendor service not available");
+        return;
+    }
+
+    // 将 Java Binder 转换为 Native AIBinder
+    AIBinder *aiBinder = AIBinder_fromJavaBinder(env, listenerBinder);
+    if (aiBinder == nullptr) {
+        ALOGE("Failed to convert Java binder to AIBinder");
+        jniThrowException(env, "java/lang/RuntimeException", "Failed to convert binder");
+        return;
+    }
+
+    // 转换为 IEventListener
+    SpAIBinder spBinder(aiBinder);    // Takes ownership
+    std::shared_ptr<IEventListener> listener = IEventListener::fromBinder(spBinder);
+
+    if (listener == nullptr) {
+        ALOGE("Failed to convert AIBinder to IEventListener");
+        jniThrowException(env, "java/lang/RuntimeException", "Failed to convert to IEventListener");
+        return;
+    }
+
+    // 调用 AIDL 接口取消注册监听器
+    ScopedAStatus status = service->unregisterEventListener(listener);
+
+    if (!status.isOk()) {
+        ALOGE("unregisterEventListener failed: %s", status.getMessage());
+        jniThrowException(env, "android/os/RemoteException", status.getMessage());
+        return;
+    }
+
+    if (DEBUG) {
+        ALOGD("Listener unregistered successfully");
+    }
+}
+
 // ==================== JNI 方法注册 ====================
 
 static const JNINativeMethod gMethods[] = {
-    {"nativeInit", "()V", (void *)nativeInit},
-    {"nativeAcquirePerfLock", "(II)I", (void *)nativeAcquirePerfLock},
-    {"nativeReleasePerfLock", "(I)V", (void *)nativeReleasePerfLock},
+    // Event notification
+    {"nativeNotifyEventStart", "(IJII[ILjava/lang/String;)V", (void *)nativeNotifyEventStart},
+    {"nativeNotifyEventEnd", "(IJLjava/lang/String;)V", (void *)nativeNotifyEventEnd},
+
+    // Listener registration
+    {"nativeRegisterEventListener", "(Landroid/os/IBinder;)V", (void *)nativeRegisterEventListener},
+    {"nativeUnregisterEventListener", "(Landroid/os/IBinder;)V",
+     (void *)nativeUnregisterEventListener},
 };
 
 /**
@@ -206,6 +341,6 @@ int register_com_transsion_perfhub_TranPerfHub(JNIEnv *env) {
         return result;
     }
 
-    ALOGD("JNI registered: %s", className);
+    ALOGD("JNI registered: %s (%zu methods)", className, NELEM(gMethods));
     return JNI_OK;
 }

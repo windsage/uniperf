@@ -9,8 +9,22 @@
 
 #include <stdint.h>
 
+#include <memory>
 #include <string>
 #include <vector>
+
+// Forward declaration
+namespace aidl {
+namespace vendor {
+namespace transsion {
+namespace hardware {
+namespace perfhub {
+class IEventListener;
+}
+}    // namespace hardware
+}    // namespace transsion
+}    // namespace vendor
+}    // namespace aidl
 
 namespace android {
 namespace transsion {
@@ -42,6 +56,10 @@ namespace transsion {
  *
  * // Full parameters
  * TranPerfEvent::notifyEventStart(EVENT_APP_LAUNCH, ts, params, strings);
+ *
+ * // Register listener
+ * auto listener = ndk::SharedRefBase::make<MyEventListener>();
+ * TranPerfEvent::registerEventListener(listener);
  */
 class TranPerfEvent {
 public:
@@ -154,6 +172,50 @@ public:
      * @param extraString String parameter (usually packageName)
      */
     static void notifyEventEnd(int32_t eventId, int64_t timestamp, const std::string &extraString);
+
+    // ==================== Listener Registration Methods ====================
+
+    /**
+     * Register an event listener to receive performance event notifications
+     *
+     * The listener will receive onEventStart() and onEventEnd() callbacks
+     * whenever performance events occur.
+     *
+     * @param listener IEventListener implementation (must not be null)
+     * @return 0 on success, -1 on failure
+     *
+     * Usage:
+     * <pre>
+     * class MyListener : public BnEventListener {
+     *     ScopedAStatus onEventStart(...) override {
+     *         // Handle event
+     *         return ScopedAStatus::ok();
+     *     }
+     *     ScopedAStatus onEventEnd(...) override {
+     *         // Handle event
+     *         return ScopedAStatus::ok();
+     *     }
+     * };
+     *
+     * auto listener = ndk::SharedRefBase::make<MyListener>();
+     * TranPerfEvent::registerEventListener(listener);
+     * </pre>
+     */
+    static int32_t registerEventListener(
+        const std::shared_ptr<::aidl::vendor::transsion::hardware::perfhub::IEventListener>
+            &listener);
+
+    /**
+     * Unregister a previously registered event listener
+     *
+     * After this call, the listener will no longer receive event notifications.
+     *
+     * @param listener IEventListener implementation to unregister
+     * @return 0 on success, -1 on failure
+     */
+    static int32_t unregisterEventListener(
+        const std::shared_ptr<::aidl::vendor::transsion::hardware::perfhub::IEventListener>
+            &listener);
 
     // ==================== Utility Methods ====================
 

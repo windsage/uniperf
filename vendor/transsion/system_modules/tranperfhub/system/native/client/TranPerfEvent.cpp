@@ -4,6 +4,7 @@
 
 #define LOG_TAG "TranPerfEvent"
 
+#include <aidl/vendor/transsion/hardware/perfhub/IEventListener.h>
 #include <aidl/vendor/transsion/hardware/perfhub/ITranPerfHub.h>
 #include <android/binder_manager.h>
 #include <perfhub/TranPerfEvent.h>
@@ -14,6 +15,7 @@
 
 // ==================== Aconfig Flag Handling ====================
 
+// System 和 Vendor 都使用 aconfig
 #include <com_transsion_perfhub_flags.h>
 #define CHECK_FLAG() (com::transsion::perfhub::flags::enable_tranperfhub())
 
@@ -24,6 +26,7 @@ static const char *SERVICE_NAME = "vendor.transsion.hardware.perfhub.ITranPerfHu
 
 // ==================== AIDL Service Management ====================
 
+using aidl::vendor::transsion::hardware::perfhub::IEventListener;
 using aidl::vendor::transsion::hardware::perfhub::ITranPerfHub;
 using ::ndk::ScopedAStatus;
 using ::ndk::SpAIBinder;
@@ -224,6 +227,96 @@ void TranPerfEvent::notifyEventEnd(int32_t eventId, int64_t timestamp,
     if (!status.isOk()) {
         ALOGE("AIDL call failed: %s", status.getMessage());
     }
+}
+
+// ==================== Listener Registration Methods ====================
+
+/**
+ * Register event listener
+ */
+int32_t TranPerfEvent::registerEventListener(const std::shared_ptr<IEventListener> &listener) {
+    // Check feature flag
+    if (!CHECK_FLAG()) {
+        if (DEBUG) {
+            ALOGD("TranPerfHub disabled by flag");
+        }
+        return -1;
+    }
+
+    // Validate parameter
+    if (!listener) {
+        ALOGE("Listener is null");
+        return -1;
+    }
+
+    // Get service
+    auto service = getService();
+    if (!service) {
+        ALOGE("Service not available");
+        return -1;
+    }
+
+    if (DEBUG) {
+        ALOGD("registerEventListener");
+    }
+
+    // Call AIDL interface
+    auto status = service->registerEventListener(listener);
+
+    if (!status.isOk()) {
+        ALOGE("registerEventListener failed: %s", status.getMessage());
+        return -1;
+    }
+
+    if (DEBUG) {
+        ALOGD("Listener registered successfully");
+    }
+
+    return 0;
+}
+
+/**
+ * Unregister event listener
+ */
+int32_t TranPerfEvent::unregisterEventListener(const std::shared_ptr<IEventListener> &listener) {
+    // Check feature flag
+    if (!CHECK_FLAG()) {
+        if (DEBUG) {
+            ALOGD("TranPerfHub disabled by flag");
+        }
+        return -1;
+    }
+
+    // Validate parameter
+    if (!listener) {
+        ALOGE("Listener is null");
+        return -1;
+    }
+
+    // Get service
+    auto service = getService();
+    if (!service) {
+        ALOGE("Service not available");
+        return -1;
+    }
+
+    if (DEBUG) {
+        ALOGD("unregisterEventListener");
+    }
+
+    // Call AIDL interface
+    auto status = service->unregisterEventListener(listener);
+
+    if (!status.isOk()) {
+        ALOGE("unregisterEventListener failed: %s", status.getMessage());
+        return -1;
+    }
+
+    if (DEBUG) {
+        ALOGD("Listener unregistered successfully");
+    }
+
+    return 0;
 }
 
 }    // namespace transsion

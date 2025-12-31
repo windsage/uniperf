@@ -32,29 +32,51 @@ public final class TranPerfEvent {
     /** Animation event */
     public static final int EVENT_ANIMATION = 7;
 
-    // ==================== Listener Interface ====================
+    // ==================== Listener Interfaces ====================
 
     /**
-     * Listener interface for performance events
+     * Simplified listener interface for Framework internal use
      */
     public interface TrEventListener {
         void onEventStart(int eventId, long timestamp, int duration);
         void onEventEnd(int eventId, long timestamp);
     }
 
-    // ==================== Listener Management (Stub) ====================
+    // ==================== Listener Management (Simplified) ====================
 
     /**
-     * Register an event listener
+     * Register a simplified event listener
      */
     public static void registerListener(TrEventListener listener) {
         throw new RuntimeException("Stub! System implementation required.");
     }
 
     /**
-     * Unregister an event listener
+     * Unregister a simplified event listener
      */
     public static void unregisterListener(TrEventListener listener) {
+        throw new RuntimeException("Stub! System implementation required.");
+    }
+
+    /**
+     * Register a full AIDL event listener
+     *
+     * Note: The actual parameter type is vendor.transsion.hardware.perfhub.IEventListener,
+     * but SDK cannot reference vendor AIDL directly. Use Object as placeholder.
+     *
+     * At runtime, the overlay implementation will handle the actual IEventListener type.
+     */
+    public static void registerEventListener(Object listener) {
+        throw new RuntimeException("Stub! System implementation required.");
+    }
+
+    /**
+     * Unregister a full AIDL event listener
+     *
+     * Note: The actual parameter type is vendor.transsion.hardware.perfhub.IEventListener,
+     * but SDK cannot reference vendor AIDL directly. Use Object as placeholder.
+     */
+    public static void unregisterEventListener(Object listener) {
         throw new RuntimeException("Stub! System implementation required.");
     }
 
