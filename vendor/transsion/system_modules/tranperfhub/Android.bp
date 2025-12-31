@@ -34,8 +34,8 @@ phony {
     name: "tranperfhub_vendor",
     required: [
         // Vendor Service
-        "libtranperfhub-vendor",
-
+        "libtranperfhub-adapter",
+        "libtranperfhub-client",
         // AIDL 接口
         "vendor.transsion.hardware.perfhub-V1-ndk",
 

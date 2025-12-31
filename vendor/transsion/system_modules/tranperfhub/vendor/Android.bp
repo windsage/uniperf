@@ -37,19 +37,3 @@ cc_library_shared {
         "-Wno-unused-parameter",
     ],
 }
-
-// ==================== 聚合目标 ====================
-
-phony {
-    name: "tranperfhub_vendor",
-    required: [
-        // Vendor Adapter (AIDL 服务端)
-        "libtranperfhub-adapter",
-
-        // 复用 System 的 Client 库
-        "libtranperfhub-client",
-
-        // AIDL 接口
-        "vendor.transsion.hardware.perfhub-V1-ndk",
-    ],
-}
