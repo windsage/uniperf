@@ -2,54 +2,33 @@ package {
     default_applicable_licenses: ["vendor_transsion_license"],
 }
 
-// ==================== libtranperfhub-vendor.so ====================
+// ==================== libtranperfhub-adapter.so ====================
+// Vendor AIDL 服务端实现
 
 cc_library_shared {
-    name: "libtranperfhub-vendor",
-
+    name: "libtranperfhub-adapter",
     vendor: true,
 
     srcs: [
-        "service/TranPerfHubService.cpp",
+        "adapter/TranPerfHubAdapter.cpp",
         "adapter/PlatformAdapter.cpp",
-        "init/register.cpp",
-        "client/TranPerfEvent.cpp",
-    ],
-
-    export_include_dirs: [
-        "include",
     ],
 
     local_include_dirs: [
-        "include",
-        "service",
-        "adapter",
-        "init",
-        "client",
+        "adapter/include",
     ],
 
-    header_libs: [
-        "libutils_headers",
-        "liblog_headers",
+    export_include_dirs: [
+        "adapter/include",
     ],
 
     shared_libs: [
-        "liblog",
-        "libutils",
-        "libcutils",
         "libbase",
         "libbinder_ndk",
+        "libcutils",
+        "liblog",
+        "libutils",
         "vendor.transsion.hardware.perfhub-V1-ndk",
-    ],
-
-    static_libs: [
-        "libtranperfhub_flags_c",
-    ],
-
-    // 运行时依赖
-    runtime_libs: [
-        "libqti-perfd-client",
-        "libpowerhal",
     ],
 
     cflags: [
@@ -57,46 +36,20 @@ cc_library_shared {
         "-Werror",
         "-Wno-unused-parameter",
     ],
-
-    cppflags: [
-        "-std=c++17",
-    ],
 }
 
-// ==================== 头文件导出 ====================
+// ==================== 聚合目标 ====================
 
-cc_library_headers {
-    name: "libtranperfhub_vendor_headers",
+phony {
+    name: "tranperfhub_vendor",
+    required: [
+        // Vendor Adapter (AIDL 服务端)
+        "libtranperfhub-adapter",
 
-    vendor: true,
+        // 复用 System 的 Client 库
+        "libtranperfhub-client",
 
-    export_include_dirs: [
-        "include",
+        // AIDL 接口
+        "vendor.transsion.hardware.perfhub-V1-ndk",
     ],
-}
-
-// ==================== 独立服务 (可选) ====================
-
-cc_binary {
-    name: "vendor.transsion.hardware.perfhub-service",
-
-    vendor: true,
-    relative_install_path: "hw",
-
-    srcs: [
-        "init/service_main.cpp",
-    ],
-
-    shared_libs: [
-        "liblog",
-        "libutils",
-        "libbinder_ndk",
-        "libtranperfhub-vendor",
-    ],
-
-    init_rc: [
-        "init/vendor.transsion.hardware.perfhub-service.rc",
-    ],
-
-    enabled: false,  // 暂不启用
 }

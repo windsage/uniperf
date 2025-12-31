@@ -51,7 +51,7 @@ public final class TranPerfHub {
             int eventId, long timestamp, int numParams, int[] intParams, String extraStrings) {
         if (DEBUG) {
             Log.d(TAG, String.format("notifyEventStart: eventId=%d, timestamp=%d, numParams=%d, "
-                                     + "extraStrings=%s",
+                                             + "extraStrings=%s",
                                eventId, timestamp, numParams, extraStrings));
         }
 

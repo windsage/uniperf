@@ -9,18 +9,39 @@
 
 #include <stdint.h>
 
+#include <string>
+#include <vector>
+
 namespace android {
 namespace transsion {
 
 /**
  * TranPerfEvent - Native layer performance event API
  *
+ * Thread-safe, supports both System and Vendor partitions.
+ *
  * Usage:
  * #include <perfhub/TranPerfEvent.h>
  *
  * using namespace android::transsion;
- * TranPerfEvent::notifyEventStart(TranPerfEvent::EVENT_APP_LAUNCH, 0);
- * TranPerfEvent::notifyEventEnd(TranPerfEvent::EVENT_APP_LAUNCH);
+ *
+ * // Simple usage
+ * int64_t ts = TranPerfEvent::now();
+ * TranPerfEvent::notifyEventStart(EVENT_APP_LAUNCH, ts);
+ *
+ * // With package name
+ * TranPerfEvent::notifyEventStart(EVENT_APP_LAUNCH, ts, "com.android.settings");
+ *
+ * // With string array
+ * std::vector<std::string> strings = {"com.android.settings", ".MainActivity", "cold_start"};
+ * TranPerfEvent::notifyEventStart(EVENT_APP_LAUNCH, ts, strings);
+ *
+ * // With int parameters
+ * std::vector<int32_t> params = {3000, 1};  // duration=3s, cold_start=1
+ * TranPerfEvent::notifyEventStart(EVENT_APP_LAUNCH, ts, params);
+ *
+ * // Full parameters
+ * TranPerfEvent::notifyEventStart(EVENT_APP_LAUNCH, ts, params, strings);
  */
 class TranPerfEvent {
 public:
@@ -29,48 +50,138 @@ public:
     /** App launch event */
     static constexpr int32_t EVENT_APP_LAUNCH = 1;
 
+    /** App switch event */
+    static constexpr int32_t EVENT_APP_SWITCH = 2;
+
     /** Scroll event */
-    static constexpr int32_t EVENT_SCROLL = 2;
+    static constexpr int32_t EVENT_SCROLL = 3;
+
+    /** Camera open event */
+    static constexpr int32_t EVENT_CAMERA_OPEN = 4;
+
+    /** Game start event */
+    static constexpr int32_t EVENT_GAME_START = 5;
+
+    /** Video play event */
+    static constexpr int32_t EVENT_VIDEO_PLAY = 6;
 
     /** Animation event */
-    static constexpr int32_t EVENT_ANIMATION = 3;
+    static constexpr int32_t EVENT_ANIMATION = 7;
 
-    /** Window switch event */
-    static constexpr int32_t EVENT_WINDOW_SWITCH = 4;
+    // ==================== String Separator Constant ====================
 
-    /** Touch event */
-    static constexpr int32_t EVENT_TOUCH = 5;
+    /** String array separator (ASCII 31 - Unit Separator) */
+    static constexpr char STRING_SEPARATOR = '\x1F';
 
-    /** App switch event */
-    static constexpr int32_t EVENT_APP_SWITCH = 6;
-
-    // ==================== Event Parameter Constants ====================
-
-    /** Cold start for app launch */
-    static constexpr int32_t PARAM_COLD_START = 0;
-
-    /** Warm start for app launch */
-    static constexpr int32_t PARAM_WARM_START = 1;
-
-    // ==================== Public API ====================
+    // ==================== Event Start Methods ====================
 
     /**
-     * Notify that a performance event has started.
+     * Notify event start (minimal)
      *
-     * @param eventId Event type (EVENT_*)
-     * @param eventParam Event parameter (default 0)
-     * @return handle (>0 success, <=0 failure)
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds
+     * @return 0 on success, -1 on failure
      */
-    static int32_t notifyEventStart(int32_t eventId, int32_t eventParam = 0);
+    static int32_t notifyEventStart(int32_t eventId, int64_t timestamp);
 
     /**
-     * Notify that a performance event has ended.
+     * Notify event start with single string
      *
-     * @param eventId Event type (EVENT_*)
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds
+     * @param extraString String parameter (usually packageName)
+     * @return 0 on success, -1 on failure
      */
-    static void notifyEventEnd(int32_t eventId);
+    static int32_t notifyEventStart(int32_t eventId, int64_t timestamp,
+                                    const std::string &extraString);
+
+    /**
+     * Notify event start with string array
+     *
+     * Strings will be joined with '\x1F' separator
+     * Example: {"com.android.settings", ".MainActivity", "cold_start"}
+     *          -> "com.android.settings\x1F.MainActivity\x1Fcold_start"
+     *
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds
+     * @param stringParams String array to be joined
+     * @return 0 on success, -1 on failure
+     */
+    static int32_t notifyEventStart(int32_t eventId, int64_t timestamp,
+                                    const std::vector<std::string> &stringParams);
+
+    /**
+     * Notify event start with int parameters
+     *
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds
+     * @param intParams Integer parameters array
+     *                  intParams[0] = duration (ms), 0 means manual release
+     *                  intParams[1..n] = event-specific parameters
+     * @return 0 on success, -1 on failure
+     */
+    static int32_t notifyEventStart(int32_t eventId, int64_t timestamp,
+                                    const std::vector<int32_t> &intParams);
+
+    /**
+     * Notify event start with int parameters and string array (full)
+     *
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds
+     * @param intParams Integer parameters array
+     * @param stringParams String array to be joined with '\x1F'
+     * @return 0 on success, -1 on failure
+     */
+    static int32_t notifyEventStart(int32_t eventId, int64_t timestamp,
+                                    const std::vector<int32_t> &intParams,
+                                    const std::vector<std::string> &stringParams);
+
+    // ==================== Event End Methods ====================
+
+    /**
+     * Notify event end (minimal)
+     *
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds
+     */
+    static void notifyEventEnd(int32_t eventId, int64_t timestamp);
+
+    /**
+     * Notify event end with string
+     *
+     * @param eventId Event type identifier
+     * @param timestamp Event timestamp in nanoseconds
+     * @param extraString String parameter (usually packageName)
+     */
+    static void notifyEventEnd(int32_t eventId, int64_t timestamp, const std::string &extraString);
+
+    // ==================== Utility Methods ====================
+
+    /**
+     * Get current timestamp in nanoseconds (CLOCK_MONOTONIC)
+     *
+     * @return Current timestamp in nanoseconds
+     */
+    static int64_t now();
+
+    /**
+     * Join string array with separator '\x1F'
+     *
+     * @param strings String array to join
+     * @return Joined string with '\x1F' separator
+     *
+     * Example:
+     *   {"com.android.settings", ".MainActivity", "cold_start"}
+     *   -> "com.android.settings\x1F.MainActivity\x1Fcold_start"
+     */
+    static std::string joinStrings(const std::vector<std::string> &strings);
 
 private:
+    // Internal full AIDL call
+    static int32_t notifyEventStartInternal(int32_t eventId, int64_t timestamp, int32_t numParams,
+                                            const std::vector<int32_t> &intParams,
+                                            const std::string &extraStrings);
+
     // Prevent instantiation
     TranPerfEvent() = delete;
     ~TranPerfEvent() = delete;
