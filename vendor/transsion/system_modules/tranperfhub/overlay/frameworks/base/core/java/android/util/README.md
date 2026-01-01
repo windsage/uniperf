@@ -233,7 +233,7 @@ long timestamp = TranPerfEvent.now();
 ```
 ┌──────────────────────────────────────────────────────┐
 │        应用层 / Framework 层                          │
-│  调用 TranPerfEvent.notifyEventStart/End()            │
+│  调用 TranPerfEvent.notifyEventStart/End()          │
 └────────────────────────┬─────────────────────────────┘
                          │
                          ▼
@@ -241,9 +241,9 @@ long timestamp = TranPerfEvent.now();
 │     TranPerfEvent (事件中心)                          │
 ├──────────────────────────────────────────────────────┤
 │ 1. 检查 Flags.enableTranperfhub() 是否启用             │
-│ 2. 记录接收时间戳和延迟监控                              │
-│ 3. 通知本地监听器（多线程安全）                           │
-│ 4. 通过反射调用 TranPerfHub                            │
+│ 2. 记录接收时间戳和延迟监控                        │
+│ 3. 通知本地监听器（多线程安全）                    │
+│ 4. 通过反射调用 TranPerfHub                       │
 └────┬─────────────────────────────────────────────────┘
      │
      ├─► 简化监听器（TrEventListener）
