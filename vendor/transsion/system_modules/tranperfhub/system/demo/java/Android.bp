@@ -20,7 +20,7 @@ android_app {
     privileged: true,
 
     static_libs: [
-        "vendor.transsion.hardware.perfhub-java", // AIDL Java 库
+        "vendor.transsion.hardware.perfhub-V1-java", // AIDL Java 库
     ],
 
     optimize: {

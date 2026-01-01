@@ -36,7 +36,7 @@ cc_library_shared {
         "libcutils",
         "libbase",
         "libbinder_ndk",
-        "vendor.transsion.hardware.perfhub-ndk",
+        "vendor.transsion.hardware.perfhub-V1-ndk",
     ],
 
     static_libs: [

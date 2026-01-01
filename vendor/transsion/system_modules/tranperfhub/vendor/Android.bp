@@ -24,7 +24,7 @@ cc_library_shared {
         "libcutils",
         "liblog",
         "libutils",
-        "vendor.transsion.hardware.perfhub-ndk",
+        "vendor.transsion.hardware.perfhub-V1-ndk",
     ],
 
     cflags: [

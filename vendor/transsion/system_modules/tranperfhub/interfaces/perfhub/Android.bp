@@ -21,7 +21,7 @@ aidl_interface {
         // NDK 后端 (System 和 Vendor 都用)
         ndk: {
             enabled: true,
-            // 生成库名: vendor.transsion.hardware.perfhub-ndk
+            // 生成库名: vendor.transsion.hardware.perfhub-V1-ndk
         },
 
         // 不需要 Java 后端
