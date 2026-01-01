@@ -32,6 +32,7 @@ cc_library_shared {
         "-Werror",
         "-Wno-unused-parameter",
         "-DLOG_TAG=\"TranPerfHub\"",
+        // "-DTRAN_LOG_DISABLED",
     ],
 
     cppflags: [
