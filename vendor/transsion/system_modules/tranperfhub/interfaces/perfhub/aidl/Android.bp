@@ -26,7 +26,7 @@ aidl_interface {
 
         // 不需要 Java 后端
         java: {
-            enabled: false,
+            enabled: true,
         },
 
         // 不需要 C++ 后端
@@ -38,8 +38,8 @@ aidl_interface {
     // 版本管理
     versions_with_info: [
         {
-            version: "1",  // 首个稳定版本
-            imports: [],   // 无依赖其他 AIDL
+            version: "1", // 首个稳定版本
+            imports: [], // 无依赖其他 AIDL
         },
     ],
 

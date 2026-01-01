@@ -10,16 +10,12 @@ cc_library_shared {
     vendor: true,
 
     srcs: [
-        "adapter/TranPerfHubAdapter.cpp",
-        "adapter/PlatformAdapter.cpp",
+        "TranPerfHubAdapter.cpp",
+        "PlatformAdapter.cpp",
     ],
 
     local_include_dirs: [
-        "adapter/include",
-    ],
-
-    export_include_dirs: [
-        "adapter/include",
+        "include",
     ],
 
     shared_libs: [
@@ -35,5 +31,10 @@ cc_library_shared {
         "-Wall",
         "-Werror",
         "-Wno-unused-parameter",
+        "-DLOG_TAG=\"TranPerfHub\"",
+    ],
+
+    cppflags: [
+        "-std=c++17",
     ],
 }

@@ -6,23 +6,23 @@ package {
 
 android_app {
     name: "PerfHubListenerDemo",
-    
+
     // System 分区
     system_ext_specific: true,
-    
+
     srcs: [
         "com/transsion/perfhub/demo/*.java",
     ],
-    
+
     // 需要系统权限
     platform_apis: true,
     certificate: "platform",
     privileged: true,
-    
+
     static_libs: [
-        "vendor.transsion.hardware.perfhub-V1-java",  // AIDL Java 库
+        "vendor.transsion.hardware.perfhub-V1-java", // AIDL Java 库
     ],
-    
+
     optimize: {
         enabled: false,
     },

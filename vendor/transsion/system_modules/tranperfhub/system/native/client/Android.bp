@@ -41,7 +41,7 @@ cc_library_shared {
 
     static_libs: [
         "libtranperfhub_flags_c",
-   ],
+    ],
 
     cflags: [
         "-Wall",

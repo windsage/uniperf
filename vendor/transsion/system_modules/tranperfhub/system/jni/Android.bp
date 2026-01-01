@@ -31,6 +31,10 @@ cc_library_shared {
         "libtranperfhub_flags_c",
     ],
 
-    cflags: ["-Wall", "-Werror", "-Wno-unused-parameter"],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
     cppflags: ["-std=c++17"],
 }
