@@ -1,5 +1,3 @@
-#define LOG_TAG "TranPerfHub-Platform"
-
 #include "PlatformAdapter.h"
 
 #include <android-base/logging.h>

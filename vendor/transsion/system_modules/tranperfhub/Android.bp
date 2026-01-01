@@ -36,6 +36,7 @@ phony {
         // Aconfig Flags
         "com.transsion.perfhub.flags-aconfig-java",
         "libtranperfhub_flags_c",
+        "libaconfig_storage_read_api_cc",
     ],
 }
 
@@ -52,5 +53,6 @@ phony {
 
         // Aconfig Flags
         "libtranperfhub_flags_c",
+        "libaconfig_storage_read_api_cc",
     ],
 }
