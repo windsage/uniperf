@@ -19,6 +19,9 @@
 #include <android/binder_ibinder_jni.h>
 #include <android/binder_manager.h>
 
+#include "com.transsion.perfhub.flags.h"
+
+#define CHECK_FLAG() com::transsion::perfhub::flags::enable_tranperfhub()
 using namespace android;
 
 using aidl::vendor::transsion::hardware::perfhub::IEventListener;
@@ -89,6 +92,12 @@ static void resetVendorService() {
  */
 static void nativeNotifyEventStart(JNIEnv *env, jclass clazz, jint eventId, jlong timestamp,
                                    jint numParams, jintArray intParams, jstring extraStrings) {
+    if (!CHECK_FLAG()) {
+        if (DEBUG) {
+            ALOGD("TranPerfHub disabled by flag");
+        }
+        return;
+    }
     if (DEBUG) {
         ALOGD("nativeNotifyEventStart: eventId=%d, timestamp=%lld, numParams=%d", eventId,
               (long long)timestamp, numParams);
@@ -163,6 +172,12 @@ static void nativeNotifyEventStart(JNIEnv *env, jclass clazz, jint eventId, jlon
  */
 static void nativeNotifyEventEnd(JNIEnv *env, jclass clazz, jint eventId, jlong timestamp,
                                  jstring extraStrings) {
+    if (!CHECK_FLAG()) {
+        if (DEBUG) {
+            ALOGD("TranPerfHub disabled by flag");
+        }
+        return;
+    }
     if (DEBUG) {
         ALOGD("nativeNotifyEventEnd: eventId=%d, timestamp=%lld", eventId, (long long)timestamp);
     }
@@ -204,6 +219,12 @@ static void nativeNotifyEventEnd(JNIEnv *env, jclass clazz, jint eventId, jlong 
  * Register event listener
  */
 static void nativeRegisterEventListener(JNIEnv *env, jclass clazz, jobject listenerBinder) {
+    if (!CHECK_FLAG()) {
+        if (DEBUG) {
+            ALOGD("TranPerfHub disabled by flag");
+        }
+        return;
+    }
     if (DEBUG) {
         ALOGD("nativeRegisterEventListener");
     }
@@ -259,6 +280,12 @@ static void nativeRegisterEventListener(JNIEnv *env, jclass clazz, jobject liste
  * Unregister event listener
  */
 static void nativeUnregisterEventListener(JNIEnv *env, jclass clazz, jobject listenerBinder) {
+    if (!CHECK_FLAG()) {
+        if (DEBUG) {
+            ALOGD("TranPerfHub disabled by flag");
+        }
+        return;
+    }
     if (DEBUG) {
         ALOGD("nativeUnregisterEventListener");
     }

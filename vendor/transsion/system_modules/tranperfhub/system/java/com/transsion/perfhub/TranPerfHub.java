@@ -5,6 +5,8 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.transsion.perfhub.flags.Flags;
+
 import vendor.transsion.hardware.perfhub.IEventListener;
 
 /**
@@ -55,6 +57,12 @@ public final class TranPerfHub {
      */
     public static void notifyEventStart(
             int eventId, long timestamp, int numParams, int[] intParams, String extraStrings) {
+        if (!Flags.enableTranperfhub()) {
+            if (DEBUG) {
+                Log.d(TAG, "TranPerfHub disabled by flag");
+            }
+            return;
+        }
         if (DEBUG) {
             Log.d(TAG, String.format("notifyEventStart: eventId=%d, timestamp=%d, numParams=%d, "
                                              + "extraStrings=%s",
@@ -104,6 +112,12 @@ public final class TranPerfHub {
      * @param extraStrings Optional string parameter (usually packageName), can be null
      */
     public static void notifyEventEnd(int eventId, long timestamp, String extraStrings) {
+        if (!Flags.enableTranperfhub()) {
+            if (DEBUG) {
+                Log.d(TAG, "TranPerfHub disabled by flag");
+            }
+            return;
+        }
         if (DEBUG) {
             Log.d(TAG, String.format("notifyEventEnd: eventId=%d, timestamp=%d, extraStrings=%s",
                                eventId, timestamp, extraStrings));
@@ -159,6 +173,12 @@ public final class TranPerfHub {
      * </pre>
      */
     public static void registerEventListener(IEventListener listener) {
+        if (!Flags.enableTranperfhub()) {
+            if (DEBUG) {
+                Log.d(TAG, "TranPerfHub disabled by flag");
+            }
+            return;
+        }
         if (listener == null) {
             throw new IllegalArgumentException("Listener cannot be null");
         }
@@ -198,6 +218,12 @@ public final class TranPerfHub {
      * @throws RemoteException if unregistration fails
      */
     public static void unregisterEventListener(IEventListener listener) {
+        if (!Flags.enableTranperfhub()) {
+            if (DEBUG) {
+                Log.d(TAG, "TranPerfHub disabled by flag");
+            }
+            return;
+        }
         if (listener == null) {
             throw new IllegalArgumentException("Listener cannot be null");
         }

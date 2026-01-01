@@ -21,7 +21,8 @@ import vendor.transsion.hardware.perfhub.IEventListener;
  * <pre>
  * // Send event
  * long ts = TranPerfEvent.now();
- * TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts, 3, new int[]{1, 2, 3}, "com.android.settings");
+ * TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts, 3, new int[]{1, 2, 3},
+ * "com.android.settings");
  *
  * // Register simplified listener (Framework internal use)
  * TranPerfEvent.registerListener(new TrEventListener() {
@@ -55,28 +56,53 @@ public final class TranPerfEvent {
     // Latency threshold for warning (10ms)
     private static final long LATENCY_THRESHOLD_NS = 10_000_000L;
 
-    // ==================== Event Type Constants ====================
+    // ========================================================================
+    // EVENT RANGE DEFINITIONS
+    // Each range is allocated 1000 IDs to allow sub-categorization.
+    // ========================================================================
 
-    /** App launch event */
-    public static final int EVENT_APP_LAUNCH = 1;
+    // ==================== Core / Base Events (0 - 999) ====================
+    /** Most common system-level events */
+    public static final int RANGE_CORE = 0;
+    public static final int EVENT_ID_UNKNOWN = 0;
 
-    /** App switch event */
-    public static final int EVENT_APP_SWITCH = 2;
+    // ==================== Interaction & UX (1000 - 4999) ====================
+    /** Application launch (Cold, Warm, Hot start) */
+    public static final int RANGE_LAUNCH = 1000;
+    /** Scrolling scenarios (List fling, Page scroll) */
+    public static final int RANGE_SCROLLING = 1100;
+    /** Input response (Key click, Touch gesture) */
+    public static final int RANGE_INPUT_TOUCH = 1200;
+    /** Interface transition (Activity jump, Fragment switch) */
+    public static final int RANGE_TRANSITION = 1300;
 
-    /** Scroll event */
-    public static final int EVENT_SCROLL = 3;
+    // ==================== System Components (5000 - 9999) ====================
+    /** SystemUI scenarios (Notification shade, Control Center, Keyguard) */
+    public static final int RANGE_SYSTEMUI = 5000;
+    /** Home screen scenarios (Launcher, Minus-one screen, App drawer) */
+    public static final int RANGE_HOME_SCREEN = 6000;
+    /** Multi-window & Split-screen (Task switching, Freeform) */
+    public static final int RANGE_MULTI_WINDOW = 7000;
 
-    /** Camera open event */
-    public static final int EVENT_CAMERA_OPEN = 4;
+    // ==================== Multimedia & Communication (10000 - 19999) ====================
+    /** Camera scenarios (Preview, Capture, Recording) */
+    public static final int RANGE_CAMERA = 10000;
+    /** Audio scenarios (Playback, Recording, Audio Effects) */
+    public static final int RANGE_AUDIO = 11000;
+    /** Video scenarios (Encoding, Decoding, Rendering) */
+    public static final int RANGE_VIDEO = 12000;
+    /** WebView & Browser (Page loading, JS execution) */
+    public static final int RANGE_WEBVIEW = 13000;
+    /** Telephony scenarios (Voice call, CS/IMS call setup) */
+    public static final int RANGE_TELEPHONY = 14000;
+    /** Video Call scenarios (VoLTE/ViLTE, VoIP, Screen sharing) */
+    public static final int RANGE_VIDEO_CALL = 15000;
 
-    /** Game start event */
-    public static final int EVENT_GAME_START = 5;
-
-    /** Video play event */
-    public static final int EVENT_VIDEO_PLAY = 6;
-
-    /** Animation event */
-    public static final int EVENT_ANIMATION = 7;
+    // ==================== Vertical Domains (20000+) ====================
+    /** Game scenarios (Frame drops, Asset loading) */
+    public static final int RANGE_GAME = 20000;
+    /** Location scenarios (GNSS signal, Network positioning) */
+    public static final int RANGE_LOCATION = 21000;
 
     // ==================== Listener Interfaces ====================
 
