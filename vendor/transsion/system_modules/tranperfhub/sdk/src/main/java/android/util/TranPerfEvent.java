@@ -1,150 +1,133 @@
 package android.util;
 
+import android.os.IBinder;
+
 /**
  * TranPerfEvent - Performance Event API (SDK Stub)
  *
  * This is a stub implementation for SDK compilation.
- * The actual implementation is provided by the system overlay.
- *
- * @hide
+ * The actual implementation is provided by the system framework overlay at runtime.
+ * * Note: Methods throw RuntimeException to ensure that this stub is never
+ * packaged into an APK; it should be used with 'compileOnly' dependency.
  */
 public final class TranPerfEvent {
     // ==================== Event Type Constants ====================
 
-    /** App launch event */
     public static final int EVENT_APP_LAUNCH = 1;
-
-    /** App switch event */
     public static final int EVENT_APP_SWITCH = 2;
-
-    /** Scroll event */
     public static final int EVENT_SCROLL = 3;
-
-    /** Camera open event */
     public static final int EVENT_CAMERA_OPEN = 4;
-
-    /** Game start event */
     public static final int EVENT_GAME_START = 5;
-
-    /** Video play event */
     public static final int EVENT_VIDEO_PLAY = 6;
-
-    /** Animation event */
     public static final int EVENT_ANIMATION = 7;
 
     // ==================== Listener Interfaces ====================
 
     /**
-     * Simplified listener interface for Framework internal use
+     * Simplified listener interface for Framework internal use.
      */
     public interface TrEventListener {
         void onEventStart(int eventId, long timestamp, int duration);
         void onEventEnd(int eventId, long timestamp);
     }
 
-    // ==================== Listener Management (Simplified) ====================
+    /**
+     * Full event listener for SDK and external app use.
+     * Implementation should inherit this class.
+     */
+    public abstract static class PerfEventListener {
+        public abstract void onEventStart(
+                int eventId, long timestamp, int numParams, int[] intParams, String extraStrings);
+        public abstract void onEventEnd(int eventId, long timestamp, String extraStrings);
+
+        /** @hide */
+        private Object mStub;
+    }
+
+    // ==================== Listener Management ====================
 
     /**
-     * Register a simplified event listener
+     * Register a simplified listener (System internal use).
      */
     public static void registerListener(TrEventListener listener) {
-        throw new RuntimeException("Stub! System implementation required.");
+        throw new RuntimeException("Stub!");
     }
 
     /**
-     * Unregister a simplified event listener
+     * Unregister a simplified listener.
      */
     public static void unregisterListener(TrEventListener listener) {
-        throw new RuntimeException("Stub! System implementation required.");
+        throw new RuntimeException("Stub!");
     }
 
     /**
-     * Register a full AIDL event listener
-     *
-     * Note: The actual parameter type is vendor.transsion.hardware.perfhub.IEventListener,
-     * but SDK cannot reference vendor AIDL directly. Use Object as placeholder.
-     *
-     * At runtime, the overlay implementation will handle the actual IEventListener type.
+     * Recommended: Register a listener using the abstract class.
      */
-    public static void registerEventListener(Object listener) {
-        throw new RuntimeException("Stub! System implementation required.");
+    public static void registerEventListener(PerfEventListener listener) {
+        throw new RuntimeException("Stub!");
     }
 
     /**
-     * Unregister a full AIDL event listener
-     *
-     * Note: The actual parameter type is vendor.transsion.hardware.perfhub.IEventListener,
-     * but SDK cannot reference vendor AIDL directly. Use Object as placeholder.
+     * Unregister a listener.
      */
-    public static void unregisterEventListener(Object listener) {
-        throw new RuntimeException("Stub! System implementation required.");
+    public static void unregisterEventListener(PerfEventListener listener) {
+        throw new RuntimeException("Stub!");
+    }
+
+    /**
+     * Bottom-level: Register using a raw IBinder.
+     */
+    public static void registerEventListener(android.os.IBinder listenerBinder) {
+        throw new RuntimeException("Stub!");
+    }
+
+    /**
+     * Bottom-level: Unregister using a raw IBinder.
+     */
+    public static void unregisterEventListener(android.os.IBinder listenerBinder) {
+        throw new RuntimeException("Stub!");
     }
 
     // ==================== Event Start Methods ====================
 
-    /**
-     * Overload 1: eventId + timestamp
-     */
     public static void notifyEventStart(int eventId, long timestamp) {
-        throw new RuntimeException("Stub! System implementation required.");
+        throw new RuntimeException("Stub!");
     }
 
-    /**
-     * Overload 2: eventId + timestamp + string
-     */
     public static void notifyEventStart(int eventId, long timestamp, String extraString) {
-        throw new RuntimeException("Stub! System implementation required.");
+        throw new RuntimeException("Stub!");
     }
 
-    /**
-     * Overload 3: eventId + timestamp + string[]
-     */
     public static void notifyEventStart(int eventId, long timestamp, String[] stringParams) {
-        throw new RuntimeException("Stub! System implementation required.");
+        throw new RuntimeException("Stub!");
     }
 
-    /**
-     * Overload 4: eventId + timestamp + numParams + int[]
-     */
     public static void notifyEventStart(
             int eventId, long timestamp, int numParams, int[] intParams) {
-        throw new RuntimeException("Stub! System implementation required.");
+        throw new RuntimeException("Stub!");
     }
 
-    /**
-     * Overload 5: eventId + timestamp + numParams + int[] + string[]
-     */
     public static void notifyEventStart(
             int eventId, long timestamp, int numParams, int[] intParams, String[] stringParams) {
-        throw new RuntimeException("Stub! System implementation required.");
+        throw new RuntimeException("Stub!");
     }
 
     // ==================== Event End Methods ====================
 
-    /**
-     * Notify event end (minimal)
-     */
     public static void notifyEventEnd(int eventId, long timestamp) {
-        throw new RuntimeException("Stub! System implementation required.");
+        throw new RuntimeException("Stub!");
     }
 
-    /**
-     * Notify event end with string parameter
-     */
     public static void notifyEventEnd(int eventId, long timestamp, String extraString) {
-        throw new RuntimeException("Stub! System implementation required.");
+        throw new RuntimeException("Stub!");
     }
 
     // ==================== Helper Methods ====================
 
-    /**
-     * Get current timestamp in nanoseconds
-     */
     public static long now() {
-        throw new RuntimeException("Stub! System implementation required.");
+        throw new RuntimeException("Stub!");
     }
 
-    // Private constructor to prevent instantiation
     private TranPerfEvent() {
         throw new AssertionError("TranPerfEvent cannot be instantiated");
     }

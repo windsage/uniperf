@@ -104,6 +104,19 @@ public final class TranPerfEvent {
         void onEventEnd(int eventId, long timestamp);
     }
 
+    /**
+     * 2. 完整事件监听器 (新增，用于 SDK 极致解耦)
+     * 调用方继承此类，无需直接依赖 vendor.transsion 命名空间
+     */
+    public abstract static class PerfEventListener {
+        public abstract void onEventStart(
+                int eventId, long timestamp, int numParams, int[] intParams, String extraStrings);
+        public abstract void onEventEnd(int eventId, long timestamp, String extraStrings);
+
+        /** @hide */
+        private Object mStub; // 存储 IEventListener.Stub 实例
+    }
+
     // ==================== Listener Management ====================
 
     // Simplified listeners (Framework internal)
@@ -144,6 +157,40 @@ public final class TranPerfEvent {
         if (DEBUG) {
             Log.d(TAG,
                     "Simplified listener unregistered, remaining: " + sSimplifiedListeners.size());
+        }
+    }
+
+    /**
+     * 3. 面向 SDK 的注册接口 (推荐)
+     * 调用方只需 new TranPerfEvent.PerfEventListener() {}
+     */
+    public static void registerEventListener(PerfEventListener listener) {
+        if (listener == null)
+            return;
+        try {
+            // 动态包装成 AIDL Stub
+            IEventListener.Stub stub = new IEventListener.Stub() {
+                @Override
+                public void onEventStart(int id, long ts, int n, int[] p, String s) {
+                    listener.onEventStart(id, ts, n, p, s);
+                }
+                @Override
+                public void onEventEnd(int id, long ts, String s) {
+                    listener.onEventEnd(id, ts, s);
+                }
+            };
+            listener.mStub = stub;
+            registerEventListener(stub.asBinder());
+        } catch (NoClassDefFoundError | Exception e) {
+            Log.e(TAG, "Failed to wrap listener: IEventListener not found in this environment");
+        }
+    }
+
+    public static void unregisterEventListener(PerfEventListener listener) {
+        if (listener != null && listener.mStub instanceof IEventListener.Stub) {
+            android.os.IBinder binder = ((IEventListener.Stub) listener.mStub).asBinder();
+            unregisterEventListener(binder);
+            listener.mStub = null;
         }
     }
 
@@ -352,12 +399,13 @@ public final class TranPerfEvent {
                             eventId, timestamp, latency, latency / 1_000_000.0, numParams,
                             extraStrings));
         }
-
+        final int[] safeIntParams = (intParams != null) ? intParams : new int[0];
         // 1. Notify local AIDL listeners (完整参数)
         if (!sAidlListeners.isEmpty()) {
             for (IEventListener listener : sAidlListeners) {
                 try {
-                    listener.onEventStart(eventId, timestamp, numParams, intParams, extraStrings);
+                    listener.onEventStart(
+                            eventId, timestamp, numParams, safeIntParams, extraStrings);
                 } catch (RemoteException e) {
                     Log.e(TAG, "AIDL listener callback failed", e);
                 }
@@ -366,7 +414,8 @@ public final class TranPerfEvent {
 
         // 2. Notify local simplified listeners (精简参数)
         if (!sSimplifiedListeners.isEmpty()) {
-            int duration = (intParams != null && intParams.length > 0) ? intParams[0] : 0;
+            int duration =
+                    (safeIntParams != null && safeIntParams.length > 0) ? safeIntParams[0] : 0;
             for (TrEventListener listener : sSimplifiedListeners) {
                 try {
                     listener.onEventStart(eventId, timestamp, duration);
@@ -382,7 +431,8 @@ public final class TranPerfEvent {
                 return;
             }
 
-            sNotifyStartMethod.invoke(null, eventId, timestamp, numParams, intParams, extraStrings);
+            sNotifyStartMethod.invoke(
+                    null, eventId, timestamp, numParams, safeIntParams, extraStrings);
 
         } catch (Exception e) {
             Log.e(TAG, "Failed to call TranPerfHub.notifyEventStart", e);
