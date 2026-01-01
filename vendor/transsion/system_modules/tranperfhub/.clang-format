@@ -109,7 +109,6 @@ UseTab: Never
 ---
 Language: Java
 BasedOnStyle: Google
-InsertBraces: true
 AccessModifierOffset: -4
 AlignOperands: true
 AllowShortIfStatementsOnASingleLine: false

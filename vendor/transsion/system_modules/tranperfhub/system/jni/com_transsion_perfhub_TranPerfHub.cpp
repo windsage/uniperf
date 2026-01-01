@@ -323,6 +323,7 @@ static const JNINativeMethod gMethods[] = {
      (void *)nativeUnregisterEventListener},
 };
 
+namespace android {
 /**
  * 注册 JNI 方法
  */
@@ -344,3 +345,4 @@ int register_com_transsion_perfhub_TranPerfHub(JNIEnv *env) {
     ALOGD("JNI registered: %s (%zu methods)", className, NELEM(gMethods));
     return JNI_OK;
 }
+}    // namespace android
