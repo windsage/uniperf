@@ -10,7 +10,7 @@ aidl_interface {
 
     // AIDL 源文件
     srcs: [
-        "vendor/transsion/hardware/perfhub/*.aidl",
+        "../vendor/transsion/hardware/perfhub/*.aidl",
     ],
 
     // 稳定性标记 (vintf = 跨版本兼容)
@@ -36,13 +36,14 @@ aidl_interface {
     },
 
     // 版本管理
-    versions_with_info: [
-        {
-            version: "1", // 首个稳定版本
-            imports: [], // 无依赖其他 AIDL
-        },
-    ],
+    //    versions_with_info: [
+    //        {
+    //            version: "1", // 首个稳定版本
+    //            imports: [], // 无依赖其他 AIDL
+    //        },
+    //    ],
 
+    frozen: false,
     // 所有者
     owner: "transsion",
 }
