@@ -1,20 +1,11 @@
-// 配置 staging 状态的 flag values
-
 package {
     default_applicable_licenses: ["vendor_transsion_license"],
 }
 
-aconfig_value_set {
-    name: "aconfig_value_set_perfhub_staging",
-    values: [
-        "tranperfhub_flag_values.textproto",
-    ],
-}
-
 aconfig_values {
-    name: "aconfig_values_perfhub_staging",
+    name: "aconfig-values-platform_vendor_transsion_build_flags_release-staging-PFM-com.transsion.perfhub.flags-all",
     package: "com.transsion.perfhub.flags",
     srcs: [
-        ":aconfig_value_set_perfhub_staging",
+        "*_flag_value.textproto",
     ],
 }

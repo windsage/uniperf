@@ -1,5 +1,3 @@
-# bleeding_edge 状态: 研发自建,供测试使用
-
 flag_value {
     package: "com.transsion.perfhub.flags"
     name: "enable_tranperfhub"
