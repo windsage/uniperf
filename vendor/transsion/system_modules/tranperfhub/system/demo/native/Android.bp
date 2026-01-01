@@ -18,7 +18,7 @@ cc_binary {
         "libbinder_ndk",
         "liblog",
         "libutils",
-        "vendor.transsion.hardware.perfhub-V1-ndk",
+        "vendor.transsion.hardware.perfhub-ndk",
     ],
 
     cflags: [

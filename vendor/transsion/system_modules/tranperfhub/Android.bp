@@ -31,7 +31,7 @@ phony {
         "libtranperfhub-client",
 
         // AIDL 接口
-        "vendor.transsion.hardware.perfhub-V1-ndk",
+        "vendor.transsion.hardware.perfhub-ndk",
 
         // Aconfig Flags
         "com.transsion.perfhub.flags-aconfig-java",
@@ -48,7 +48,7 @@ phony {
         "libtranperfhub-adapter",
         "libtranperfhub-client",
         // AIDL 接口
-        "vendor.transsion.hardware.perfhub-V1-ndk",
+        "vendor.transsion.hardware.perfhub-ndk",
 
         // Aconfig Flags
         "libtranperfhub_flags_c",
