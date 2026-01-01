@@ -10,12 +10,12 @@ cc_library_shared {
     vendor: true,
 
     srcs: [
-        "TranPerfHubAdapter.cpp",
-        "PlatformAdapter.cpp",
+        "adapter/TranPerfHubAdapter.cpp",
+        "adapter/PlatformAdapter.cpp",
     ],
 
     local_include_dirs: [
-        "include",
+        "adapter/include",
     ],
 
     shared_libs: [

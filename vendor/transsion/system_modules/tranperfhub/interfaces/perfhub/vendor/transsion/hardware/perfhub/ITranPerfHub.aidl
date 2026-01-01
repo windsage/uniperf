@@ -8,6 +8,7 @@ import vendor.transsion.hardware.perfhub.IEventListener;
  * Performance event notification interface for cross-process communication
  * between System and Vendor partitions.
  */
+@VintfStability
 interface ITranPerfHub {
     /**
      * Notify performance event start

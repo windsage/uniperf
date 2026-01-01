@@ -6,10 +6,10 @@ license {
     name: "vendor_transsion_license",
     visibility: ["//visibility:public"],
     license_kinds: [
-        "SPDX-license-identifier-Apache-2.0", // 或者是其他的协议，如 Proprietary
+        "SPDX-license-identifier-Apache-2.0",
     ],
     license_text: [
-        "NOTICE", // 对应目录下必须有一个名为 NOTICE 的文本文件
+        "LICENSE",
     ],
 }
 

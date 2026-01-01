@@ -14,6 +14,7 @@ package vendor.transsion.hardware.perfhub;
  *   3. Receive event notifications asynchronously
  *   4. Unregister via ITranPerfHub.unregisterEventListener() when done
  */
+@VintfStability
 interface IEventListener {
     /**
      * Called when a performance event starts
