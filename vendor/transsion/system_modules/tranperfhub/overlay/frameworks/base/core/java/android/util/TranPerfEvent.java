@@ -21,7 +21,7 @@ import vendor.transsion.hardware.perfhub.IEventListener;
  * <pre>
  * // Send event
  * long ts = TranPerfEvent.now();
- * TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts, 3000, "com.android.settings");
+ * TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts, 3, new int[]{1, 2, 3}, "com.android.settings");
  *
  * // Register simplified listener (Framework internal use)
  * TranPerfEvent.registerListener(new TrEventListener() {

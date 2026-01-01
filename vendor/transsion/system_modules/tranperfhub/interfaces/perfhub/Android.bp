@@ -4,46 +4,28 @@ package {
 
 aidl_interface {
     name: "vendor.transsion.hardware.perfhub",
-
-    // Vendor 分区可用
     vendor_available: true,
-
-    // AIDL 源文件
     srcs: [
         "vendor/transsion/hardware/perfhub/*.aidl",
     ],
-
-    // 稳定性标记 (vintf = 跨版本兼容)
     stability: "vintf",
-
-    // 后端支持
     backend: {
-        // NDK 后端 (System 和 Vendor 都用)
         ndk: {
             enabled: true,
-            // 生成库名: vendor.transsion.hardware.perfhub-V1-ndk
         },
-
-        // 不需要 Java 后端
         java: {
             enabled: true,
         },
-
-        // 不需要 C++ 后端
         cpp: {
             enabled: false,
         },
     },
-
-    // 版本管理
     //    versions_with_info: [
     //        {
     //            version: "1", // 首个稳定版本
     //            imports: [], // 无依赖其他 AIDL
     //        },
     //    ],
-
     frozen: false,
-    // 所有者
     owner: "transsion",
 }
