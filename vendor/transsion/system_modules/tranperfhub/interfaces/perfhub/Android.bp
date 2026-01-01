@@ -10,7 +10,7 @@ aidl_interface {
 
     // AIDL 源文件
     srcs: [
-        "../vendor/transsion/hardware/perfhub/*.aidl",
+        "vendor/transsion/hardware/perfhub/*.aidl",
     ],
 
     // 稳定性标记 (vintf = 跨版本兼容)
