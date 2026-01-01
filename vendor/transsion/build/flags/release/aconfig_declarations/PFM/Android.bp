@@ -9,7 +9,7 @@ aconfig_declarations {
     package: "com.transsion.perfhub.flags",
     container: "system",
     srcs: [
-        "tranperfhub.aconfig",
+        "flags.aconfig",
     ],
 }
 

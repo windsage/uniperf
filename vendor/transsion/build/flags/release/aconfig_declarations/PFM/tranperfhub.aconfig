@@ -1,5 +1,3 @@
-// vendor/transsion/build/flags/release/aconfig_declarations/PFM/tranperfhub.aconfig
-
 package: "com.transsion.perfhub.flags"
 
 container: "system"
@@ -10,7 +8,7 @@ flag {
     description: "Feature flag to enable TranPerfHub performance optimization framework."
     is_fixed_read_only: false
     bug: "pfm_tranperfhub_251228_sr-nw-0002-0003"
-    
-    // does NOT specify enabled/disabled state (根据SR状态配置)
-    // does NOT specify read-only/read-write permission
+
+    # does NOT specify enabled/disabled state (根据SR状态配置)
+    # does NOT specify read-only/read-write permission
 }

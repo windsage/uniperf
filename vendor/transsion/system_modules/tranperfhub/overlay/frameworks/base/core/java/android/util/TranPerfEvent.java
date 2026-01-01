@@ -4,8 +4,6 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
 
-import com.transsion.perfhub.flags.Flags;
-
 import java.lang.reflect.Method;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -122,7 +120,9 @@ public final class TranPerfEvent {
      * This listener receives only essential event information.
      *
      * @param listener TrEventListener implementation
+     * @hide
      */
+    @SystemApi
     public static void registerListener(TrEventListener listener) {
         if (listener != null && !sSimplifiedListeners.contains(listener)) {
             sSimplifiedListeners.add(listener);
@@ -136,7 +136,9 @@ public final class TranPerfEvent {
      * Unregister a simplified event listener
      *
      * @param listener TrEventListener implementation to remove
+     * @hide
      */
+    @SystemApi
     public static void unregisterListener(TrEventListener listener) {
         sSimplifiedListeners.remove(listener);
         if (DEBUG) {
@@ -145,40 +147,40 @@ public final class TranPerfEvent {
         }
     }
 
+    // ==================== Listener Management ====================
+
     /**
      * Register a full AIDL event listener (Advanced use)
-     *
-     * This listener receives complete event information including all parameters.
-     * The listener will also be registered to TranPerfHub for remote events.
-     *
-     * @param listener IEventListener implementation
+     * * @param listenerBinder The IBinder object of the listener
      */
-    public static void registerEventListener(IEventListener listener) {
-        if (listener == null) {
-            Log.e(TAG, "Cannot register null AIDL listener");
+    public static void registerEventListener(android.os.IBinder listenerBinder) {
+        if (listenerBinder == null) {
+            Log.e(TAG, "Cannot register null binder");
             return;
         }
 
-        if (sAidlListeners.contains(listener)) {
-            Log.w(TAG, "AIDL listener already registered");
-            return;
-        }
+        // 将 IBinder 转换为真正的 AIDL 接口
+        IEventListener listener = IEventListener.Stub.asInterface(listenerBinder);
 
-        // Add to local list
-        sAidlListeners.add(listener);
-
-        // Register to TranPerfHub for remote events
-        try {
-            if (!initReflection()) {
-                Log.e(TAG, "Failed to initialize TranPerfHub reflection");
+        // 检查是否已经存在 (通过 Binder 比较)
+        for (IEventListener existing : sAidlListeners) {
+            if (existing.asBinder().equals(listenerBinder)) {
+                Log.w(TAG, "AIDL listener already registered");
                 return;
             }
+        }
 
+        // 添加到本地列表
+        sAidlListeners.add(listener);
+
+        // 注册到 TranPerfHub
+        try {
+            if (!initReflection())
+                return;
             if (sRegisterListenerMethod != null) {
+                // 注意：反射调用时，如果 PerfHub 那边接收的是 IEventListener，这里传入 listener
+                // 对象即可
                 sRegisterListenerMethod.invoke(null, listener);
-                if (DEBUG) {
-                    Log.d(TAG, "AIDL listener registered, total: " + sAidlListeners.size());
-                }
             }
         } catch (Exception e) {
             Log.e(TAG, "Failed to register AIDL listener to TranPerfHub", e);
@@ -187,31 +189,31 @@ public final class TranPerfEvent {
 
     /**
      * Unregister a full AIDL event listener
-     *
-     * @param listener IEventListener implementation to remove
+     * * @param listenerBinder The IBinder object to remove
      */
-    public static void unregisterEventListener(IEventListener listener) {
-        if (listener == null) {
+    public static void unregisterEventListener(android.os.IBinder listenerBinder) {
+        if (listenerBinder == null)
             return;
+
+        IEventListener target = null;
+        for (IEventListener listener : sAidlListeners) {
+            if (listener.asBinder().equals(listenerBinder)) {
+                target = listener;
+                break;
+            }
         }
 
-        // Remove from local list
-        sAidlListeners.remove(listener);
-
-        // Unregister from TranPerfHub
-        try {
-            if (!initReflection()) {
-                return;
-            }
-
-            if (sUnregisterListenerMethod != null) {
-                sUnregisterListenerMethod.invoke(null, listener);
-                if (DEBUG) {
-                    Log.d(TAG, "AIDL listener unregistered, remaining: " + sAidlListeners.size());
+        if (target != null) {
+            sAidlListeners.remove(target);
+            try {
+                if (!initReflection())
+                    return;
+                if (sUnregisterListenerMethod != null) {
+                    sUnregisterListenerMethod.invoke(null, target);
                 }
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to unregister AIDL listener", e);
             }
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to unregister AIDL listener from TranPerfHub", e);
         }
     }
 
