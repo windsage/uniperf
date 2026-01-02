@@ -1,7 +1,3 @@
-package {
-    default_applicable_licenses: ["default_applicable_licenses"],
-}
-
 license {
     name: "vendor_transsion_license",
     visibility: ["//visibility:public"],
@@ -50,6 +46,5 @@ phony {
 
         // Aconfig Flags
         "libtranperfhub_flags_c",
-        "libaconfig_storage_read_api_cc",
     ],
 }

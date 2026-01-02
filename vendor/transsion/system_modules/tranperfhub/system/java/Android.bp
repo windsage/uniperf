@@ -11,5 +11,6 @@ java_library {
     required: ["libtranperfhub-jni"],
     static_libs: [
         "vendor.transsion.hardware.perfhub-V1-java",
+        "com.transsion.perfhub.flags-aconfig-java",
     ],
 }

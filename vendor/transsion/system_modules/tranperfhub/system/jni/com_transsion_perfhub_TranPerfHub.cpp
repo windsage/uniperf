@@ -19,7 +19,7 @@
 #include <android/binder_ibinder_jni.h>
 #include <android/binder_manager.h>
 
-#include "com.transsion.perfhub.flags.h"
+#include "com_transsion_perfhub_flags.h"
 
 #define CHECK_FLAG() com::transsion::perfhub::flags::enable_tranperfhub()
 using namespace android;
