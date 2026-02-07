@@ -45,3 +45,7 @@ ifneq ($(filter eng userdebug,$(TARGET_BUILD_VARIANT)),)
         persist.vendor.transsion.perfhub.debug=1 \
         persist.vendor.transsion.perfhub.log_level=verbose
 endif
+
+PRODUCT_COPY_FILES += \
+    vendor/transsion/system_modules/tranperfhub/vendor/configs/platform_mappings_qcom.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perfhub/platform_mappings_qcom.xml \
+    vendor/transsion/system_modules/tranperfhub/vendor/configs/platform_mappings_mtk.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perfhub/platform_mappings_mtk.xml

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  MTK Platform Parameter Mappings
+  
+  Document Reference: PowerHAL_command_introduction_unlocked.pdf
+  
+  Note: MTK uses generic Cluster 0/1/2 naming without Silver/Gold/Prime distinction
+-->
+
+<PlatformMapping platform="MTK" version="1.0">
+    
+    <Metadata>
+        <Description>MTK PowerHAL Command Mappings (Core Parameters)</Description>
+        <Author>CHAO</Author>
+        <LastUpdate>2025-02-07</LastUpdate>
+        <DocumentRef>PowerHAL_command_introduction_unlocked.pdf</DocumentRef>
+    </Metadata>
+
+    <!-- ==================== CPU Frequency Control ==================== -->
+    
+    <ParamMap 
+        name="CPU_CLUSTER0_MIN_FREQ" 
+        command="0x00400000"
+        cmdname="PERF_RES_CPUFREQ_MIN_CLUSTER_0"
+        description="Cluster 0 Min Frequency (Unit: KHz)"
+        note="The floor of CPU freq for cluster 0/1/2"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER1_MIN_FREQ" 
+        command="0x00400100"
+        cmdname="PERF_RES_CPUFREQ_MIN_CLUSTER_1"
+        description="Cluster 1 Min Frequency (Unit: KHz)"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER2_MIN_FREQ" 
+        command="0x00400200"
+        cmdname="PERF_RES_CPUFREQ_MIN_CLUSTER_2"
+        description="Cluster 2 Min Frequency (Unit: KHz)"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER0_MAX_FREQ" 
+        command="0x00404000"
+        cmdname="PERF_RES_CPUFREQ_MAX_CLUSTER_0"
+        description="Cluster 0 Max Frequency (Unit: KHz)"
+        note="The ceiling of CPU freq for cluster 0/1/2"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER1_MAX_FREQ" 
+        command="0x00404100"
+        cmdname="PERF_RES_CPUFREQ_MAX_CLUSTER_1"
+        description="Cluster 1 Max Frequency (Unit: KHz)"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER2_MAX_FREQ" 
+        command="0x00404200"
+        cmdname="PERF_RES_CPUFREQ_MAX_CLUSTER_2"
+        description="Cluster 2 Max Frequency (Unit: KHz)"/>
+
+    <!-- ==================== CPU Core Control ==================== -->
+    
+    <ParamMap 
+        name="CPU_CLUSTER0_MIN_CORES" 
+        command="0x00800000"
+        cmdname="PERF_RES_CPUCORE_MIN_CLUSTER_0"
+        description="Cluster 0 Minimum Online Cores"
+        note="minimum number of cores for cluster 0/1/2"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER1_MIN_CORES" 
+        command="0x00800100"
+        cmdname="PERF_RES_CPUCORE_MIN_CLUSTER_1"
+        description="Cluster 1 Minimum Online Cores"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER2_MIN_CORES" 
+        command="0x00800200"
+        cmdname="PERF_RES_CPUCORE_MIN_CLUSTER_2"
+        description="Cluster 2 Minimum Online Cores"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER0_MAX_CORES" 
+        command="0x00804000"
+        cmdname="PERF_RES_CPUCORE_MAX_CLUSTER_0"
+        description="Cluster 0 Maximum Online Cores"
+        note="maximum number of cores for cluster 0/1/2"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER1_MAX_CORES" 
+        command="0x00804100"
+        cmdname="PERF_RES_CPUCORE_MAX_CLUSTER_1"
+        description="Cluster 1 Maximum Online Cores"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER2_MAX_CORES" 
+        command="0x00804200"
+        cmdname="PERF_RES_CPUCORE_MAX_CLUSTER_2"
+        description="Cluster 2 Maximum Online Cores"/>
+
+    <!-- ==================== GPU Control ==================== -->
+    
+    <ParamMap 
+        name="GPU_MIN_FREQ" 
+        command="0x00c00000"
+        cmdname="PERF_RES_GPU_FREQ_MIN"
+        description="GPU Min Frequency (Unit: OPP)"
+        note="The floor of GPU freq"/>
+    
+    <ParamMap 
+        name="GPU_MAX_FREQ" 
+        command="0x00c04000"
+        cmdname="PERF_RES_GPU_FREQ_MAX"
+        description="GPU Max Frequency (Unit: OPP)"
+        note="The ceiling of GPU freq"/>
+
+    <!-- ==================== DRAM Control ==================== -->
+    
+    <ParamMap 
+        name="DDR_OPP_MIN" 
+        command="0x01000000"
+        cmdname="PERF_RES_DRAM_OPP_MIN"
+        description="DRAM OPP Min Level"
+        note="The floor of DRAM freq (Unit: OPP)"/>
+
+    <!-- ==================== Scheduler Control ==================== -->
+    
+    <ParamMap 
+        name="SCHED_BOOST" 
+        command="0x01404300"
+        cmdname="PERF_RES_SCHED_PREFER_IDLE_TA"
+        description="Scheduler Prefer Idle for Top-App"
+        note="prefer idle of top-app"/>
+    
+    <ParamMap 
+        name="SCHED_UCLAMP_MIN_FG" 
+        command="0x01408100"
+        cmdname="PERF_RES_SCHED_UCLAMP_MIN_FG"
+        description="Scheduler UCLAMP Min for Foreground"
+        note="uclamp min of foreground"/>
+    
+    <ParamMap 
+        name="SCHED_UCLAMP_MIN_TA" 
+        command="0x01408300"
+        cmdname="PERF_RES_SCHED_UCLAMP_MIN_TA"
+        description="Scheduler UCLAMP Min for Top-App"
+        note="uclamp min of top-app"/>
+
+    <!-- ==================== MTK-Specific Parameters ==================== -->
+    
+    <!-- Performance Mode -->
+    <ParamMap 
+        name="MTK_CPU_PERF_MODE" 
+        command="0x00414000"
+        cmdname="PERF_RES_CPUFREQ_PERF_MODE"
+        description="CPU Performance Mode"
+        note="De-isolate all CPU core (Lower priority, limited by core ceiling and forced isolation)"/>
+    
+    <!-- Power Management -->
+    <ParamMap 
+        name="MTK_PM_QOS_CPUIDLE_MCDI_ENABLE" 
+        command="0x01c3c100"
+        cmdname="PERF_RES_PM_QOS_CPUIDLE_MCDI_ENABLE"
+        description="Enable/Disable MCDI (Multi-Core Deep Idle)"
+        note="Default enable. Turn off MCDI improves performance but increases power consumption"/>
+    
+    <ParamMap 
+        name="MTK_PM_QOS_CPU_DMA_LATENCY" 
+        command="0x01c3c200"
+        cmdname="PERF_RES_PM_QOS_CPU_DMA_LATENCY_VALUE"
+        description="CPU DMA Latency Value (Unit: us)"
+        note="Set minimum CPU wake-up time requirement. Limits CPU idle states"/>
+    
+    <!-- Cache Partition Control -->
+    <ParamMap 
+        name="MTK_SCHED_CACHE_SET_CT_ROOT" 
+        command="0x01420200"
+        cmdname="PERF_RES_SCHED_CACHE_SET_CT_ROOT"
+        description="Set Root as Critical Task Group for Cache"
+        note="Whether to set root as critical task group"/>
+    
+    <ParamMap 
+        name="MTK_SCHED_CACHE_SET_CT_TA" 
+        command="0x01420300"
+        cmdname="PERF_RES_SCHED_CACHE_SET_CT_TA"
+        description="Set Top-App as Critical Task Group for Cache"
+        note="Whether to set top-app as critical task group"/>
+    
+    <!-- FPSGO / Frame Pacing -->
+    <ParamMap 
+        name="MTK_FPS_FPSGO_ENABLE" 
+        command="0x01808000"
+        cmdname="PERF_RES_FPS_FPSGO_ENABLE"
+        description="Enable FPSGO (Frame Pacing System)"
+        note="Whether to enable FPSGO module"/>
+    
+    <ParamMap 
+        name="MTK_FPS_FBT_BHR" 
+        command="0x01810000"
+        cmdname="PERF_RES_FPS_FBT_BHR"
+        description="Frame Boost Hint Ratio"
+        note="FBT boost hint ratio (0-100)"/>
+    
+    <!-- Peak Power Budget -->
+    <ParamMap 
+        name="MTK_PEAK_POWER_BUDGET_MODE" 
+        command="0x03c04000"
+        cmdname="PERF_RES_PEAK_POWER_BUDGET_MODE"
+        description="Peak Power Budget Mode"
+        note="0: Disable PPB, 1: Enable PPB, 12: Enable PPB 2.0"/>
+
+</PlatformMapping>

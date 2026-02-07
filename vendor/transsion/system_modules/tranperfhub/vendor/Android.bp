@@ -12,6 +12,9 @@ cc_library_shared {
     srcs: [
         "adapter/TranPerfHubAdapter.cpp",
         "adapter/PlatformAdapter.cpp",
+        "adapter/XmlConfigParser.cpp",
+        "adapter/ParamMapper.cpp",
+        "adapter/PerfHubTypes.cpp",
     ],
 
     local_include_dirs: [
@@ -24,6 +27,7 @@ cc_library_shared {
         "libcutils",
         "liblog",
         "libutils",
+        "libxml2",
         "vendor.transsion.hardware.perfhub-V1-ndk",
     ],
 
@@ -32,6 +36,7 @@ cc_library_shared {
         "-Werror",
         "-Wno-unused-parameter",
         "-DLOG_TAG=\"TranPerfHub\"",
+        "-DPERFHUB_USE_HARDCODED_MAPPINGS=0",
         // "-DTRAN_LOG_DISABLED",
     ],
 

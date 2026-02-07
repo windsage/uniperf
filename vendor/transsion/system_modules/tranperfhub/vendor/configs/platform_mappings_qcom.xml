@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  QCOM Platform Parameter Mappings
+  
+  Document Reference: KBA200524182546_REV_8_Perflock_Opcode_explanation.pdf
+  
+  Cluster Naming Convention:
+    - Silver (小核) = Little Core / Cluster 0
+    - Gold   (中核) = Big Core / Cluster 1  
+    - Prime  (大核) = Prime Core / Cluster 2
+-->
+
+<PlatformMapping platform="QCOM" version="1.0">
+    
+    <Metadata>
+        <Description>QCOM Perflock Opcode Mappings (Core Parameters)</Description>
+        <Author>CHAO</Author>
+        <LastUpdate>2025-02-07</LastUpdate>
+        <DocumentRef>KBA200524182546_REV_8_Perflock_Opcode_explanation.pdf</DocumentRef>
+    </Metadata>
+
+    <!-- ==================== CPU Frequency Control ==================== -->
+    
+    <!-- Silver Cluster (Little Core / Cluster 0) -->
+    <ParamMap 
+        name="CPU_CLUSTER0_MIN_FREQ" 
+        opcode="0x40800100"
+        description="Silver Cluster Min Frequency"
+        sysnode="/sys/module/msm_performance/parameters/cpu_min_freq"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER0_MAX_FREQ" 
+        opcode="0x40804100"
+        description="Silver Cluster Max Frequency"
+        sysnode="/sys/module/msm_performance/parameters/cpu_max_freq"/>
+    
+    <!-- Gold Cluster (Big Core / Cluster 1) -->
+    <ParamMap 
+        name="CPU_CLUSTER1_MIN_FREQ" 
+        opcode="0x40800000"
+        description="Gold Cluster Min Frequency"
+        sysnode="/sys/module/msm_performance/parameters/cpu_min_freq"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER1_MAX_FREQ" 
+        opcode="0x40804000"
+        description="Gold Cluster Max Frequency"
+        sysnode="/sys/module/msm_performance/parameters/cpu_max_freq"/>
+    
+    <!-- Prime Cluster (Prime Core / Cluster 2) -->
+    <ParamMap 
+        name="CPU_CLUSTER2_MIN_FREQ" 
+        opcode="0x40800200"
+        description="Prime Cluster Min Frequency"
+        sysnode="/sys/module/msm_performance/parameters/cpu_min_freq"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER2_MAX_FREQ" 
+        opcode="0x40804200"
+        description="Prime Cluster Max Frequency"
+        sysnode="/sys/module/msm_performance/parameters/cpu_max_freq"/>
+
+    <!-- ==================== CPU Core Control ==================== -->
+    
+    <ParamMap 
+        name="CPU_CLUSTER0_MIN_CORES" 
+        opcode="0x41000100"
+        description="Silver Cluster Min Online Cores"
+        sysnode="/sys/devices/system/cpu/cpu0/core_ctl/min_cpus"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER1_MIN_CORES" 
+        opcode="0x41000000"
+        description="Gold Cluster Min Online Cores"
+        sysnode="/sys/devices/system/cpu/cpu4/core_ctl/min_cpus"/>
+    
+    <ParamMap 
+        name="CPU_CLUSTER2_MIN_CORES" 
+        opcode="0x41000200"
+        description="Prime Cluster Min Online Cores"
+        sysnode="/sys/devices/system/cpu/cpu7/core_ctl/min_cpus"/>
+
+    <!-- ==================== GPU Control ==================== -->
+    
+    <ParamMap 
+        name="GPU_MIN_FREQ" 
+        opcode="0x42804000"
+        description="GPU Min Frequency"
+        sysnode="/sys/class/kgsl/kgsl-3d0/min_pwrlevel"/>
+    
+    <ParamMap 
+        name="GPU_MAX_FREQ" 
+        opcode="0x42808000"
+        description="GPU Max Frequency"
+        sysnode="/sys/class/kgsl/kgsl-3d0/max_pwrlevel"/>
+
+    <!-- ==================== Scheduler Control ==================== -->
+    
+    <ParamMap 
+        name="SCHED_BOOST" 
+        opcode="0x40C00000"
+        description="Scheduler Boost Level (0-3)"
+        sysnode="/proc/sys/kernel/sched_boost"/>
+    
+    <ParamMap 
+        name="SCHED_UPMIGRATE" 
+        opcode="0x40C1C000"
+        description="Scheduler Up-migrate Threshold"
+        sysnode="/proc/sys/kernel/sched_upmigrate"/>
+    
+    <ParamMap 
+        name="SCHED_DOWNMIGRATE" 
+        opcode="0x40C20000"
+        description="Scheduler Down-migrate Threshold"
+        sysnode="/proc/sys/kernel/sched_downmigrate"/>
+
+    <!-- ==================== Memory & Bandwidth ==================== -->
+    
+    <ParamMap 
+        name="LLCC_DDR_BW_MIN_FREQ" 
+        opcode="0x43000000"
+        description="LLCC to DDR Min Bandwidth"
+        sysnode="/sys/class/devfreq/soc:qcom,cpu-llcc-ddr-bw/min_freq"/>
+    
+    <ParamMap 
+        name="LLCC_DDR_BW_MAX_FREQ" 
+        opcode="0x43004000"
+        description="LLCC to DDR Max Bandwidth"
+        sysnode="/sys/class/devfreq/soc:qcom,cpu-llcc-ddr-bw/max_freq"/>
+    
+    <ParamMap 
+        name="CPU_LLCC_BW_MIN_FREQ" 
+        opcode="0x41844000"
+        description="CPU to LLCC Min Bandwidth"
+        sysnode="/sys/class/devfreq/soc:qcom,cpu-cpu-llcc-bw/min_freq"/>
+    
+    <ParamMap 
+        name="L3_MEMLAT_MIN_FREQ" 
+        opcode="0x43400000"
+        description="L3 Cache Memory Latency Min Freq"
+        sysnode="/sys/class/devfreq/soc:qcom,l3-cpu*/min_freq"/>
+
+    <!-- ==================== QCOM-Specific Parameters ==================== -->
+    
+    <!-- WALT Scheduler -->
+    <ParamMap 
+        name="QCOM_WALT_ADAPTIVE_HIGH_FREQ_GOLD" 
+        opcode="0x4080C000"
+        description="WALT Adaptive High Freq - Gold Cluster"
+        sysnode="/proc/sys/kernel/sched_walt_cpu_high_irqload"/>
+    
+    <ParamMap 
+        name="QCOM_WALT_ADAPTIVE_HIGH_FREQ_SILVER" 
+        opcode="0x4080C100"
+        description="WALT Adaptive High Freq - Silver Cluster"
+        sysnode="/proc/sys/kernel/sched_walt_cpu_high_irqload"/>
+    
+    <ParamMap 
+        name="QCOM_WALT_ADAPTIVE_HIGH_FREQ_PRIME" 
+        opcode="0x4080C200"
+        description="WALT Adaptive High Freq - Prime Cluster"
+        sysnode="/proc/sys/kernel/sched_walt_cpu_high_irqload"/>
+    
+    <!-- Power Management -->
+    <ParamMap 
+        name="QCOM_LPM_BIAS_HYST" 
+        opcode="0x40408000"
+        description="Low Power Mode Bias Hysteresis"
+        sysnode="/sys/module/lpm_levels/parameters/bias_hyst"/>
+    
+    <ParamMap 
+        name="QCOM_POWER_COLLAPSE_TOGGLE" 
+        opcode="0x40400000"
+        description="Toggle CPU Power Collapse"
+        sysnode="/dev/cpu_dma_latency"/>
+    
+    <!-- Storage -->
+    <ParamMap 
+        name="QCOM_STORAGE_CLK_SCALING" 
+        opcode="0x42C10000"
+        description="Storage Clock Scaling Disable"
+        sysnode="/sys/class/scsi_host/host0/clkscale_enable"/>
+    
+    <!-- GPU Extensions -->
+    <ParamMap 
+        name="QCOM_GPU_TOUCH_WAKEUP" 
+        opcode="0x42834000"
+        description="GPU Touch Wakeup Enable"
+        sysnode="/sys/class/kgsl/kgsl-3d0/wake_timeout"/>
+    
+    <!-- Core Control -->
+    <ParamMap 
+        name="QCOM_CPU_CORE_CTL_NOT_PREFERRED" 
+        opcode="0x4100C000"
+        description="CPU Core Control Not Preferred Mask"
+        sysnode="/sys/devices/system/cpu/cpu*/core_ctl/not_preferred"/>
+
+</PlatformMapping>

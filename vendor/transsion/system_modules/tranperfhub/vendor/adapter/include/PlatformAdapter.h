@@ -3,27 +3,16 @@
 
 #include <string>
 #include <vector>
-
+using vendor::transsion::perfhub::Platform;
 namespace vendor {
 namespace transsion {
 namespace hardware {
 namespace perfhub {
 
 /**
- * Platform Type Detection
- */
-enum class PlatformType {
-    UNKNOWN = 0,
-    QCOM = 1,
-    MTK = 2,
-    UNISOC = 3,
-};
-
-/**
  * Platform Adapter
  *
  * Responsibilities:
- *  - Detect platform type (QCOM/MTK/UNISOC)
  *  - Load platform-specific functions via dlsym
  *  - Provide unified interface for performance lock operations
  *
@@ -63,8 +52,6 @@ public:
     void releasePerfLock(int32_t handle);
 
 private:
-    PlatformType detectPlatform();
-
     bool initQcom();
     bool initMtk();
     bool initUnisoc();
@@ -83,7 +70,7 @@ private:
     void mapEventToOpcodes(int32_t eventId, std::vector<int32_t> &opcodes);
 
 private:
-    PlatformType mPlatform;
+    Platform mPlatform;
 
     // QCOM function pointers
     struct QcomFunctions {
