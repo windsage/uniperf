@@ -116,13 +116,21 @@ void ParamMapper::clearMappings() {
 // ====================== Production Mode: Hardcoded Mappings ======================
 
 void ParamMapper::loadHardcodedMappings() {
-    // This will be replaced by generated code from Python script
-    // For now, leave empty - will be filled by tools/gen_platform_mapping.py
-    
-    // Example generated content (auto-generated, DO NOT EDIT):
-    // #include "QcomMappings.inc"  // or MtkMappings.inc
-    
-    TLOGI("Hardcoded mappings loaded (placeholder)");
+    TLOGI("Loading hardcoded mappings for platform: %s",
+          PlatformDetector::getPlatformName(mPlatform));
+
+    if (mPlatform == Platform::QCOM) {
+        #include "QcomMappings.inc"
+        mMappings = QCOM_MAPPINGS;
+        TLOGI("Loaded QCOM hardcoded mappings: %zu params", mMappings.size());
+    } else if (mPlatform == Platform::MTK) {
+        #include "MtkMappings.inc"
+        mMappings = MTK_MAPPINGS;
+        TLOGI("Loaded MTK hardcoded mappings: %zu params", mMappings.size());
+    } else {
+        TLOGE("Unsupported platform for hardcoded mappings: %d",
+              static_cast<int>(mPlatform));
+    }
 }
 
 #else
