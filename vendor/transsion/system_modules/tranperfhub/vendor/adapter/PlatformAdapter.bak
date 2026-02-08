@@ -1,3 +1,4 @@
+// TODO delete
 #define LOG_TAG "PerfHub-PlatformAdapter"
 
 #include "PlatformAdapter.h"
