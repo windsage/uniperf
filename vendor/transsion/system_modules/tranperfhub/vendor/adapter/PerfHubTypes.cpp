@@ -1,4 +1,4 @@
-#define LOG_TAG "PerfHub-Types"
+#define LOG_TAG "PerfHub-Platform"
 
 #include "PerfHubTypes.h"
 
@@ -12,46 +12,79 @@ namespace vendor {
 namespace transsion {
 namespace perfhub {
 
-// ====================== PlatformDetector Implementation ======================
+PlatformDetector &PlatformDetector::getInstance() {
+    // C++11 magic statics: thread-safe, lazy initialization, zero overhead after first call
+    static PlatformDetector instance;
+    return instance;
+}
 
-Platform PlatformDetector::detect() {
+PlatformDetector::PlatformDetector() {
+    // Perform detection only once during construction
+    mPlatform = performDetection();
+
+    TLOGI("Platform initialized: %s", getPlatformName());
+}
+
+Platform PlatformDetector::performDetection() {
     char platform[PROPERTY_VALUE_MAX] = {0};
+    char hardware[PROPERTY_VALUE_MAX] = {0};
 
-    // Read ro.board.platform property
+    // Read critical properties (IPC cost: ~50μs each, but only once)
     property_get("ro.board.platform", platform, "");
+    property_get("ro.hardware", hardware, "");
 
-    TLOGI("Platform detection: ro.board.platform = '%s'", platform);
+    TLOGI("Detection params: platform='%s', hardware='%s'", platform, hardware);
 
-    // QCOM platform patterns
-    if (strstr(platform, "qcom") != nullptr || strstr(platform, "msm") != nullptr ||
-        strstr(platform, "sm") != nullptr || strstr(platform, "sdm") != nullptr ||
-        strstr(platform, "kona") != nullptr || strstr(platform, "lahaina") != nullptr ||
-        strstr(platform, "taro") != nullptr || strstr(platform, "kalama") != nullptr ||
-        strstr(platform, "volcano") != nullptr || strstr(platform, "pineapple") != nullptr ||
-        strstr(platform, "cliffs") != nullptr) {
-        TLOGI("Detected platform: QCOM");
+    // ==================== QCOM Detection (Priority 1) ====================
+    // Check hardware first (most reliable for QCOM devices)
+    if (strstr(hardware, "qcom") != nullptr) {
         return Platform::QCOM;
     }
 
-    // MTK platform patterns
-    if (strstr(platform, "mt") != nullptr) {
-        TLOGI("Detected platform: MTK");
+    // Check platform patterns (ordered by popularity)
+    // Use strncmp for fixed prefixes (faster than strstr)
+    if (strncmp(platform, "sm", 2) == 0 ||     // Snapdragon 8xx series
+        strncmp(platform, "msm", 3) == 0 ||    // Legacy Snapdragon
+        strncmp(platform, "sdm", 3) == 0) {    // Snapdragon 6xx/7xx
+        return Platform::QCOM;
+    }
+
+    // Check codenames (newer generation chips)
+    if (strstr(platform, "volcano") != nullptr ||      // SM8750
+        strstr(platform, "pineapple") != nullptr ||    // SM8650
+        strstr(platform, "kalama") != nullptr ||       // SM8550
+        strstr(platform, "taro") != nullptr ||         // SM8450
+        strstr(platform, "lahaina") != nullptr ||      // SM8350
+        strstr(platform, "kona") != nullptr) {         // SM8250
+        return Platform::QCOM;
+    }
+
+    // ==================== MTK Detection (Priority 2) ====================
+    // MTK uses consistent "mt" prefix
+    if (strncmp(platform, "mt", 2) == 0 || strncmp(hardware, "mt", 2) == 0) {
         return Platform::MTK;
     }
 
-    // UNISOC platform patterns
-    if (strstr(platform, "unisoc") != nullptr || strstr(platform, "ums") != nullptr ||
-        strstr(platform, "sp") != nullptr) {
-        TLOGI("Detected platform: UNISOC");
+    // ==================== UNISOC Detection (Priority 3) ====================
+    // Check platform patterns (UNISOC uses multiple naming schemes)
+    if (strncmp(platform, "ums", 3) == 0 ||    // UMS series
+        strncmp(platform, "sp", 2) == 0) {     // Spreadtrum series
         return Platform::UNISOC;
     }
 
-    TLOGE("Failed to detect platform: '%s'", platform);
+    // Check explicit brand name
+    if (strstr(platform, "unisoc") != nullptr || strstr(hardware, "unisoc") != nullptr) {
+        return Platform::UNISOC;
+    }
+
+    // ==================== Fallback ====================
+    TLOGE("Platform detection failed - no matching pattern found");
     return Platform::UNKNOWN;
 }
 
-const char *PlatformDetector::getPlatformName(Platform platform) {
-    switch (platform) {
+const char *PlatformDetector::getPlatformName() const {
+    // Use static strings (no heap allocation)
+    switch (mPlatform) {
         case Platform::QCOM:
             return "QCOM";
         case Platform::MTK:

@@ -35,7 +35,7 @@ bool ParamMapper::init(Platform platform) {
 
     // Detect platform if not specified
     if (platform == Platform::UNKNOWN) {
-        mPlatform = PlatformDetector::detect();
+        mPlatform = PlatformDetector::getInstance().getPlatform();
     } else {
         mPlatform = platform;
     }

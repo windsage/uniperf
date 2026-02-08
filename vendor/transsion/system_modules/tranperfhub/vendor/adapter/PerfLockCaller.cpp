@@ -59,7 +59,7 @@ bool PerfLockCaller::init() {
     TLOGI("Initializing PerfLockCaller");
 
     // 1. 检测平台
-    mPlatform = PlatformDetector::detect();
+    mPlatform = PlatformDetector::getInstance().getPlatform();
     if (mPlatform == Platform::UNKNOWN) {
         TLOGE("Failed to detect platform");
         return false;

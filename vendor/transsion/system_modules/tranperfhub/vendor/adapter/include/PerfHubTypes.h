@@ -29,22 +29,34 @@ enum class Platform {
  */
 class PlatformDetector {
 public:
-    /**
-     * Detect current platform from system properties
-     *
-     * Reads ro.board.platform and matches against known platform patterns
-     *
-     * @return Detected platform type
-     */
-    static Platform detect();
+    // Get singleton instance (thread-safe, lazy initialization)
+    static PlatformDetector &getInstance();
 
-    /**
-     * Get human-readable platform name
-     *
-     * @param platform Platform enum value
-     * @return Platform name string (e.g., "QCOM", "MTK")
-     */
-    static const char *getPlatformName(Platform platform);
+    // Get cached platform type (zero-cost after first call)
+    inline Platform getPlatform() const { return mPlatform; }
+
+    // Fast boolean queries (inlined for zero overhead)
+    inline bool isQCOM() const { return mPlatform == Platform::QCOM; }
+    inline bool isMTK() const { return mPlatform == Platform::MTK; }
+    inline bool isUNISOC() const { return mPlatform == Platform::UNISOC; }
+    inline bool isUnknown() const { return mPlatform == Platform::UNKNOWN; }
+
+    // Get platform name string (for logging)
+    const char *getPlatformName() const;
+
+    // Prevent copy and assignment
+    PlatformDetector(const PlatformDetector &) = delete;
+    PlatformDetector &operator=(const PlatformDetector &) = delete;
+
+private:
+    // Private constructor for singleton
+    PlatformDetector();
+
+    // Core detection logic (called once during initialization)
+    Platform performDetection();
+
+    // Cached platform type
+    Platform mPlatform;
 };
 
 /**
