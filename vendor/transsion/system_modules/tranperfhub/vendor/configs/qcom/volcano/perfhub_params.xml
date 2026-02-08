@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TranPerfTurbo version="1.0" platform="pineapple" chip="QCOM">
+
+    <Scenarios>
+
+        <!-- 应用启动场景 -->
+        <Scenario id="1" name="APP_LAUNCH" fps="60" description="应用启动基础boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <!-- 通用CPU频率配置 -->
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="0xFFF"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="0xFFF"/>
+                    <Param name="CPU_CLUSTER2_MIN_FREQ" value="0xFFF"/>
+
+                    <!-- 通用调度器配置 -->
+                    <Param name="SCHED_BOOST" value="1"/>
+                    <Param name="SCHED_TASK_BOOST" value="0"/>
+
+                    <!-- QCOM专有参数 -->
+                    <Param name="QCOM_WALT_ADAPTIVE_HIGH_FREQ_PRIME" value="2956800"/>
+                    <Param name="QCOM_CPU_LLCC_BW_MIN_FREQ" value="0x104410"/>
+                    <Param name="QCOM_STORAGE_CLK_SCALING" value="1"/>
+                    <Param name="QCOM_GPU_TOUCH_WAKEUP" value="1"/>
+                </Resources>
+            </Config>
+        </Scenario>
+
+        <!-- 游戏启动场景 -->
+        <Scenario id="3" name="GAME_LAUNCH" fps="90" description="游戏应用启动boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="0x4B0"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="0x76C"/>
+                    <Param name="SCHED_BOOST" value="1"/>
+                    <Param name="QCOM_SCHED_GROUP_UP_DOWN_MIGRATE" value="0x0041002D"/>
+                    <Param name="QCOM_LPM_BIAS" value="0x63"/>
+                </Resources>
+            </Config>
+        </Scenario>
+
+        <!-- 更多场景... -->
+    </Scenarios>
+</TranPerfTurbo>

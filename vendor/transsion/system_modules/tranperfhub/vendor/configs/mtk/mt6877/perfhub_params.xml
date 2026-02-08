@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TranPerfTurbo version="1.0" platform="mt6878" chip="MTK">
+
+    <Scenarios>
+
+        <!-- 应用启动场景 -->
+        <Scenario id="1" name="APP_LAUNCH" fps="0" description="应用启动基础boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <!-- 通用CPU频率配置 -->
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="3000000"/>
+
+                    <!-- DDR配置 -->
+                    <Param name="DDR_OPP_MIN" value="0"/>
+
+                    <!-- 通用调度器配置 -->
+                    <Param name="SCHED_UCLAMP_MIN" value="100"/>
+
+                    <!-- MTK专有参数 -->
+                    <Param name="MTK_PERF_TASK_TURBO" value="15"/>
+                    <Param name="MTK_SCHED_CACHE_PART_CTRL" value="1"/>
+                </Resources>
+            </Config>
+        </Scenario>
+
+        <!-- 进程创建场景 -->
+        <Scenario id="3" name="APP_LAUNCH_PROCESS_CREATE" description="进程创建boost">
+            <Config timeout="35000" release="auto">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="3000000"/>
+                    <Param name="DDR_OPP_MIN" value="0"/>
+                    <Param name="SCHED_UCLAMP_MIN" value="100"/>
+                    <Param name="MTK_FBT_BHR" value="100"/>
+                    <Param name="MTK_POWER_HINT_EXT_HINT" value="30"/>
+                    <Param name="MTK_POWER_HINT_EXT_HINT_HOLD_TIME" value="35000"/>
+                </Resources>
+            </Config>
+        </Scenario>
+
+        <!-- 更多场景... -->
+    </Scenarios>
+</TranPerfTurbo>

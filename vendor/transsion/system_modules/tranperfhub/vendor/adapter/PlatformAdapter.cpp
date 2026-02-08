@@ -1,5 +1,3 @@
-// vendor/transsion/system_modules/tranperfhub/vendor/adapter/PlatformAdapter.cpp
-
 #define LOG_TAG "PerfHub-PlatformAdapter"
 
 #include "PlatformAdapter.h"
@@ -15,33 +13,79 @@
 
 // QCOM mpctl_msg_t structure (from mp-ctl/VendorIPerf.h)
 #define MAX_ARGS_PER_REQUEST 64
+#define MAX_RESERVE_ARGS_PER_REQUEST 32
 #define MAX_MSG_APP_NAME_LEN 128
+#define MTK_MAX_ARGS_PER_REQUEST 600
+
+enum {
+    MPCTL_CMD_PERFLOCKACQ = 2,
+    MPCTL_CMD_PERFLOCKREL = 3,
+    MPCTL_CMD_PERFLOCKPOLL = 4,
+    MPCTL_CMD_PERFLOCKRESET = 5,
+    MPCTL_CMD_EXIT = 6,
+    MPCTL_CMD_PERFLOCK_RESTORE_GOV_PARAMS = 7,
+    MPCTL_CMD_PERFLOCKHINTACQ = 8,
+    MPCTL_CMD_PERFGETFEEDBACK = 9,
+    MPCTL_CMD_PERFEVENT = 10,
+};
 
 struct mpctl_msg_t {
-    uint16_t data;                             // Number of parameters
-    int32_t pl_handle;                         // Performance lock handle
-    uint8_t req_type;                          // Command type
-    int32_t pl_time;                           // Duration in milliseconds
-    int32_t pl_args[MAX_ARGS_PER_REQUEST];     // Parameter array
-    int32_t reservedArgs[32];                  // Reserved arguments
+    uint16_t data;                             // Number of parameters in pl_args
+    int32_t pl_handle;                         // Performance lock handle (0 for new)
+    uint8_t req_type;                          // Command type (MPCTL_CMD_xxx)
+    int32_t pl_time;                           // Duration in milliseconds (0=indefinite)
+    int32_t pl_args[MAX_ARGS_PER_REQUEST];     // Parameter array [opcode1, value1, opcode2, value2, ...]
+    int32_t reservedArgs[MAX_RESERVE_ARGS_PER_REQUEST];  // Reserved for tid/pid/flags
     int32_t numRArgs;                          // Number of reserved args
-    pid_t client_pid;                          // Client PID
-    pid_t client_tid;                          // Client TID
-    uint32_t hint_id;                          // Hint ID
+    pid_t client_pid;                          // Client process ID
+    pid_t client_tid;                          // Client thread ID
+    uint32_t hint_id;                          // Hint ID (for MPCTL_CMD_PERFLOCKHINTACQ)
     int32_t hint_type;                         // Hint type
-    void *userdata;                            // User data pointer
-    char usrdata_str[MAX_MSG_APP_NAME_LEN];    // Package name
-    char propDefVal[92];                       // Property default value
-    bool renewFlag;                            // Renew flag
-    bool offloadFlag;                          // Offload flag
-    int32_t app_workload_type;                 // App workload type
+    void *userdata;                            // User data pointer (used internally by mp-ctl)
+    char usrdata_str[MAX_MSG_APP_NAME_LEN];    // Package name string
+    char propDefVal[92];                       // Property default value (for queries)
+    bool renewFlag;                            // Renew existing lock flag
+    bool offloadFlag;                          // Offload to thread pool flag
+    int32_t app_workload_type;                 // App workload type hint
     int32_t app_pid;                           // App PID
-    int16_t version;                           // Message version
+    int16_t version;                           // Message version (use 1)
     int16_t size;                              // Message size
 };
 
-#define MPCTL_CMD_PERFLOCKACQ 0
-#define MPCTL_CMD_PERFLOCKREL 1
+// MTK Command IDs (from mtkperf_resource.h)
+enum MtkPerfResource {
+    // CPU Frequency (Unit: KHz)
+    PERF_RES_CPUFREQ_MIN_CLUSTER_0 = 0x00400000,
+    PERF_RES_CPUFREQ_MIN_CLUSTER_1 = 0x00400100,
+    PERF_RES_CPUFREQ_MIN_CLUSTER_2 = 0x00400200,
+    PERF_RES_CPUFREQ_MAX_CLUSTER_0 = 0x00404000,
+    PERF_RES_CPUFREQ_MAX_CLUSTER_1 = 0x00404100,
+    PERF_RES_CPUFREQ_MAX_CLUSTER_2 = 0x00404200,
+
+    // CPU Core Control
+    PERF_RES_CPUCORE_MIN_CLUSTER_0 = 0x00800000,
+    PERF_RES_CPUCORE_MIN_CLUSTER_1 = 0x00800100,
+    PERF_RES_CPUCORE_MIN_CLUSTER_2 = 0x00800200,
+    PERF_RES_CPUCORE_MAX_CLUSTER_0 = 0x00804000,
+    PERF_RES_CPUCORE_MAX_CLUSTER_1 = 0x00804100,
+    PERF_RES_CPUCORE_MAX_CLUSTER_2 = 0x00804200,
+
+    // GPU Frequency (Unit: OPP) 注意:不是KHz!
+    PERF_RES_GPU_FREQ_MIN = 0x00c00000,
+    PERF_RES_GPU_FREQ_MAX = 0x00c04000,
+
+    // DRAM (Unit: OPP) 注意:不是KHz!
+    PERF_RES_DRAM_OPP_MIN = 0x01000000,
+
+    // Scheduler
+    PERF_RES_SCHED_PREFER_IDLE_TA = 0x01404300,
+    PERF_RES_SCHED_UCLAMP_MIN_FG = 0x01408100,
+    PERF_RES_SCHED_UCLAMP_MIN_TA = 0x01408300,
+
+    // Power Management
+    PERF_RES_PM_QOS_CPUIDLE_MCDI_ENABLE = 0x01c3c100,
+    PERF_RES_PM_QOS_CPU_DMA_LATENCY_VALUE = 0x01c3c200,
+};
 
 namespace vendor {
 namespace transsion {
@@ -298,59 +342,75 @@ int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventId, int32_t duration,
         return -1;
     }
 
-    // Extract current FPS from intParams
+    // 1. Extract current FPS from intParams[1]
     int32_t currentFps = extractCurrentFps(intParams);
-    
-    // Convert scenario to opcodes using XML config + ParamMapper
+
+    // 2. Convert scenario to opcodes using XML config + ParamMapper
     std::vector<int32_t> opcodes;
     int32_t effectiveTimeout = duration;
-    
+
     if (!convertScenarioToOpcodes(eventId, currentFps, opcodes, effectiveTimeout)) {
-        TLOGE("Failed to convert scenario to opcodes: eventId=%d", eventId);
+        TLOGE("Failed to convert scenario %d to opcodes", eventId);
         return -1;
     }
-    
-    TLOGI("QCOM: eventId=%d, fps=%d, timeout=%d, opcodes=%zu",
+
+    TLOGI("QCOM Lock Acquire: event=%d, fps=%d, timeout=%d ms, opcodes=%zu",
           eventId, currentFps, effectiveTimeout, opcodes.size());
 
-    // Prepare mpctl message
+    // 3. Prepare mpctl_msg_t structure
     mpctl_msg_t msg;
     memset(&msg, 0, sizeof(mpctl_msg_t));
 
     msg.req_type = MPCTL_CMD_PERFLOCKACQ;
-    msg.pl_handle = 0;    // 0 means create new lock
-    msg.pl_time = effectiveTimeout;
-    msg.client_pid = getpid();
-    msg.client_tid = gettid();
-    msg.version = 1;
-    msg.size = sizeof(mpctl_msg_t);
+    msg.pl_handle = 0;                         // 0 = create new lock
+    msg.pl_time = effectiveTimeout;            // timeout in milliseconds
+    msg.client_pid = getpid();                 // current process ID
+    msg.client_tid = gettid();                 // current thread ID
+    msg.version = 1;                           // message version
+    msg.size = sizeof(mpctl_msg_t);           // message size
+    msg.renewFlag = false;                     // not renewing
+    msg.offloadFlag = false;                   // synchronous call
+    msg.hint_id = 0;                          // not a hint
+    msg.hint_type = 0;                        // not a hint
+    msg.userdata = nullptr;                   // no userdata
+    msg.app_workload_type = 0;                // unknown workload
+    msg.app_pid = getpid();                   // app PID
 
-    // Copy package name
     if (!packageName.empty()) {
         strncpy(msg.usrdata_str, packageName.c_str(), MAX_MSG_APP_NAME_LEN - 1);
         msg.usrdata_str[MAX_MSG_APP_NAME_LEN - 1] = '\0';
     }
 
-    // Copy opcodes to message
     size_t numOpcodes = std::min(opcodes.size(), static_cast<size_t>(MAX_ARGS_PER_REQUEST));
     for (size_t i = 0; i < numOpcodes; i++) {
         msg.pl_args[i] = opcodes[i];
     }
-    msg.data = static_cast<uint16_t>(numOpcodes);
+    msg.data = static_cast<uint16_t>(numOpcodes);  // total number of ints in pl_args
 
-    // Call QCOM perfmodule_submit_request (direct in-process call)
+    // 可选: 填充reserved args (tid/pid已经在专用字段中)
+    msg.numRArgs = 0;  // 不使用reservedArgs数组
+
+    // 4. Call perfmodule_submit_request (direct in-process call)
     int32_t handle = submitRequest(&msg);
 
-    TLOGI("QCOM perfmodule_submit_request returned: handle=%d", handle);
+    if (handle > 0) {
+        TLOGI("QCOM perfmodule_submit_request SUCCESS: handle=%d, timeout=%d ms",
+              handle, effectiveTimeout);
 
-    if (handle > 0 && effectiveTimeout > 0) {
-        // Start timeout timer
-        startTimeoutTimer(eventId, handle, effectiveTimeout);
+        // Start timeout timer if needed
+        if (effectiveTimeout > 0) {
+            startTimeoutTimer(eventId, handle, effectiveTimeout);
+        }
+    } else if (handle == -3) {
+        TLOGE("QCOM perfmodule_submit_request FAILED: Target initialization not complete");
+    } else {
+        TLOGE("QCOM perfmodule_submit_request FAILED: handle=%d", handle);
     }
 
     return handle;
 }
 
+// QCOM释放性能锁
 void PlatformAdapter::qcomReleasePerfLock(int32_t handle) {
     typedef int (*perfmodule_submit_request_t)(mpctl_msg_t *);
     auto submitRequest = reinterpret_cast<perfmodule_submit_request_t>(mQcomFuncs.submitRequest);
@@ -360,6 +420,9 @@ void PlatformAdapter::qcomReleasePerfLock(int32_t handle) {
         return;
     }
 
+    TLOGI("QCOM Lock Release: handle=%d", handle);
+
+    // Prepare mpctl_msg_t for release
     mpctl_msg_t msg;
     memset(&msg, 0, sizeof(mpctl_msg_t));
 
@@ -370,8 +433,18 @@ void PlatformAdapter::qcomReleasePerfLock(int32_t handle) {
     msg.version = 1;
     msg.size = sizeof(mpctl_msg_t);
 
-    TLOGI("QCOM: Releasing lock handle=%d", handle);
-    submitRequest(&msg);
+    // Call perfmodule_submit_request
+    int32_t result = submitRequest(&msg);
+
+    if (result >= 0) {
+        TLOGI("QCOM perfmodule_submit_request (release) SUCCESS: handle=%d", handle);
+    } else {
+        TLOGE("QCOM perfmodule_submit_request (release) FAILED: handle=%d, result=%d",
+              handle, result);
+    }
+
+    // Cancel timeout timer
+    cancelTimeoutTimer(handle);
 }
 
 // ====================== MTK Implementation ======================
@@ -379,50 +452,76 @@ void PlatformAdapter::qcomReleasePerfLock(int32_t handle) {
 int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventId, int32_t duration,
                                             const std::vector<int32_t> &intParams,
                                             const std::string &packageName) {
-    typedef int (*mtk_perf_lock_acq_t)(int *, int, int, int, int, int);
+    // Function signature: int libpowerhal_LockAcq(int *list, int hdl, int size, int pid, int tid, int duration)
+    typedef int (*mtk_perf_lock_acq_t)(int*, int, int, int, int, int);
     auto lockAcq = reinterpret_cast<mtk_perf_lock_acq_t>(mMtkFuncs.lockAcq);
 
     if (!lockAcq) {
         TLOGE("MTK lockAcq function not initialized");
-        return -1;
+        return 0;  // MTK失败返回0,不是-1
     }
 
-    // Extract current FPS from intParams
+    // 1. Extract current FPS
     int32_t currentFps = extractCurrentFps(intParams);
-    
-    // Convert scenario to commands using XML config + ParamMapper
+
+    // 2. Convert scenario to MTK commands
     std::vector<int32_t> commands;
     int32_t effectiveTimeout = duration;
-    
-    if (!convertScenarioToOpcodes(eventId, currentFps, commands, effectiveTimeout)) {
-        TLOGE("Failed to convert scenario to commands: eventId=%d", eventId);
-        return -1;
-    }
-    
-    TLOGI("MTK: eventId=%d, fps=%d, timeout=%d, commands=%zu",
-          eventId, currentFps, effectiveTimeout, commands.size());
 
-    // Call MTK libpowerhal_LockAcq (direct in-process call)
+    if (!convertScenarioToOpcodes(eventId, currentFps, commands, effectiveTimeout)) {
+        TLOGE("MTK: Failed to convert scenario %d to commands", eventId);
+        return 0;
+    }
+
+    // 3. RITICAL: MTK参数验证 (from powerhal_api.cpp)
+    if (commands.size() % 2 != 0) {
+        TLOGE("MTK: Invalid command size %zu (must be even pairs)", commands.size());
+        return 0;
+    }
+
+    if (commands.size() > MAX_ARGS_PER_REQUEST) {
+        TLOGE("MTK: Command size %zu exceeds limit %d", commands.size(), MAX_ARGS_PER_REQUEST);
+        return 0;
+    }
+
+    if (commands.empty()) {
+        TLOGE("MTK: Empty command list");
+        return 0;
+    }
+
+    // 4. CRITICAL: 单位转换 (MTK特殊需求)
+    convertUnitsForMtk(commands);
+
+    TLOGI("MTK Lock Acquire: event=%d, fps=%d, timeout=%d ms, commands=%zu pairs",
+          eventId, currentFps, effectiveTimeout, commands.size() / 2);
+
+    // 5. 调用MTK API (正确的pid/tid)
     int32_t handle = lockAcq(
-        commands.data(),
-        0,                                   // handle (0 = new)
-        static_cast<int>(commands.size()),   // numArgs
-        0,                                   // pid
-        0,                                   // tid
-        effectiveTimeout
+            commands.data(),
+            0,                                   // hdl (0 = create new)
+            static_cast<int>(commands.size()),   // size (总元素数,包括cmd+value)
+            getpid(),                            // pid
+            gettid(),                            // tid
+            effectiveTimeout                     // duration in milliseconds
     );
 
-    TLOGI("MTK libpowerhal_LockAcq returned: handle=%d", handle);
+    // 6. 正确判断返回值 (MTK返回0=失败, >0=成功)
+    if (handle > 0) {
+        TLOGI("MTK LockAcq SUCCESS: handle=%d, timeout=%d ms", handle, effectiveTimeout);
 
-    if (handle > 0 && effectiveTimeout > 0) {
         // Start timeout timer
-        startTimeoutTimer(eventId, handle, effectiveTimeout);
+        if (effectiveTimeout > 0) {
+            startTimeoutTimer(eventId, handle, effectiveTimeout);
+        }
+    } else {
+        TLOGE("MTK LockAcq FAILED: handle=%d (0=disabled/failed)", handle);
     }
 
-    return handle;
+    return handle;  // 返回0或正值
 }
 
 void PlatformAdapter::mtkReleasePerfLock(int32_t handle) {
+    // Function signature: int libpowerhal_LockRel(int hdl)
     typedef int (*mtk_perf_lock_rel_t)(int);
     auto lockRel = reinterpret_cast<mtk_perf_lock_rel_t>(mMtkFuncs.lockRel);
 
@@ -431,11 +530,128 @@ void PlatformAdapter::mtkReleasePerfLock(int32_t handle) {
         return;
     }
 
-    TLOGI("MTK: Releasing lock handle=%d", handle);
-    lockRel(handle);
+    TLOGI("MTK Lock Release: handle=%d", handle);
+
+    int result = lockRel(handle);
+
+    if (result == 0) {
+        TLOGI("MTK LockRel SUCCESS: handle=%d", handle);
+    } else {
+        TLOGE("MTK LockRel FAILED: handle=%d, result=%d", handle, result);
+    }
+
+    // Cancel timeout timer
+    cancelTimeoutTimer(handle);
 }
 
 // ====================== Scenario Conversion ======================
+/**
+ * MTK平台单位转换
+ *
+ * CRITICAL: MTK有些参数使用特殊单位,需要转换!
+ *
+ * 1. CPU频率: KHz (与统一单位一致,无需转换)
+ * 2. GPU频率: OPP索引 (不是KHz! 需要转换)
+ * 3. DRAM频率: OPP索引 (不是KHz! 需要转换)
+ */
+void PlatformAdapter::convertUnitsForMtk(std::vector<int32_t> &commands) {
+    // commands格式: [cmd1, value1, cmd2, value2, ...]
+
+    for (size_t i = 0; i < commands.size(); i += 2) {
+        int32_t cmd = commands[i];
+        int32_t &value = commands[i + 1];
+
+        switch (cmd) {
+            // ==================== GPU: KHz → OPP Index ====================
+            case PERF_RES_GPU_FREQ_MIN:
+            case PERF_RES_GPU_FREQ_MAX:
+                // MTK GPU uses OPP index, NOT frequency!
+                // 需要查询GPU OPP table转换 (简化版:直接用OPP索引)
+                value = convertGpuFreqToOppIndex(value);
+                TLOGI("MTK Unit Convert: GPU freq %d KHz → OPP index %d", commands[i+1], value);
+                break;
+
+                // ==================== DRAM: KHz → OPP Index ====================
+            case PERF_RES_DRAM_OPP_MIN:
+                // MTK DRAM uses OPP index, NOT frequency!
+                value = convertDramFreqToOppIndex(value);
+                TLOGI("MTK Unit Convert: DRAM freq %d KHz → OPP index %d", commands[i+1], value);
+                break;
+
+                // ==================== CPU: KHz (无需转换) ====================
+            case PERF_RES_CPUFREQ_MIN_CLUSTER_0:
+            case PERF_RES_CPUFREQ_MIN_CLUSTER_1:
+            case PERF_RES_CPUFREQ_MIN_CLUSTER_2:
+            case PERF_RES_CPUFREQ_MAX_CLUSTER_0:
+            case PERF_RES_CPUFREQ_MAX_CLUSTER_1:
+            case PERF_RES_CPUFREQ_MAX_CLUSTER_2:
+                // CPU frequency already in KHz, no conversion needed
+                TLOGI("MTK: CPU freq = %d KHz (no conversion)", value);
+                break;
+
+                // ==================== Scheduler/PM: 无需转换 ====================
+            default:
+                // Other commands use raw values
+                break;
+        }
+    }
+}
+
+/**
+ * GPU频率 → OPP索引转换
+ *
+ * MTK GPU OPP表是平台相关的,需要查询或使用预定义映射
+ * 这里简化处理:假设OPP 0 = 最高频率
+ */
+int32_t PlatformAdapter::convertGpuFreqToOppIndex(int32_t freqKhz) {
+    // 简化版:直接返回OPP索引
+
+    // 示例映射 (具体值根据平台而定)
+    static const std::vector<std::pair<int, int>> GPU_FREQ_TO_OPP = {
+            {1000000, 0},  // 1000 MHz = OPP 0 (highest)
+            {900000, 1},   // 900 MHz = OPP 1
+            {800000, 2},   // 800 MHz = OPP 2
+            {700000, 3},   // 700 MHz = OPP 3
+            {600000, 4},   // 600 MHz = OPP 4
+            {500000, 5},   // 500 MHz = OPP 5
+    };
+
+    // Find closest OPP
+    for (const auto& [freq, opp] : GPU_FREQ_TO_OPP) {
+        if (freqKhz >= freq) {
+            return opp;
+        }
+    }
+
+    // Default to lowest OPP
+    return GPU_FREQ_TO_OPP.back().second;
+}
+
+/**
+* DRAM频率 → OPP索引转换
+*/
+int32_t PlatformAdapter::convertDramFreqToOppIndex(int32_t freqKhz) {
+    // 简化版:直接返回OPP索引
+    // 实际项目需要查询平台DRAM OPP表
+
+    // 这里其实需要确认是不是每个平台都采用一样的DDR
+    static const std::vector<std::pair<int, int>> DRAM_FREQ_TO_OPP = {
+            {3200000, 0},  // 3200 MHz = OPP 0 (highest)
+            {2400000, 1},  // 2400 MHz = OPP 1
+            {1866000, 2},  // 1866 MHz = OPP 2
+            {1600000, 3},  // 1600 MHz = OPP 3
+            {1200000, 4},  // 1200 MHz = OPP 4
+    };
+
+    for (const auto& [freq, opp] : DRAM_FREQ_TO_OPP) {
+        if (freqKhz >= freq) {
+            return opp;
+        }
+    }
+
+    return DRAM_FREQ_TO_OPP.back().second;
+}
+
 
 bool PlatformAdapter::convertScenarioToOpcodes(int32_t eventId, int32_t currentFps,
                                                 std::vector<int32_t> &opcodes,
