@@ -101,10 +101,6 @@ enum MtkPerfResource {
     PERF_RES_PM_QOS_CPU_DMA_LATENCY_VALUE = 0x01c3c200,
 };
 
-// ==================== 平台枚举 ====================
-
-enum class Platform { UNKNOWN = 0, QCOM = 1, MTK = 2, UNISOC = 3 };
-
 // ==================== PerfLockCaller 类 ====================
 
 /**

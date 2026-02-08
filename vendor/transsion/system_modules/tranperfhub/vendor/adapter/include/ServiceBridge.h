@@ -17,7 +17,6 @@
 
 namespace vendor {
 namespace transsion {
-namespace hardware {
 namespace perfhub {
 
 using ::aidl::vendor::transsion::hardware::perfhub::BnTranPerfHub;
@@ -86,7 +85,6 @@ private:
 };
 
 }    // namespace perfhub
-}    // namespace hardware
 }    // namespace transsion
 }    // namespace vendor
 

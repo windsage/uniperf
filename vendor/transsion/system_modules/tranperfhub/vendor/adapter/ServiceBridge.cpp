@@ -7,7 +7,6 @@
 
 namespace vendor {
 namespace transsion {
-namespace hardware {
 namespace perfhub {
 
 // ==================== Constructor / Destructor ====================
@@ -302,6 +301,5 @@ int32_t ServiceBridge::getDuration(const std::vector<int32_t> &intParams) const 
 }
 
 }    // namespace perfhub
-}    // namespace hardware
 }    // namespace transsion
 }    // namespace vendor

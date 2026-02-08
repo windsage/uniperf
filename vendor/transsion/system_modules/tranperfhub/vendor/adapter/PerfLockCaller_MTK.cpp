@@ -3,7 +3,6 @@
 
 namespace vendor {
 namespace transsion {
-namespace hardware {
 namespace perfhub {
 
 // ==================== MTK 平台实现 ====================
@@ -109,6 +108,5 @@ void PerfLockCaller::mtkReleasePerfLock(int32_t handle) {
 }
 
 }    // namespace perfhub
-}    // namespace hardware
 }    // namespace transsion
 }    // namespace vendor

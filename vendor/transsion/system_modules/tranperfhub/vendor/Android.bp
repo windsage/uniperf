@@ -10,7 +10,7 @@ cc_library_shared {
     vendor: true,
 
     srcs: [
-        "adapter/PerfLockCaller_QCOM.cpp",
+        "adapter/PerfLockCaller.cpp",
         "adapter/PerfLockCaller_MTK.cpp",
         "adapter/ServiceBridge.cpp",
         "adapter/XmlConfigParser.cpp",

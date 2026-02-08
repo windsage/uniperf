@@ -1,3 +1,5 @@
+#include "PerfLockCaller.h"
+
 #include <android-base/properties.h>
 #include <dlfcn.h>
 #include <unistd.h>
@@ -5,12 +7,11 @@
 #include <chrono>
 #include <cstring>
 
-#include "PerfLockCaller.h"
+#include "PerfHubType.h"
 #include "TranLog.h"
 
 namespace vendor {
 namespace transsion {
-namespace hardware {
 namespace perfhub {
 
 // ==================== Constructor / Destructor ====================
@@ -58,7 +59,7 @@ bool PerfLockCaller::init() {
     TLOGI("Initializing PerfLockCaller");
 
     // 1. 检测平台
-    mPlatform = detectPlatform();
+    mPlatform = PlatformDetector::detect();
     if (mPlatform == Platform::UNKNOWN) {
         TLOGE("Failed to detect platform");
         return false;
@@ -89,32 +90,6 @@ bool PerfLockCaller::init() {
     mInitialized = true;
     TLOGI("PerfLockCaller initialized successfully");
     return true;
-}
-
-Platform PerfLockCaller::detectPlatform() {
-    char platform[PROP_VALUE_MAX] = {0};
-    __system_property_get("ro.board.platform", platform);
-
-    TLOGI("Detecting platform from ro.board.platform=%s", platform);
-
-    // QCOM: "pineapple", "kalama", "taro", "msm8998" 等
-    if (strstr(platform, "qcom") || strstr(platform, "msm") || strstr(platform, "kalama") ||
-        strstr(platform, "pineapple") || strstr(platform, "taro")) {
-        return Platform::QCOM;
-    }
-
-    // MTK: "mt6895", "mt6983", "mt6878" 等
-    if (strstr(platform, "mt")) {
-        return Platform::MTK;
-    }
-
-    // UNISOC: "ums9620", "ums512" 等
-    if (strstr(platform, "unisoc") || strstr(platform, "ums")) {
-        return Platform::UNISOC;
-    }
-
-    TLOGE("Unknown platform: %s", platform);
-    return Platform::UNKNOWN;
 }
 
 bool PerfLockCaller::initQcom() {
@@ -403,6 +378,5 @@ void PerfLockCaller::handleTimeout(int32_t eventId, int32_t platformHandle) {
 }
 
 }    // namespace perfhub
-}    // namespace hardware
 }    // namespace transsion
 }    // namespace vendor
