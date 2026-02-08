@@ -10,8 +10,9 @@ cc_library_shared {
     vendor: true,
 
     srcs: [
-        "adapter/TranPerfHubAdapter.cpp",
-        "adapter/PlatformAdapter.cpp",
+        "adapter/PerfLockCaller_QCOM.cpp",
+        "adapter/PerfLockCaller_MTK.cpp",
+        "adapter/ServiceBridge.cpp",
         "adapter/XmlConfigParser.cpp",
         "adapter/ParamMapper.cpp",
         "adapter/PerfHubTypes.cpp",

@@ -1,15 +1,17 @@
 #define LOG_TAG "PerfHub-PlatformAdapter"
 
 #include "PlatformAdapter.h"
-#include "TranLog.h"
-#include "XmlConfigParser.h"
-#include "ParamMapper.h"
 
 #include <android-base/properties.h>
 #include <dlfcn.h>
 #include <unistd.h>
-#include <cstring>
+
 #include <chrono>
+#include <cstring>
+
+#include "ParamMapper.h"
+#include "TranLog.h"
+#include "XmlConfigParser.h"
 
 // QCOM mpctl_msg_t structure (from mp-ctl/VendorIPerf.h)
 #define MAX_ARGS_PER_REQUEST 64
@@ -30,15 +32,16 @@ enum {
 };
 
 struct mpctl_msg_t {
-    uint16_t data;                             // Number of parameters in pl_args
-    int32_t pl_handle;                         // Performance lock handle (0 for new)
-    uint8_t req_type;                          // Command type (MPCTL_CMD_xxx)
-    int32_t pl_time;                           // Duration in milliseconds (0=indefinite)
-    int32_t pl_args[MAX_ARGS_PER_REQUEST];     // Parameter array [opcode1, value1, opcode2, value2, ...]
-    int32_t reservedArgs[MAX_RESERVE_ARGS_PER_REQUEST];  // Reserved for tid/pid/flags
-    int32_t numRArgs;                          // Number of reserved args
-    pid_t client_pid;                          // Client process ID
-    pid_t client_tid;                          // Client thread ID
+    uint16_t data;        // Number of parameters in pl_args
+    int32_t pl_handle;    // Performance lock handle (0 for new)
+    uint8_t req_type;     // Command type (MPCTL_CMD_xxx)
+    int32_t pl_time;      // Duration in milliseconds (0=indefinite)
+    int32_t
+        pl_args[MAX_ARGS_PER_REQUEST];    // Parameter array [opcode1, value1, opcode2, value2, ...]
+    int32_t reservedArgs[MAX_RESERVE_ARGS_PER_REQUEST];    // Reserved for tid/pid/flags
+    int32_t numRArgs;                                      // Number of reserved args
+    pid_t client_pid;                                      // Client process ID
+    pid_t client_tid;                                      // Client thread ID
     uint32_t hint_id;                          // Hint ID (for MPCTL_CMD_PERFLOCKHINTACQ)
     int32_t hint_type;                         // Hint type
     void *userdata;                            // User data pointer (used internally by mp-ctl)
@@ -92,37 +95,35 @@ namespace transsion {
 namespace hardware {
 namespace perfhub {
 
-using vendor::transsion::perfhub::XmlConfigParser;
 using vendor::transsion::perfhub::ParamMapper;
-using vendor::transsion::perfhub::ScenarioConfig;
 using vendor::transsion::perfhub::Platform;
+using vendor::transsion::perfhub::ScenarioConfig;
+using vendor::transsion::perfhub::XmlConfigParser;
 
 // ====================== Constructor / Destructor ======================
 
-PlatformAdapter::PlatformAdapter() 
-    : mPlatform(Platform::UNKNOWN),
-      mInitialized(false) {
+PlatformAdapter::PlatformAdapter() : mPlatform(Platform::UNKNOWN), mInitialized(false) {
     memset(&mQcomFuncs, 0, sizeof(mQcomFuncs));
     memset(&mMtkFuncs, 0, sizeof(mMtkFuncs));
 }
 
 PlatformAdapter::~PlatformAdapter() {
     TLOGI("Destroying PlatformAdapter");
-    
+
     // Cancel all active timers and release locks
     std::lock_guard<std::mutex> lock(mLocksMutex);
-    for (auto& pair : mActiveLocks) {
+    for (auto &pair : mActiveLocks) {
         // Cancel timer
         {
             std::lock_guard<std::mutex> timerLock(pair.second.timerMutex);
             pair.second.timerCanceled = true;
         }
         pair.second.timerCv.notify_all();
-        
+
         if (pair.second.timerThread.joinable()) {
             pair.second.timerThread.join();
         }
-        
+
         // Release lock
         if (pair.second.platformHandle > 0) {
             if (mPlatform == Platform::QCOM) {
@@ -142,16 +143,16 @@ bool PlatformAdapter::init() {
         TLOGW("PlatformAdapter already initialized");
         return true;
     }
-    
+
     TLOGI("Initializing PlatformAdapter");
-    
+
     // 1. Detect platform
     mPlatform = PlatformDetector::detect();
     if (mPlatform == Platform::UNKNOWN) {
         TLOGE("Failed to detect platform");
         return false;
     }
-    
+
     // 2. Initialize platform-specific functions
     bool platformInitOk = false;
     switch (mPlatform) {
@@ -168,15 +169,15 @@ bool PlatformAdapter::init() {
             TLOGE("Unknown platform");
             return false;
     }
-    
+
     if (!platformInitOk) {
         TLOGE("Failed to initialize platform functions");
         return false;
     }
-    
+
     // 3. Initialize XmlConfigParser
     mConfigParser = std::make_unique<XmlConfigParser>();
-    
+
     std::string configFile;
     if (mPlatform == Platform::QCOM) {
         // TODO: Get chip name from property, use default for now
@@ -184,16 +185,16 @@ bool PlatformAdapter::init() {
     } else if (mPlatform == Platform::MTK) {
         configFile = "perfhub_config_mt6878.xml";
     }
-    
+
     if (!mConfigParser->loadConfig(configFile)) {
         TLOGE("Failed to load scenario config: %s", configFile.c_str());
         return false;
     }
     TLOGI("Loaded scenario config: %zu scenarios", mConfigParser->getScenarioCount());
-    
+
     // 4. Initialize ParamMapper
     mParamMapper = std::make_unique<ParamMapper>();
-    
+
     Platform mappingPlatform;
     if (mPlatform == Platform::QCOM) {
         mappingPlatform = Platform::QCOM;
@@ -202,13 +203,13 @@ bool PlatformAdapter::init() {
     } else {
         mappingPlatform = Platform::UNKNOWN;
     }
-    
+
     if (!mParamMapper->init(mappingPlatform)) {
         TLOGE("Failed to initialize ParamMapper");
         return false;
     }
     TLOGI("Loaded parameter mappings: %zu params", mParamMapper->getMappingCount());
-    
+
     mInitialized = true;
     TLOGI("PlatformAdapter initialized successfully");
     return true;
@@ -262,12 +263,12 @@ int32_t PlatformAdapter::acquirePerfLock(int32_t eventId, int32_t duration,
         TLOGE("PlatformAdapter not initialized");
         return -1;
     }
-    
-    TLOGI("acquirePerfLock: eventId=%d, duration=%d, pkg=%s",
-          eventId, duration, packageName.c_str());
-    
+
+    TLOGI("acquirePerfLock: eventId=%d, duration=%d, pkg=%s", eventId, duration,
+          packageName.c_str());
+
     int32_t platformHandle = -1;
-    
+
     switch (mPlatform) {
         case Platform::QCOM:
             platformHandle = qcomAcquirePerfLock(eventId, duration, intParams, packageName);
@@ -282,12 +283,12 @@ int32_t PlatformAdapter::acquirePerfLock(int32_t eventId, int32_t duration,
             TLOGE("Unknown platform");
             return -1;
     }
-    
+
     if (platformHandle < 0) {
         TLOGE("Failed to acquire perf lock");
         return -1;
     }
-    
+
     TLOGI("Perf lock acquired: handle=%d", platformHandle);
     return platformHandle;
 }
@@ -297,12 +298,12 @@ void PlatformAdapter::releasePerfLock(int32_t handle) {
         TLOGE("PlatformAdapter not initialized");
         return;
     }
-    
+
     TLOGI("releasePerfLock: handle=%d", handle);
-    
+
     // Cancel timeout timer if exists
     cancelTimeoutTimer(handle);
-    
+
     // Release platform lock
     switch (mPlatform) {
         case Platform::QCOM:
@@ -315,15 +316,15 @@ void PlatformAdapter::releasePerfLock(int32_t handle) {
             TLOGE("Unknown platform");
             break;
     }
-    
+
     // Remove from tracking
     {
         std::lock_guard<std::mutex> lock(mLocksMutex);
         auto it = mActiveLocks.find(handle);
         if (it != mActiveLocks.end()) {
             int64_t duration = (getCurrentTimeNs() - it->second.startTime) / 1000000;
-            TLOGI("Lock released: handle=%d, duration=%lld ms (timeout was %d ms)",
-                  handle, static_cast<long long>(duration), it->second.timeout);
+            TLOGI("Lock released: handle=%d, duration=%lld ms (timeout was %d ms)", handle,
+                  static_cast<long long>(duration), it->second.timeout);
             mActiveLocks.erase(it);
         }
     }
@@ -354,27 +355,27 @@ int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventId, int32_t duration,
         return -1;
     }
 
-    TLOGI("QCOM Lock Acquire: event=%d, fps=%d, timeout=%d ms, opcodes=%zu",
-          eventId, currentFps, effectiveTimeout, opcodes.size());
+    TLOGI("QCOM Lock Acquire: event=%d, fps=%d, timeout=%d ms, opcodes=%zu", eventId, currentFps,
+          effectiveTimeout, opcodes.size());
 
     // 3. Prepare mpctl_msg_t structure
     mpctl_msg_t msg;
     memset(&msg, 0, sizeof(mpctl_msg_t));
 
     msg.req_type = MPCTL_CMD_PERFLOCKACQ;
-    msg.pl_handle = 0;                         // 0 = create new lock
-    msg.pl_time = effectiveTimeout;            // timeout in milliseconds
-    msg.client_pid = getpid();                 // current process ID
-    msg.client_tid = gettid();                 // current thread ID
-    msg.version = 1;                           // message version
-    msg.size = sizeof(mpctl_msg_t);           // message size
-    msg.renewFlag = false;                     // not renewing
-    msg.offloadFlag = false;                   // synchronous call
-    msg.hint_id = 0;                          // not a hint
-    msg.hint_type = 0;                        // not a hint
-    msg.userdata = nullptr;                   // no userdata
-    msg.app_workload_type = 0;                // unknown workload
-    msg.app_pid = getpid();                   // app PID
+    msg.pl_handle = 0;                 // 0 = create new lock
+    msg.pl_time = effectiveTimeout;    // timeout in milliseconds
+    msg.client_pid = getpid();         // current process ID
+    msg.client_tid = gettid();         // current thread ID
+    msg.version = 1;                   // message version
+    msg.size = sizeof(mpctl_msg_t);    // message size
+    msg.renewFlag = false;             // not renewing
+    msg.offloadFlag = false;           // synchronous call
+    msg.hint_id = 0;                   // not a hint
+    msg.hint_type = 0;                 // not a hint
+    msg.userdata = nullptr;            // no userdata
+    msg.app_workload_type = 0;         // unknown workload
+    msg.app_pid = getpid();            // app PID
 
     if (!packageName.empty()) {
         strncpy(msg.usrdata_str, packageName.c_str(), MAX_MSG_APP_NAME_LEN - 1);
@@ -385,17 +386,17 @@ int32_t PlatformAdapter::qcomAcquirePerfLock(int32_t eventId, int32_t duration,
     for (size_t i = 0; i < numOpcodes; i++) {
         msg.pl_args[i] = opcodes[i];
     }
-    msg.data = static_cast<uint16_t>(numOpcodes);  // total number of ints in pl_args
+    msg.data = static_cast<uint16_t>(numOpcodes);    // total number of ints in pl_args
 
     // 可选: 填充reserved args (tid/pid已经在专用字段中)
-    msg.numRArgs = 0;  // 不使用reservedArgs数组
+    msg.numRArgs = 0;    // 不使用reservedArgs数组
 
     // 4. Call perfmodule_submit_request (direct in-process call)
     int32_t handle = submitRequest(&msg);
 
     if (handle > 0) {
-        TLOGI("QCOM perfmodule_submit_request SUCCESS: handle=%d, timeout=%d ms",
-              handle, effectiveTimeout);
+        TLOGI("QCOM perfmodule_submit_request SUCCESS: handle=%d, timeout=%d ms", handle,
+              effectiveTimeout);
 
         // Start timeout timer if needed
         if (effectiveTimeout > 0) {
@@ -439,8 +440,8 @@ void PlatformAdapter::qcomReleasePerfLock(int32_t handle) {
     if (result >= 0) {
         TLOGI("QCOM perfmodule_submit_request (release) SUCCESS: handle=%d", handle);
     } else {
-        TLOGE("QCOM perfmodule_submit_request (release) FAILED: handle=%d, result=%d",
-              handle, result);
+        TLOGE("QCOM perfmodule_submit_request (release) FAILED: handle=%d, result=%d", handle,
+              result);
     }
 
     // Cancel timeout timer
@@ -452,13 +453,14 @@ void PlatformAdapter::qcomReleasePerfLock(int32_t handle) {
 int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventId, int32_t duration,
                                             const std::vector<int32_t> &intParams,
                                             const std::string &packageName) {
-    // Function signature: int libpowerhal_LockAcq(int *list, int hdl, int size, int pid, int tid, int duration)
-    typedef int (*mtk_perf_lock_acq_t)(int*, int, int, int, int, int);
+    // Function signature: int libpowerhal_LockAcq(int *list, int hdl, int size, int pid, int tid,
+    // int duration)
+    typedef int (*mtk_perf_lock_acq_t)(int *, int, int, int, int, int);
     auto lockAcq = reinterpret_cast<mtk_perf_lock_acq_t>(mMtkFuncs.lockAcq);
 
     if (!lockAcq) {
         TLOGE("MTK lockAcq function not initialized");
-        return 0;  // MTK失败返回0,不是-1
+        return 0;    // MTK失败返回0,不是-1
     }
 
     // 1. Extract current FPS
@@ -492,17 +494,16 @@ int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventId, int32_t duration,
     // 4. CRITICAL: 单位转换 (MTK特殊需求)
     convertUnitsForMtk(commands);
 
-    TLOGI("MTK Lock Acquire: event=%d, fps=%d, timeout=%d ms, commands=%zu pairs",
-          eventId, currentFps, effectiveTimeout, commands.size() / 2);
+    TLOGI("MTK Lock Acquire: event=%d, fps=%d, timeout=%d ms, commands=%zu pairs", eventId,
+          currentFps, effectiveTimeout, commands.size() / 2);
 
     // 5. 调用MTK API (正确的pid/tid)
-    int32_t handle = lockAcq(
-            commands.data(),
-            0,                                   // hdl (0 = create new)
-            static_cast<int>(commands.size()),   // size (总元素数,包括cmd+value)
-            getpid(),                            // pid
-            gettid(),                            // tid
-            effectiveTimeout                     // duration in milliseconds
+    int32_t handle = lockAcq(commands.data(),
+                             0,                                    // hdl (0 = create new)
+                             static_cast<int>(commands.size()),    // size (总元素数,包括cmd+value)
+                             getpid(),                             // pid
+                             gettid(),                             // tid
+                             effectiveTimeout                      // duration in milliseconds
     );
 
     // 6. 正确判断返回值 (MTK返回0=失败, >0=成功)
@@ -517,7 +518,7 @@ int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventId, int32_t duration,
         TLOGE("MTK LockAcq FAILED: handle=%d (0=disabled/failed)", handle);
     }
 
-    return handle;  // 返回0或正值
+    return handle;    // 返回0或正值
 }
 
 void PlatformAdapter::mtkReleasePerfLock(int32_t handle) {
@@ -568,14 +569,14 @@ void PlatformAdapter::convertUnitsForMtk(std::vector<int32_t> &commands) {
                 // MTK GPU uses OPP index, NOT frequency!
                 // 需要查询GPU OPP table转换 (简化版:直接用OPP索引)
                 value = convertGpuFreqToOppIndex(value);
-                TLOGI("MTK Unit Convert: GPU freq %d KHz → OPP index %d", commands[i+1], value);
+                TLOGI("MTK Unit Convert: GPU freq %d KHz → OPP index %d", commands[i + 1], value);
                 break;
 
                 // ==================== DRAM: KHz → OPP Index ====================
             case PERF_RES_DRAM_OPP_MIN:
                 // MTK DRAM uses OPP index, NOT frequency!
                 value = convertDramFreqToOppIndex(value);
-                TLOGI("MTK Unit Convert: DRAM freq %d KHz → OPP index %d", commands[i+1], value);
+                TLOGI("MTK Unit Convert: DRAM freq %d KHz → OPP index %d", commands[i + 1], value);
                 break;
 
                 // ==================== CPU: KHz (无需转换) ====================
@@ -608,16 +609,16 @@ int32_t PlatformAdapter::convertGpuFreqToOppIndex(int32_t freqKhz) {
 
     // 示例映射 (具体值根据平台而定)
     static const std::vector<std::pair<int, int>> GPU_FREQ_TO_OPP = {
-            {1000000, 0},  // 1000 MHz = OPP 0 (highest)
-            {900000, 1},   // 900 MHz = OPP 1
-            {800000, 2},   // 800 MHz = OPP 2
-            {700000, 3},   // 700 MHz = OPP 3
-            {600000, 4},   // 600 MHz = OPP 4
-            {500000, 5},   // 500 MHz = OPP 5
+        {1000000, 0},    // 1000 MHz = OPP 0 (highest)
+        {900000, 1},     // 900 MHz = OPP 1
+        {800000, 2},     // 800 MHz = OPP 2
+        {700000, 3},     // 700 MHz = OPP 3
+        {600000, 4},     // 600 MHz = OPP 4
+        {500000, 5},     // 500 MHz = OPP 5
     };
 
     // Find closest OPP
-    for (const auto& [freq, opp] : GPU_FREQ_TO_OPP) {
+    for (const auto &[freq, opp] : GPU_FREQ_TO_OPP) {
         if (freqKhz >= freq) {
             return opp;
         }
@@ -628,22 +629,22 @@ int32_t PlatformAdapter::convertGpuFreqToOppIndex(int32_t freqKhz) {
 }
 
 /**
-* DRAM频率 → OPP索引转换
-*/
+ * DRAM频率 → OPP索引转换
+ */
 int32_t PlatformAdapter::convertDramFreqToOppIndex(int32_t freqKhz) {
     // 简化版:直接返回OPP索引
     // 实际项目需要查询平台DRAM OPP表
 
     // 这里其实需要确认是不是每个平台都采用一样的DDR
     static const std::vector<std::pair<int, int>> DRAM_FREQ_TO_OPP = {
-            {3200000, 0},  // 3200 MHz = OPP 0 (highest)
-            {2400000, 1},  // 2400 MHz = OPP 1
-            {1866000, 2},  // 1866 MHz = OPP 2
-            {1600000, 3},  // 1600 MHz = OPP 3
-            {1200000, 4},  // 1200 MHz = OPP 4
+        {3200000, 0},    // 3200 MHz = OPP 0 (highest)
+        {2400000, 1},    // 2400 MHz = OPP 1
+        {1866000, 2},    // 1866 MHz = OPP 2
+        {1600000, 3},    // 1600 MHz = OPP 3
+        {1200000, 4},    // 1200 MHz = OPP 4
     };
 
-    for (const auto& [freq, opp] : DRAM_FREQ_TO_OPP) {
+    for (const auto &[freq, opp] : DRAM_FREQ_TO_OPP) {
         if (freqKhz >= freq) {
             return opp;
         }
@@ -652,49 +653,46 @@ int32_t PlatformAdapter::convertDramFreqToOppIndex(int32_t freqKhz) {
     return DRAM_FREQ_TO_OPP.back().second;
 }
 
-
 bool PlatformAdapter::convertScenarioToOpcodes(int32_t eventId, int32_t currentFps,
-                                                std::vector<int32_t> &opcodes,
-                                                int32_t &effectiveTimeout) {
+                                               std::vector<int32_t> &opcodes,
+                                               int32_t &effectiveTimeout) {
     // 1. Get scenario configuration from XML
-    const ScenarioConfig* config = mConfigParser->getScenarioConfig(eventId, currentFps);
+    const ScenarioConfig *config = mConfigParser->getScenarioConfig(eventId, currentFps);
     if (!config) {
         TLOGE("Scenario config not found: eventId=%d, fps=%d", eventId, currentFps);
         return false;
     }
-    
-    TLOGI("Found scenario: id=%d, name='%s', fps=%d, timeout=%d, params=%zu",
-          config->id, config->name.c_str(), config->fps, 
-          config->timeout, config->params.size());
-    
+
+    TLOGI("Found scenario: id=%d, name='%s', fps=%d, timeout=%d, params=%zu", config->id,
+          config->name.c_str(), config->fps, config->timeout, config->params.size());
+
     // 2. Use timeout from XML config
     effectiveTimeout = config->timeout;
-    
+
     // 3. Convert params to platform opcodes
-    opcodes.reserve(config->params.size() * 2);  // opcode + value pairs
-    
+    opcodes.reserve(config->params.size() * 2);    // opcode + value pairs
+
     int validParamCount = 0;
-    for (const auto& param : config->params) {
+    for (const auto &param : config->params) {
         int32_t opcode = mParamMapper->getOpcode(param.name);
         if (opcode < 0) {
-            TLOGD("Skip unsupported param: %s (platform-specific or unavailable)", 
+            TLOGD("Skip unsupported param: %s (platform-specific or unavailable)",
                   param.name.c_str());
             continue;
         }
-        
+
         opcodes.push_back(opcode);
         opcodes.push_back(param.value);
         validParamCount++;
-        
-        TLOGD("  Map: %s=%d -> opcode=0x%08X", 
-              param.name.c_str(), param.value, opcode);
+
+        TLOGD("  Map: %s=%d -> opcode=0x%08X", param.name.c_str(), param.value, opcode);
     }
-    
+
     if (validParamCount == 0) {
         TLOGW("No valid parameters to apply for eventId=%d", eventId);
         return false;
     }
-    
+
     TLOGI("Converted %d/%zu params to opcodes", validParamCount, config->params.size());
     return true;
 }
@@ -703,37 +701,37 @@ int32_t PlatformAdapter::extractCurrentFps(const std::vector<int32_t> &intParams
     // AIDL parameter format: [duration, fps, ...]
     // intParams[0] = duration (already passed separately)
     // intParams[1] = fps (if available)
-    
+
     if (intParams.size() >= 2) {
         int32_t fps = intParams[1];
         TLOGD("Extracted FPS from intParams: %d", fps);
         return fps;
     }
-    
+
     TLOGD("No FPS in intParams, using default 0");
     return 0;
 }
 
 // ====================== Timeout Timer Implementation ======================
 
-void PlatformAdapter::startTimeoutTimer(int32_t eventId, int32_t platformHandle, 
+void PlatformAdapter::startTimeoutTimer(int32_t eventId, int32_t platformHandle,
                                         int32_t timeoutMs) {
-    TLOGD("Starting timeout timer: eventId=%d, handle=%d, timeout=%d ms",
-          eventId, platformHandle, timeoutMs);
-    
+    TLOGD("Starting timeout timer: eventId=%d, handle=%d, timeout=%d ms", eventId, platformHandle,
+          timeoutMs);
+
     std::lock_guard<std::mutex> lock(mLocksMutex);
-    
-    EventLock& eventLock = mActiveLocks[platformHandle];
+
+    EventLock &eventLock = mActiveLocks[platformHandle];
     eventLock.platformHandle = platformHandle;
     eventLock.eventId = eventId;
     eventLock.timeout = timeoutMs;
     eventLock.startTime = getCurrentTimeNs();
     eventLock.timerCanceled = false;
-    
+
     // Create timer thread
     eventLock.timerThread = std::thread([this, eventId, platformHandle, timeoutMs]() {
-        EventLock* lockPtr = nullptr;
-        
+        EventLock *lockPtr = nullptr;
+
         // Get lock pointer
         {
             std::lock_guard<std::mutex> lock(mLocksMutex);
@@ -742,27 +740,25 @@ void PlatformAdapter::startTimeoutTimer(int32_t eventId, int32_t platformHandle,
                 lockPtr = &it->second;
             }
         }
-        
+
         if (!lockPtr) {
             TLOGE("Timer: Event lock not found: handle=%d", platformHandle);
             return;
         }
-        
+
         // Wait for timeout or cancellation
         std::unique_lock<std::mutex> timerLock(lockPtr->timerMutex);
-        bool canceled = lockPtr->timerCv.wait_for(
-            timerLock,
-            std::chrono::milliseconds(timeoutMs),
-            [lockPtr]() { return lockPtr->timerCanceled.load(); }
-        );
-        
+        bool canceled =
+            lockPtr->timerCv.wait_for(timerLock, std::chrono::milliseconds(timeoutMs),
+                                      [lockPtr]() { return lockPtr->timerCanceled.load(); });
+
         if (canceled) {
             TLOGD("Timer canceled: handle=%d (End event received)", platformHandle);
             return;
         }
-        
+
         // Timeout occurred - trigger auto-release
-        TLOGW("Timer EXPIRED: eventId=%d, handle=%d, timeout=%d ms (End event NOT received)", 
+        TLOGW("Timer EXPIRED: eventId=%d, handle=%d, timeout=%d ms (End event NOT received)",
               eventId, platformHandle, timeoutMs);
         onTimeout(eventId, platformHandle);
     });
@@ -770,24 +766,24 @@ void PlatformAdapter::startTimeoutTimer(int32_t eventId, int32_t platformHandle,
 
 void PlatformAdapter::cancelTimeoutTimer(int32_t platformHandle) {
     TLOGD("Canceling timeout timer: handle=%d", platformHandle);
-    
+
     std::lock_guard<std::mutex> lock(mLocksMutex);
-    
+
     auto it = mActiveLocks.find(platformHandle);
     if (it == mActiveLocks.end()) {
         TLOGD("No active timer to cancel: handle=%d", platformHandle);
         return;
     }
-    
-    EventLock& eventLock = it->second;
-    
+
+    EventLock &eventLock = it->second;
+
     // Signal timer thread to cancel
     {
         std::lock_guard<std::mutex> timerLock(eventLock.timerMutex);
         eventLock.timerCanceled = true;
     }
     eventLock.timerCv.notify_all();
-    
+
     // Wait for timer thread to finish
     if (eventLock.timerThread.joinable()) {
         eventLock.timerThread.join();
@@ -796,16 +792,16 @@ void PlatformAdapter::cancelTimeoutTimer(int32_t platformHandle) {
 }
 
 void PlatformAdapter::onTimeout(int32_t eventId, int32_t platformHandle) {
-    TLOGW("AUTO-RELEASE triggered: eventId=%d, handle=%d (timeout expired)", 
-          eventId, platformHandle);
-    
+    TLOGW("AUTO-RELEASE triggered: eventId=%d, handle=%d (timeout expired)", eventId,
+          platformHandle);
+
     // Release platform lock
     if (mPlatform == Platform::QCOM) {
         qcomReleasePerfLock(platformHandle);
     } else if (mPlatform == Platform::MTK) {
         mtkReleasePerfLock(platformHandle);
     }
-    
+
     // Remove from tracking
     {
         std::lock_guard<std::mutex> lock(mLocksMutex);
@@ -821,8 +817,7 @@ void PlatformAdapter::onTimeout(int32_t eventId, int32_t platformHandle) {
 
 int64_t PlatformAdapter::getCurrentTimeNs() {
     auto now = std::chrono::steady_clock::now();
-    return std::chrono::duration_cast<std::chrono::nanoseconds>(
-        now.time_since_epoch()).count();
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
 }
 
 }    // namespace perfhub
