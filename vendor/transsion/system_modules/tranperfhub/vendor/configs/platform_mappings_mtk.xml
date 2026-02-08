@@ -14,7 +14,7 @@
         <Description>MTK PowerHAL Command Mappings (Core Parameters)</Description>
         <Author>CHAO</Author>
         <LastUpdate>2025-02-07</LastUpdate>
-        <DocumentRef>PowerHAL_command_introduction_unlocked.pdf</DocumentRef>
+        <DocumentRef>PowerHAL_command_introduction.pdf</DocumentRef>
     </Metadata>
 
     <!-- ==================== CPU Frequency Control ==================== -->

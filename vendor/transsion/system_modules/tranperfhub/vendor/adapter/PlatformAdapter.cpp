@@ -479,8 +479,8 @@ int32_t PlatformAdapter::mtkAcquirePerfLock(int32_t eventId, int32_t duration,
         return 0;
     }
 
-    if (commands.size() > MAX_ARGS_PER_REQUEST) {
-        TLOGE("MTK: Command size %zu exceeds limit %d", commands.size(), MAX_ARGS_PER_REQUEST);
+    if (commands.size() > MTK_MAX_ARGS_PER_REQUEST) {
+        TLOGE("MTK: Command size %zu exceeds limit %d", commands.size(), MTK_MAX_ARGS_PER_REQUEST);
         return 0;
     }
 
