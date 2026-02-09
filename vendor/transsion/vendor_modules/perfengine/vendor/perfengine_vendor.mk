@@ -29,7 +29,7 @@ PRODUCT_VENDOR_PROPERTIES += \
 # ==================== SELinux 策略 ====================
 
 BOARD_SEPOLICY_DIRS += \
-    vendor/transsion/system_modules/perfengine/sepolicy/vendor
+    vendor/transsion/vendor_modules/usf/perfengine/sepolicy/vendor
 
 # ==================== Vendor 额外依赖 ====================
 
@@ -47,5 +47,5 @@ ifneq ($(filter eng userdebug,$(TARGET_BUILD_VARIANT)),)
 endif
 
 PRODUCT_COPY_FILES += \
-    vendor/transsion/system_modules/perfengine/vendor/configs/platform_mappings_qcom.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perfengine/platform_mappings_qcom.xml \
-    vendor/transsion/system_modules/perfengine/vendor/configs/platform_mappings_mtk.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perfengine/platform_mappings_mtk.xml
+    vendor/transsion/vendor_modules/usf/perfengine/vendor/configs/platform_mappings_qcom.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perfengine/platform_mappings_qcom.xml \
+    vendor/transsion/vendor_modules/usf/perfengine/vendor/configs/platform_mappings_mtk.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perfengine/platform_mappings_mtk.xml

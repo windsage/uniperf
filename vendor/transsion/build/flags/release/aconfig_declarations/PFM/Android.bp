@@ -5,8 +5,8 @@ package {
 // ==================== Aconfig 声明 ====================
 
 aconfig_declarations {
-    name: "com.transsion.perfhub.flags-aconfig",
-    package: "com.transsion.perfhub.flags",
+    name: "com.transsion.perfengine.flags-aconfig",
+    package: "com.transsion.perfengine.flags",
     container: "system",
     srcs: [
         "flags.aconfig",
@@ -16,8 +16,8 @@ aconfig_declarations {
 // ==================== Java 库 (System 层使用) ====================
 
 java_aconfig_library {
-    name: "com.transsion.perfhub.flags-aconfig-java",
-    aconfig_declarations: "com.transsion.perfhub.flags-aconfig",
+    name: "com.transsion.perfengine.flags-aconfig-java",
+    aconfig_declarations: "com.transsion.perfengine.flags-aconfig",
 
     // SDK 版本
     min_sdk_version: "current",
@@ -32,8 +32,8 @@ java_aconfig_library {
 // ==================== C++ 库 (System Native 和 Vendor 都可用) ====================
 
 cc_aconfig_library {
-    name: "libtranperfhub_flags_c",
-    aconfig_declarations: "com.transsion.perfhub.flags-aconfig",
+    name: "libperfengine_flags_c",
+    aconfig_declarations: "com.transsion.perfengine.flags-aconfig",
 
     // vendor_available 允许 Vendor 层使用
     vendor_available: true,

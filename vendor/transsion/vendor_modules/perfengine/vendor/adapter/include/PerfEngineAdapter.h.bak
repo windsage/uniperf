@@ -1,4 +1,4 @@
-// vendor/transsion/system_modules/perfengine/vendor/adapter/include/PerfEngineAdapter.h
+// vendor/transsion/vendor_modules/usf/perfengine/vendor/adapter/include/PerfEngineAdapter.h
 // TODO delete
 #ifndef PERFENGINE_ADAPTER_H
 #define PERFENGINE_ADAPTER_H

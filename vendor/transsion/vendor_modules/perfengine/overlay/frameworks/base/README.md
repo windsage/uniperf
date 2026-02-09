@@ -282,7 +282,7 @@ long timestamp = TranPerfEvent.now();
 ┌────────────────────────────────────────────────────────────┐
 │                 TranPerfEvent (事件中心)                   │
 ├────────────────────────────────────────────────────────────┤
-│ 1. 检查 Flags.enableTranperfengine() 是否启用                 │
+│ 1. 检查 Flags.enablePerfengine() 是否启用                 │
 │ 2. 记录接收时间戳和延迟监控                                │
 │ 3. 通知本地监听器（多线程安全）                            │
 │ 4. 通过反射调用 PerfEngine                                │
@@ -318,7 +318,7 @@ notifyEventStart: eventId=1, timestamp=123456, latency=15000000 ns (15.00 ms), .
 通过 Android Feature Flags（aconfig）控制模块启用状态：
 
 ```java
-if (!Flags.enableTranperfengine()) {
+if (!Flags.enablePerfengine()) {
     return;  // 模块禁用，不发送事件
 }
 ```
@@ -373,7 +373,7 @@ long ts = System.nanoTime();
 ### Q3: 事件没有被接收到怎么办？
 
 检查以下几点：
-1. Feature Flag 是否启用：`Flags.enableTranperfengine()`
+1. Feature Flag 是否启用：`Flags.enablePerfengine()`
 2. 监听器是否正确注册
 3. PerfEngine 是否正常加载（查看反射初始化日志）
 

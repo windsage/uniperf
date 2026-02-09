@@ -1,4 +1,4 @@
-# vendor/transsion/system_modules/perfengine/perfengine.mk
+# vendor/transsion/vendor_modules/usf/perfengine/perfengine.mk
 
 # ============================================================
 # PerfEngine - 自动化配置脚本
@@ -12,7 +12,7 @@
 #
 # 使用方式:
 #   在 device.mk 中添加:
-#   $(call inherit-product, vendor/transsion/system_modules/perfengine/perfengine.mk)
+#   $(call inherit-product, vendor/transsion/vendor_modules/usf/perfengine/perfengine.mk)
 #
 # ============================================================
 
@@ -44,7 +44,7 @@ $(info [PerfEngine] Platform detected: $(PERFENGINE_PLATFORM_TYPE) - $(PERFENGIN
 
 # ==================== 配置文件路径 ====================
 
-PERFENGINE_BASE_DIR := vendor/transsion/system_modules/perfengine
+PERFENGINE_BASE_DIR := vendor/transsion/vendor_modules/usf/perfengine
 PERFENGINE_CONFIG_DIR := $(PERFENGINE_BASE_DIR)/vendor/configs
 
 # 根据平台选择配置目录

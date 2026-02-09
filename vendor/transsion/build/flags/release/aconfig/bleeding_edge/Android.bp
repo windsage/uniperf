@@ -1,6 +1,6 @@
 aconfig_value_set {
     name: "aconfig_value_set-platform_vendor_transsion_build_flags_release-bleeding_edge",
     values: [
-        "aconfig-values-platform_vendor_transsion_build_flags_release-bleeding_edge-PFM-com.transsion.perfhub.flags-all",
+        "aconfig-values-platform_vendor_transsion_build_flags_release-bleeding_edge-PFM-com.transsion.perfengine.flags-all",
     ]
 }

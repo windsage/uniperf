@@ -2,8 +2,8 @@ package {
     default_applicable_licenses: ["vendor_transsion_license"],
 }
 aconfig_values {
-    name: "aconfig-values-platform_vendor_transsion_build_flags_release-stable-PFM-com.transsion.perfhub.flags-all",
-    package: "com.transsion.perfhub.flags",
+    name: "aconfig-values-platform_vendor_transsion_build_flags_release-stable-PFM-com.transsion.perfengine.flags-all",
+    package: "com.transsion.perfengine.flags",
     srcs: [
         "*_flag_values.textproto",
     ],

@@ -1,6 +1,6 @@
 flag_value {
-    package: "com.transsion.perfhub.flags"
-    name: "enable_tranperfhub"
+    package: "com.transsion.perfengine.flags"
+    name: "enable_perfengine"
     state: ENABLED              # 开启功能
     permission: READ_WRITE      # 可运行时修改
 }

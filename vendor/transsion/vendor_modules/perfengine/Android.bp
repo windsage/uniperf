@@ -25,7 +25,7 @@ phony {
 
         // AIDL 接口
         "vendor.transsion.hardware.perfengine-V1-ndk",
-
+        "vendor.transsion.hardware.perfengine-V1-java",
         // Aconfig Flags
         "com.transsion.perfengine.flags-aconfig-java",
         "libperfengine_flags_c",

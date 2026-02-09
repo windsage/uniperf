@@ -249,7 +249,7 @@ Examples:
   %(prog)s --all
 
   # Generate from custom directory
-  %(prog)s --all --base-dir vendor/transsion/system_modules/perfengine/vendor
+  %(prog)s --all --base-dir vendor/transsion/vendor_modules/usf/perfengine/vendor
         """
     )
 

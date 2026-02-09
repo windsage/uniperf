@@ -1,4 +1,4 @@
-// vendor/transsion/system_modules/perfengine/vendor/adapter/include/ServiceBridge.h
+// vendor/transsion/vendor_modules/usf/perfengine/vendor/adapter/include/ServiceBridge.h
 // AIDL 服务桥接层 - 重命名自 PerfEngineAdapter
 
 #ifndef SERVICE_BRIDGE_H

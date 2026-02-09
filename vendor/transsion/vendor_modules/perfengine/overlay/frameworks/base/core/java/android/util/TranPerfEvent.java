@@ -406,7 +406,7 @@ public final class TranPerfEvent {
     private static void notifyEventStartInternal(
             int eventId, long timestamp, int numParams, int[] intParams, String extraStrings) {
         // Check aconfig flag
-        if (!Flags.enableTranperfengine()) {
+        if (!Flags.enablePerfengine()) {
             if (DEBUG) {
                 Log.d(TAG, "PerfEngine disabled by flag");
             }
@@ -479,7 +479,7 @@ public final class TranPerfEvent {
      */
     public static void notifyEventEnd(int eventId, long timestamp, String extraString) {
         // Check aconfig flag
-        if (!Flags.enableTranperfengine()) {
+        if (!Flags.enablePerfengine()) {
             return;
         }
 
