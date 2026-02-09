@@ -1,0 +1,50 @@
+license {
+    name: "vendor_transsion_license",
+    visibility: ["//visibility:public"],
+    license_kinds: [
+        "SPDX-license-identifier-Apache-2.0",
+    ],
+    license_text: [
+        "LICENSE",
+    ],
+}
+
+// ==================== System 分区模块聚合 ====================
+
+phony {
+    name: "perfengine_system",
+    required: [
+        // Framework 实现层
+        "perfengine_impl",
+
+        // JNI 层
+        "libperfengine-jni",
+
+        // System Native Client
+        "libperfengine-client",
+
+        // AIDL 接口
+        "vendor.transsion.hardware.perfengine-V1-ndk",
+
+        // Aconfig Flags
+        "com.transsion.perfengine.flags-aconfig-java",
+        "libperfengine_flags_c",
+        "libaconfig_storage_read_api_cc",
+    ],
+}
+
+// ==================== Vendor 分区模块聚合 ====================
+
+phony {
+    name: "perfengine_vendor",
+    required: [
+        // Vendor Service
+        "libperfengine-adapter",
+        "libperfengine-client",
+        // AIDL 接口
+        "vendor.transsion.hardware.perfengine-V1-ndk",
+
+        // Aconfig Flags
+        "libperfengine_flags_c",
+    ],
+}

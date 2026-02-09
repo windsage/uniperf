@@ -1,0 +1,296 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Platform Mapping Generator
+
+Converts XML platform mapping files to C++ hardcoded include files.
+
+Usage:
+    # Generate QCOM mappings
+    python3 gen_platform_mapping.py \
+        -i configs/platform_mappings_qcom.xml \
+        -o adapter/include/QcomMappings.inc
+
+    # Generate MTK mappings
+    python3 gen_platform_mapping.py \
+        -i configs/platform_mappings_mtk.xml \
+        -o adapter/include/MtkMappings.inc
+
+    # Generate all mappings at once
+    python3 gen_platform_mapping.py --all
+
+Author: chao.xu5
+Date: 2025-02-08
+"""
+
+import argparse
+import sys
+import os
+import xml.etree.ElementTree as ET
+from pathlib import Path
+from datetime import datetime
+
+
+class PlatformMappingGenerator:
+    """Platform mapping XML to C++ converter"""
+
+    def __init__(self, xml_path: str, output_path: str):
+        self.xml_path = xml_path
+        self.output_path = output_path
+        self.mappings = []
+        self.platform = ""
+        self.version = ""
+
+    def parse_xml(self) -> bool:
+        """Parse XML mapping file"""
+        try:
+            tree = ET.parse(self.xml_path)
+            root = tree.getroot()
+
+            if root.tag != "PlatformMapping":
+                print(f"Error: Invalid root element '{root.tag}', expected 'PlatformMapping'")
+                return False
+
+            # Extract platform and version
+            self.platform = root.get("platform", "UNKNOWN")
+            self.version = root.get("version", "1.0")
+
+            print(f"Parsing {self.platform} platform mappings...")
+
+            # Parse all ParamMap entries
+            for param_map in root.findall("ParamMap"):
+                name = param_map.get("name")
+                if not name:
+                    print(f"Warning: ParamMap missing 'name' attribute, skipping")
+                    continue
+
+                # QCOM uses 'opcode', MTK uses 'command'
+                opcode = param_map.get("opcode") or param_map.get("command")
+                if not opcode:
+                    print(f"Warning: ParamMap '{name}' missing 'opcode'/'command' attribute, skipping")
+                    continue
+
+                # Convert hex string to integer
+                try:
+                    if opcode.startswith("0x") or opcode.startswith("0X"):
+                        value = int(opcode, 16)
+                    else:
+                        value = int(opcode)
+                except ValueError:
+                    print(f"Warning: Invalid opcode value '{opcode}' for '{name}', skipping")
+                    continue
+
+                # Optional: description for comment
+                description = param_map.get("description", "")
+
+                self.mappings.append({
+                    "name": name,
+                    "value": value,
+                    "hex": opcode,
+                    "description": description
+                })
+
+            print(f"Parsed {len(self.mappings)} parameter mappings")
+            return True
+
+        except ET.ParseError as e:
+            print(f"Error: Failed to parse XML: {e}")
+            return False
+        except FileNotFoundError:
+            print(f"Error: XML file not found: {self.xml_path}")
+            return False
+        except Exception as e:
+            print(f"Error: Unexpected error: {e}")
+            return False
+
+    def generate_cpp(self) -> bool:
+        """Generate C++ hardcoded mapping file"""
+        try:
+            # Create output directory if not exists
+            output_dir = os.path.dirname(self.output_path)
+            if output_dir:
+                os.makedirs(output_dir, exist_ok=True)
+
+            with open(self.output_path, 'w', encoding='utf-8') as f:
+                # Write header
+                self._write_header(f)
+
+                # Write mapping table
+                self._write_mapping_table(f)
+
+                # Write footer
+                self._write_footer(f)
+
+            print(f"Generated: {self.output_path}")
+            print(f"  Platform: {self.platform}")
+            print(f"  Mappings: {len(self.mappings)}")
+            return True
+
+        except IOError as e:
+            print(f"Error: Failed to write output file: {e}")
+            return False
+        except Exception as e:
+            print(f"Error: Unexpected error: {e}")
+            return False
+
+    def _write_header(self, f):
+        """Write file header"""
+        xml_filename = os.path.basename(self.xml_path)
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        f.write(f"// Auto-generated from {xml_filename}\n")
+        f.write(f"// Generated at: {timestamp}\n")
+        f.write(f"// Platform: {self.platform}\n")
+        f.write(f"// Version: {self.version}\n")
+        f.write(f"// Total mappings: {len(self.mappings)}\n")
+        f.write(f"//\n")
+        f.write(f"// DO NOT EDIT THIS FILE MANUALLY\n")
+        f.write(f"// Regenerate using: tools/gen_platform_mapping.py\n")
+        f.write(f"\n")
+
+    def _write_mapping_table(self, f):
+        """Write C++ mapping table"""
+        # Determine table name based on platform
+        table_name = f"{self.platform.upper()}_MAPPINGS"
+
+        f.write(f"static const std::unordered_map<std::string, int32_t> {table_name} = {{\n")
+
+        # Write each mapping entry
+        for i, mapping in enumerate(self.mappings):
+            name = mapping["name"]
+            value = mapping["value"]
+            hex_str = mapping["hex"]
+            description = mapping["description"]
+
+            # Format: {"PARAM_NAME", 0x12345678},  // Description
+            if description:
+                f.write(f'    {{"{name}", 0x{value:08X}}},  // {description}\n')
+            else:
+                f.write(f'    {{"{name}", 0x{value:08X}}},\n')
+
+        f.write(f"}};\n")
+
+    def _write_footer(self, f):
+        """Write file footer"""
+        f.write(f"\n")
+        f.write(f"// End of auto-generated file\n")
+
+
+def generate_single_mapping(xml_path: str, output_path: str) -> bool:
+    """Generate single mapping file"""
+    print(f"\n{'='*60}")
+    print(f"Generating platform mapping")
+    print(f"  Input:  {xml_path}")
+    print(f"  Output: {output_path}")
+    print(f"{'='*60}\n")
+
+    generator = PlatformMappingGenerator(xml_path, output_path)
+
+    if not generator.parse_xml():
+        return False
+
+    if not generator.generate_cpp():
+        return False
+
+    print(f"\n✅ Successfully generated {output_path}\n")
+    return True
+
+
+def generate_all_mappings(base_dir: str = ".") -> bool:
+    """Generate all platform mappings"""
+    configs = [
+        {
+            "name": "QCOM",
+            "xml": f"{base_dir}/configs/platform_mappings_qcom.xml",
+            "output": f"{base_dir}/adapter/include/QcomMappings.inc"
+        },
+        {
+            "name": "MTK",
+            "xml": f"{base_dir}/configs/platform_mappings_mtk.xml",
+            "output": f"{base_dir}/adapter/include/MtkMappings.inc"
+        }
+    ]
+
+    success_count = 0
+    fail_count = 0
+
+    print("\n" + "="*60)
+    print("Generating all platform mappings")
+    print("="*60)
+
+    for config in configs:
+        if os.path.exists(config["xml"]):
+            if generate_single_mapping(config["xml"], config["output"]):
+                success_count += 1
+            else:
+                fail_count += 1
+        else:
+            print(f"\n⚠️  Warning: XML file not found: {config['xml']}")
+            fail_count += 1
+
+    print("\n" + "="*60)
+    print(f"Summary: {success_count} succeeded, {fail_count} failed")
+    print("="*60 + "\n")
+
+    return fail_count == 0
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Generate C++ hardcoded mapping files from XML",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Generate single mapping
+  %(prog)s -i configs/platform_mappings_qcom.xml -o adapter/include/QcomMappings.inc
+
+  # Generate all mappings
+  %(prog)s --all
+
+  # Generate from custom directory
+  %(prog)s --all --base-dir vendor/transsion/system_modules/perfengine/vendor
+        """
+    )
+
+    parser.add_argument(
+        "-i", "--input",
+        help="Input XML mapping file"
+    )
+
+    parser.add_argument(
+        "-o", "--output",
+        help="Output C++ include file (.inc)"
+    )
+
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Generate all platform mappings (QCOM + MTK)"
+    )
+
+    parser.add_argument(
+        "--base-dir",
+        default=".",
+        help="Base directory for batch generation (default: current directory)"
+    )
+
+    args = parser.parse_args()
+
+    # Validate arguments
+    if args.all:
+        # Generate all mappings
+        success = generate_all_mappings(args.base_dir)
+        sys.exit(0 if success else 1)
+    elif args.input and args.output:
+        # Generate single mapping
+        success = generate_single_mapping(args.input, args.output)
+        sys.exit(0 if success else 1)
+    else:
+        parser.print_help()
+        print("\nError: Must specify either --all or both -i/--input and -o/--output")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

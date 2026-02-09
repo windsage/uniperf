@@ -1,0 +1,41 @@
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
+}
+
+cc_library_shared {
+    name: "libperfengine-jni",
+    system_ext_specific: true,
+
+    srcs: [
+        "com_transsion_perfengine_PerfEngine.cpp",
+        "onload.cpp",
+    ],
+
+    header_libs: [
+        "jni_headers",
+        "libutils_headers",
+        "liblog_headers",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libutils",
+        "libcutils",
+        "libnativehelper",
+        "libandroid_runtime",
+        "libbinder_ndk",
+        "vendor.transsion.hardware.perfengine-V1-ndk",
+    ],
+
+    static_libs: [
+        "libperfengine_flags_c",
+        "libaconfig_storage_read_api_cc",
+    ],
+
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
+    cppflags: ["-std=c++17"],
+}

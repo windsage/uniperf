@@ -1,0 +1,69 @@
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
+}
+
+// ==================== libperfengine-client.so ====================
+// Native 层客户端库 (供 C++ 代码调用)
+// 同时支持 System 和 Vendor 分区
+
+cc_library_shared {
+    name: "libperfengine-client",
+
+    // 同时支持 System 和 Vendor
+    system_ext_specific: true,
+    vendor_available: true,
+
+    srcs: [
+        "client/TranPerfEvent.cpp",
+    ],
+
+    export_include_dirs: [
+        "include",
+    ],
+
+    local_include_dirs: [
+        "include",
+    ],
+
+    header_libs: [
+        "libutils_headers",
+        "liblog_headers",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libutils",
+        "libcutils",
+        "libbase",
+        "libbinder_ndk",
+        "vendor.transsion.hardware.perfengine-V1-ndk",
+    ],
+
+    static_libs: [
+        "libperfengine_flags_c",
+        "libaconfig_storage_read_api_cc",
+    ],
+
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+    ],
+
+    cppflags: [
+        "-std=c++17",
+    ],
+}
+
+// ==================== 头文件导出 ====================
+
+cc_library_headers {
+    name: "libperfengine_headers",
+
+    export_include_dirs: [
+        "include",
+    ],
+
+    vendor_available: true,
+    host_supported: true,
+}

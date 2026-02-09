@@ -1,0 +1,16 @@
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
+}
+
+java_library {
+    name: "perfengine_impl",
+    system_ext_specific: true,
+    srcs: ["com/transsion/perfengine/PerfEngine.java"],
+    installable: true,
+    platform_apis: true,
+    required: ["libperfengine-jni"],
+    static_libs: [
+        "vendor.transsion.hardware.perfengine-V1-java",
+        "com.transsion.perfengine.flags-aconfig-java",
+    ],
+}
