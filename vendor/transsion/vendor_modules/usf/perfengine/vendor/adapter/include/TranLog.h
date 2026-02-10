@@ -12,8 +12,9 @@
 #define LOG_TAG "TranssionModule"
 #endif
 
+namespace vendor {
 namespace transsion {
-namespace log {
+namespace perfengine {
 
 enum class Level : int {
     V = ANDROID_LOG_VERBOSE,
@@ -49,36 +50,40 @@ public:
     }
 };
 
-}    // namespace log
+}    // namespace perfengine
 }    // namespace transsion
+}    // namespace vendor
 
 // --- Core Macro Definitions: Prefixed with TRAN_ to prevent naming collisions ---
 
-#define TRAN_PRINT_LOG(level, tag, fmt, ...)                          \
-    do {                                                              \
-        if (transsion::log::TranLogger::isLoggable(level)) {          \
-            __android_log_print((int)level, tag, fmt, ##__VA_ARGS__); \
-        }                                                             \
+#define TRAN_PRINT_LOG(level, tag, fmt, ...)                                \
+    do {                                                                    \
+        if (vendor::transsion::perfengine::TranLogger::isLoggable(level)) { \
+            __android_log_print((int)level, tag, fmt, ##__VA_ARGS__);       \
+        }                                                                   \
     } while (0)
 
 /**
  * Detailed Logs: Includes [File:Line] and Function name.
  * Best used for Debugging and Verbose levels.
  */
-#define TRAN_LOGV(tag, fmt, ...)                                                          \
-    TRAN_PRINT_LOG(transsion::log::Level::V, tag, "[%s:%d] %s: " fmt, __FILE__, __LINE__, \
-                   __FUNCTION__, ##__VA_ARGS__)
-#define TRAN_LOGD(tag, fmt, ...)                                                          \
-    TRAN_PRINT_LOG(transsion::log::Level::D, tag, "[%s:%d] %s: " fmt, __FILE__, __LINE__, \
-                   __FUNCTION__, ##__VA_ARGS__)
+#define TRAN_LOGV(tag, fmt, ...)                                                               \
+    TRAN_PRINT_LOG(vendor::transsion::perfengine::Level::V, tag, "[%s:%d] %s: " fmt, __FILE__, \
+                   __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define TRAN_LOGD(tag, fmt, ...)                                                               \
+    TRAN_PRINT_LOG(vendor::transsion::perfengine::Level::D, tag, "[%s:%d] %s: " fmt, __FILE__, \
+                   __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
 /**
  * Standard Logs: Simple output without metadata.
  * Suitable for Info, Warn, and Error levels.
  */
-#define TRAN_LOGI(tag, fmt, ...) TRAN_PRINT_LOG(transsion::log::Level::I, tag, fmt, ##__VA_ARGS__)
-#define TRAN_LOGW(tag, fmt, ...) TRAN_PRINT_LOG(transsion::log::Level::W, tag, fmt, ##__VA_ARGS__)
-#define TRAN_LOGE(tag, fmt, ...) TRAN_PRINT_LOG(transsion::log::Level::E, tag, fmt, ##__VA_ARGS__)
+#define TRAN_LOGI(tag, fmt, ...) \
+    TRAN_PRINT_LOG(vendor::transsion::perfengine::Level::I, tag, fmt, ##__VA_ARGS__)
+#define TRAN_LOGW(tag, fmt, ...) \
+    TRAN_PRINT_LOG(vendor::transsion::perfengine::Level::W, tag, fmt, ##__VA_ARGS__)
+#define TRAN_LOGE(tag, fmt, ...) \
+    TRAN_PRINT_LOG(vendor::transsion::perfengine::Level::E, tag, fmt, ##__VA_ARGS__)
 
 /**
  * Shorthand Macros: Automatically uses the LOG_TAG defined in the current scope.

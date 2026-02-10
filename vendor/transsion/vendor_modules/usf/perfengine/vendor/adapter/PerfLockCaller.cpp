@@ -7,8 +7,13 @@
 #include <chrono>
 #include <cstring>
 
-#include "PerfEngineType.h"
+#include "PerfEngineTypes.h"
 #include "TranLog.h"
+
+#ifdef LOG_TAG
+#undef LOG_TAG
+#endif
+#define LOG_TAG "PerfEngine-PerfLockCaller"
 
 namespace vendor {
 namespace transsion {

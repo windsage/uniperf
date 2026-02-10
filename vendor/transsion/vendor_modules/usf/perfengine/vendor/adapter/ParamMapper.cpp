@@ -1,4 +1,3 @@
-#define LOG_TAG "PerfEngine-ParamMapper"
 
 #include "ParamMapper.h"
 
@@ -14,6 +13,10 @@
 
 #include <cstring>
 
+#ifdef LOG_TAG
+#undef LOG_TAG
+#endif
+#define LOG_TAG "PerfEngine-ParamMapper"
 namespace vendor {
 namespace transsion {
 namespace perfengine {
@@ -46,7 +49,7 @@ bool ParamMapper::init(Platform platform) {
     }
 
     TLOGI("Initializing ParamMapper for platform: %s",
-          PlatformDetector::getPlatformName(mPlatform));
+          PlatformDetector::getInstance().getPlatformName());
 
 #if PERFENGINE_USE_HARDCODED_MAPPINGS
     // Production mode: Load hardcoded mappings
@@ -92,7 +95,7 @@ int32_t ParamMapper::getOpcode(const std::string &paramName) {
 
     // Parameter not found - might be platform-specific param on wrong platform
     TLOGD("Parameter '%s' not found in %s mappings (platform-specific or unsupported)",
-          paramName.c_str(), getPlatformName(mPlatform).c_str());
+          paramName.c_str(), PlatformDetector::getInstance().getPlatformName());
     return -1;
 }
 
@@ -210,7 +213,7 @@ bool ParamMapper::parseXmlDocument(const std::string &xmlPath) {
         xmlFree(xmlPlatform);
 
         TLOGI("XML platform: %s, Current platform: %s", platformStr.c_str(),
-              getPlatformName(mPlatform).c_str());
+              PlatformDetector::getInstance().getPlatformName());
     }
 
     // Parse all <ParamMap> nodes

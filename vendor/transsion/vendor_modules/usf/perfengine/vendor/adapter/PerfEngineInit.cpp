@@ -1,11 +1,15 @@
 // 初始化函数 - 供 mtkpower-service / perf-hal-service dlopen 调用
 
-#define LOG_TAG "PerfEngine-Init"
 #include <android/binder_manager.h>
 #include <android/binder_process.h>
 
 #include "ServiceBridge.h"
 #include "TranLog.h"
+
+#ifdef LOG_TAG
+#undef LOG_TAG
+#endif
+#define LOG_TAG "PerfEngine-Init"
 
 using vendor::transsion::hardware::perfengine::ServiceBridge;
 

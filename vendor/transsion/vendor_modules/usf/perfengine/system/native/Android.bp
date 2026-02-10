@@ -39,10 +39,10 @@ cc_library_shared {
         "vendor.transsion.hardware.perfengine-V1-ndk",
     ],
 
-    static_libs: [
-        "libperfengine_flags_c",
-        "libaconfig_storage_read_api_cc",
-    ],
+    // static_libs: [
+    //     "libperfengine_flags_c",
+    //     "libaconfig_storage_read_api_cc",
+    // ],
 
     cflags: [
         "-Wall",

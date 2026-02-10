@@ -1,7 +1,8 @@
 #ifndef PERF_LOCK_CALLER_H
 #define PERF_LOCK_CALLER_H
 
-#define LOG_TAG "PerfEngine-PerfLockCaller"
+#include <sys/types.h>
+#include <unistd.h>
 
 #include <atomic>
 #include <condition_variable>
@@ -13,9 +14,9 @@
 #include <thread>
 #include <vector>
 
+#include "PerfEngineTypes.h"
 namespace vendor {
 namespace transsion {
-namespace hardware {
 namespace perfengine {
 
 // ==================== QCOM 平台定义 ====================
@@ -201,7 +202,6 @@ private:
 };
 
 }    // namespace perfengine
-}    // namespace hardware
 }    // namespace transsion
 }    // namespace vendor
 

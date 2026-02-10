@@ -24,6 +24,7 @@ public final class PerfEngine {
 
     // Native library name (matches libperfengine-jni.so)
     private static final String JNI_LIBRARY = "perfengine-jni";
+    private static final boolean ENABLE_PERFENGINE = false;
 
     // Load native library
     static {
@@ -57,7 +58,8 @@ public final class PerfEngine {
      */
     public static void notifyEventStart(
             int eventId, long timestamp, int numParams, int[] intParams, String extraStrings) {
-        if (!Flags.enablePerfengine()) {
+        // if (!Flags.enablePerfengine()) {
+        if (!ENABLE_PERFENGINE) {
             if (DEBUG) {
                 Log.d(TAG, "PerfEngine disabled by flag");
             }
@@ -112,7 +114,8 @@ public final class PerfEngine {
      * @param extraStrings Optional string parameter (usually packageName), can be null
      */
     public static void notifyEventEnd(int eventId, long timestamp, String extraStrings) {
-        if (!Flags.enablePerfengine()) {
+        // if (!Flags.enablePerfengine()) {
+        if (!ENABLE_PERFENGINE) {
             if (DEBUG) {
                 Log.d(TAG, "PerfEngine disabled by flag");
             }
@@ -173,7 +176,8 @@ public final class PerfEngine {
      * </pre>
      */
     public static void registerEventListener(IEventListener listener) {
-        if (!Flags.enablePerfengine()) {
+        // if (!Flags.enablePerfengine()) {
+        if (!ENABLE_PERFENGINE) {
             if (DEBUG) {
                 Log.d(TAG, "PerfEngine disabled by flag");
             }
@@ -218,7 +222,8 @@ public final class PerfEngine {
      * @throws RemoteException if unregistration fails
      */
     public static void unregisterEventListener(IEventListener listener) {
-        if (!Flags.enablePerfengine()) {
+        // if (!Flags.enablePerfengine()) {
+        if (!ENABLE_PERFENGINE) {
             if (DEBUG) {
                 Log.d(TAG, "PerfEngine disabled by flag");
             }

@@ -16,9 +16,9 @@
 // ==================== Aconfig Flag Handling ====================
 
 // System 和 Vendor 都使用 aconfig
-#include <com_transsion_perfengine_flags.h>
-#define CHECK_FLAG() (com::transsion::perfengine::flags::enable_perfengine())
-
+// #include <com_transsion_perfengine_flags.h>
+// #define CHECK_FLAG() (com::transsion::perfengine::flags::enable_perfengine())
+#define CHECK_FLAG() (false)
 // ==================== Constants ====================
 
 static constexpr bool DEBUG = false;

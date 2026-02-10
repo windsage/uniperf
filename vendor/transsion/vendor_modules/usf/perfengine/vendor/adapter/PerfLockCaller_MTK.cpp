@@ -1,6 +1,10 @@
 #include "PerfLockCaller.h"
 #include "TranLog.h"
 
+#ifdef LOG_TAG
+#undef LOG_TAG
+#endif
+#define LOG_TAG "PerfEngine-PerfLockCaller-MTK"
 namespace vendor {
 namespace transsion {
 namespace perfengine {

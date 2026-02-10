@@ -1,4 +1,3 @@
-#define LOG_TAG "PerfEngine-Platform"
 
 #include "PerfEngineTypes.h"
 
@@ -7,7 +6,10 @@
 #include <cstring>
 
 #include "TranLog.h"
-
+#ifdef LOG_TAG
+#undef LOG_TAG
+#endif
+#define LOG_TAG "PerfEngine-Platform"
 namespace vendor {
 namespace transsion {
 namespace perfengine {

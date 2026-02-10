@@ -103,6 +103,7 @@ public final class TranPerfEvent {
     public static final int RANGE_GAME = 20000;
     /** Location scenarios (GNSS signal, Network positioning) */
     public static final int RANGE_LOCATION = 21000;
+    private static final boolean ENABLE_PERFENGINE = false;
 
     // ==================== Listener Interfaces ====================
 
@@ -335,8 +336,8 @@ public final class TranPerfEvent {
                     Class<?> listenerClass =
                             Class.forName("vendor.transsion.hardware.perfengine.IEventListener");
 
-                    sRegisterListenerMethod =
-                            sPerfEngineClass.getDeclaredMethod("registerEventListener", listenerClass);
+                    sRegisterListenerMethod = sPerfEngineClass.getDeclaredMethod(
+                            "registerEventListener", listenerClass);
 
                     sUnregisterListenerMethod = sPerfEngineClass.getDeclaredMethod(
                             "unregisterEventListener", listenerClass);
@@ -406,7 +407,8 @@ public final class TranPerfEvent {
     private static void notifyEventStartInternal(
             int eventId, long timestamp, int numParams, int[] intParams, String extraStrings) {
         // Check aconfig flag
-        if (!Flags.enablePerfengine()) {
+        // if (!Flags.enablePerfengine()) {
+        if (!ENABLE_PERFENGINE) {
             if (DEBUG) {
                 Log.d(TAG, "PerfEngine disabled by flag");
             }
@@ -479,7 +481,8 @@ public final class TranPerfEvent {
      */
     public static void notifyEventEnd(int eventId, long timestamp, String extraString) {
         // Check aconfig flag
-        if (!Flags.enablePerfengine()) {
+        // if (!Flags.enablePerfengine()) {
+        if (!ENABLE_PERFENGINE) {
             return;
         }
 

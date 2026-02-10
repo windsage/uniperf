@@ -4,8 +4,6 @@
 #ifndef SERVICE_BRIDGE_H
 #define SERVICE_BRIDGE_H
 
-#define LOG_TAG "PerfEngine-ServiceBridge"
-
 #include <aidl/vendor/transsion/hardware/perfengine/BnPerfEngine.h>
 #include <aidl/vendor/transsion/hardware/perfengine/IEventListener.h>
 #include <android/binder_auto_utils.h>

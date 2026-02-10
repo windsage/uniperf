@@ -1,4 +1,3 @@
-#define LOG_TAG "PerfEngine-XmlParser"
 
 #include "XmlConfigParser.h"
 
@@ -13,6 +12,10 @@
 
 #include "TranLog.h"
 
+#ifdef LOG_TAG
+#undef LOG_TAG
+#endif
+#define LOG_TAG "PerfEngine-XmlParser"
 namespace vendor {
 namespace transsion {
 namespace perfengine {

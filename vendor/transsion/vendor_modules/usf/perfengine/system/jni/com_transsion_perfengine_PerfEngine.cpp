@@ -19,9 +19,10 @@
 #include <android/binder_ibinder_jni.h>
 #include <android/binder_manager.h>
 
-#include "com_transsion_perfengine_flags.h"
+// #include "com_transsion_perfengine_flags.h"
 
-#define CHECK_FLAG() com::transsion::perfengine::flags::enable_perfengine()
+// #define CHECK_FLAG() com::transsion::perfengine::flags::enable_perfengine()
+#define CHECK_FLAG() (false)
 using namespace android;
 
 using aidl::vendor::transsion::hardware::perfengine::IEventListener;

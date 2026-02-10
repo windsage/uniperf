@@ -27,9 +27,9 @@ phony {
         "vendor.transsion.hardware.perfengine-V1-ndk",
         "vendor.transsion.hardware.perfengine-V1-java",
         // Aconfig Flags
-        "com.transsion.perfengine.flags-aconfig-java",
-        "libperfengine_flags_c",
-        "libaconfig_storage_read_api_cc",
+        //"com.transsion.perfengine.flags-aconfig-java",
+        //"libperfengine_flags_c",
+        //"libaconfig_storage_read_api_cc",
     ],
 }
 
@@ -45,6 +45,6 @@ phony {
         "vendor.transsion.hardware.perfengine-V1-ndk",
 
         // Aconfig Flags
-        "libperfengine_flags_c",
+        // "libperfengine_flags_c",
     ],
 }
