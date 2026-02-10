@@ -16,8 +16,6 @@ ifneq ($(filter ums% unisoc%,$(TARGET_BOARD_PLATFORM)),)
     PERFENGINE_CHIP_NAME := $(TARGET_BOARD_PLATFORM)
 endif
 
-$(info [PerfEngine] Platform: $(PERFENGINE_PLATFORM_TYPE), Chip: $(PERFENGINE_CHIP_NAME))
-
 PERFENGINE_BASE_DIR := vendor/transsion/vendor_modules/usf/perfengine
 PERFENGINE_CONFIG_DIR := $(PERFENGINE_BASE_DIR)/vendor/configs
 
@@ -38,11 +36,6 @@ ifneq ($(PERFENGINE_CHIP_CONFIG_DIR),)
         PERFENGINE_CONFIG_PATH := $(PERFENGINE_CHIP_CONFIG_DIR)/perfengine_params.xml
     endif
 endif
-
-export PERFENGINE_PLATFORM_TYPE
-export PERFENGINE_CHIP_NAME
-export PERFENGINE_CONFIG_PATH
-export PERFENGINE_MAPPING_PATH
 
 # ========== 根据模块名自动包含对应 mk ==========
 ifneq ($(filter perfengine_system,$(PRODUCT_PACKAGES)),)

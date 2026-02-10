@@ -103,13 +103,11 @@ bool PerfLockCaller::init() {
           XmlConfigParser::getInstance().getScenarioCount());
 
     // 4. 初始化参数映射器
-    std::string mappingFile = getPlatformMappingFile();
-    if (!ParamMapper::getInstance().init(mPlatform, mappingFile)) {
-        TLOGE("Failed to initialize ParamMapper with file: %s", mappingFile.c_str());
+    if (!ParamMapper::getInstance().init(mPlatform)) {
         return false;
     }
-    TLOGI("ParamMapper initialized with %zu mappings from: %s",
-          ParamMapper::getInstance().getMappingCount(), mappingFile.c_str());
+    TLOGI("ParamMapper initialized with %zu mappings ",
+          ParamMapper::getInstance().getMappingCount());
 
     mInitialized = true;
     TLOGI("PerfLockCaller initialized successfully");
@@ -212,12 +210,12 @@ int32_t PerfLockCaller::acquirePerfLock(int32_t eventId, int32_t duration,
     int32_t platformHandle = -1;
     switch (mPlatform) {
         case Platform::QCOM:
-            platformHandle =
-                qcomAcquirePerfLockWithParams(eventId, effectiveTimeout, platformParams, packageName);
+            platformHandle = qcomAcquirePerfLockWithParams(eventId, effectiveTimeout,
+                                                           platformParams, packageName);
             break;
         case Platform::MTK:
-            platformHandle =
-                mtkAcquirePerfLockWithParams(eventId, effectiveTimeout, platformParams, packageName);
+            platformHandle = mtkAcquirePerfLockWithParams(eventId, effectiveTimeout, platformParams,
+                                                          packageName);
             break;
         default:
             TLOGE("Unknown platform");
@@ -247,7 +245,7 @@ bool PerfLockCaller::convertToPlatformParams(const ScenarioConfig &config,
     platformParams.clear();
 
     for (const auto &param : config.params) {
-        int32_t platformCode = ParamMapper::getInstance().getMapping(param.name);
+        int32_t platformCode = ParamMapper::getInstance().getOpcode(param.name);
 
         if (platformCode < 0) {
             TLOGD("Param '%s' not supported, skipping", param.name.c_str());
@@ -266,8 +264,8 @@ bool PerfLockCaller::convertToPlatformParams(const ScenarioConfig &config,
 // ==================== QCOM 平台调用 ====================
 
 int32_t PerfLockCaller::qcomAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                                       const std::vector<int32_t> &platformParams,
-                                                       const std::string &packageName) {
+                                                      const std::vector<int32_t> &platformParams,
+                                                      const std::string &packageName) {
     typedef int (*perfmodule_submit_request_t)(mpctl_msg_t *);
     auto submitRequest = reinterpret_cast<perfmodule_submit_request_t>(mQcomFuncs.submitRequest);
 
@@ -351,8 +349,8 @@ void PerfLockCaller::qcomReleasePerfLock(int32_t handle) {
 // ==================== MTK 平台调用 ====================
 
 int32_t PerfLockCaller::mtkAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                                      const std::vector<int32_t> &platformParams,
-                                                      const std::string &packageName) {
+                                                     const std::vector<int32_t> &platformParams,
+                                                     const std::string &packageName) {
     typedef int (*mtk_perf_lock_acq_t)(int *, int, int, int, int, int);
     auto lockAcq = reinterpret_cast<mtk_perf_lock_acq_t>(mMtkFuncs.lockAcq);
 
@@ -376,8 +374,8 @@ int32_t PerfLockCaller::mtkAcquirePerfLockWithParams(int32_t eventId, int32_t du
     TLOGI("MTK libpowerhal_LockAcq: timeout=%dms, commands=%zu pairs", duration,
           commands.size() / 2);
 
-    int32_t handle =
-        lockAcq(commands.data(), 0, static_cast<int>(commands.size()), getpid(), gettid(), duration);
+    int32_t handle = lockAcq(commands.data(), 0, static_cast<int>(commands.size()), getpid(),
+                             gettid(), duration);
 
     if (handle > 0) {
         TLOGI("MTK SUCCESS: handle=%d", handle);
@@ -499,6 +497,6 @@ void PerfLockCaller::handleTimeout(int32_t eventId, int32_t platformHandle) {
     }
 }
 
-}  // namespace perfengine
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace perfengine
+}    // namespace transsion
+}    // namespace vendor

@@ -1,9 +1,8 @@
-// vendor/transsion/vendor_modules/usf/perfengine/vendor/adapter/include/PerfLockCaller.h
-
 #ifndef PERF_LOCK_CALLER_H
 #define PERF_LOCK_CALLER_H
 
-#define LOG_TAG "PerfEngine-PerfLockCaller"
+#include <sys/types.h>
+#include <unistd.h>
 
 #include <atomic>
 #include <cstdint>
@@ -32,7 +31,8 @@ struct mpctl_msg_t {
     int32_t pl_handle;    // Performance lock handle (0 for new)
     uint8_t req_type;     // Command type (MPCTL_CMD_xxx)
     int32_t pl_time;      // Duration in milliseconds (0=indefinite)
-    int32_t pl_args[MAX_ARGS_PER_REQUEST];    // Parameter array [opcode1, value1, opcode2, value2, ...]
+    int32_t
+        pl_args[MAX_ARGS_PER_REQUEST];    // Parameter array [opcode1, value1, opcode2, value2, ...]
     int32_t reservedArgs[MAX_RESERVE_ARGS_PER_REQUEST];    // Reserved for tid/pid/flags
     int32_t numRArgs;                                      // Number of reserved args
     pid_t client_pid;                                      // Client process ID
@@ -50,7 +50,6 @@ struct mpctl_msg_t {
     int16_t size;                              // Message size
 };
 
-
 class PerfLockCaller {
 public:
     PerfLockCaller();
@@ -59,8 +58,7 @@ public:
     bool init();
 
     int32_t acquirePerfLock(int32_t eventId, int32_t duration,
-                            const std::vector<int32_t> &intParams,
-                            const std::string &packageName);
+                            const std::vector<int32_t> &intParams, const std::string &packageName);
 
     void releasePerfLock(int32_t handle);
 
@@ -116,8 +114,8 @@ private:
     std::mutex mTimerMutex;
 };
 
-}  // namespace perfengine
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace perfengine
+}    // namespace transsion
+}    // namespace vendor
 
-#endif  // PERF_LOCK_CALLER_H
+#endif    // PERF_LOCK_CALLER_H

@@ -10,16 +10,15 @@ cc_library_shared {
     vendor: true,
 
     srcs: [
-        "adapter/PerfLockCaller.cpp",
-        "adapter/PerfLockCaller_MTK.cpp",
-        "adapter/ServiceBridge.cpp",
-        "adapter/XmlConfigParser.cpp",
-        "adapter/ParamMapper.cpp",
-        "adapter/PerfEngineTypes.cpp",
+        "PerfLockCaller.cpp",
+        "ServiceBridge.cpp",
+        "XmlConfigParser.cpp",
+        "ParamMapper.cpp",
+        "PerfEngineTypes.cpp",
     ],
 
     local_include_dirs: [
-        "adapter/include",
+        "include",
     ],
 
     shared_libs: [
