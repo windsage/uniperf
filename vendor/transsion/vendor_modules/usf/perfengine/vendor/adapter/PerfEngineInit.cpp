@@ -1,5 +1,3 @@
-// 初始化函数 - 供 mtkpower-service / perf-hal-service dlopen 调用
-
 #include <android/binder_manager.h>
 #include <android/binder_process.h>
 
@@ -11,20 +9,27 @@
 #endif
 #define LOG_TAG "PerfEngine-Init"
 
-using vendor::transsion::hardware::perfengine::ServiceBridge;
+using vendor::transsion::perfengine::ServiceBridge;
 
-// 全局服务实例 (保持存活)
+// 全局服务实例
 static std::shared_ptr<ServiceBridge> gServiceBridge;
 
 /**
  * PerfEngine 初始化函数
  *
- * 此函数由 mtkpower-service 或 perf-hal-service 通过 dlsym 调用
+ * 由 mtkpower-service 或 perf-hal-service 通过 dlsym 调用
  *
- * 职责:
+ * 完整流程:
  * 1. 创建 ServiceBridge 实例
+ *    └─ ServiceBridge 构造函数:
+ *       ├─ 创建 PerfLockCaller
+ *       └─ PerfLockCaller::init():
+ *          ├─ 检测平台 (QCOM/MTK/UNISOC)
+ *          ├─ 初始化平台函数 (dlsym)
+ *          ├─ 加载 XML 配置文件 (XmlConfigParser::loadConfig)
+ *          └─ 初始化参数映射器 (ParamMapper::init)
+ *
  * 2. 注册 AIDL 服务到 ServiceManager
- * 3. 返回初始化结果
  *
  * @return true 成功, false 失败
  */
@@ -32,6 +37,7 @@ extern "C" bool PerfEngine_Initialize() {
     TLOGI("PerfEngine_Initialize called");
 
     // 1. 创建 ServiceBridge 实例
+    //    构造函数会自动初始化 PerfLockCaller, XmlConfigParser, ParamMapper
     gServiceBridge = ndk::SharedRefBase::make<ServiceBridge>();
     if (!gServiceBridge) {
         TLOGE("Failed to create ServiceBridge");
@@ -55,8 +61,6 @@ extern "C" bool PerfEngine_Initialize() {
 
 /**
  * PerfEngine 反初始化函数
- *
- * 注意: 通常不需要调用,因为服务生命周期与进程相同
  */
 extern "C" void PerfEngine_Shutdown() {
     TLOGI("PerfEngine_Shutdown called");

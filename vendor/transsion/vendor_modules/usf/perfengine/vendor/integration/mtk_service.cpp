@@ -31,29 +31,44 @@ bool powerd_done = false;
 
 // add for PerfEngine by chao.xu5 start.
 static void loadPerfEngine() {
-    ALOGI("[PerfEngine] Loading adapter...");
+    ALOGI("[PerfEngine] Loading libperfengine-adapter.so...");
 
+    // 1. 加载动态库
     void *handle = dlopen("libperfengine-adapter.so", RTLD_NOW | RTLD_LOCAL);
     if (!handle) {
-        ALOGE("[PerfEngine] dlopen failed: %s", dlerror());
+        ALOGE("[PerfEngine] Failed to dlopen: %s", dlerror());
         return;
     }
 
+    ALOGI("[PerfEngine] Library loaded successfully");
+
+    // 2. 查找初始化函数
     typedef bool (*InitFunc)(void);
     InitFunc initFunc = reinterpret_cast<InitFunc>(dlsym(handle, "PerfEngine_Initialize"));
+
     if (!initFunc) {
-        ALOGE("[PerfEngine] dlsym failed: %s", dlerror());
+        ALOGE("[PerfEngine] Failed to find PerfEngine_Initialize: %s", dlerror());
         dlclose(handle);
         return;
     }
 
-    if (!initFunc()) {
-        ALOGE("[PerfEngine] PerfEngine_Initialize failed");
-        dlclose(handle);
-        return;
-    }
+    ALOGI("[PerfEngine] Found PerfEngine_Initialize");
 
-    ALOGI("[PerfEngine] Adapter loaded successfully");
+    // 3. 调用初始化函数
+    //    此函数会:
+    //    - 创建 ServiceBridge
+    //    - 初始化 PerfLockCaller (检测平台, dlsym 查找函数)
+    //    - 加载 XML 配置 (XmlConfigParser)
+    //    - 初始化参数映射器 (ParamMapper)
+    //    - 注册 AIDL 服务到 ServiceManager
+    bool success = initFunc();
+
+    if (success) {
+        ALOGI("[PerfEngine] Initialization SUCCESS");
+    } else {
+        ALOGE("[PerfEngine] Initialization FAILED");
+        dlclose(handle);
+    }
 }
 // add for PerfEngine by chao.xu5 end.
 

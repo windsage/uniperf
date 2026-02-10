@@ -27,32 +27,45 @@ using aidl::vendor::qti::hardware::perf2::Perf;
  * 4. 调用 so 中的初始化函数注册 AIDL 服务
  */
 static void loadPerfEngine() {
-    QLOGI(LOG_TAG, "[PerfEngine] Loading adapter...");
+    QLOGI(LOG_TAG, "[PerfEngine] Loading libperfengine-adapter.so...");
 
+    // 1. 加载动态库
     void *handle = dlopen("libperfengine-adapter.so", RTLD_NOW | RTLD_LOCAL);
     if (!handle) {
-        QLOGE(LOG_TAG, "[PerfEngine] dlopen failed: %s", dlerror());
+        QLOGE(LOG_TAG, "[PerfEngine] Failed to dlopen: %s", dlerror());
         return;
     }
 
-    // 查找初始化函数
+    QLOGI(LOG_TAG, "[PerfEngine] Library loaded successfully");
+
+    // 2. 查找初始化函数
     typedef bool (*InitFunc)(void);
     InitFunc initFunc = reinterpret_cast<InitFunc>(dlsym(handle, "PerfEngine_Initialize"));
+
     if (!initFunc) {
-        QLOGE(LOG_TAG, "[PerfEngine] dlsym PerfEngine_Initialize failed: %s", dlerror());
+        QLOGE(LOG_TAG, "[PerfEngine] Failed to find PerfEngine_Initialize: %s", dlerror());
         dlclose(handle);
         return;
     }
 
-    // 调用初始化(会注册 AIDL 服务到 ServiceManager)
-    if (!initFunc()) {
-        QLOGE(LOG_TAG, "[PerfEngine] PerfEngine_Initialize failed");
-        dlclose(handle);
-        return;
-    }
+    QLOGI(LOG_TAG, "[PerfEngine] Found PerfEngine_Initialize");
 
-    // 不 dlclose,保持 so 加载
-    QLOGI(LOG_TAG, "[PerfEngine] Adapter loaded successfully");
+    // 3. 调用初始化函数
+    //    此函数会:
+    //    - 创建 ServiceBridge
+    //    - 初始化 PerfLockCaller (检测平台, dlsym 查找函数)
+    //    - 加载 XML 配置 (XmlConfigParser)
+    //    - 初始化参数映射器 (ParamMapper)
+    //    - 注册 AIDL 服务到 ServiceManager
+    bool success = initFunc();
+
+    if (success) {
+        QLOGI(LOG_TAG, "[PerfEngine] Initialization SUCCESS");
+        // 注意: 不能 dlclose(handle), 需要保持 SO 加载状态
+    } else {
+        QLOGE(LOG_TAG, "[PerfEngine] Initialization FAILED");
+        dlclose(handle);
+    }
 }
 // add for PerfEngine by chao.xu5 end.
 
