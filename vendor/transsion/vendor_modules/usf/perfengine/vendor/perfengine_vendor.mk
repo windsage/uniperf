@@ -1,5 +1,3 @@
-$(info [PerfEngine] Loading Vendor partition configuration)
-
 PRODUCT_PACKAGES += \
     libperfengine-adapter \
     vendor.transsion.perfengine-V1-ndk

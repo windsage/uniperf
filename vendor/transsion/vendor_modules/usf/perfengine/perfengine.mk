@@ -38,10 +38,10 @@ ifneq ($(PERFENGINE_CHIP_CONFIG_DIR),)
 endif
 
 # ========== 根据模块名自动包含对应 mk ==========
-ifneq ($(filter perfengine_system,$(PRODUCT_PACKAGES)),)
+ifneq ($(TARGET_COPY_OUT_SYSTEM),)
     $(call inherit-product-if-exists, $(PERFENGINE_BASE_DIR)/system/perfengine_system.mk)
 endif
 
-ifneq ($(filter perfengine_vendor,$(PRODUCT_PACKAGES)),)
+ifneq ($(TARGET_COPY_OUT_VENDOR),)
     $(call inherit-product-if-exists, $(PERFENGINE_BASE_DIR)/vendor/perfengine_vendor.mk)
 endif

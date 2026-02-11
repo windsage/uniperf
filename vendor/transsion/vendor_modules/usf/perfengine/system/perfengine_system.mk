@@ -1,5 +1,3 @@
-$(info [PerfEngine] Loading System partition configuration)
-
 PRODUCT_PACKAGES += \
     perfengine_impl \
     libperfengine-jni \
