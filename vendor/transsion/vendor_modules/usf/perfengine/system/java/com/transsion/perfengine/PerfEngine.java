@@ -5,7 +5,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
 
-// import com.transsion.perfengine.flags.Flags;
+//import com.transsion.perfengine.flags.Flags;
 
 import vendor.transsion.hardware.perfengine.IEventListener;
 

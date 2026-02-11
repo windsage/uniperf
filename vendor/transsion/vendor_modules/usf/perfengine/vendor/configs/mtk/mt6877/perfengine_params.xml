@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TranPerfTurbo version="1.0" platform="mt6878" chip="MTK">
+<PerfEngine version="1.0" platform="mt6877" chip="MTK">
 
     <Scenarios>
 
@@ -41,4 +41,4 @@
 
         <!-- 更多场景... -->
     </Scenarios>
-</TranPerfTurbo>
+</PerfEngine>
