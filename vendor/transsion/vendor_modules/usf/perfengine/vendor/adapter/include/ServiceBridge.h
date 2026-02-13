@@ -57,12 +57,19 @@ private:
 
     std::unique_ptr<PerfLockCaller> mPerfLockCaller;
 
+    struct DeathCookie {
+        ServiceBridge *bridge;
+        AIBinder *binder;
+    };
+
     struct ListenerInfo {
         std::shared_ptr<IEventListener> listener;
         ::ndk::ScopedAIBinder_DeathRecipient deathRecipient;
+        DeathCookie *cookie;
 
-        ListenerInfo(std::shared_ptr<IEventListener> l, ::ndk::ScopedAIBinder_DeathRecipient dr)
-            : listener(std::move(l)), deathRecipient(std::move(dr)) {}
+        ListenerInfo(std::shared_ptr<IEventListener> l, ::ndk::ScopedAIBinder_DeathRecipient dr,
+                     DeathCookie *c)
+            : listener(std::move(l)), deathRecipient(std::move(dr)), cookie(c) {}
     };
 
     std::vector<ListenerInfo> mListeners;

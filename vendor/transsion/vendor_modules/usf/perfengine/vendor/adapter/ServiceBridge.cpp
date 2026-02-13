@@ -187,8 +187,9 @@ static void ensureBinderThreadSetup() {
         AIBinder_DeathRecipient_new(ServiceBridge::onListenerDied));
 
     // 关联到死亡通知
-    binder_status_t status = AIBinder_linkToDeath(listener->asBinder().get(), deathRecipient.get(),
-                                                  this);    // cookie = this pointer
+    auto *cookie = new DeathCookie{this, listener->asBinder().get()};
+    binder_status_t status =
+        AIBinder_linkToDeath(listener->asBinder().get(), deathRecipient.get(), cookie);
 
     if (status != STATUS_OK) {
         TLOGE("Failed to link to death: %d", status);
@@ -226,39 +227,50 @@ static void ensureBinderThreadSetup() {
 void ServiceBridge::broadcastEventStart(int32_t eventId, int64_t timestamp, int32_t numParams,
                                         const std::vector<int32_t> &intParams,
                                         const std::optional<std::string> &extraStrings) {
-    std::lock_guard<Mutex> lock(mListenerLock);
-
-    if (mListeners.empty()) {
-        return;    // 没有监听器,跳过广播
+    // Snapshot under lock
+    std::vector<std::shared_ptr<IEventListener>> snapshot;
+    {
+        std::lock_guard<Mutex> lock(mListenerLock);
+        if (mListeners.empty()) {
+            return;
+        }
+        snapshot.reserve(mListeners.size());
+        for (auto &info : mListeners) {
+            snapshot.push_back(info.listener);
+        }
     }
 
-    TLOGI("Broadcasting eventStart to %zu listeners", mListeners.size());
+    TLOGI("Broadcasting eventStart to %zu listeners", snapshot.size());
 
-    // 广播给所有监听器 (oneway 调用,非阻塞)
-    for (auto &info : mListeners) {
+    // Broadcast outside lock
+    for (auto &listener : snapshot) {
         auto status =
-            info.listener->onEventStart(eventId, timestamp, numParams, intParams, extraStrings);
-
+            listener->onEventStart(eventId, timestamp, numParams, intParams, extraStrings);
         if (!status.isOk()) {
             TLOGW("Failed to notify listener: %s", status.getMessage());
-            // 继续通知下一个监听器,即使这个失败
         }
     }
 }
 
 void ServiceBridge::broadcastEventEnd(int32_t eventId, int64_t timestamp,
                                       const std::optional<std::string> &extraStrings) {
-    std::lock_guard<Mutex> lock(mListenerLock);
-
-    if (mListeners.empty()) {
-        return;
+    // Snapshot under lock
+    std::vector<std::shared_ptr<IEventListener>> snapshot;
+    {
+        std::lock_guard<Mutex> lock(mListenerLock);
+        if (mListeners.empty())
+            return;
+        snapshot.reserve(mListeners.size());
+        for (auto &info : mListeners) {
+            snapshot.push_back(info.listener);
+        }
     }
 
-    TLOGI("Broadcasting eventEnd to %zu listeners", mListeners.size());
+    TLOGI("Broadcasting eventEnd to %zu listeners", snapshot.size());
 
-    for (auto &info : mListeners) {
-        auto status = info.listener->onEventEnd(eventId, timestamp, extraStrings);
-
+    // Broadcast outside lock
+    for (auto &listener : snapshot) {
+        auto status = listener->onEventEnd(eventId, timestamp, extraStrings);
         if (!status.isOk()) {
             TLOGW("Failed to notify listener: %s", status.getMessage());
         }
@@ -282,16 +294,13 @@ bool ServiceBridge::findListener(const std::shared_ptr<IEventListener> &listener
 }
 
 void ServiceBridge::removeListener(const std::shared_ptr<IEventListener> &listener) {
-    // 必须在持有 mListenerLock 的情况下调用
-
     AIBinder *targetBinder = listener->asBinder().get();
-
     for (auto it = mListeners.begin(); it != mListeners.end();) {
         if (it->listener->asBinder().get() == targetBinder) {
-            // 在移除前取消死亡通知
-            AIBinder_unlinkToDeath(it->listener->asBinder().get(), it->deathRecipient.get(), this);
-
-            it = mListeners.erase(it);
+            AIBinder_unlinkToDeath(it->listener->asBinder().get(), it->deathRecipient.get(),
+                                   it->cookie);
+            delete it->cookie;
+            it = listeners.erase(it);
         } else {
             ++it;
         }
@@ -301,20 +310,29 @@ void ServiceBridge::removeListener(const std::shared_ptr<IEventListener> &listen
 // ==================== Death Notification Callback  ====================
 
 void ServiceBridge::onListenerDied(void *cookie) {
-    TLOGW("Listener died, cleaning up...");
-
-    auto *bridge = static_cast<ServiceBridge *>(cookie);
-    if (!bridge) {
-        TLOGE("Invalid bridge pointer in death callback");
+    auto *dc = static_cast<DeathCookie *>(cookie);
+    if (!dc || !dc->bridge) {
+        delete dc;
         return;
     }
 
-    // 注意: 无法从回调中识别具体哪个监听器死亡
-    // 实际上,当进程死亡时,其所有 Binder 对象都会失效
-    // 我们会在下次注册/注销时清理无效监听器
-    // 或实现更复杂的跟踪机制(如果需要)
+    TLOGW("Listener died, binder=%p, removing...", dc->binder);
 
-    TLOGI("Death notification received, listener will be cleaned up on next access");
+    {
+        std::lock_guard<Mutex> lock(dc->bridge->mListenerLock);
+        auto &listeners = dc->bridge->mListeners;
+        for (auto it = listeners.begin(); it != listeners.end();) {
+            if (it->listener->asBinder().get() == dc->binder) {
+                // 已死亡，无需 unlinkToDeath
+                it = listeners.erase(it);
+                TLOGI("Dead listener removed, remaining: %zu", listeners.size());
+            } else {
+                ++it;
+            }
+        }
+    }
+
+    delete dc;
 }
 
 }    // namespace perfengine

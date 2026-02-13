@@ -188,14 +188,13 @@ public final class TranPerfEvent {
     }
 
     /**
-     * 3. 面向 SDK 的注册接口 (推荐)
+     * 3. 面向 SDK 的注册接口
      * 调用方只需 new TranPerfEvent.PerfEventListener() {}
      */
     public static void registerEventListener(PerfEventListener listener) {
         if (listener == null)
             return;
         try {
-            // 动态包装成 AIDL Stub
             IEventListener.Stub stub = new IEventListener.Stub() {
                 @Override
                 public void onEventStart(int id, long ts, int n, int[] p, String s) {
@@ -206,10 +205,12 @@ public final class TranPerfEvent {
                     listener.onEventEnd(id, ts, s);
                 }
             };
+
             listener.mStub = stub;
             registerEventListener(stub.asBinder());
         } catch (NoClassDefFoundError | Exception e) {
-            Log.e(TAG, "Failed to wrap listener: IEventListener not found in this environment");
+            Log.e(TAG, "Failed to wrap listener: " + e.getMessage());
+            listener.mStub = null;
         }
     }
 
@@ -233,31 +234,26 @@ public final class TranPerfEvent {
             return;
         }
 
-        // 将 IBinder 转换为真正的 AIDL 接口
-        IEventListener listener = IEventListener.Stub.asInterface(listenerBinder);
-
-        // 检查是否已经存在 (通过 Binder 比较)
         for (IEventListener existing : sAidlListeners) {
-            if (existing.asBinder().equals(listenerBinder)) {
+            if (existing.asBinder() == listenerBinder
+                    || existing.asBinder().equals(listenerBinder)) {
                 Log.w(TAG, "AIDL listener already registered");
                 return;
             }
         }
 
-        // 添加到本地列表
+        IEventListener listener = IEventListener.Stub.asInterface(listenerBinder);
         sAidlListeners.add(listener);
 
-        // 注册到 PerfEngine
         try {
             if (!initReflection())
                 return;
             if (sRegisterListenerMethod != null) {
-                // 注意：反射调用时，如果 PerfEngine 那边接收的是 IEventListener，这里传入 listener
-                // 对象即可
                 sRegisterListenerMethod.invoke(null, listener);
             }
         } catch (Exception e) {
             Log.e(TAG, "Failed to register AIDL listener to PerfEngine", e);
+            sAidlListeners.remove(listener);
         }
     }
 
@@ -271,23 +267,27 @@ public final class TranPerfEvent {
 
         IEventListener target = null;
         for (IEventListener listener : sAidlListeners) {
-            if (listener.asBinder().equals(listenerBinder)) {
+            if (listener.asBinder() == listenerBinder
+                    || listener.asBinder().equals(listenerBinder)) {
                 target = listener;
                 break;
             }
         }
 
-        if (target != null) {
-            sAidlListeners.remove(target);
-            try {
-                if (!initReflection())
-                    return;
-                if (sUnregisterListenerMethod != null) {
-                    sUnregisterListenerMethod.invoke(null, target);
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Failed to unregister AIDL listener", e);
+        if (target == null) {
+            Log.w(TAG, "unregisterEventListener: listener not found, binder=" + listenerBinder);
+            return;
+        }
+
+        sAidlListeners.remove(target);
+        try {
+            if (!initReflection())
+                return;
+            if (sUnregisterListenerMethod != null) {
+                sUnregisterListenerMethod.invoke(null, target);
             }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to unregister AIDL listener", e);
         }
     }
 
