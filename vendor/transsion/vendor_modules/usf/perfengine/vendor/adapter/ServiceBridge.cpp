@@ -50,58 +50,44 @@ ServiceBridge::~ServiceBridge() {
         return ::ndk::ScopedAStatus::ok();
     }
 
-    // 参数校验
     if (static_cast<int32_t>(intParams.size()) != numParams) {
-        TLOGE("Parameter count mismatch: expected=%d, actual=%zu", numParams, intParams.size());
+        TLOGE("Param count mismatch: expected=%d actual=%zu", numParams, intParams.size());
         return ::ndk::ScopedAStatus::ok();
     }
 
-    if (numParams < 1) {
-        TLOGE("Invalid parameter count: %d", numParams);
-        return ::ndk::ScopedAStatus::ok();
-    }
+    // Single source of truth: parse all context here
+    EventContext ctx = EventContext::parse(eventId, intParams, extraStrings.value_or(""));
 
-    // 提取 duration 和 packageName
-    int32_t duration = getDuration(intParams);
-    std::string packageName = extraStrings.value_or("");
+    TLOGI("notifyEventStart: eventId=%d pkg='%s' act='%s' fps=%d duration=%d", ctx.eventId,
+          ctx.package.c_str(), ctx.activity.c_str(), ctx.fps, ctx.duration);
 
-    TLOGI("notifyEventStart: eventId=%d, duration=%d, pkg=%s", eventId, duration,
-          packageName.c_str());
-
-    // 1. 先广播给监听器 (在申请锁之前)
+    // 1. Broadcast to listeners first (non-blocking, oneway)
     broadcastEventStart(eventId, timestamp, numParams, intParams, extraStrings);
 
-    // 2. 申请性能锁
-    int32_t platformHandle =
-        mPerfLockCaller->acquirePerfLock(eventId, duration, intParams, packageName);
-
+    // 2. Acquire perf lock
+    int32_t platformHandle = mPerfLockCaller->acquirePerfLock(ctx);
     if (platformHandle < 0) {
-        TLOGE("Failed to acquire perf lock for event %d", eventId);
+        TLOGE("Failed to acquire perf lock for eventId=%d", eventId);
         return ::ndk::ScopedAStatus::ok();
     }
 
-    // 3. 保存事件信息
+    // 3. Track active event
     {
         std::lock_guard<Mutex> lock(mEventLock);
-
-        // 检查事件是否已存在
         auto it = mActiveEvents.find(eventId);
         if (it != mActiveEvents.end()) {
-            TLOGW("Event %d already active, releasing old handle %d", eventId,
+            TLOGW("Event %d already active, releasing old handle=%d", eventId,
                   it->second.platformHandle);
             mPerfLockCaller->releasePerfLock(it->second.platformHandle);
         }
-
-        // 存储新事件
         EventInfo info;
         info.platformHandle = platformHandle;
         info.startTime = timestamp;
-        info.packageName = packageName;
+        info.packageName = ctx.package;
         mActiveEvents[eventId] = info;
     }
 
-    TLOGI("Event %d started, platformHandle=%d", eventId, platformHandle);
-
+    TLOGI("Event %d started, handle=%d", eventId, platformHandle);
     return ::ndk::ScopedAStatus::ok();
 }
 
@@ -114,31 +100,32 @@ ServiceBridge::~ServiceBridge() {
         return ::ndk::ScopedAStatus::ok();
     }
 
-    std::string packageName = extraStrings.value_or("");
+    // Parse context for logging; extraStrings on End carries same
+    // positional convention as Start (e.g. package at strings[0])
+    EventContext ctx = EventContext::parse(eventId, {}, extraStrings.value_or(""));
 
-    TLOGI("notifyEventEnd: eventId=%d, pkg=%s", eventId, packageName.c_str());
+    TLOGI("notifyEventEnd: eventId=%d pkg='%s'", ctx.eventId, ctx.package.c_str());
 
-    // 1. 先广播给监听器
+    // 1. Broadcast to listeners first
     broadcastEventEnd(eventId, timestamp, extraStrings);
 
-    // 2. 查找并释放事件
-    std::lock_guard<Mutex> lock(mEventLock);
+    // 2. Find, release, and remove active event
+    {
+        std::lock_guard<Mutex> lock(mEventLock);
+        auto it = mActiveEvents.find(eventId);
+        if (it == mActiveEvents.end()) {
+            TLOGW("Event %d not found in active events", eventId);
+            return ::ndk::ScopedAStatus::ok();
+        }
 
-    auto it = mActiveEvents.find(eventId);
-    if (it == mActiveEvents.end()) {
-        TLOGW("Event %d not found in active events", eventId);
-        return ::ndk::ScopedAStatus::ok();
+        mPerfLockCaller->releasePerfLock(it->second.platformHandle);
+
+        int64_t elapsedMs = (timestamp - it->second.startTime) / 1000000LL;
+        TLOGI("Event %d ended: handle=%d elapsed=%lldms", eventId, it->second.platformHandle,
+              (long long)elapsedMs);
+
+        mActiveEvents.erase(it);
     }
-
-    // 释放性能锁
-    mPerfLockCaller->releasePerfLock(it->second.platformHandle);
-
-    // 计算事件持续时间(用于日志)
-    int64_t duration = timestamp - it->second.startTime;
-    TLOGI("Event %d ended, duration=%lld ms", eventId, (long long)(duration / 1000000));
-
-    // 从活跃事件中移除
-    mActiveEvents.erase(it);
 
     return ::ndk::ScopedAStatus::ok();
 }
@@ -295,13 +282,6 @@ void ServiceBridge::onListenerDied(void *cookie) {
     // 或实现更复杂的跟踪机制(如果需要)
 
     TLOGI("Death notification received, listener will be cleaned up on next access");
-}
-
-// ==================== Helper Methods ====================
-
-int32_t ServiceBridge::getDuration(const std::vector<int32_t> &intParams) const {
-    // Duration 总是第一个参数
-    return intParams.empty() ? 0 : intParams[0];
 }
 
 }    // namespace perfengine

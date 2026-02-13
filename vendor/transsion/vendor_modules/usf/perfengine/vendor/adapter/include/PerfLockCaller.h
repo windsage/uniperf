@@ -13,6 +13,7 @@
 #include <thread>
 #include <vector>
 
+#include "EventContext.h"
 #include "PerfEngineTypes.h"
 
 namespace vendor {
@@ -57,8 +58,7 @@ public:
 
     bool init();
 
-    int32_t acquirePerfLock(int32_t eventId, int32_t duration,
-                            const std::vector<int32_t> &intParams, const std::string &packageName);
+    int32_t acquirePerfLock(const EventContext &ctx);
 
     void releasePerfLock(int32_t handle);
 
@@ -72,8 +72,6 @@ private:
 
     std::string getPlatformMappingFile();
 
-    int32_t extractCurrentFps(const std::vector<int32_t> &intParams);
-
     bool convertToPlatformParams(const ScenarioConfig &config,
                                  std::vector<int32_t> &platformParams);
 
@@ -82,8 +80,7 @@ private:
     } mQcomFuncs;
 
     int32_t qcomAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                          const std::vector<int32_t> &platformParams,
-                                          const std::string &packageName);
+                                          const std::vector<int32_t> &platformParams);
 
     void qcomReleasePerfLock(int32_t handle);
 
@@ -93,8 +90,7 @@ private:
     } mMtkFuncs;
 
     int32_t mtkAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                         const std::vector<int32_t> &platformParams,
-                                         const std::string &packageName);
+                                         const std::vector<int32_t> &platformParams);
 
     void mtkReleasePerfLock(int32_t handle);
 

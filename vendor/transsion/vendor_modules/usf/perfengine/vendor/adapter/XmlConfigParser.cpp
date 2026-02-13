@@ -1,4 +1,3 @@
-
 #include "XmlConfigParser.h"
 
 #include <libxml/parser.h>
@@ -16,70 +15,57 @@
 #undef LOG_TAG
 #endif
 #define LOG_TAG "PerfEngine-XmlParser"
+
 namespace vendor {
 namespace transsion {
 namespace perfengine {
 
-// ====================== Public Methods ======================
+// ============================================================
+// Public Methods
+// ============================================================
 
 XmlConfigParser &XmlConfigParser::getInstance() {
     static XmlConfigParser instance;
     return instance;
 }
 
-bool XmlConfigParser::loadConfig(const std::string &xmlPath) {
+bool XmlConfigParser::loadConfig(const std::string &filename) {
     std::lock_guard<std::mutex> lock(mMutex);
 
-    // Find config file with priority
-    std::string fullPath = findConfigFile(xmlPath);
+    std::string fullPath = findConfigFile(filename);
     if (fullPath.empty()) {
-        TLOGE("Config file not found: %s", xmlPath.c_str());
+        TLOGE("Config file not found: %s", filename.c_str());
         return false;
     }
 
     TLOGI("Loading config from: %s", fullPath.c_str());
 
-    // Parse XML document
     bool result = parseXmlDocument(fullPath);
     if (result) {
         mCurrentConfigPath = fullPath;
-        TLOGI("Config loaded successfully, %zu scenarios cached", mConfigCache.size());
+        // Count total entries across all scenario IDs
+        size_t total = 0;
+        for (const auto &kv : mConfigCache)
+            total += kv.second.size();
+        TLOGI("Config loaded: %zu scenario-id groups, %zu total entries", mConfigCache.size(),
+              total);
     } else {
-        TLOGE("Failed to parse config file: %s", fullPath.c_str());
+        TLOGE("Failed to parse config: %s", fullPath.c_str());
     }
 
     return result;
 }
 
-const ScenarioConfig *XmlConfigParser::getScenarioConfig(int32_t sceneId, int32_t currentFps) {
+const ScenarioConfig *XmlConfigParser::getScenarioConfig(int32_t sceneId, int32_t currentFps,
+                                                         const std::string &package,
+                                                         const std::string &activity) {
     std::lock_guard<std::mutex> lock(mMutex);
-
-    // 1. Try FPS-specific configuration first
-    if (currentFps > 0) {
-        uint32_t key = makeCacheKey(sceneId, currentFps);
-        auto it = mConfigCache.find(key);
-        if (it != mConfigCache.end()) {
-            TLOGD("Found FPS-specific config: sceneId=%d, fps=%d", sceneId, currentFps);
-            return &(it->second);
-        }
-    }
-
-    // 2. Fallback to generic configuration (fps=0)
-    uint32_t key = makeCacheKey(sceneId, 0);
-    auto it = mConfigCache.find(key);
-    if (it != mConfigCache.end()) {
-        TLOGD("Using generic config: sceneId=%d", sceneId);
-        return &(it->second);
-    }
-
-    // 3. Configuration not found
-    TLOGW("No config found for sceneId=%d, fps=%d", sceneId, currentFps);
-    return nullptr;
+    return findBestMatch(sceneId, currentFps, package, activity);
 }
 
-bool XmlConfigParser::reloadConfig(const std::string &xmlPath) {
+bool XmlConfigParser::reloadConfig(const std::string &filename) {
     clearCache();
-    return loadConfig(xmlPath);
+    return loadConfig(filename);
 }
 
 void XmlConfigParser::clearCache() {
@@ -91,141 +77,250 @@ void XmlConfigParser::clearCache() {
 
 size_t XmlConfigParser::getScenarioCount() const {
     std::lock_guard<std::mutex> lock(mMutex);
-    return mConfigCache.size();
+    size_t total = 0;
+    for (const auto &kv : mConfigCache)
+        total += kv.second.size();
+    return total;
 }
 
-// ====================== Private Methods ======================
+// ============================================================
+// Core matching logic
+// ============================================================
+
+/**
+ * Priority cascade (called with mMutex held):
+ *   P1: fps==currentFps && package==pkg && activity==act
+ *   P2: fps==currentFps && package==pkg && activity==""
+ *   P3: fps==currentFps && package==""  && activity==""
+ *   P4: fps==0          && package==pkg && activity==act
+ *   P5: fps==0          && package==pkg && activity==""
+ *   P6: fps==0          && package==""  && activity==""
+ */
+const ScenarioConfig *XmlConfigParser::findBestMatch(int32_t sceneId, int32_t fps,
+                                                     const std::string &package,
+                                                     const std::string &activity) const {
+    auto it = mConfigCache.find(sceneId);
+    if (it == mConfigCache.end()) {
+        TLOGW("No scenarios found for sceneId=%d", sceneId);
+        return nullptr;
+    }
+
+    const std::vector<ScenarioConfig> &entries = it->second;
+
+    TLOGD("findBestMatch: sceneId=%d, fps=%d, pkg='%s', act='%s', candidates=%zu", sceneId, fps,
+          package.c_str(), activity.c_str(), entries.size());
+
+    // Helper lambda: find first entry matching the given criteria
+    auto find = [&](int32_t wantFps, const std::string &wantPkg,
+                    const std::string &wantAct) -> const ScenarioConfig * {
+        for (const auto &cfg : entries) {
+            if (cfg.fps == wantFps && cfg.package == wantPkg && cfg.activity == wantAct) {
+                return &cfg;
+            }
+        }
+        return nullptr;
+    };
+
+    const ScenarioConfig *result = nullptr;
+
+    // ---- P1: exact fps + package + activity ----
+    if (fps > 0 && !package.empty() && !activity.empty()) {
+        result = find(fps, package, activity);
+        if (result) {
+            TLOGD("Matched P1: fps=%d pkg='%s' act='%s'", fps, package.c_str(), activity.c_str());
+            return result;
+        }
+    }
+
+    // ---- P2: exact fps + package (no activity) ----
+    if (fps > 0 && !package.empty()) {
+        result = find(fps, package, "");
+        if (result) {
+            TLOGD("Matched P2: fps=%d pkg='%s'", fps, package.c_str());
+            return result;
+        }
+    }
+
+    // ---- P3: exact fps, generic (no package) ----
+    if (fps > 0) {
+        result = find(fps, "", "");
+        if (result) {
+            TLOGD("Matched P3: fps=%d (generic)", fps);
+            return result;
+        }
+    }
+
+    // ---- P4: fps=0 fallback + package + activity ----
+    if (!package.empty() && !activity.empty()) {
+        result = find(0, package, activity);
+        if (result) {
+            TLOGD("Matched P4: fps=0 pkg='%s' act='%s'", package.c_str(), activity.c_str());
+            return result;
+        }
+    }
+
+    // ---- P5: fps=0 fallback + package (no activity) ----
+    if (!package.empty()) {
+        result = find(0, package, "");
+        if (result) {
+            TLOGD("Matched P5: fps=0 pkg='%s'", package.c_str());
+            return result;
+        }
+    }
+
+    // ---- P6: fps=0 generic fallback ----
+    result = find(0, "", "");
+    if (result) {
+        TLOGD("Matched P6: generic fallback for sceneId=%d", sceneId);
+        return result;
+    }
+
+    TLOGW("No matching config: sceneId=%d fps=%d pkg='%s' act='%s'", sceneId, fps, package.c_str(),
+          activity.c_str());
+    return nullptr;
+}
+
+// ============================================================
+// Private: File discovery
+// ============================================================
 
 std::string XmlConfigParser::findConfigFile(const std::string &filename) {
     struct stat st;
 
-    // 1. Check /data/vendor/perfengine/ first (OTA update path)
+    // Priority 1: /data/vendor/perfengine/ (OTA / debug override)
     std::string dataPath = std::string(ConfigPath::DATA_VENDOR) + "/" + filename;
     if (stat(dataPath.c_str(), &st) == 0) {
         TLOGD("Found config in data partition: %s", dataPath.c_str());
         return dataPath;
     }
 
-    // 2. Fallback to /vendor/etc/perfengine/ (read-only)
+    // Priority 2: /vendor/etc/perfengine/ (built-in)
     std::string vendorPath = std::string(ConfigPath::VENDOR_ETC) + "/" + filename;
     if (stat(vendorPath.c_str(), &st) == 0) {
         TLOGD("Found config in vendor partition: %s", vendorPath.c_str());
         return vendorPath;
     }
 
-    // 3. Not found
     return "";
 }
 
+// ============================================================
+// Private: XML parsing
+// ============================================================
+
 bool XmlConfigParser::parseXmlDocument(const std::string &xmlPath) {
-    // Initialize libxml2 (thread-safe)
     xmlInitParser();
 
-    // Parse XML file with whitespace handling
     xmlDocPtr doc = xmlReadFile(xmlPath.c_str(), nullptr, XML_PARSE_NOBLANKS | XML_PARSE_NONET);
     if (doc == nullptr) {
-        TLOGE("Failed to parse XML file: %s", xmlPath.c_str());
+        TLOGE("xmlReadFile failed: %s", xmlPath.c_str());
         xmlCleanupParser();
         return false;
     }
 
-    // Get root node
     xmlNodePtr root = xmlDocGetRootElement(doc);
     if (root == nullptr) {
-        TLOGE("Empty XML document");
+        TLOGE("Empty XML document: %s", xmlPath.c_str());
         xmlFreeDoc(doc);
         xmlCleanupParser();
         return false;
     }
 
-    // Check root node name
     if (xmlStrcmp(root->name, (const xmlChar *)"PerfEngine") != 0) {
-        TLOGE("Invalid root node: %s (expected: PerfEngine)", root->name);
+        TLOGE("Invalid root node '%s', expected 'PerfEngine'", root->name);
         xmlFreeDoc(doc);
         xmlCleanupParser();
         return false;
     }
 
-    // Parse platform info (for logging)
+    // Log header attributes
+    std::string version = getXmlAttribute(root, "version");
     std::string platform = getXmlAttribute(root, "platform");
     std::string chip = getXmlAttribute(root, "chip");
-    if (!platform.empty() && !chip.empty()) {
-        TLOGI("Config platform=%s, chip=%s", platform.c_str(), chip.c_str());
-    }
+    TLOGI("XML header: version=%s platform=%s chip=%s", version.c_str(), platform.c_str(),
+          chip.c_str());
 
     // Find <Scenarios> node
-    xmlNodePtr scenarios = nullptr;
+    xmlNodePtr scenariosNode = nullptr;
     for (xmlNodePtr child = root->children; child; child = child->next) {
         if (child->type == XML_ELEMENT_NODE &&
             xmlStrcmp(child->name, (const xmlChar *)"Scenarios") == 0) {
-            scenarios = child;
+            scenariosNode = child;
             break;
         }
     }
 
-    if (scenarios == nullptr) {
-        TLOGE("No <Scenarios> node found");
+    if (scenariosNode == nullptr) {
+        TLOGE("No <Scenarios> node found in: %s", xmlPath.c_str());
         xmlFreeDoc(doc);
         xmlCleanupParser();
         return false;
     }
 
-    // Parse all <Scenario> nodes
-    int scenarioCount = 0;
-    for (xmlNodePtr node = scenarios->children; node; node = node->next) {
-        // Skip non-element nodes (text, comment, etc.)
-        if (node->type != XML_ELEMENT_NODE) {
+    // Parse each <Scenario>
+    int parsedCount = 0;
+    for (xmlNodePtr node = scenariosNode->children; node; node = node->next) {
+        if (node->type != XML_ELEMENT_NODE)
+            continue;
+
+        if (xmlStrcmp(node->name, (const xmlChar *)"Scenario") != 0) {
+            TLOGD("Skipping unknown node: <%s>", node->name);
             continue;
         }
 
-        if (xmlStrcmp(node->name, (const xmlChar *)"Scenario") == 0) {
-            ScenarioConfig config = parseScenarioNode(node);
+        ScenarioConfig cfg = parseScenarioNode(node);
 
-            // Validate scenario ID
-            if (config.id <= 0) {
-                TLOGW("Invalid scenario ID: %d, skipping", config.id);
-                continue;
-            }
-
-            // Store in cache
-            uint32_t key = makeCacheKey(config.id, config.fps);
-            mConfigCache[key] = config;
-            scenarioCount++;
-
-            TLOGD("Parsed scenario: id=%d, name='%s', fps=%d, timeout=%d, params=%zu", config.id,
-                  config.name.c_str(), config.fps, config.timeout, config.params.size());
+        if (cfg.id <= 0) {
+            TLOGW("Scenario with invalid id=%d, skipping", cfg.id);
+            continue;
         }
+
+        if (cfg.params.empty()) {
+            TLOGW("Scenario id=%d name='%s' has no params, skipping", cfg.id, cfg.name.c_str());
+            continue;
+        }
+
+        TLOGI(
+            "Parsed Scenario: id=%d name='%s' fps=%d pkg='%s' act='%s' "
+            "timeout=%d release=%s params=%zu",
+            cfg.id, cfg.name.c_str(), cfg.fps, cfg.package.c_str(), cfg.activity.c_str(),
+            cfg.timeout, cfg.release.c_str(), cfg.params.size());
+
+        mConfigCache[cfg.id].push_back(std::move(cfg));
+        parsedCount++;
     }
 
-    TLOGI("Successfully parsed %d scenarios", scenarioCount);
-
-    // Cleanup
     xmlFreeDoc(doc);
     xmlCleanupParser();
 
-    return scenarioCount > 0;
+    TLOGI("Parsed %d scenario entries from %s", parsedCount, xmlPath.c_str());
+    return parsedCount > 0;
 }
 
 ScenarioConfig XmlConfigParser::parseScenarioNode(void *node) {
     xmlNodePtr scenarioNode = static_cast<xmlNodePtr>(node);
     ScenarioConfig config;
 
-    // Parse 'id' attribute
+    // --- Scenario attributes ---
     std::string idStr = getXmlAttribute(scenarioNode, "id");
     if (!idStr.empty()) {
         config.id = std::atoi(idStr.c_str());
     }
 
-    // Parse 'name' attribute
     config.name = getXmlAttribute(scenarioNode, "name");
 
-    // Parse 'fps' attribute (optional)
     std::string fpsStr = getXmlAttribute(scenarioNode, "fps");
-    if (!fpsStr.empty()) {
-        config.fps = std::atoi(fpsStr.c_str());
-    }
+    config.fps = fpsStr.empty() ? 0 : std::atoi(fpsStr.c_str());
 
-    // Find <Config> node
+    // package / activity (optional)
+    config.package = getXmlAttribute(scenarioNode, "package");
+    config.activity = getXmlAttribute(scenarioNode, "activity");
+
+    // description is doc-only, no need to store
+    TLOGD("parseScenarioNode: id=%d name='%s' fps=%d pkg='%s' act='%s'", config.id,
+          config.name.c_str(), config.fps, config.package.c_str(), config.activity.c_str());
+
+    // --- Find <Config> child ---
     xmlNodePtr configNode = nullptr;
     for (xmlNodePtr child = scenarioNode->children; child; child = child->next) {
         if (child->type == XML_ELEMENT_NODE &&
@@ -236,50 +331,53 @@ ScenarioConfig XmlConfigParser::parseScenarioNode(void *node) {
     }
 
     if (configNode == nullptr) {
-        TLOGW("No <Config> node for scenario id=%d", config.id);
+        TLOGW("No <Config> for Scenario id=%d, entry will be skipped", config.id);
         return config;
     }
 
-    // Parse 'timeout' attribute
+    // Config attributes
     std::string timeoutStr = getXmlAttribute(configNode, "timeout");
-    if (!timeoutStr.empty()) {
-        config.timeout = std::atoi(timeoutStr.c_str());
-    }
+    config.timeout = timeoutStr.empty() ? 0 : std::atoi(timeoutStr.c_str());
 
-    // Parse 'release' attribute
     config.release = getXmlAttribute(configNode, "release");
-    if (config.release.empty()) {
-        config.release = "auto";    // Default value
-    }
+    if (config.release.empty())
+        config.release = "auto";
 
-    // Find <Resources> node
-    xmlNodePtr resources = nullptr;
+    TLOGD("  Config: timeout=%d release=%s", config.timeout, config.release.c_str());
+
+    // --- Find <Resources> child ---
+    xmlNodePtr resourcesNode = nullptr;
     for (xmlNodePtr child = configNode->children; child; child = child->next) {
         if (child->type == XML_ELEMENT_NODE &&
             xmlStrcmp(child->name, (const xmlChar *)"Resources") == 0) {
-            resources = child;
+            resourcesNode = child;
             break;
         }
     }
 
-    if (resources == nullptr) {
-        TLOGW("No <Resources> node for scenario id=%d", config.id);
+    if (resourcesNode == nullptr) {
+        TLOGW("No <Resources> for Scenario id=%d", config.id);
         return config;
     }
 
-    // Parse all <Param> nodes
-    for (xmlNodePtr param = resources->children; param; param = param->next) {
-        // Skip non-element nodes
-        if (param->type != XML_ELEMENT_NODE) {
+    // --- Parse <Param> nodes ---
+    for (xmlNodePtr paramNode = resourcesNode->children; paramNode; paramNode = paramNode->next) {
+        if (paramNode->type != XML_ELEMENT_NODE)
+            continue;
+
+        if (xmlStrcmp(paramNode->name, (const xmlChar *)"Param") != 0) {
+            TLOGD("  Skipping unknown node <%s> in <Resources>", paramNode->name);
             continue;
         }
 
-        if (xmlStrcmp(param->name, (const xmlChar *)"Param") == 0) {
-            PerfParam p = parseParamNode(param);
-            if (!p.name.empty()) {
-                config.params.push_back(p);
-            }
+        PerfParam p = parseParamNode(paramNode);
+        if (p.name.empty()) {
+            TLOGW("  Param with empty name, skipping");
+            continue;
         }
+
+        TLOGD("  Param: name='%s' value=%d (0x%X)", p.name.c_str(), p.value, p.value);
+        config.params.push_back(std::move(p));
     }
 
     return config;
@@ -289,10 +387,8 @@ PerfParam XmlConfigParser::parseParamNode(void *node) {
     xmlNodePtr paramNode = static_cast<xmlNodePtr>(node);
     PerfParam param;
 
-    // Parse 'name' attribute with whitespace trimming
     param.name = getXmlAttribute(paramNode, "name");
 
-    // Parse 'value' attribute (support decimal and hexadecimal)
     std::string valueStr = getXmlAttribute(paramNode, "value");
     if (!valueStr.empty()) {
         param.value = parseInt(valueStr.c_str());
@@ -301,50 +397,40 @@ PerfParam XmlConfigParser::parseParamNode(void *node) {
     return param;
 }
 
+// ============================================================
+// Private: Utilities
+// ============================================================
+
 int32_t XmlConfigParser::parseInt(const char *valueStr) {
-    if (valueStr == nullptr || *valueStr == '\0') {
+    if (valueStr == nullptr || *valueStr == '\0')
         return 0;
-    }
 
-    // Trim whitespace
-    std::string trimmed = trim(valueStr);
+    std::string s = trim(valueStr);
 
-    // Check for hexadecimal (0x or 0X prefix)
-    if (trimmed.size() >= 2 && (trimmed.substr(0, 2) == "0x" || trimmed.substr(0, 2) == "0X")) {
-        // Parse as hexadecimal
-        return static_cast<int32_t>(std::strtol(trimmed.c_str(), nullptr, 16));
-    } else {
-        // Parse as decimal
-        return std::atoi(trimmed.c_str());
+    // Hex: 0x / 0X prefix
+    if (s.size() >= 2 && (s[0] == '0') && (s[1] == 'x' || s[1] == 'X')) {
+        return static_cast<int32_t>(std::strtol(s.c_str(), nullptr, 16));
     }
+    return std::atoi(s.c_str());
 }
 
 std::string XmlConfigParser::getXmlAttribute(void *node, const char *attrName) {
     xmlNodePtr xmlNode = static_cast<xmlNodePtr>(node);
-
-    xmlChar *attrValue = xmlGetProp(xmlNode, (const xmlChar *)attrName);
-    if (attrValue == nullptr) {
+    xmlChar *val = xmlGetProp(xmlNode, (const xmlChar *)attrName);
+    if (val == nullptr)
         return "";
-    }
 
-    // Convert to std::string and trim whitespace
-    std::string result = trim(reinterpret_cast<const char *>(attrValue));
-    xmlFree(attrValue);
-
+    std::string result = trim(reinterpret_cast<const char *>(val));
+    xmlFree(val);
     return result;
 }
 
 std::string XmlConfigParser::trim(const std::string &str) {
-    // Find first non-whitespace character
     auto start =
-        std::find_if(str.begin(), str.end(), [](unsigned char ch) { return !std::isspace(ch); });
-
-    // Find last non-whitespace character
-    auto end = std::find_if(str.rbegin(), str.rend(), [](unsigned char ch) {
-                   return !std::isspace(ch);
+        std::find_if(str.begin(), str.end(), [](unsigned char c) { return !std::isspace(c); });
+    auto end = std::find_if(str.rbegin(), str.rend(), [](unsigned char c) {
+                   return !std::isspace(c);
                }).base();
-
-    // Return trimmed string
     return (start < end) ? std::string(start, end) : "";
 }
 

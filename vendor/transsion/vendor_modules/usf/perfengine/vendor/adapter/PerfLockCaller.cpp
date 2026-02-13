@@ -167,63 +167,58 @@ bool PerfLockCaller::initUnisoc() {
 
 // ==================== 核心功能链路 ====================
 
-int32_t PerfLockCaller::acquirePerfLock(int32_t eventId, int32_t duration,
-                                        const std::vector<int32_t> &intParams,
-                                        const std::string &packageName) {
+int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
     if (!mInitialized) {
         TLOGE("PerfLockCaller not initialized");
         return -1;
     }
 
-    TLOGI("=== acquirePerfLock START ===");
-    TLOGI("eventId=%d, duration=%d, pkg=%s", eventId, duration, packageName.c_str());
+    TLOGI("=== acquirePerfLock START: eventId=%d fps=%d pkg='%s' act='%s' duration=%d ===",
+          ctx.eventId, ctx.fps, ctx.package.c_str(), ctx.activity.c_str(), ctx.duration);
 
-    // 提取 currentFps
-    int32_t currentFps = extractCurrentFps(intParams);
-    TLOGD("Extracted currentFps=%d", currentFps);
-
-    // 查询 XML 配置
-    const ScenarioConfig *config =
-        XmlConfigParser::getInstance().getScenarioConfig(eventId, currentFps);
+    // Query XML config with full 6-level priority matching
+    const ScenarioConfig *config = XmlConfigParser::getInstance().getScenarioConfig(
+        ctx.eventId, ctx.fps, ctx.package, ctx.activity);
 
     if (!config) {
-        TLOGE("No config found for eventId=%d, fps=%d", eventId, currentFps);
+        TLOGE("No config: eventId=%d fps=%d pkg='%s' act='%s'", ctx.eventId, ctx.fps,
+              ctx.package.c_str(), ctx.activity.c_str());
         return -1;
     }
 
-    TLOGI("Found scenario: id=%d, name='%s', fps=%d, timeout=%d, params=%zu", config->id,
-          config->name.c_str(), config->fps, config->timeout, config->params.size());
+    TLOGI("Matched: id=%d name='%s' fps=%d pkg='%s' act='%s' timeout=%d params=%zu", config->id,
+          config->name.c_str(), config->fps, config->package.c_str(), config->activity.c_str(),
+          config->timeout, config->params.size());
 
-    // 参数映射
+    // Convert semantic params -> platform opcodes
     std::vector<int32_t> platformParams;
     if (!convertToPlatformParams(*config, platformParams)) {
-        TLOGE("Failed to convert params for eventId=%d", eventId);
+        TLOGE("No mappable params for eventId=%d", ctx.eventId);
         return -1;
     }
 
-    TLOGI("Converted %zu params to %zu platform opcodes", config->params.size(),
-          platformParams.size() / 2);
+    TLOGI("Converted %zu params -> %zu opcodes", config->params.size(), platformParams.size() / 2);
 
-    // 调用平台 API
-    int32_t effectiveTimeout = (config->timeout > 0) ? config->timeout : duration;
+    // Config timeout takes priority; fall back to caller-supplied duration
+    int32_t effectiveTimeout = (config->timeout > 0) ? config->timeout : ctx.duration;
 
     int32_t platformHandle = -1;
     switch (mPlatform) {
         case Platform::QCOM:
-            platformHandle = qcomAcquirePerfLockWithParams(eventId, effectiveTimeout,
-                                                           platformParams, packageName);
+            platformHandle =
+                qcomAcquirePerfLockWithParams(ctx.eventId, effectiveTimeout, platformParams);
             break;
         case Platform::MTK:
-            platformHandle = mtkAcquirePerfLockWithParams(eventId, effectiveTimeout, platformParams,
-                                                          packageName);
+            platformHandle =
+                mtkAcquirePerfLockWithParams(ctx.eventId, effectiveTimeout, platformParams);
             break;
         default:
-            TLOGE("Unknown platform");
+            TLOGE("Unsupported platform");
             return -1;
     }
 
     if (platformHandle < 0) {
-        TLOGE("Failed to acquire perf lock");
+        TLOGE("Platform acquirePerfLock failed: eventId=%d", ctx.eventId);
         return -1;
     }
 
@@ -232,13 +227,6 @@ int32_t PerfLockCaller::acquirePerfLock(int32_t eventId, int32_t duration,
 }
 
 // ==================== 参数转换 ====================
-
-int32_t PerfLockCaller::extractCurrentFps(const std::vector<int32_t> &intParams) {
-    if (intParams.size() >= 2 && intParams[1] > 0) {
-        return intParams[1];
-    }
-    return 0;
-}
 
 bool PerfLockCaller::convertToPlatformParams(const ScenarioConfig &config,
                                              std::vector<int32_t> &platformParams) {
@@ -264,8 +252,7 @@ bool PerfLockCaller::convertToPlatformParams(const ScenarioConfig &config,
 // ==================== QCOM 平台调用 ====================
 
 int32_t PerfLockCaller::qcomAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                                      const std::vector<int32_t> &platformParams,
-                                                      const std::string &packageName) {
+                                                      const std::vector<int32_t> &platformParams) {
     typedef int (*perfmodule_submit_request_t)(mpctl_msg_t *);
     auto submitRequest = reinterpret_cast<perfmodule_submit_request_t>(mQcomFuncs.submitRequest);
 
@@ -349,8 +336,7 @@ void PerfLockCaller::qcomReleasePerfLock(int32_t handle) {
 // ==================== MTK 平台调用 ====================
 
 int32_t PerfLockCaller::mtkAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                                     const std::vector<int32_t> &platformParams,
-                                                     const std::string &packageName) {
+                                                     const std::vector<int32_t> &platformParams) {
     typedef int (*mtk_perf_lock_acq_t)(int *, int, int, int, int, int);
     auto lockAcq = reinterpret_cast<mtk_perf_lock_acq_t>(mMtkFuncs.lockAcq);
 

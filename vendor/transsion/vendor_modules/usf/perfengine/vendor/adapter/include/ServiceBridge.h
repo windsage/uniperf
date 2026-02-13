@@ -68,7 +68,6 @@ private:
     std::vector<ListenerInfo> mListeners;
     Mutex mListenerLock;
 
-    int32_t getDuration(const std::vector<int32_t> &intParams) const;
     bool findListener(const std::shared_ptr<IEventListener> &listener);
     void removeListener(const std::shared_ptr<IEventListener> &listener);
 

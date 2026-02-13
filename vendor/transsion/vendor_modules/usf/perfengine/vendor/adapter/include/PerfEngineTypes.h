@@ -77,6 +77,8 @@ struct ScenarioConfig {
     int32_t id;                       // Scenario ID (event ID)
     std::string name;                 // Scenario name (for logging)
     int32_t fps;                      // Target FPS (0 = generic config)
+    std::string package;              // Package name filter (empty = match all)
+    std::string activity;             // Activity name filter (empty = match all, requires package)
     int32_t timeout;                  // Duration in ms (0 = infinite)
     std::string release;              // Release strategy: "auto" | "manual"
     std::vector<PerfParam> params;    // Parameter list

@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PerfEngine version="1.0" platform="pineapple" chip="QCOM">
-
+<PerfEngine version="2.0" platform="pineapple" chip="QCOM">
+    <!--
+    ============================================================
+    场景列表
+    Scenario 属性说明：
+        id          - 事件ID，对应 notifyEventStart 的 eventId
+        name        - 场景名（日志/调试用）
+        fps         - 刷新率过滤，0=通用（fallback），具体值精确匹配
+        package     - 包名过滤（可选），未指定则匹配所有应用
+        activity    - Activity过滤（可选），需配合 package 使用
+        description - 可读描述（文档用）
+    
+    匹配优先级（由高到低）：
+        1. id + fps + package + activity
+        2. id + fps + package
+        3. id + fps（无包名过滤）
+        4. id + package + activity（fps=0 fallback）
+        5. id + package（fps=0 fallback）
+        6. id only（fps=0，无包名，通用兜底）
+    ============================================================
+    -->
     <Scenarios>
 
         <!-- 应用启动场景 -->
@@ -38,6 +57,17 @@
             </Config>
         </Scenario>
 
-        <!-- 更多场景... -->
+        <Scenario id="7" name="FOREGROUND_APP" fps="0"
+                  package="com.tencent.tmgp.pubgmhd"
+                  activity="com.tencent.tmgp.pubgmhd.LobbyActivity"
+                  description="PUBG 大厅页面省电配置">
+            <Config timeout="0" release="manual">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="1400000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="1600000"/>
+                    <Param name="SCHED_BOOST"           value="0"/>
+                </Resources>
+            </Config>
+        </Scenario>
     </Scenarios>
 </PerfEngine>
