@@ -2,7 +2,7 @@
  * TranPerfEvent Native Implementation
  */
 
-#define LOG_TAG "TranPerfEvent"
+#define LOG_TAG "TPE-Event"
 
 #include <aidl/vendor/transsion/hardware/perfengine/IEventListener.h>
 #include <aidl/vendor/transsion/hardware/perfengine/IPerfEngine.h>

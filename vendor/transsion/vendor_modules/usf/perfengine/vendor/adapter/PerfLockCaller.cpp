@@ -15,7 +15,7 @@
 #ifdef LOG_TAG
 #undef LOG_TAG
 #endif
-#define LOG_TAG "PerfEngine-PerfLockCaller"
+#define LOG_TAG "TPE-Caller"
 
 namespace vendor {
 namespace transsion {

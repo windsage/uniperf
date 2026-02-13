@@ -9,7 +9,7 @@
 #ifdef LOG_TAG
 #undef LOG_TAG
 #endif
-#define LOG_TAG "PerfEngine-Platform"
+#define LOG_TAG "TPE-Plat"
 namespace vendor {
 namespace transsion {
 namespace perfengine {

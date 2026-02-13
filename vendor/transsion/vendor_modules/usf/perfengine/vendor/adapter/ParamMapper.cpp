@@ -16,7 +16,7 @@
 #ifdef LOG_TAG
 #undef LOG_TAG
 #endif
-#define LOG_TAG "PerfEngine-ParamMapper"
+#define LOG_TAG "TPE-Mapper"
 namespace vendor {
 namespace transsion {
 namespace perfengine {

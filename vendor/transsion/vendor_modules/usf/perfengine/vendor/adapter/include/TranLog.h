@@ -9,7 +9,7 @@
  * If not defined (e.g., via Android.bp or source file), provide a default.
  */
 #ifndef LOG_TAG
-#define LOG_TAG "TranssionModule"
+#define LOG_TAG "TPE-LOG"
 #endif
 
 namespace vendor {

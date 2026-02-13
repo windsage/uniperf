@@ -1,6 +1,12 @@
 #include "ServiceBridge.h"
 
+#include <sched.h>
+#include <sys/prctl.h>
+#include <unistd.h>
 #include <utils/Trace.h>
+
+#include <cerrno>
+#include <cstring>
 
 #include "PerfLockCaller.h"
 #include "TranLog.h"
@@ -8,7 +14,7 @@
 #ifdef LOG_TAG
 #undef LOG_TAG
 #endif
-#define LOG_TAG "PerfEngine-ServiceBridge"
+#define LOG_TAG "TPE-Bridge"
 namespace vendor {
 namespace transsion {
 namespace perfengine {
@@ -38,12 +44,38 @@ ServiceBridge::~ServiceBridge() {
     mListeners.clear();
 }
 
+static void ensureBinderThreadSetup() {
+    thread_local bool sSetup = false;
+    if (sSetup)
+        return;
+
+    // Rename thread — max 15 chars (PR_SET_NAME limit)
+    int ret = prctl(PR_SET_NAME, "tpe_binder", 0, 0, 0);
+    if (ret != 0) {
+        TLOGW("prctl PR_SET_NAME failed: %s", strerror(errno));
+    } else {
+        TLOGD("Binder thread tid=%d renamed to 'tpe_binder'", gettid());
+    }
+
+    // Elevate to RT
+    struct sched_param param;
+    param.sched_priority = 2;
+    ret = sched_setscheduler(0, SCHED_FIFO, &param);
+    if (ret == 0) {
+        TLOGI("Binder thread tid=%d elevated to SCHED_FIFO prio=2", gettid());
+    } else {
+        TLOGW("sched_setscheduler failed: %s (tid=%d)", strerror(errno), gettid());
+    }
+
+    sSetup = true;
+}
 // ==================== Event Notification Implementation ====================
 
 ::ndk::ScopedAStatus ServiceBridge::notifyEventStart(
     int32_t eventId, int64_t timestamp, int32_t numParams, const std::vector<int32_t> &intParams,
     const std::optional<std::string> &extraStrings) {
     ATRACE_NAME("ServiceBridge::notifyEventStart");
+    ensureBinderThreadSetup();
 
     if (!mPerfLockCaller) {
         TLOGE("PerfLockCaller not initialized");
@@ -94,6 +126,7 @@ ServiceBridge::~ServiceBridge() {
 ::ndk::ScopedAStatus ServiceBridge::notifyEventEnd(int32_t eventId, int64_t timestamp,
                                                    const std::optional<std::string> &extraStrings) {
     ATRACE_NAME("ServiceBridge::notifyEventEnd");
+    ensureBinderThreadSetup();
 
     if (!mPerfLockCaller) {
         TLOGE("PerfLockCaller not initialized");

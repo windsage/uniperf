@@ -4,7 +4,7 @@
  * 职责: AIDL 客户端，透传调用到 Vendor 层 PerfEngineAdapter
  */
 
-#define LOG_TAG "PerfEngine-JNI"
+#define LOG_TAG "TPE-JNI"
 
 #include <android_runtime/AndroidRuntime.h>
 #include <jni.h>

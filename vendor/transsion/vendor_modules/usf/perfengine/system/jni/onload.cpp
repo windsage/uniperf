@@ -2,7 +2,7 @@
  * JNI OnLoad entry point
  */
 
-#define LOG_TAG "PerfEngine-JNI"
+#define LOG_TAG "TPE-JNI"
 
 #include <jni.h>
 #include <nativehelper/JNIHelp.h>

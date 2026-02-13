@@ -14,7 +14,7 @@
 #ifdef LOG_TAG
 #undef LOG_TAG
 #endif
-#define LOG_TAG "PerfEngine-XmlParser"
+#define LOG_TAG "TPE-Parser"
 
 namespace vendor {
 namespace transsion {
