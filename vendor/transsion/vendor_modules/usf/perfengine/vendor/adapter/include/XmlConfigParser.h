@@ -95,6 +95,18 @@ private:
 
     mutable std::mutex mMutex;
     std::string mCurrentConfigPath;
+    /**
+     * Pre-convert semantic params to platform opcodes for all cached entries.
+     * Must be called after ParamMapper is initialized.
+     * Iterates all ScenarioConfig entries and fills platformParams in-place.
+     */
+    void buildPlatformParams();
+
+    /**
+     * Convert one ScenarioConfig's params to platformParams.
+     * Returns number of successfully mapped params.
+     */
+    int32_t convertScenarioParams(ScenarioConfig &config);
 };
 
 }    // namespace perfengine

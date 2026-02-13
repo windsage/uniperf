@@ -62,16 +62,15 @@ bool PerfLockCaller::init() {
 
     TLOGI("Initializing PerfLockCaller");
 
-    // 1. 检测平台
+    // 1. Detect platform
     mPlatform = PlatformDetector::getInstance().getPlatform();
     if (mPlatform == Platform::UNKNOWN) {
         TLOGE("Failed to detect platform");
         return false;
     }
-
     TLOGI("Detected platform: %s", PlatformDetector::getInstance().getPlatformName());
 
-    // 2. 初始化平台函数
+    // 2. Initialize platform functions (dlsym)
     bool platformInitOk = false;
     switch (mPlatform) {
         case Platform::QCOM:
@@ -87,27 +86,24 @@ bool PerfLockCaller::init() {
             TLOGE("Unknown platform");
             return false;
     }
-
     if (!platformInitOk) {
         TLOGE("Failed to initialize platform functions");
         return false;
     }
 
-    // 3. 加载 Scenario XML 配置文件
-    std::string scenarioConfigPath = "perfengine_params.xml";
-    if (!XmlConfigParser::getInstance().loadConfig(scenarioConfigPath)) {
-        TLOGE("Failed to load scenario config: %s", scenarioConfigPath.c_str());
-        return false;
-    }
-    TLOGI("Loaded scenario config: %s, %zu scenarios", scenarioConfigPath.c_str(),
-          XmlConfigParser::getInstance().getScenarioCount());
-
-    // 4. 初始化参数映射器
+    // 3. Initialize ParamMapper FIRST — XmlConfigParser depends on it for pre-conversion
     if (!ParamMapper::getInstance().init(mPlatform)) {
+        TLOGE("Failed to initialize ParamMapper");
         return false;
     }
-    TLOGI("ParamMapper initialized with %zu mappings ",
-          ParamMapper::getInstance().getMappingCount());
+    TLOGI("ParamMapper initialized: %zu mappings", ParamMapper::getInstance().getMappingCount());
+
+    // 4. Load scenario XML — triggers pre-conversion using ParamMapper
+    if (!XmlConfigParser::getInstance().loadConfig("perfengine_params.xml")) {
+        TLOGE("Failed to load scenario config");
+        return false;
+    }
+    TLOGI("Loaded scenario config: %zu entries", XmlConfigParser::getInstance().getScenarioCount());
 
     mInitialized = true;
     TLOGI("PerfLockCaller initialized successfully");
@@ -176,7 +172,7 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
     TLOGI("=== acquirePerfLock START: eventId=%d fps=%d pkg='%s' act='%s' duration=%d ===",
           ctx.eventId, ctx.fps, ctx.package.c_str(), ctx.activity.c_str(), ctx.duration);
 
-    // Query XML config with full 6-level priority matching
+    // Find best-matching scenario config (6-level priority)
     const ScenarioConfig *config = XmlConfigParser::getInstance().getScenarioConfig(
         ctx.eventId, ctx.fps, ctx.package, ctx.activity);
 
@@ -186,18 +182,21 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
         return -1;
     }
 
-    TLOGI("Matched: id=%d name='%s' fps=%d pkg='%s' act='%s' timeout=%d params=%zu", config->id,
+#if !PERFENGINE_PRODUCTION
+    TLOGI("Matched: id=%d name='%s' fps=%d pkg='%s' act='%s' timeout=%d opcodes=%zu", config->id,
           config->name.c_str(), config->fps, config->package.c_str(), config->activity.c_str(),
-          config->timeout, config->params.size());
+          config->timeout, config->platformParams.size() / 2);
+#else
+    TLOGI("Matched: id=%d fps=%d timeout=%d opcodes=%zu", config->id, config->fps, config->timeout,
+          config->platformParams.size() / 2);
+#endif
 
-    // Convert semantic params -> platform opcodes
-    std::vector<int32_t> platformParams;
-    if (!convertToPlatformParams(*config, platformParams)) {
-        TLOGE("No mappable params for eventId=%d", ctx.eventId);
+    // platformParams pre-converted at load time — zero conversion cost here
+    if (config->platformParams.empty()) {
+        TLOGE("No platform params for eventId=%d (all params unmapped on this platform)",
+              ctx.eventId);
         return -1;
     }
-
-    TLOGI("Converted %zu params -> %zu opcodes", config->params.size(), platformParams.size() / 2);
 
     // Config timeout takes priority; fall back to caller-supplied duration
     int32_t effectiveTimeout = (config->timeout > 0) ? config->timeout : ctx.duration;
@@ -205,12 +204,12 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
     int32_t platformHandle = -1;
     switch (mPlatform) {
         case Platform::QCOM:
-            platformHandle =
-                qcomAcquirePerfLockWithParams(ctx.eventId, effectiveTimeout, platformParams);
+            platformHandle = qcomAcquirePerfLockWithParams(ctx.eventId, effectiveTimeout,
+                                                           config->platformParams);
             break;
         case Platform::MTK:
             platformHandle =
-                mtkAcquirePerfLockWithParams(ctx.eventId, effectiveTimeout, platformParams);
+                mtkAcquirePerfLockWithParams(ctx.eventId, effectiveTimeout, config->platformParams);
             break;
         default:
             TLOGE("Unsupported platform");
@@ -224,29 +223,6 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
 
     TLOGI("=== acquirePerfLock SUCCESS: handle=%d ===", platformHandle);
     return platformHandle;
-}
-
-// ==================== 参数转换 ====================
-
-bool PerfLockCaller::convertToPlatformParams(const ScenarioConfig &config,
-                                             std::vector<int32_t> &platformParams) {
-    platformParams.clear();
-
-    for (const auto &param : config.params) {
-        int32_t platformCode = ParamMapper::getInstance().getOpcode(param.name);
-
-        if (platformCode < 0) {
-            TLOGD("Param '%s' not supported, skipping", param.name.c_str());
-            continue;
-        }
-
-        platformParams.push_back(platformCode);
-        platformParams.push_back(param.value);
-
-        TLOGD("Mapped: '%s' → 0x%08X = %d", param.name.c_str(), platformCode, param.value);
-    }
-
-    return !platformParams.empty();
 }
 
 // ==================== QCOM 平台调用 ====================

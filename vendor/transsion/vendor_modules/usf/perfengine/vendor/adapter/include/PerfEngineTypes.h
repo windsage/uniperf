@@ -72,16 +72,28 @@ struct PerfParam {
 
 /**
  * Scenario configuration structure
+ *
+ * platformParams is always present: pre-converted [opcode, value, opcode, value, ...]
+ * params and name are stripped in production builds (PERFENGINE_PRODUCTION=1)
+ * to reduce memory footprint.
  */
 struct ScenarioConfig {
-    int32_t id;                       // Scenario ID (event ID)
-    std::string name;                 // Scenario name (for logging)
-    int32_t fps;                      // Target FPS (0 = generic config)
-    std::string package;              // Package name filter (empty = match all)
-    std::string activity;             // Activity name filter (empty = match all, requires package)
-    int32_t timeout;                  // Duration in ms (0 = infinite)
-    std::string release;              // Release strategy: "auto" | "manual"
-    std::vector<PerfParam> params;    // Parameter list
+    int32_t id;              // Scenario ID (event ID)
+    int32_t fps;             // Target FPS (0 = generic config)
+    std::string package;     // Package name filter (empty = match all)
+    std::string activity;    // Activity name filter (empty = match all)
+    int32_t timeout;         // Duration in ms (0 = infinite)
+    std::string release;     // Release strategy: "auto" | "manual"
+
+    // Pre-converted platform opcodes: [opcode0, value0, opcode1, value1, ...]
+    // Built at parse time, zero conversion cost at acquirePerfLock hot path.
+    std::vector<int32_t> platformParams;
+
+#if !PERFENGINE_PRODUCTION
+    // Debug/dev only: stripped in production to save memory
+    std::string name;
+    std::vector<PerfParam> params;
+#endif
 
     ScenarioConfig() : id(0), fps(0), timeout(0), release("auto") {}
 };

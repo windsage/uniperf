@@ -1,5 +1,7 @@
 #include <android/binder_manager.h>
 #include <android/binder_process.h>
+#include <processgroup/sched_policy.h>
+#include <sys/resource.h>
 
 #include "ServiceBridge.h"
 #include "TranLog.h"
@@ -56,6 +58,12 @@ extern "C" bool PerfEngine_Initialize() {
     }
 
     TLOGI("PerfEngine service registered: %s", serviceName.c_str());
+
+    // Elevate binder thread pool to RT-class for oneway dispatch latency
+    set_sched_policy(0, SP_FOREGROUND);
+    setpriority(PRIO_PROCESS, 0, -20);
+
+    TLOGI("Binder thread pool priority elevated");
     return true;
 }
 

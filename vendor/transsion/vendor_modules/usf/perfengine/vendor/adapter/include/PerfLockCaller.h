@@ -72,9 +72,6 @@ private:
 
     std::string getPlatformMappingFile();
 
-    bool convertToPlatformParams(const ScenarioConfig &config,
-                                 std::vector<int32_t> &platformParams);
-
     struct {
         void *submitRequest;
     } mQcomFuncs;

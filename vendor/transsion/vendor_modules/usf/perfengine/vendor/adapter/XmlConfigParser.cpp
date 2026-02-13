@@ -41,19 +41,23 @@ bool XmlConfigParser::loadConfig(const std::string &filename) {
     TLOGI("Loading config from: %s", fullPath.c_str());
 
     bool result = parseXmlDocument(fullPath);
-    if (result) {
-        mCurrentConfigPath = fullPath;
-        // Count total entries across all scenario IDs
-        size_t total = 0;
-        for (const auto &kv : mConfigCache)
-            total += kv.second.size();
-        TLOGI("Config loaded: %zu scenario-id groups, %zu total entries", mConfigCache.size(),
-              total);
-    } else {
+    if (!result) {
         TLOGE("Failed to parse config: %s", fullPath.c_str());
+        return false;
     }
 
-    return result;
+    mCurrentConfigPath = fullPath;
+
+    size_t total = 0;
+    for (const auto &kv : mConfigCache)
+        total += kv.second.size();
+    TLOGI("Config parsed: %zu scenario-id groups, %zu total entries", mConfigCache.size(), total);
+
+    // Pre-convert semantic params -> platform opcodes at load time.
+    // ParamMapper must already be initialized before this call.
+    buildPlatformParams();
+
+    return true;
 }
 
 const ScenarioConfig *XmlConfigParser::getScenarioConfig(int32_t sceneId, int32_t currentFps,
@@ -361,14 +365,12 @@ ScenarioConfig XmlConfigParser::parseScenarioNode(void *node) {
     }
 
     // --- Parse <Param> nodes ---
+    // Parse all <Param> nodes inside <Resources>
     for (xmlNodePtr paramNode = resourcesNode->children; paramNode; paramNode = paramNode->next) {
         if (paramNode->type != XML_ELEMENT_NODE)
             continue;
-
-        if (xmlStrcmp(paramNode->name, (const xmlChar *)"Param") != 0) {
-            TLOGD("  Skipping unknown node <%s> in <Resources>", paramNode->name);
+        if (xmlStrcmp(paramNode->name, (const xmlChar *)"Param") != 0)
             continue;
-        }
 
         PerfParam p = parseParamNode(paramNode);
         if (p.name.empty()) {
@@ -376,8 +378,22 @@ ScenarioConfig XmlConfigParser::parseScenarioNode(void *node) {
             continue;
         }
 
+#if PERFENGINE_PRODUCTION
+        // Production: convert immediately, discard name string
+        int32_t opcode = ParamMapper::getInstance().getOpcode(p.name);
+        if (opcode < 0) {
+            TLOGD("  Param '%s' not mapped on this platform, skipping", p.name.c_str());
+        } else {
+            config.platformParams.push_back(opcode);
+            config.platformParams.push_back(p.value);
+            TLOGD("  Prod pre-mapped: '%s' -> 0x%08X = %d", p.name.c_str(), opcode, p.value);
+        }
+        // p goes out of scope here — no heap allocation retained
+#else
+        // Dev: store semantic param for debugging and post-conversion
         TLOGD("  Param: name='%s' value=%d (0x%X)", p.name.c_str(), p.value, p.value);
         config.params.push_back(std::move(p));
+#endif
     }
 
     return config;
@@ -432,6 +448,71 @@ std::string XmlConfigParser::trim(const std::string &str) {
                    return !std::isspace(c);
                }).base();
     return (start < end) ? std::string(start, end) : "";
+}
+
+void XmlConfigParser::buildPlatformParams() {
+    // mMutex is already held by loadConfig caller
+    int32_t totalConverted = 0;
+    int32_t totalSkipped = 0;
+
+    TLOGI("buildPlatformParams: starting pre-conversion for all scenarios");
+
+    for (auto &kv : mConfigCache) {
+        for (auto &cfg : kv.second) {
+            int32_t converted = convertScenarioParams(cfg);
+            totalConverted += converted;
+
+            if (cfg.platformParams.empty()) {
+                // No mappable params for this platform — warn but keep entry
+                // so higher-priority matches can still be found by findBestMatch
+                TLOGW(
+                    "Scenario id=%d fps=%d pkg='%s' act='%s': "
+                    "no mappable params on current platform, entry kept but will be no-op",
+                    cfg.id, cfg.fps, cfg.package.c_str(), cfg.activity.c_str());
+                totalSkipped++;
+            } else {
+                TLOGD(
+                    "Scenario id=%d fps=%d pkg='%s' act='%s': "
+                    "%zu opcodes pre-converted",
+                    cfg.id, cfg.fps, cfg.package.c_str(), cfg.activity.c_str(),
+                    cfg.platformParams.size() / 2);
+            }
+        }
+    }
+
+    TLOGI(
+        "buildPlatformParams done: %d opcode-value pairs converted, "
+        "%d entries with no mappable params",
+        totalConverted, totalSkipped);
+
+    // release param mapper
+    ParamMapper::getInstance().clearMappings();
+    TLOGI("ParamMapper cache released after pre-conversion");
+}
+
+int32_t XmlConfigParser::convertScenarioParams(ScenarioConfig &config) {
+    config.platformParams.clear();
+
+#if !PERFENGINE_PRODUCTION
+    // Dev build: iterate named params, log each mapping result
+    for (const auto &param : config.params) {
+        int32_t opcode = ParamMapper::getInstance().getOpcode(param.name);
+        if (opcode < 0) {
+            TLOGD("  Param '%s' not mapped on this platform, skipping", param.name.c_str());
+            continue;
+        }
+        config.platformParams.push_back(opcode);
+        config.platformParams.push_back(param.value);
+        TLOGD("  Pre-mapped: '%s' -> 0x%08X = %d", param.name.c_str(), opcode, param.value);
+    }
+#else
+    // Production build: params vector is stripped, reconstruct from XML parse
+    // In production, parseScenarioNode converts directly without storing params.
+    // This branch should not be reached; conversion happens inside parseScenarioNode.
+    TLOGW("convertScenarioParams called in PRODUCTION build — unexpected");
+#endif
+
+    return static_cast<int32_t>(config.platformParams.size() / 2);
 }
 
 }    // namespace perfengine
