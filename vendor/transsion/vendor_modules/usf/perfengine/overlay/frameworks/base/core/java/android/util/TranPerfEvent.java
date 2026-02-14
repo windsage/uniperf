@@ -132,7 +132,7 @@ public final class TranPerfEvent {
     }
 
     /**
-     * 2. 完整事件监听器 (新增，用于 SDK 极致解耦)
+     * 2. 完整事件监听器
      * 调用方继承此类，无需直接依赖 vendor.transsion 命名空间
      */
     public abstract static class PerfEventListener {
@@ -188,10 +188,19 @@ public final class TranPerfEvent {
     }
 
     /**
-     * 3. 面向 SDK 的注册接口
-     * 调用方只需 new TranPerfEvent.PerfEventListener() {}
+     * Register a PerfEventListener, subscribe to ALL events.
      */
     public static void registerEventListener(PerfEventListener listener) {
+        registerEventListener(listener, new int[0]);
+    }
+
+    /**
+     * Register a PerfEventListener with event filter.
+     *
+     * @param listener    PerfEventListener implementation
+     * @param eventFilter Array of eventIds to subscribe; empty = all events
+     */
+    public static void registerEventListener(PerfEventListener listener, int[] eventFilter) {
         if (listener == null)
             return;
         try {
@@ -205,9 +214,8 @@ public final class TranPerfEvent {
                     listener.onEventEnd(id, ts, s);
                 }
             };
-
             listener.mStub = stub;
-            registerEventListener(stub.asBinder());
+            registerEventListener(stub.asBinder(), eventFilter);
         } catch (NoClassDefFoundError | Exception e) {
             Log.e(TAG, "Failed to wrap listener: " + e.getMessage());
             listener.mStub = null;
@@ -225,10 +233,21 @@ public final class TranPerfEvent {
     // ==================== Listener Management ====================
 
     /**
-     * Register a full AIDL event listener (Advanced use)
-     * * @param listenerBinder The IBinder object of the listener
+     * Register a full AIDL event listener, subscribe to ALL events.
+     *
+     * @param listenerBinder The IBinder object of the listener
      */
     public static void registerEventListener(android.os.IBinder listenerBinder) {
+        registerEventListener(listenerBinder, new int[0]);
+    }
+
+    /**
+     * Register a full AIDL event listener with event filter.
+     *
+     * @param listenerBinder The IBinder object of the listener
+     * @param eventFilter    Array of eventIds to subscribe; empty = all events
+     */
+    public static void registerEventListener(android.os.IBinder listenerBinder, int[] eventFilter) {
         if (listenerBinder == null) {
             Log.e(TAG, "Cannot register null binder");
             return;
@@ -249,7 +268,8 @@ public final class TranPerfEvent {
             if (!initReflection())
                 return;
             if (sRegisterListenerMethod != null) {
-                sRegisterListenerMethod.invoke(null, listener);
+                sRegisterListenerMethod.invoke(
+                        null, listener, eventFilter != null ? eventFilter : new int[0]);
             }
         } catch (Exception e) {
             Log.e(TAG, "Failed to register AIDL listener to PerfEngine", e);
@@ -331,13 +351,13 @@ public final class TranPerfEvent {
                                 String.class // extraStrings
                         );
 
-                // Listener registration methods (新增)
+                // Listener registration methods
                 try {
                     Class<?> listenerClass =
                             Class.forName("vendor.transsion.hardware.perfengine.IEventListener");
 
                     sRegisterListenerMethod = sPerfEngineClass.getDeclaredMethod(
-                            "registerEventListener", listenerClass);
+                            "registerEventListener", listenerClass, int[].class);
 
                     sUnregisterListenerMethod = sPerfEngineClass.getDeclaredMethod(
                             "unregisterEventListener", listenerClass);
@@ -347,7 +367,6 @@ public final class TranPerfEvent {
                     }
                 } catch (Exception e) {
                     Log.w(TAG, "Listener registration methods not available: " + e.getMessage());
-                    // Not fatal - event notification still works
                 }
 
                 sReflectionInitialized = true;

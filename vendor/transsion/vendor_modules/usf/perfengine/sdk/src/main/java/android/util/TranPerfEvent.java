@@ -61,9 +61,18 @@ public final class TranPerfEvent {
     }
 
     /**
-     * Recommended: Register a listener using the abstract class.
+     * Recommended: Register a listener using the abstract class, subscribe to ALL events.
      */
     public static void registerEventListener(PerfEventListener listener) {
+        throw new RuntimeException("Stub!");
+    }
+
+    /**
+     * Recommended: Register a listener using the abstract class, with event filter.
+     *
+     * @param eventFilter Array of eventIds to subscribe; empty = all events
+     */
+    public static void registerEventListener(PerfEventListener listener, int[] eventFilter) {
         throw new RuntimeException("Stub!");
     }
 
@@ -75,9 +84,18 @@ public final class TranPerfEvent {
     }
 
     /**
-     * Bottom-level: Register using a raw IBinder.
+     * Bottom-level: Register using a raw IBinder, subscribe to ALL events.
      */
     public static void registerEventListener(android.os.IBinder listenerBinder) {
+        throw new RuntimeException("Stub!");
+    }
+
+    /**
+     * Bottom-level: Register using a raw IBinder, with event filter.
+     *
+     * @param eventFilter Array of eventIds to subscribe; empty = all events
+     */
+    public static void registerEventListener(android.os.IBinder listenerBinder, int[] eventFilter) {
         throw new RuntimeException("Stub!");
     }
 

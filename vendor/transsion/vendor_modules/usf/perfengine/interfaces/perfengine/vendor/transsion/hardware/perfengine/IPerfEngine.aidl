@@ -50,6 +50,8 @@ interface IPerfEngine {
      * whenever performance events occur.
      *
      * @param listener IEventListener implementation
+     * @param eventFilter Array of eventIds this listener cares about.
+     *                    Empty array (length == 0) means subscribe to ALL events.
      *
      * Note: This is NOT a oneway call - blocks until registration completes
      *       to ensure listener is properly registered before returning.
@@ -58,7 +60,7 @@ interface IPerfEngine {
      * Death notification: If the listener process dies, it will be automatically
      *                     unregistered via Binder death notification.
      */
-    void registerEventListener(IEventListener listener);
+    void registerEventListener(IEventListener listener, in int[] eventFilter);
 
     /**
      * Unregister a previously registered event listener

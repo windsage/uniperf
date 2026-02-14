@@ -39,8 +39,8 @@ public:
     ::ndk::ScopedAStatus notifyEventEnd(int32_t eventId, int64_t timestamp,
                                         const std::optional<std::string> &extraStrings) override;
 
-    ::ndk::ScopedAStatus registerEventListener(
-        const std::shared_ptr<IEventListener> &listener) override;
+    ::ndk::ScopedAStatus registerEventListener(const std::shared_ptr<IEventListener> &listener,
+                                               const std::vector<int32_t> &eventFilter) override;
 
     ::ndk::ScopedAStatus unregisterEventListener(
         const std::shared_ptr<IEventListener> &listener) override;
@@ -66,10 +66,14 @@ private:
         std::shared_ptr<IEventListener> listener;
         ::ndk::ScopedAIBinder_DeathRecipient deathRecipient;
         DeathCookie *cookie;
+        std::unordered_set<int32_t> eventFilter;
 
         ListenerInfo(std::shared_ptr<IEventListener> l, ::ndk::ScopedAIBinder_DeathRecipient dr,
-                     DeathCookie *c)
-            : listener(std::move(l)), deathRecipient(std::move(dr)), cookie(c) {}
+                     DeathCookie *c, std::unordered_set<int32_t> ef)
+            : listener(std::move(l)),
+              deathRecipient(std::move(dr)),
+              cookie(c),
+              eventFilter(std::move(ef)) {}
     };
 
     std::vector<ListenerInfo> mListeners;

@@ -206,6 +206,18 @@ public:
             &listener);
 
     /**
+     * Register event listener with event filter.
+     *
+     * @param listener    IEventListener implementation
+     * @param eventFilter EventIds to subscribe; empty vector = all events
+     * @return 0 on success, -1 on failure
+     */
+    static int32_t registerEventListener(
+        const std::shared_ptr<::aidl::vendor::transsion::hardware::perfengine::IEventListener>
+            &listener,
+        const std::vector<int32_t> &eventFilter);
+
+    /**
      * Unregister a previously registered event listener
      *
      * After this call, the listener will no longer receive event notifications.

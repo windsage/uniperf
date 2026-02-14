@@ -175,6 +175,10 @@ public final class PerfEngine {
      * </pre>
      */
     public static void registerEventListener(IEventListener listener) {
+        registerEventListener(listener, new int[0]);
+    }
+
+    public static void registerEventListener(IEventListener listener, int[] eventFilter) {
         // if (!Flags.enablePerfengine()) {
         if (!ENABLE_PERFENGINE) {
             if (DEBUG) {
@@ -185,26 +189,19 @@ public final class PerfEngine {
         if (listener == null) {
             throw new IllegalArgumentException("Listener cannot be null");
         }
-
-        if (DEBUG) {
-            Log.d(TAG, "registerEventListener: " + listener);
-        }
-
+        if (DEBUG)
+            Log.d(TAG, "registerEventListener with filter size="
+                               + (eventFilter != null ? eventFilter.length : 0));
         try {
-            // Get binder object
             IBinder binder = listener.asBinder();
             if (binder == null) {
-                Log.e(TAG, "Failed to get binder from listener");
                 throw new IllegalArgumentException("Listener binder is null");
             }
-
             // Call native method
-            nativeRegisterEventListener(binder);
-
+            nativeRegisterEventListener(binder, eventFilter != null ? eventFilter : new int[0]);
             if (DEBUG) {
                 Log.d(TAG, "Listener registered successfully");
             }
-
         } catch (Exception e) {
             Log.e(TAG, "Failed to register event listener", e);
             throw new RuntimeException("Failed to register event listener", e);
@@ -285,8 +282,10 @@ public final class PerfEngine {
      * Native method: Register event listener
      *
      * @param listenerBinder Binder object of IEventListener
+     * @param eventFilter Array of event types to filter
      */
-    private static native void nativeRegisterEventListener(IBinder listenerBinder);
+    private static native void nativeRegisterEventListener(
+            IBinder listenerBinder, int[] eventFilter);
 
     /**
      * Native method: Unregister event listener

@@ -166,7 +166,7 @@ static void ensureBinderThreadSetup() {
 // ==================== Listener Registration Implementation  ====================
 
 ::ndk::ScopedAStatus ServiceBridge::registerEventListener(
-    const std::shared_ptr<IEventListener> &listener) {
+    const std::shared_ptr<IEventListener> &listener, const std::vector<int32_t> &eventFilter) {
     ATRACE_NAME("ServiceBridge::registerEventListener");
 
     if (!listener) {
@@ -176,30 +176,35 @@ static void ensureBinderThreadSetup() {
 
     std::lock_guard<Mutex> lock(mListenerLock);
 
-    // 检查是否已注册
     if (findListener(listener)) {
         TLOGW("Listener already registered");
         return ::ndk::ScopedAStatus::ok();
     }
 
-    // 创建 death recipient
     auto deathRecipient = ::ndk::ScopedAIBinder_DeathRecipient(
         AIBinder_DeathRecipient_new(ServiceBridge::onListenerDied));
 
-    // 关联到死亡通知
     auto *cookie = new DeathCookie{this, listener->asBinder().get()};
     binder_status_t status =
         AIBinder_linkToDeath(listener->asBinder().get(), deathRecipient.get(), cookie);
 
     if (status != STATUS_OK) {
         TLOGE("Failed to link to death: %d", status);
+        delete cookie;
         return ::ndk::ScopedAStatus::fromStatus(status);
     }
 
-    // 添加到监听器列表
-    mListeners.emplace_back(listener, std::move(deathRecipient));
+    // Build filter set; empty vector means subscribe all
+    std::unordered_set<int32_t> filterSet(eventFilter.begin(), eventFilter.end());
 
-    TLOGI("Listener registered, total listeners: %zu", mListeners.size());
+    if (filterSet.empty()) {
+        TLOGI("Listener registered: subscribe ALL events, total=%zu", mListeners.size() + 1);
+    } else {
+        TLOGI("Listener registered: filter=%zu eventIds, total=%zu", filterSet.size(),
+              mListeners.size() + 1);
+    }
+
+    mListeners.emplace_back(listener, std::move(deathRecipient), cookie, std::move(filterSet));
 
     return ::ndk::ScopedAStatus::ok();
 }
@@ -227,34 +232,6 @@ static void ensureBinderThreadSetup() {
 void ServiceBridge::broadcastEventStart(int32_t eventId, int64_t timestamp, int32_t numParams,
                                         const std::vector<int32_t> &intParams,
                                         const std::optional<std::string> &extraStrings) {
-    // Snapshot under lock
-    std::vector<std::shared_ptr<IEventListener>> snapshot;
-    {
-        std::lock_guard<Mutex> lock(mListenerLock);
-        if (mListeners.empty()) {
-            return;
-        }
-        snapshot.reserve(mListeners.size());
-        for (auto &info : mListeners) {
-            snapshot.push_back(info.listener);
-        }
-    }
-
-    TLOGI("Broadcasting eventStart to %zu listeners", snapshot.size());
-
-    // Broadcast outside lock
-    for (auto &listener : snapshot) {
-        auto status =
-            listener->onEventStart(eventId, timestamp, numParams, intParams, extraStrings);
-        if (!status.isOk()) {
-            TLOGW("Failed to notify listener: %s", status.getMessage());
-        }
-    }
-}
-
-void ServiceBridge::broadcastEventEnd(int32_t eventId, int64_t timestamp,
-                                      const std::optional<std::string> &extraStrings) {
-    // Snapshot under lock
     std::vector<std::shared_ptr<IEventListener>> snapshot;
     {
         std::lock_guard<Mutex> lock(mListenerLock);
@@ -262,17 +239,57 @@ void ServiceBridge::broadcastEventEnd(int32_t eventId, int64_t timestamp,
             return;
         snapshot.reserve(mListeners.size());
         for (auto &info : mListeners) {
-            snapshot.push_back(info.listener);
+            // Empty filter = subscribe all; otherwise check membership
+            if (info.eventFilter.empty() || info.eventFilter.count(eventId) > 0) {
+                snapshot.push_back(info.listener);
+            }
         }
     }
 
-    TLOGI("Broadcasting eventEnd to %zu listeners", snapshot.size());
+    if (snapshot.empty()) {
+        TLOGD("broadcastEventStart: no listeners for eventId=%d", eventId);
+        return;
+    }
 
-    // Broadcast outside lock
+    TLOGI("Broadcasting eventStart eventId=%d to %zu/%zu listeners", eventId, snapshot.size(),
+          mListeners.size());
+
+    for (auto &listener : snapshot) {
+        auto status =
+            listener->onEventStart(eventId, timestamp, numParams, intParams, extraStrings);
+        if (!status.isOk()) {
+            TLOGW("Failed to notify listener onEventStart: %s", status.getMessage());
+        }
+    }
+}
+
+void ServiceBridge::broadcastEventEnd(int32_t eventId, int64_t timestamp,
+                                      const std::optional<std::string> &extraStrings) {
+    std::vector<std::shared_ptr<IEventListener>> snapshot;
+    {
+        std::lock_guard<Mutex> lock(mListenerLock);
+        if (mListeners.empty())
+            return;
+        snapshot.reserve(mListeners.size());
+        for (auto &info : mListeners) {
+            if (info.eventFilter.empty() || info.eventFilter.count(eventId) > 0) {
+                snapshot.push_back(info.listener);
+            }
+        }
+    }
+
+    if (snapshot.empty()) {
+        TLOGD("broadcastEventEnd: no listeners for eventId=%d", eventId);
+        return;
+    }
+
+    TLOGI("Broadcasting eventEnd eventId=%d to %zu/%zu listeners", eventId, snapshot.size(),
+          mListeners.size());
+
     for (auto &listener : snapshot) {
         auto status = listener->onEventEnd(eventId, timestamp, extraStrings);
         if (!status.isOk()) {
-            TLOGW("Failed to notify listener: %s", status.getMessage());
+            TLOGW("Failed to notify listener onEventEnd: %s", status.getMessage());
         }
     }
 }

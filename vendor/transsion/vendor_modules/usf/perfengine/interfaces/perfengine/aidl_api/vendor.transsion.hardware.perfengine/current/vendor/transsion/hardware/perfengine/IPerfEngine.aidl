@@ -21,6 +21,6 @@ package vendor.transsion.hardware.perfengine;
 interface IPerfEngine {
   oneway void notifyEventStart(int eventId, long timestamp, int numParams, in int[] intParams, @nullable @utf8InCpp String extraStrings);
   oneway void notifyEventEnd(int eventId, long timestamp, @nullable @utf8InCpp String extraStrings);
-  void registerEventListener(vendor.transsion.hardware.perfengine.IEventListener listener);
+  void registerEventListener(vendor.transsion.hardware.perfengine.IEventListener listener, in int[] eventFilter);
   void unregisterEventListener(vendor.transsion.hardware.perfengine.IEventListener listener);
 }

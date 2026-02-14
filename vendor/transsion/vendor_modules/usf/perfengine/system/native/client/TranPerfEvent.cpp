@@ -234,22 +234,28 @@ void TranPerfEvent::notifyEventEnd(int32_t eventId, int64_t timestamp,
 /**
  * Register event listener
  */
+/**
+ * Register event listener - subscribe to ALL events
+ */
 int32_t TranPerfEvent::registerEventListener(const std::shared_ptr<IEventListener> &listener) {
-    // Check feature flag
+    return registerEventListener(listener, {});
+}
+
+/**
+ * Register event listener with event filter
+ */
+int32_t TranPerfEvent::registerEventListener(const std::shared_ptr<IEventListener> &listener,
+                                             const std::vector<int32_t> &eventFilter) {
     if (!CHECK_FLAG()) {
-        if (DEBUG) {
+        if (DEBUG)
             ALOGD("PerfEngine disabled by flag");
-        }
         return -1;
     }
-
-    // Validate parameter
     if (!listener) {
         ALOGE("Listener is null");
         return -1;
     }
 
-    // Get service
     auto service = getService();
     if (!service) {
         ALOGE("Service not available");
@@ -257,21 +263,17 @@ int32_t TranPerfEvent::registerEventListener(const std::shared_ptr<IEventListene
     }
 
     if (DEBUG) {
-        ALOGD("registerEventListener");
+        ALOGD("registerEventListener: filter size=%zu", eventFilter.size());
     }
 
-    // Call AIDL interface
-    auto status = service->registerEventListener(listener);
-
+    auto status = service->registerEventListener(listener, eventFilter);
     if (!status.isOk()) {
         ALOGE("registerEventListener failed: %s", status.getMessage());
         return -1;
     }
 
-    if (DEBUG) {
+    if (DEBUG)
         ALOGD("Listener registered successfully");
-    }
-
     return 0;
 }
 

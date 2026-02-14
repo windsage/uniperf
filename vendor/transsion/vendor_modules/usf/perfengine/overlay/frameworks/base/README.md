@@ -193,6 +193,24 @@ TranPerfEvent.registerEventListener(new TranPerfEvent.PerfEventListener() {
 });
 ```
 
+### 示例 4b：注册完整监听器（仅订阅指定事件）
+
+```java
+// 只订阅应用启动和滚动事件，减少不必要的跨进程回调
+int[] filter = {TranPerfEvent.EVENT_APP_LAUNCH, TranPerfEvent.EVENT_SCROLL};
+TranPerfEvent.registerEventListener(new TranPerfEvent.PerfEventListener() {
+    @Override
+    public void onEventStart(int eventId, long timestamp, int numParams,
+                             int[] intParams, String extraStrings) {
+        // 只会收到 EVENT_APP_LAUNCH 和 EVENT_SCROLL 的回调
+    }
+
+    @Override
+    public void onEventEnd(int eventId, long timestamp, String extraStrings) {
+    }
+}, filter);
+```
+
 ### 示例 5：AIDL 监听器（高级用法）
 
 ```java
@@ -211,6 +229,25 @@ TranPerfEvent.registerEventListener(new IEventListener.Stub() {
         // 处理事件结束
     }
 });
+```
+
+### 示例 5b：AIDL 监听器（带事件过滤）
+
+```java
+int[] filter = {TranPerfEvent.EVENT_APP_LAUNCH};
+TranPerfEvent.registerEventListener(new IEventListener.Stub() {
+    @Override
+    public void onEventStart(int eventId, long timestamp, int numParams,
+                             int[] intParams, String extraStrings)
+            throws RemoteException {
+        // 只会收到 EVENT_APP_LAUNCH 的回调
+    }
+
+    @Override
+    public void onEventEnd(int eventId, long timestamp, String extraStrings)
+            throws RemoteException {
+    }
+}.asBinder(), filter);
 ```
 
 ---
@@ -248,14 +285,20 @@ TranPerfEvent.registerListener(TrEventListener listener)
 // 取消注册简化监听器
 TranPerfEvent.unregisterListener(TrEventListener listener)
 
-// 注册完整监听器（推荐）
+// 注册完整监听器 - 订阅所有事件
 TranPerfEvent.registerEventListener(PerfEventListener listener)
+
+// 注册完整监听器 - 按事件过滤
+TranPerfEvent.registerEventListener(PerfEventListener listener, int[] eventFilter)
 
 // 取消注册完整监听器
 TranPerfEvent.unregisterEventListener(PerfEventListener listener)
 
-// 注册 AIDL 监听器（高级）
+// 注册 AIDL 监听器（高级）- 订阅所有事件
 TranPerfEvent.registerEventListener(IBinder listenerBinder)
+
+// 注册 AIDL 监听器（高级）- 按事件过滤
+TranPerfEvent.registerEventListener(IBinder listenerBinder, int[] eventFilter)
 
 // 取消注册 AIDL 监听器（高级）
 TranPerfEvent.unregisterEventListener(IBinder listenerBinder)

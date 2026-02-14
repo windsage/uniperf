@@ -217,27 +217,24 @@ static void nativeNotifyEventEnd(JNIEnv *env, jclass clazz, jint eventId, jlong 
 // ==================== JNI 方法实现 - Listener Registration ====================
 
 /**
- * Register event listener
+ * Register event listener with event filter
  */
-static void nativeRegisterEventListener(JNIEnv *env, jclass clazz, jobject listenerBinder) {
+static void nativeRegisterEventListener(JNIEnv *env, jclass clazz, jobject listenerBinder,
+                                        jintArray eventFilter) {
     if (!CHECK_FLAG()) {
-        if (DEBUG) {
+        if (DEBUG)
             ALOGD("PerfEngine disabled by flag");
-        }
         return;
     }
-    if (DEBUG) {
+    if (DEBUG)
         ALOGD("nativeRegisterEventListener");
-    }
 
-    // Validate parameter
     if (listenerBinder == nullptr) {
         ALOGE("listenerBinder is null");
         jniThrowException(env, "java/lang/IllegalArgumentException", "Listener binder is null");
         return;
     }
 
-    // 获取 Vendor 服务
     std::shared_ptr<IPerfEngine> service = getVendorService();
     if (service == nullptr) {
         ALOGE("Vendor service not available");
@@ -245,7 +242,6 @@ static void nativeRegisterEventListener(JNIEnv *env, jclass clazz, jobject liste
         return;
     }
 
-    // 将 Java Binder 转换为 Native AIBinder
     AIBinder *aiBinder = AIBinder_fromJavaBinder(env, listenerBinder);
     if (aiBinder == nullptr) {
         ALOGE("Failed to convert Java binder to AIBinder");
@@ -253,28 +249,37 @@ static void nativeRegisterEventListener(JNIEnv *env, jclass clazz, jobject liste
         return;
     }
 
-    // 转换为 IEventListener
-    SpAIBinder spBinder(aiBinder);    // Takes ownership
+    SpAIBinder spBinder(aiBinder);
     std::shared_ptr<IEventListener> listener = IEventListener::fromBinder(spBinder);
-
     if (listener == nullptr) {
         ALOGE("Failed to convert AIBinder to IEventListener");
         jniThrowException(env, "java/lang/RuntimeException", "Failed to convert to IEventListener");
         return;
     }
 
-    // 调用 AIDL 接口注册监听器
-    ScopedAStatus status = service->registerEventListener(listener);
+    // 将 jintArray 转换为 std::vector<int32_t>
+    std::vector<int32_t> filter;
+    if (eventFilter != nullptr) {
+        jsize len = env->GetArrayLength(eventFilter);
+        if (len > 0) {
+            jint *elements = env->GetIntArrayElements(eventFilter, nullptr);
+            if (elements != nullptr) {
+                filter.assign(elements, elements + len);
+                env->ReleaseIntArrayElements(eventFilter, elements, JNI_ABORT);
+            }
+        }
+    }
 
+    // 调用 AIDL 接口，透传 filter
+    ScopedAStatus status = service->registerEventListener(listener, filter);
     if (!status.isOk()) {
         ALOGE("registerEventListener failed: %s", status.getMessage());
         jniThrowException(env, "android/os/RemoteException", status.getMessage());
         return;
     }
 
-    if (DEBUG) {
-        ALOGD("Listener registered successfully");
-    }
+    if (DEBUG)
+        ALOGD("Listener registered successfully, filter size=%zu", filter.size());
 }
 
 /**
@@ -346,7 +351,8 @@ static const JNINativeMethod gMethods[] = {
     {"nativeNotifyEventEnd", "(IJLjava/lang/String;)V", (void *)nativeNotifyEventEnd},
 
     // Listener registration
-    {"nativeRegisterEventListener", "(Landroid/os/IBinder;)V", (void *)nativeRegisterEventListener},
+    {"nativeRegisterEventListener", "(Landroid/os/IBinder;[I)V",
+     (void *)nativeRegisterEventListener},
     {"nativeUnregisterEventListener", "(Landroid/os/IBinder;)V",
      (void *)nativeUnregisterEventListener},
 };
