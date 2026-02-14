@@ -1,0 +1,12 @@
+# system_server（运行 PerfEngine.java / JNI）访问 PerfEngine 服务
+allow system_server vendor_perfengine_service:service_manager find;
+allow system_server vendor_perfengine_service:binder { call transfer };
+
+# platform_app（运行 TranPerfEvent 注册 listener 的应用）访问 PerfEngine 服务
+allow platform_app vendor_perfengine_service:service_manager find;
+allow platform_app vendor_perfengine_service:binder { call transfer };
+
+# PerfEngine 向 system_server / platform_app 回调 onEventStart/onEventEnd（oneway）
+# 回调方向是 vendor → system，需要 transfer 权限
+allow system_server vendor_perfengine_service:binder transfer;
+allow platform_app vendor_perfengine_service:binder transfer;

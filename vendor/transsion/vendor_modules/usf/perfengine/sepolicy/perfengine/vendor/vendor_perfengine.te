@@ -1,0 +1,23 @@
+# ============================================================
+# QCOM 平台：PerfEngine 跑在 vendor_hal_perf_default domain 内
+# ============================================================
+
+# 允许 vendor_hal_perf_default 向 servicemanager 注册 PerfEngine 服务
+allow vendor_hal_perf_default vendor_perfengine_service:service_manager add;
+
+# 允许 vendor_hal_perf_default 作为服务端处理 binder 调用
+allow vendor_hal_perf_default vendor_perfengine_service:binder { call transfer };
+
+# 允许 vendor_hal_perf_default 向已注册的 listener（system_server / platform_app）回调
+allow vendor_hal_perf_default system_server:binder transfer;
+allow vendor_hal_perf_default platform_app:binder transfer;
+
+# ============================================================
+# MTK 平台：PerfEngine 跑在 hal_mtkpower domain 内
+# （domain 名称需在设备上用 ps -Z | grep mtkpower 确认）
+# ============================================================
+
+allow hal_mtkpower vendor_perfengine_service:service_manager add;
+allow hal_mtkpower vendor_perfengine_service:binder { call transfer };
+allow hal_mtkpower system_server:binder transfer;
+allow hal_mtkpower platform_app:binder transfer;

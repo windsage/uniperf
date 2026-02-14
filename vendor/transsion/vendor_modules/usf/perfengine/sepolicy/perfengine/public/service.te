@@ -1,0 +1,3 @@
+# PerfEngine AIDL 服务的 servicemanager 标签
+# 必须放 public，vendor 和 system_ext 双方都要引用此 type
+type vendor_perfengine_service, service_manager_type;
