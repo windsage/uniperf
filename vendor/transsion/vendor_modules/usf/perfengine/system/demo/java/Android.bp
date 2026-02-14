@@ -1,0 +1,25 @@
+package {
+    default_applicable_licenses: ["vendor_transsion_license"],
+}
+
+// ==================== Java Demo 应用 ====================
+
+android_app {
+    name: "PerfEngineDemo",
+    system_ext_specific: true,
+    platform_apis: true,
+
+    srcs: ["src/**/*.java"],
+
+    resource_dirs: ["res"],
+
+    manifest: "AndroidManifest.xml",
+
+    static_libs: [],
+
+    certificate: "platform",    // platform 签名
+
+    optimize: {
+        enabled: false,
+    },
+}

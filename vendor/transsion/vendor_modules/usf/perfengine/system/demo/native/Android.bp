@@ -5,29 +5,25 @@ package {
 // ==================== Native Demo 可执行文件 ====================
 
 cc_binary {
-    name: "perfengine_listener_demo",
+    name: "perfengine_demo",
+    system_ext_specific: true,
 
-    vendor: true,
-
-    srcs: [
-        "PerfEngineListenerDemo.cpp",
-    ],
+    srcs: ["perfengine_demo.cpp"],
 
     shared_libs: [
-        "libbase",
-        "libbinder_ndk",
         "liblog",
         "libutils",
+        "libcutils",
+        "libbinder_ndk",
+        "libandroid-base",
+        "libperfengine-client",
         "vendor.transsion.hardware.perfengine-V1-ndk",
     ],
 
-    cflags: [
-        "-Wall",
-        "-Werror",
-        "-Wno-unused-parameter",
+    header_libs: [
+        "libperfengine-client-headers",
     ],
 
-    cppflags: [
-        "-std=c++17",
-    ],
+    cflags: ["-Wall", "-Wextra", "-Wno-unused-parameter"],
+    cppflags: ["-std=c++17"],
 }

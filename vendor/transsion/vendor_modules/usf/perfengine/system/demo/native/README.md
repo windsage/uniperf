@@ -1,2 +1,1 @@
-PerfEngineListenerDemo 是一个既有发送又有接收的demo
-PerfEngineListenerDemo2是一个单纯接受的demo
+perfengine_demo 是一个既有发送又有接收的demo，同时两个一起执行可以测试互相发送与监听。
