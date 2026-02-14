@@ -138,6 +138,8 @@ static void printUsage(const char *prog) {
 
 static void signalHandler(int) {
     gRunning = false;
+    // 直接退出进程
+    exit(0);
 }
 
 // ==================== Listener Implementation ====================
@@ -296,7 +298,6 @@ static int modeSendRun(bool sendAll, int32_t eventId, const std::string &pkg, in
 // ==================== Mode: both ====================
 
 static int modeBothRun(const std::vector<int32_t> &filter) {
-    // Register listener first
     auto listener = ndk::SharedRefBase::make<DemoEventListener>(true);
     int32_t ret;
     if (filter.empty()) {
@@ -310,27 +311,25 @@ static int modeBothRun(const std::vector<int32_t> &filter) {
     }
     std::cout << "[BOTH] Listener registered" << std::endl;
 
-    // Send all events in a background thread
-    std::thread sender([&]() {
+    std::atomic<bool> senderDone{false};
+
+    std::thread sender([&senderDone]() {
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
         std::cout << "[BOTH] Sending test events..." << std::endl;
         for (int32_t id : kAllEvents) {
-            if (!gRunning)
-                break;
+            if (!gRunning) break;
             sendOneEvent(id, "com.transsion.demo", 1000, true);
             std::this_thread::sleep_for(std::chrono::milliseconds(600));
         }
         std::cout << "[BOTH] All test events sent, waiting 2s then exit..." << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        gRunning = false;
+        senderDone = true;
     });
 
-    // Wait until sender done
-    while (gRunning) {
+    while (!senderDone && gRunning) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
-    if (sender.joinable())
-        sender.join();
+    if (sender.joinable()) sender.join();
 
     TranPerfEvent::unregisterEventListener(listener);
     std::cout << "[BOTH] Done" << std::endl;

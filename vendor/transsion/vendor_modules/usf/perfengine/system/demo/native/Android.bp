@@ -22,6 +22,7 @@ cc_binary {
 
     header_libs: [
         "libperfengine-client-headers",
+        "libandroid-base",
     ],
 
     cflags: ["-Wall", "-Wextra", "-Wno-unused-parameter"],

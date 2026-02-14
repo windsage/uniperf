@@ -251,6 +251,18 @@ public class MainActivity extends Activity {
         mBtnRegister.setOnClickListener(v -> onRegisterClicked());
         mBtnUnregister.setOnClickListener(v -> onUnregisterClicked());
         mBtnClearLog.setOnClickListener(v -> mLogAdapter.clear());
+
+        mRgListenerType.setOnCheckedChangeListener((group, checkedId) -> {
+            if (mRegisteredType != ListenerType.NONE) {
+                toast("Please unregister first before switching listener type");
+                return;
+            }
+            if (checkedId == R.id.rb_ibinder) {
+                mEtFilter.setHint("Filter supported (IBinder mode)");
+            } else {
+                mEtFilter.setHint("e.g. 1,3,5");
+            }
+        });
     }
 
     private void onRegisterClicked() {

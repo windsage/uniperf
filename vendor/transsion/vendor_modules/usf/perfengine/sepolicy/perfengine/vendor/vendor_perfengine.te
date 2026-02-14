@@ -13,11 +13,19 @@ allow vendor_hal_perf_default system_server:binder transfer;
 allow vendor_hal_perf_default platform_app:binder transfer;
 
 # ============================================================
-# MTK 平台：PerfEngine 跑在 hal_mtkpower domain 内
-# （domain 名称需在设备上用 ps -Z | grep mtkpower 确认）
+# MTK 平台：PerfEngine 跑在 mtk_hal_power domain 内
 # ============================================================
 
-allow hal_mtkpower vendor_perfengine_service:service_manager add;
-allow hal_mtkpower vendor_perfengine_service:binder { call transfer };
-allow hal_mtkpower system_server:binder transfer;
-allow hal_mtkpower platform_app:binder transfer;
+allow mtk_hal_power vendor_perfengine_service:service_manager add;
+allow mtk_hal_power vendor_perfengine_service:binder { call transfer };
+allow mtk_hal_power system_server:binder transfer;
+allow mtk_hal_power platform_app:binder transfer;
+
+# ============================================================
+# UNISOC 平台：PerfEngine 跑在 ??? domain 内
+# ============================================================
+
+allow mtk_hal_power vendor_perfengine_service:service_manager add;
+allow mtk_hal_power vendor_perfengine_service:binder { call transfer };
+allow mtk_hal_power system_server:binder transfer;
+allow mtk_hal_power platform_app:binder transfer;
