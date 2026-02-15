@@ -1,0 +1,204 @@
+// Android.bp - vendor/transsion/vendor_modules/usf/sysmonitor/
+//
+// Build targets:
+//   libsysmonitor        — core .so, loaded by sysmonitor-service or other native processes
+//   libsysmonitor_jni    — JNI bridge .so, loaded by system Java process
+//   sysmonitor-service   — standalone vendor native daemon
+//
+// Platform selection: set SMON_PLATFORM_* via product makefile, e.g.:
+//   SMON_PLATFORM := QCOM   in device/<vendor>/<product>/BoardConfig.mk
+//   This propagates to Android.bp via soong_config_variables below.
+
+soong_config_module_type {
+    name: "sysmonitor_cc_defaults",
+    module_type: "cc_defaults",
+    config_namespace: "transsion_sysmonitor",
+    variables: ["platform"],
+    properties: ["cflags"],
+}
+
+soong_config_string_variable {
+    name: "platform",
+    values: ["qcom", "mtk", "unisoc"],
+}
+
+sysmonitor_cc_defaults {
+    name: "sysmonitor_platform_defaults",
+    soong_config_variables: {
+        platform: {
+            qcom: {
+                cflags: ["-DSMON_PLATFORM_QCOM"],
+            },
+            mtk: {
+                cflags: ["-DSMON_PLATFORM_MTK"],
+            },
+            unisoc: {
+                cflags: ["-DSMON_PLATFORM_UNISOC"],
+            },
+        },
+    },
+}
+
+// ---------------------------------------------------------------------------
+// Common compiler defaults shared by all targets
+// ---------------------------------------------------------------------------
+cc_defaults {
+    name: "sysmonitor_cc_base",
+    defaults: ["sysmonitor_platform_defaults"],
+
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        // Disable C++ exceptions — use explicit error codes instead
+        "-fno-exceptions",
+        // Disable RTTI — not needed, reduces binary size
+        "-fno-rtti",
+    ],
+
+    // Release build: strip all log strings, zero overhead
+    // Set in BoardConfig.mk: SMON_LOG_DISABLED := true
+    // productVariables can propagate this if needed; for now use explicit flag.
+    // cflags: ["-DSMON_LOG_DISABLED"],  // uncomment for production
+
+    include_dirs: [
+        "vendor/transsion/vendor_modules/usf/sysmonitor",
+        "vendor/transsion/vendor_modules/usf/sysmonitor/include",
+    ],
+
+    target: {
+        android: {
+            cflags: ["-DANDROID"],
+        },
+    },
+}
+
+// ---------------------------------------------------------------------------
+// libsysmonitor — core monitoring library
+// Loaded by: sysmonitor-service (vendor process)
+//            perf2-hal-service (optional, if chosen as host process)
+// ---------------------------------------------------------------------------
+cc_library_shared {
+    name: "libsysmonitor",
+    defaults: ["sysmonitor_cc_base"],
+    vendor: true,
+
+    srcs: [
+        // Core
+        "core/SysMonitor.cpp",
+        "core/CollectorManager.cpp",
+        "core/MetricStore.cpp",
+        // Node probing (init-time only, not hot path)
+        "core/NodeProbe.cpp",
+        // Collectors
+        "collector/CpuCollector.cpp",
+        "collector/MemCollector.cpp",
+        "collector/GpuCollector.cpp",
+        "collector/ThermalCollector.cpp",
+        "collector/PowerCollector.cpp",
+        "collector/JavaBridgeCollector.cpp",
+        // Dispatch / subscription
+        "dispatch/DispatchManager.cpp",
+    ],
+
+    export_include_dirs: ["include"],
+
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libutils",
+    ],
+
+    static_libs: [],
+
+    // Export stable C API only; C++ ABI not exposed across process boundary
+    version_script: "libsysmonitor.map",
+}
+
+// ---------------------------------------------------------------------------
+// libsysmonitor_jni — JNI bridge, loaded into system Java process
+// Placed in system partition; calls back into libsysmonitor via ashmem
+// ---------------------------------------------------------------------------
+cc_library_shared {
+    name: "libsysmonitor_jni",
+    // system partition (loaded by Java framework)
+    system_ext_specific: true,
+
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-fno-exceptions",
+        "-fno-rtti",
+    ],
+
+    include_dirs: [
+        "vendor/transsion/vendor_modules/usf/sysmonitor/include",
+        "libnativehelper/include",
+    ],
+
+    srcs: [
+        "jni/SysMonitorJNI.cpp",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libnativehelper",
+        "libandroid_runtime",
+    ],
+}
+
+// ---------------------------------------------------------------------------
+// sysmonitor-service — standalone vendor daemon
+// ---------------------------------------------------------------------------
+cc_binary {
+    name: "vendor.transsion.sysmonitor-service",
+    defaults: ["sysmonitor_cc_base"],
+    vendor: true,
+    init_rc: ["vendor.transsion.sysmonitor-service.rc"],
+
+    srcs: [
+        "service/sysmonitor_service.cpp",
+    ],
+
+    shared_libs: [
+        "libsysmonitor",
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libbinder_ndk",
+        "libutils",
+    ],
+}
+
+// ---------------------------------------------------------------------------
+// Unit tests (host + device)
+// ---------------------------------------------------------------------------
+cc_test {
+    name: "sysmonitor_tests",
+    defaults: ["sysmonitor_cc_base"],
+    vendor: true,
+    test_suites: ["device-tests"],
+
+    srcs: [
+        "tests/MetricStoreTest.cpp",
+        "tests/CpuCollectorTest.cpp",
+        "tests/NodeProbeTest.cpp",
+    ],
+
+    shared_libs: [
+        "libsysmonitor",
+        "liblog",
+        "libbase",
+    ],
+
+    static_libs: [
+        "libgtest",
+        "libgmock",
+    ],
+}
