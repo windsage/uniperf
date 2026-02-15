@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions>
+    <library
+        name="com.transsion.perfengine"
+        file="/system_ext/framework/perfengine_impl.jar"/>
+</permissions>

@@ -14,3 +14,10 @@ java_library {
     //    "com.transsion.perfengine.flags-aconfig-java",
     ],
 }
+
+prebuilt_etc {
+    name: "com.transsion.perfengine.xml",
+    system_ext_specific: true,
+    src: "com.transsion.perfengine.xml",
+    sub_dir: "permissions",
+}

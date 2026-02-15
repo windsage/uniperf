@@ -2,6 +2,7 @@ PRODUCT_PACKAGES += \
     perfengine_impl \
     libperfengine-jni \
     libperfengine-client \
+    com.transsion.perfengine.xml \
     vendor.transsion.perfengine-V1-ndk \
     vendor.transsion.perfengine-V1-java
 
