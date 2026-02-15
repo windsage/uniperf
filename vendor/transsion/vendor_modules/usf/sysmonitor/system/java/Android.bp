@@ -1,0 +1,22 @@
+// ---------------------------------------------------------------------------
+// sysmonitor-java — Java collectors + bridge (system_ext partition)
+// ---------------------------------------------------------------------------
+java_library {
+    name: "sysmonitor-java",
+    installable: true,
+    system_ext_specific: true,
+
+    srcs: [
+        "src/**/*.java",
+    ],
+
+    sdk_version: "system_current",
+
+    libs: [
+        "framework",
+    ],
+
+    required: [
+        "libsysmonitor_jni",
+    ],
+}

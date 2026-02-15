@@ -65,61 +65,7 @@ cc_defaults {
     },
 }
 
-// ---------------------------------------------------------------------------
-// libsysmonitor — core monitoring library (vendor partition)
-// ---------------------------------------------------------------------------
-cc_library_shared {
-    name: "libsysmonitor",
-    defaults: ["sysmonitor_cc_base"],
-    vendor: true,
 
-    srcs: [
-        // Core facade + store + scheduler
-        "vendor/core/SysMonitor.cpp",
-        "vendor/core/CollectorManager.cpp",
-        "vendor/core/MetricStore.cpp",
-        "vendor/core/JavaBridgeSetInstance.cpp",
-
-        // Platform node probing (init-time only)
-        "vendor/platform/NodeProbe.cpp",
-
-        // Collectors
-        "vendor/collector/CpuCollector.cpp",
-        "vendor/collector/MemCollector.cpp",
-        "vendor/collector/GpuCollector.cpp",
-        "vendor/collector/ThermalCollector.cpp",
-        "vendor/collector/PowerCollector.cpp",
-        "vendor/collector/JavaBridgeCollector.cpp",
-
-        // Threshold dispatch
-        "vendor/dispatch/DispatchManager.cpp",
-    ],
-
-    // Headers exported to consumers (MetricDef.h, MetricStore.h, SysMonitor.h)
-    export_include_dirs: [
-        "vendor/core/include",
-        "vendor/dispatch/include",
-        "vendor/platform/include",
-    ],
-
-    local_include_dirs: [
-        "vendor/core/include",
-        "vendor/dispatch/include",
-        "vendor/platform/include",
-        "vendor/collector",         // for intra-collector includes
-    ],
-
-    shared_libs: [
-        "liblog",
-        "libcutils",
-        "libbase",
-        "libutils",
-        "libbinder_ndk",
-        "libandroid",               // ASharedMemory_create
-        // AIDL NDK backend (DispatchManager / SysMonitor use ISysMonitor types)
-        "vendor.transsion.hardware.sysmonitor-V1-ndk",
-    ],
-}
 
 // ---------------------------------------------------------------------------
 // libsysmonitor_jni — JNI bridge (system_ext partition)
@@ -161,63 +107,9 @@ cc_library_shared {
     ],
 }
 
-// ---------------------------------------------------------------------------
-// sysmonitor-service — standalone vendor daemon
-// ---------------------------------------------------------------------------
-cc_binary {
-    name: "vendor.transsion.sysmonitor-service",
-    defaults: ["sysmonitor_cc_base"],
-    vendor: true,
 
-    srcs: [
-        "vendor/service/sysmonitor_service.cpp",
-    ],
 
-    init_rc: [
-        "vendor/service/vendor.transsion.sysmonitor-service.rc",
-    ],
 
-    vintf_fragments: [
-        "vintf/vendor.transsion.sysmonitor.xml",
-    ],
-
-    local_include_dirs: [
-        "vendor/core/include",
-        "vendor/platform/include",
-    ],
-
-    shared_libs: [
-        "libsysmonitor",
-        "liblog",
-        "libcutils",
-        "libbase",
-        "libbinder_ndk",
-        "libutils",
-    ],
-}
-
-// ---------------------------------------------------------------------------
-// sysmonitor-java — Java collectors + bridge (system_ext partition)
-// ---------------------------------------------------------------------------
-java_library {
-    name: "sysmonitor-java",
-    installable: true,
-    system_ext_specific: true,
-
-    srcs: [
-        "system/java/**/*.java",
-    ],
-
-    sdk_version: "system_current",
-
-    libs: [
-        "framework",
-    ],
-
-    required: [
-        "libsysmonitor_jni",
-    ],
-}
 
 // ---------------------------------------------------------------------------
 // Unit tests

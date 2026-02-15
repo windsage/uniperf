@@ -1,0 +1,90 @@
+// ---------------------------------------------------------------------------
+// libsysmonitor — core monitoring library (vendor partition)
+// ---------------------------------------------------------------------------
+cc_library_shared {
+    name: "libsysmonitor",
+    defaults: ["sysmonitor_cc_base"],
+    vendor: true,
+
+    srcs: [
+        // Core facade + store + scheduler
+        "core/SysMonitor.cpp",
+        "core/CollectorManager.cpp",
+        "core/MetricStore.cpp",
+        "core/JavaBridgeSetInstance.cpp",
+
+        // Platform node probing (init-time only)
+        "platform/NodeProbe.cpp",
+
+        // Collectors
+        "collector/CpuCollector.cpp",
+        "collector/MemCollector.cpp",
+        "collector/GpuCollector.cpp",
+        "collector/ThermalCollector.cpp",
+        "collector/PowerCollector.cpp",
+        "collector/JavaBridgeCollector.cpp",
+
+        // Threshold dispatch
+        "dispatch/DispatchManager.cpp",
+    ],
+
+    // Headers exported to consumers (MetricDef.h, MetricStore.h, SysMonitor.h)
+    export_include_dirs: [
+        "core/include",
+        "dispatch/include",
+        "platform/include",
+    ],
+
+    local_include_dirs: [
+        "core/include",
+        "dispatch/include",
+        "platform/include",
+        "collector",         // for intra-collector includes
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libutils",
+        "libbinder_ndk",
+        "libandroid",               // ASharedMemory_create
+        // AIDL NDK backend (DispatchManager / SysMonitor use ISysMonitor types)
+        "vendor.transsion.hardware.sysmonitor-V1-ndk",
+    ],
+}
+
+// ---------------------------------------------------------------------------
+// sysmonitor-service — standalone vendor daemon
+// ---------------------------------------------------------------------------
+cc_binary {
+    name: "vendor.transsion.sysmonitor-service",
+    defaults: ["sysmonitor_cc_base"],
+    vendor: true,
+
+    srcs: [
+        "service/sysmonitor_service.cpp",
+    ],
+
+    init_rc: [
+        "service/vendor.transsion.sysmonitor-service.rc",
+    ],
+
+    vintf_fragments: [
+        "vintf/vendor.transsion.sysmonitor.xml",
+    ],
+
+    local_include_dirs: [
+        "core/include",
+        "platform/include",
+    ],
+
+    shared_libs: [
+        "libsysmonitor",
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libbinder_ndk",
+        "libutils",
+    ],
+}
