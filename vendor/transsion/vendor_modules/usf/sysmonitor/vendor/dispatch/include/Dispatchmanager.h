@@ -52,7 +52,7 @@ struct Subscription {
 // ---------------------------------------------------------------------------
 class DispatchManager {
 public:
-    DispatchManager() = default;
+    DispatchManager();
     ~DispatchManager() = default;
 
     DispatchManager(const DispatchManager &) = delete;

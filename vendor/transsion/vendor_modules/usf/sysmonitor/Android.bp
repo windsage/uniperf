@@ -119,9 +119,6 @@ cc_library_shared {
         // AIDL NDK backend (DispatchManager / SysMonitor use ISysMonitor types)
         "vendor.transsion.hardware.sysmonitor-V1-ndk",
     ],
-
-    // Stable C-only symbol export (C++ ABI not exposed across process boundary)
-    version_script: "libsysmonitor.map",
 }
 
 // ---------------------------------------------------------------------------

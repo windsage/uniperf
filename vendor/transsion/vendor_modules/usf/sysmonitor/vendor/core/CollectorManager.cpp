@@ -23,6 +23,9 @@ CollectorManager::CollectorManager(MetricStore *store) : mStore(store) {
     SMLOGD("CollectorManager created");
 }
 
+CollectorManager::CollectorManager(MetricStore *store, PublishFn hook)
+    : mStore(store), mExternalHook(std::move(hook)) {}
+
 CollectorManager::~CollectorManager() {
     stop();
     SMLOGD("CollectorManager destroyed");
@@ -127,8 +130,12 @@ void CollectorManager::samplingLoop() {
 
     // Pre-build the PublishFn closure once (heap alloc only here, not hot path)
     MetricStore *store = mStore;
-    PublishFn publishFn = [store](MetricId id, int64_t value, int64_t ts) {
+    auto externalHook = mExternalHook;
+    PublishFn publishFn = [store, &externalHook](MetricId id, int64_t value, int64_t ts) {
         store->publish(id, value, ts);
+        if (externalHook) {
+            externalHook(id, value, ts);
+        }
     };
 
     const int64_t tickIntervalNs = static_cast<int64_t>(kBaseTickMs) * 1'000'000LL;

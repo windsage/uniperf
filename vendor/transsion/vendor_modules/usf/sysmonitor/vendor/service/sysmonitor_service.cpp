@@ -30,17 +30,11 @@ static const char *kServiceName = "vendor.transsion.hardware.sysmonitor.ISysMoni
 // ---------------------------------------------------------------------------
 // Signal handler: graceful shutdown on SIGTERM / SIGINT
 // ---------------------------------------------------------------------------
-static std::shared_ptr<SysMonitor> *gSysMonitor = nullptr;
+static std::atomic<bool> gShutdownRequested{false};
 
 static void onSignal(int sig) {
-    SMLOGI("Received signal %d, shutting down...", sig);
-    if (gSysMonitor && *gSysMonitor) {
-        (*gSysMonitor)->stop();
-    }
-    // Let the process exit naturally after joinRpcThreadpool returns
-    // (ABinderProcess_joinRpcThreadpool does not return on normal operation,
-    //  so we explicitly exit here from signal context)
-    _exit(0);
+    gShutdownRequested.store(true, std::memory_order_relaxed);
+    _exit(0);    // 保留兜底，让 joinRpcThreadpool 退出
 }
 
 // ---------------------------------------------------------------------------
@@ -63,8 +57,6 @@ int main(int /*argc*/, char * /*argv*/[]) {
         SMLOGE("Failed to allocate SysMonitor");
         return 1;
     }
-
-    gSysMonitor = &sysmon;    // expose to signal handler
 
     if (!sysmon->init()) {
         SMLOGE("SysMonitor::init() failed");

@@ -47,11 +47,13 @@ public final class SysMonitorBridge {
      *
      * @return true if connected and shared memory is mapped.
      */
-    public static boolean init() {
-        if (!sLoaded)
+    public static synchronized boolean init() {
+        if (!sLoaded) {
             return false;
-        if (sReady)
+        }
+        if (sReady) {
             return true;
+        }
         sReady = nativeConnect();
         if (!sReady) {
             Log.w(TAG, "init: failed to connect to sysmonitor-service");

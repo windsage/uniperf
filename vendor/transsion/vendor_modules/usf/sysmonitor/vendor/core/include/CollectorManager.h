@@ -36,6 +36,7 @@ namespace sysmonitor {
 class CollectorManager {
 public:
     explicit CollectorManager(MetricStore *store);
+    explicit CollectorManager(MetricStore *store, PublishFn externalHook = nullptr);
     ~CollectorManager();
 
     // Prevent copy
@@ -76,6 +77,7 @@ public:
     bool isRunning() const { return mRunning.load(std::memory_order_acquire); }
 
 private:
+    PublishFn mExternalHook;
     /** Main loop executed on the sampling thread. */
     void samplingLoop();
 

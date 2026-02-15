@@ -141,8 +141,14 @@ bool MetricStore::attachShm(int fd) {
         return false;
     }
 
-    // Reader does not own the fd — caller should close it after this call
-    mShmFd = fd;
+    // fd ownership: mmap() internally increments the kernel file reference count,
+    // so the mapping remains valid even after the fd is closed.
+    // This instance does NOT own the fd — caller is responsible for closing it
+    // after this call returns. Do NOT close fd here to avoid double-close:
+    //   SysMonitor::getSharedMemoryFd() dup()'s the original fd before sending.
+    //   SysMonitorJNI calls attachShm(fd) then close(fd) — that close is safe
+    //   because it only closes the dup'd copy; the mapping persists independently.
+    mShmFd = fd;    // stored for reference (e.g. ASharedMemory_getSize), not for ownership
     mIsWriter = false;
     SMLOGI("MetricStore ready (reader): fd=%d mapped@%p", fd, mMappedAddr);
     return true;

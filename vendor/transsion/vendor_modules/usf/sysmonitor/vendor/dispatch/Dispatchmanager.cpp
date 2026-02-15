@@ -19,6 +19,11 @@ namespace sysmonitor {
 // Cleanest: add real ctor. Since header says default, we add a real one here.
 // (Redefine as non-default in .cpp — header forward-declared only default,
 //  which is compatible as long as we provide the body here.)
+DispatchManager::DispatchManager() {
+    for (size_t i = 0; i < kMetricSlotCount; ++i) {
+        mLastNotified[i] = LLONG_MIN;
+    }
+}
 
 // ---------------------------------------------------------------------------
 // Register
@@ -73,15 +78,6 @@ bool DispatchManager::registerListener(const std::shared_ptr<IMetricListener> &l
 
     SMLOGI("registerListener: binder=%p watchIds=%zu total=%d", binder, metricIds.size(),
            mListenerCount.load());
-
-    // Initialize mLastNotified on first registration
-    static bool sLastNotifiedInited = false;
-    if (!sLastNotifiedInited) {
-        for (size_t i = 0; i < kMetricSlotCount; ++i) {
-            mLastNotified[i] = LLONG_MIN;
-        }
-        sLastNotifiedInited = true;
-    }
 
     return true;
 }
@@ -164,7 +160,17 @@ void DispatchManager::notify(MetricId id, int64_t value, int64_t timestampNs) {
             }
         }
 
-        // Update last-notified value (under lock, used for threshold edge detect)
+        // Update last-notified value (under lock, used for threshold edge detect).
+        // Design limitation: mLastNotified is a per-metric global value, NOT
+        // per-subscriber. If multiple subscribers watch the same metricId with
+        // different thresholds, the rising-edge detection shares one "last" value.
+        // Consequence: after subscriber A's threshold is crossed and mLastNotified
+        // is updated to the new value, subscriber B with a higher threshold may
+        // lose its rising-edge opportunity if the value drops and rises again but
+        // stays above A's threshold (mLastNotified never resets to below B's threshold).
+        // This is an acceptable trade-off for the current single-threshold-per-metric
+        // use case. If per-subscriber edge detection is needed in future, move
+        // mLastNotified into the Subscription struct.
         mLastNotified[idx] = value;
     }
 

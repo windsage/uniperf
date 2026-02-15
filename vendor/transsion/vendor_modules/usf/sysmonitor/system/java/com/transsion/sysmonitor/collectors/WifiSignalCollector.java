@@ -49,7 +49,12 @@ public class WifiSignalCollector {
         mContext.registerReceiver(mReceiver, filter);
         mRegistered = true;
         // Push current RSSI immediately on start
-        int rssi = mWifiManager.getConnectionInfo().getRssi();
+        int rssi = 0;
+        NetworkCapabilities nc =connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+        if (nc != null) {
+            WifiInfo info = (WifiInfo) nc.getTransportInfo();
+            rssi = info.getRssi();
+        }
         if (rssi != Integer.MIN_VALUE) {
             SysMonitorBridge.push(SysMonitorBridge.METRIC_WIFI_RSSI, rssi);
         }
