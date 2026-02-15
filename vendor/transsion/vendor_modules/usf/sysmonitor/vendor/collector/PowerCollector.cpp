@@ -1,13 +1,14 @@
 #define LOG_TAG "SMon-Pwr"
 
+#include <fcntl.h>
+#include <unistd.h>
+
+#include <cstdlib>
+
 #include "ICollector.h"
 #include "MetricDef.h"
 #include "NodeProbe.h"
 #include "SysMonLog.h"
-
-#include <fcntl.h>
-#include <unistd.h>
-#include <cstdlib>
 
 /**
  * PowerCollector - Battery and charger metrics
@@ -37,17 +38,17 @@ public:
     bool init() override {
         // Open each node if probed; missing nodes are silently skipped
         openNode(MetricId::BATTERY_CURRENT, "BAT_CURRENT", mCurrentFd);
-        openNode(MetricId::BATTERY_TEMP,    "BAT_TEMP",    mTempFd);
-        openNode(MetricId::BATTERY_LEVEL,   "BAT_LEVEL",   mLevelFd);
-        openNode(MetricId::CHARGER_ONLINE,  "CHARGER",     mChargerFd);
+        openNode(MetricId::BATTERY_TEMP, "BAT_TEMP", mTempFd);
+        openNode(MetricId::BATTERY_LEVEL, "BAT_LEVEL", mLevelFd);
+        openNode(MetricId::CHARGER_ONLINE, "CHARGER", mChargerFd);
 
-        mAvailable = (mCurrentFd >= 0 || mTempFd >= 0 ||
-                      mLevelFd   >= 0 || mChargerFd >= 0);
-        if (!mAvailable) SMLOGE("init: no power supply nodes available");
+        mAvailable = (mCurrentFd >= 0 || mTempFd >= 0 || mLevelFd >= 0 || mChargerFd >= 0);
+        if (!mAvailable)
+            SMLOGE("init: no power supply nodes available");
         return mAvailable;
     }
 
-    void sample(const PublishFn& publishFn) override {
+    void sample(const PublishFn &publishFn) override {
         struct timespec ts;
         ::clock_gettime(CLOCK_MONOTONIC, &ts);
         const int64_t nowNs = ts.tv_sec * 1'000'000'000LL + ts.tv_nsec;
@@ -91,56 +92,70 @@ public:
 
     // Collector fires at SLOW; VSLOW handled internally via counter
     int32_t getIntervalMs() const override { return SampleInterval::SLOW; }
-    const char* getName()   const override { return "PowerCollector"; }
-    bool isAvailable()      const override { return mAvailable; }
+    const char *getName() const override { return "PowerCollector"; }
+    bool isAvailable() const override { return mAvailable; }
 
 private:
     static constexpr int64_t kErr = INT64_MIN;
     // VSLOW = 5s = 5 ticks of SLOW(1s)
     static constexpr int kVSlowEvery = SampleInterval::VSLOW / SampleInterval::SLOW;
 
-    void openNode(MetricId id, const char* name, int& fd) {
-        const char* path = NodeProbe::getPath(id);
-        if (!path) { SMLOGW("init: %s path not found", name); return; }
+    void openNode(MetricId id, const char *name, int &fd) {
+        const char *path = NodeProbe::getPath(id);
+        if (!path) {
+            SMLOGW("init: %s path not found", name);
+            return;
+        }
         fd = ::open(path, O_RDONLY | O_CLOEXEC);
-        if (fd < 0) SMLOGW("init: open '%s' failed: errno=%d", path, errno);
-        else        SMLOGI("%-14s: %s fd=%d", name, path, fd);
+        if (fd < 0)
+            SMLOGW("init: open '%s' failed: errno=%d", path, errno);
+        else
+            SMLOGI("%-14s: %s fd=%d", name, path, fd);
     }
 
     static int64_t readInt(int fd) {
-        if (::lseek(fd, 0, SEEK_SET) < 0) return kErr;
+        if (::lseek(fd, 0, SEEK_SET) < 0)
+            return kErr;
         char buf[24];
         ssize_t n = ::read(fd, buf, sizeof(buf) - 1);
-        if (n <= 0) return kErr;
+        if (n <= 0)
+            return kErr;
         buf[n] = '\0';
         return strtoll(buf, nullptr, 10);
     }
 
     static int64_t readMilliCelsius(int fd) {
         int64_t raw = readInt(fd);
-        if (raw == kErr) return kErr;
+        if (raw == kErr)
+            return kErr;
         // Battery temp nodes: some report in 0.1°C (e.g. "298" = 29.8°C),
         // some in milli-celsius (e.g. "29800"). Heuristic: < 1000 → ×100 (0.1°C→mC)
-        if (raw > -3000 && raw < 3000) return raw * 100;  // 0.1°C units
-        return raw;                                         // already milli-celsius
+        if (raw > -3000 && raw < 3000)
+            return raw * 100;    // 0.1°C units
+        return raw;              // already milli-celsius
     }
 
     void closeFds() {
-        for (int* fd : {&mCurrentFd, &mTempFd, &mLevelFd, &mChargerFd}) {
-            if (*fd >= 0) { ::close(*fd); *fd = -1; }
+        for (int *fd : {&mCurrentFd, &mTempFd, &mLevelFd, &mChargerFd}) {
+            if (*fd >= 0) {
+                ::close(*fd);
+                *fd = -1;
+            }
         }
     }
 
-    int  mCurrentFd    = -1;
-    int  mTempFd       = -1;
-    int  mLevelFd      = -1;
-    int  mChargerFd    = -1;
-    bool mAvailable    = false;
-    int  mVSlowCounter = 0;
+    int mCurrentFd = -1;
+    int mTempFd = -1;
+    int mLevelFd = -1;
+    int mChargerFd = -1;
+    bool mAvailable = false;
+    int mVSlowCounter = 0;
 };
 
-ICollector* createPowerCollector() { return new PowerCollector(); }
+ICollector *createPowerCollector() {
+    return new PowerCollector();
+}
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor

@@ -1,15 +1,17 @@
 #define LOG_TAG "SMon-Probe"
 
 #include "NodeProbe.h"
-#include "SysMonLog.h"
-#include "PlatformNodeDef.h"
 
 #include <dirent.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <cstring>
+
 #include <cstdio>
+#include <cstring>
 #include <string>
+
+#include "PlatformNodeDef.h"
+#include "SysMonLog.h"
 
 namespace vendor {
 namespace transsion {
@@ -45,12 +47,12 @@ void NodeProbe::probeAll() {
     dumpResults();
 }
 
-const char* NodeProbe::getPath(MetricId id) {
+const char *NodeProbe::getPath(MetricId id) {
     const uint32_t idx = metricIndex(id);
     if (idx == 0 || idx >= kMetricSlotCount) {
         return nullptr;
     }
-    const char* p = sResolvedPaths[idx];
+    const char *p = sResolvedPaths[idx];
     return (p[0] != '\0') ? p : nullptr;
 }
 
@@ -59,22 +61,22 @@ void NodeProbe::dumpResults() {
     SMLOGI("NodeProbe resolved paths:");
 
     // GPU
-    SMLOGI("  GPU_UTIL    : %s", getPath(MetricId::GPU_UTIL)     ?: "(not found)");
+    SMLOGI("  GPU_UTIL    : %s", getPath(MetricId::GPU_UTIL) ?: "(not found)");
     SMLOGI("  GPU_FREQ_CUR: %s", getPath(MetricId::GPU_FREQ_CUR) ?: "(not found)");
-    SMLOGI("  GPU_TEMP    : %s", getPath(MetricId::GPU_TEMP)     ?: "(not found)");
+    SMLOGI("  GPU_TEMP    : %s", getPath(MetricId::GPU_TEMP) ?: "(not found)");
 
     // Thermal
     SMLOGI("  CPU_TEMP_C0 : %s", getPath(MetricId::CPU_TEMP_CLUSTER0) ?: "(not found)");
     SMLOGI("  CPU_TEMP_C1 : %s", getPath(MetricId::CPU_TEMP_CLUSTER1) ?: "(not found)");
-    SMLOGI("  CPU_TEMP_PRX: %s", getPath(MetricId::CPU_TEMP_PRIME)    ?: "(not found)");
-    SMLOGI("  SKIN_TEMP   : %s", getPath(MetricId::SKIN_TEMP)         ?: "(not found)");
-    SMLOGI("  SOC_TEMP    : %s", getPath(MetricId::SOC_TEMP)          ?: "(not found)");
+    SMLOGI("  CPU_TEMP_PRX: %s", getPath(MetricId::CPU_TEMP_PRIME) ?: "(not found)");
+    SMLOGI("  SKIN_TEMP   : %s", getPath(MetricId::SKIN_TEMP) ?: "(not found)");
+    SMLOGI("  SOC_TEMP    : %s", getPath(MetricId::SOC_TEMP) ?: "(not found)");
 
     // Power
     SMLOGI("  BAT_CURRENT : %s", getPath(MetricId::BATTERY_CURRENT) ?: "(not found)");
-    SMLOGI("  BAT_TEMP    : %s", getPath(MetricId::BATTERY_TEMP)    ?: "(not found)");
-    SMLOGI("  BAT_LEVEL   : %s", getPath(MetricId::BATTERY_LEVEL)   ?: "(not found)");
-    SMLOGI("  CHARGER     : %s", getPath(MetricId::CHARGER_ONLINE)  ?: "(not found)");
+    SMLOGI("  BAT_TEMP    : %s", getPath(MetricId::BATTERY_TEMP) ?: "(not found)");
+    SMLOGI("  BAT_LEVEL   : %s", getPath(MetricId::BATTERY_LEVEL) ?: "(not found)");
+    SMLOGI("  CHARGER     : %s", getPath(MetricId::CHARGER_ONLINE) ?: "(not found)");
 #endif
 }
 
@@ -108,19 +110,19 @@ void NodeProbe::probeThermal() {
     SMLOGD("probeThermal: scanning thermal zones...");
 
     struct {
-        MetricId        id;
-        const char* const* candidates;
-        const char*     name;
+        MetricId id;
+        const char *const *candidates;
+        const char *name;
     } entries[] = {
-        { MetricId::CPU_TEMP_CLUSTER0, CPU_TEMP_CLUSTER0_ZONE_CANDIDATES, "CPU_TEMP_C0"  },
-        { MetricId::CPU_TEMP_CLUSTER1, CPU_TEMP_CLUSTER1_ZONE_CANDIDATES, "CPU_TEMP_C1"  },
-        { MetricId::CPU_TEMP_PRIME,    CPU_TEMP_PRIME_ZONE_CANDIDATES,    "CPU_TEMP_PRIM"},
-        { MetricId::GPU_TEMP,          GPU_TEMP_ZONE_CANDIDATES,          "GPU_TEMP"     },
-        { MetricId::SKIN_TEMP,         SKIN_TEMP_ZONE_CANDIDATES,         "SKIN_TEMP"    },
-        { MetricId::SOC_TEMP,          SOC_TEMP_ZONE_CANDIDATES,          "SOC_TEMP"     },
+        {MetricId::CPU_TEMP_CLUSTER0, CPU_TEMP_CLUSTER0_ZONE_CANDIDATES, "CPU_TEMP_C0"},
+        {MetricId::CPU_TEMP_CLUSTER1, CPU_TEMP_CLUSTER1_ZONE_CANDIDATES, "CPU_TEMP_C1"},
+        {MetricId::CPU_TEMP_PRIME, CPU_TEMP_PRIME_ZONE_CANDIDATES, "CPU_TEMP_PRIM"},
+        {MetricId::GPU_TEMP, GPU_TEMP_ZONE_CANDIDATES, "GPU_TEMP"},
+        {MetricId::SKIN_TEMP, SKIN_TEMP_ZONE_CANDIDATES, "SKIN_TEMP"},
+        {MetricId::SOC_TEMP, SOC_TEMP_ZONE_CANDIDATES, "SOC_TEMP"},
     };
 
-    for (auto& e : entries) {
+    for (auto &e : entries) {
         std::string p = probeThermalZone(e.candidates);
         if (!p.empty()) {
             store(e.id, p);
@@ -135,17 +137,17 @@ void NodeProbe::probePower() {
     SMLOGD("probePower: scanning power supply nodes...");
 
     struct {
-        MetricId        id;
-        const char* const* candidates;
-        const char*     name;
+        MetricId id;
+        const char *const *candidates;
+        const char *name;
     } entries[] = {
-        { MetricId::BATTERY_CURRENT,  BATTERY_CURRENT_CANDIDATES,  "BAT_CURRENT" },
-        { MetricId::BATTERY_TEMP,     BATTERY_TEMP_CANDIDATES,     "BAT_TEMP"    },
-        { MetricId::BATTERY_LEVEL,    BATTERY_LEVEL_CANDIDATES,    "BAT_LEVEL"   },
-        { MetricId::CHARGER_ONLINE,   CHARGER_ONLINE_CANDIDATES,   "CHARGER"     },
+        {MetricId::BATTERY_CURRENT, BATTERY_CURRENT_CANDIDATES, "BAT_CURRENT"},
+        {MetricId::BATTERY_TEMP, BATTERY_TEMP_CANDIDATES, "BAT_TEMP"},
+        {MetricId::BATTERY_LEVEL, BATTERY_LEVEL_CANDIDATES, "BAT_LEVEL"},
+        {MetricId::CHARGER_ONLINE, CHARGER_ONLINE_CANDIDATES, "CHARGER"},
     };
 
-    for (auto& e : entries) {
+    for (auto &e : entries) {
         std::string p = probeDirectPath(e.candidates);
         if (!p.empty()) {
             store(e.id, p);
@@ -160,8 +162,9 @@ void NodeProbe::probePower() {
 // Private helpers
 // ---------------------------------------------------------------------------
 
-std::string NodeProbe::probeDirectPath(const char* const* candidates) {
-    if (candidates == nullptr) return {};
+std::string NodeProbe::probeDirectPath(const char *const *candidates) {
+    if (candidates == nullptr)
+        return {};
     for (int i = 0; candidates[i] != nullptr; ++i) {
         if (::access(candidates[i], R_OK) == 0) {
             SMLOGD("probeDirectPath: hit [%d] %s", i, candidates[i]);
@@ -172,8 +175,9 @@ std::string NodeProbe::probeDirectPath(const char* const* candidates) {
     return {};
 }
 
-std::string NodeProbe::probeThermalZone(const char* const* zoneCandidates) {
-    if (zoneCandidates == nullptr) return {};
+std::string NodeProbe::probeThermalZone(const char *const *zoneCandidates) {
+    if (zoneCandidates == nullptr)
+        return {};
 
     // Enumerate /sys/class/thermal/thermal_zone0 .. thermal_zoneN
     // Typically < 30 zones; scan is fast at init time.
@@ -183,8 +187,7 @@ std::string NodeProbe::probeThermalZone(const char* const* zoneCandidates) {
 
     for (int zoneIdx = 0; zoneIdx < kMaxZones; ++zoneIdx) {
         // Build type path
-        snprintf(typePath, sizeof(typePath),
-                 "/sys/class/thermal/thermal_zone%d/type", zoneIdx);
+        snprintf(typePath, sizeof(typePath), "/sys/class/thermal/thermal_zone%d/type", zoneIdx);
 
         int fd = ::open(typePath, O_RDONLY | O_CLOEXEC);
         if (fd < 0) {
@@ -196,7 +199,8 @@ std::string NodeProbe::probeThermalZone(const char* const* zoneCandidates) {
         ssize_t n = ::read(fd, typeContent, sizeof(typeContent) - 1);
         ::close(fd);
 
-        if (n <= 0) continue;
+        if (n <= 0)
+            continue;
 
         // Strip trailing newline
         typeContent[n] = '\0';
@@ -211,13 +215,13 @@ std::string NodeProbe::probeThermalZone(const char* const* zoneCandidates) {
             if (strcmp(typeContent, zoneCandidates[c]) == 0) {
                 // Found — build the temp path
                 char tempPath[128];
-                snprintf(tempPath, sizeof(tempPath),
-                         "/sys/class/thermal/thermal_zone%d/temp", zoneIdx);
+                snprintf(tempPath, sizeof(tempPath), "/sys/class/thermal/thermal_zone%d/temp",
+                         zoneIdx);
 
                 // Verify the temp node is readable too
                 if (::access(tempPath, R_OK) == 0) {
-                    SMLOGD("probeThermalZone: matched zone%d type='%s' candidate[%d]='%s'",
-                           zoneIdx, typeContent, c, zoneCandidates[c]);
+                    SMLOGD("probeThermalZone: matched zone%d type='%s' candidate[%d]='%s'", zoneIdx,
+                           typeContent, c, zoneCandidates[c]);
                     return tempPath;
                 }
             }
@@ -226,16 +230,18 @@ std::string NodeProbe::probeThermalZone(const char* const* zoneCandidates) {
     return {};
 }
 
-void NodeProbe::store(MetricId id, const std::string& path) {
-    if (path.empty()) return;
+void NodeProbe::store(MetricId id, const std::string &path) {
+    if (path.empty())
+        return;
     const uint32_t idx = metricIndex(id);
-    if (idx == 0 || idx >= kMetricSlotCount) return;
+    if (idx == 0 || idx >= kMetricSlotCount)
+        return;
 
     // Truncate silently if path exceeds buffer (should never happen in practice)
     strncpy(sResolvedPaths[idx], path.c_str(), kMaxPathLen - 1);
     sResolvedPaths[idx][kMaxPathLen - 1] = '\0';
 }
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor

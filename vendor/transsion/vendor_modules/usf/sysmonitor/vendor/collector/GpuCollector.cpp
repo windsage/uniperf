@@ -1,14 +1,15 @@
 #define LOG_TAG "SMon-Gpu"
 
+#include <fcntl.h>
+#include <unistd.h>
+
+#include <cstdlib>
+#include <cstring>
+
 #include "ICollector.h"
 #include "MetricDef.h"
 #include "NodeProbe.h"
 #include "SysMonLog.h"
-
-#include <fcntl.h>
-#include <unistd.h>
-#include <cstring>
-#include <cstdlib>
 
 /**
  * GpuCollector - GPU utilization and current frequency
@@ -37,8 +38,8 @@ public:
 
     bool init() override {
         // NodeProbe has already run — just look up cached paths
-        const char* utilPath = NodeProbe::getPath(MetricId::GPU_UTIL);
-        const char* freqPath = NodeProbe::getPath(MetricId::GPU_FREQ_CUR);
+        const char *utilPath = NodeProbe::getPath(MetricId::GPU_UTIL);
+        const char *freqPath = NodeProbe::getPath(MetricId::GPU_FREQ_CUR);
 
         if (utilPath) {
             mUtilFd = ::open(utilPath, O_RDONLY | O_CLOEXEC);
@@ -69,7 +70,7 @@ public:
         return mAvailable;
     }
 
-    void sample(const PublishFn& publishFn) override {
+    void sample(const PublishFn &publishFn) override {
         struct timespec ts;
         ::clock_gettime(CLOCK_MONOTONIC, &ts);
         const int64_t nowNs = ts.tv_sec * 1'000'000'000LL + ts.tv_nsec;
@@ -91,8 +92,8 @@ public:
     }
 
     int32_t getIntervalMs() const override { return SampleInterval::FAST; }
-    const char* getName()   const override { return "GpuCollector"; }
-    bool isAvailable()      const override { return mAvailable; }
+    const char *getName() const override { return "GpuCollector"; }
+    bool isAvailable() const override { return mAvailable; }
 
 private:
     /**
@@ -101,26 +102,36 @@ private:
      * Returns -1 on error.
      */
     static int64_t readFirstInt(int fd) {
-        if (::lseek(fd, 0, SEEK_SET) < 0) return -1;
+        if (::lseek(fd, 0, SEEK_SET) < 0)
+            return -1;
         char buf[32];
         ssize_t n = ::read(fd, buf, sizeof(buf) - 1);
-        if (n <= 0) return -1;
+        if (n <= 0)
+            return -1;
         buf[n] = '\0';
         return (int64_t)strtoll(buf, nullptr, 10);
     }
 
     void closeFds() {
-        if (mUtilFd >= 0) { ::close(mUtilFd); mUtilFd = -1; }
-        if (mFreqFd >= 0) { ::close(mFreqFd); mFreqFd = -1; }
+        if (mUtilFd >= 0) {
+            ::close(mUtilFd);
+            mUtilFd = -1;
+        }
+        if (mFreqFd >= 0) {
+            ::close(mFreqFd);
+            mFreqFd = -1;
+        }
     }
 
-    int  mUtilFd    = -1;
-    int  mFreqFd    = -1;
+    int mUtilFd = -1;
+    int mFreqFd = -1;
     bool mAvailable = false;
 };
 
-ICollector* createGpuCollector() { return new GpuCollector(); }
+ICollector *createGpuCollector() {
+    return new GpuCollector();
+}
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor

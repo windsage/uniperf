@@ -1,14 +1,15 @@
 #define LOG_TAG "SMon-Cpu"
 
+#include <fcntl.h>
+#include <unistd.h>
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
 #include "ICollector.h"
 #include "MetricDef.h"
 #include "SysMonLog.h"
-
-#include <fcntl.h>
-#include <unistd.h>
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
 
 /**
  * CpuCollector - CPU utilization per cluster + total
@@ -37,15 +38,15 @@ namespace sysmonitor {
 // ---------------------------------------------------------------------------
 #ifndef SMON_CPU_CLUSTER0_FIRST
 #define SMON_CPU_CLUSTER0_FIRST 0
-#define SMON_CPU_CLUSTER0_LAST  3
+#define SMON_CPU_CLUSTER0_LAST 3
 #endif
 #ifndef SMON_CPU_CLUSTER1_FIRST
 #define SMON_CPU_CLUSTER1_FIRST 4
-#define SMON_CPU_CLUSTER1_LAST  6
+#define SMON_CPU_CLUSTER1_LAST 6
 #endif
 #ifndef SMON_CPU_CLUSTER2_FIRST
 #define SMON_CPU_CLUSTER2_FIRST 7
-#define SMON_CPU_CLUSTER2_LAST  7
+#define SMON_CPU_CLUSTER2_LAST 7
 #endif
 
 // Max CPU cores we track (covers up to cpu15)
@@ -55,8 +56,7 @@ static constexpr int kMaxCores = 16;
 // Per-core stat snapshot
 // ---------------------------------------------------------------------------
 struct CoreStat {
-    uint64_t user{0}, nice{0}, system{0}, idle{0},
-             iowait{0}, irq{0}, softirq{0}, steal{0};
+    uint64_t user{0}, nice{0}, system{0}, idle{0}, iowait{0}, irq{0}, softirq{0}, steal{0};
 
     uint64_t totalTime() const {
         return user + nice + system + idle + iowait + irq + softirq + steal;
@@ -71,7 +71,10 @@ class CpuCollector : public ICollector {
 public:
     CpuCollector() = default;
     ~CpuCollector() override {
-        if (mStatFd >= 0) { ::close(mStatFd); mStatFd = -1; }
+        if (mStatFd >= 0) {
+            ::close(mStatFd);
+            mStatFd = -1;
+        }
     }
 
     bool init() override {
@@ -82,10 +85,8 @@ public:
             return false;
         }
         SMLOGI("CpuCollector: /proc/stat fd=%d cluster0=[%d-%d] cluster1=[%d-%d] cluster2=[%d-%d]",
-               mStatFd,
-               SMON_CPU_CLUSTER0_FIRST, SMON_CPU_CLUSTER0_LAST,
-               SMON_CPU_CLUSTER1_FIRST, SMON_CPU_CLUSTER1_LAST,
-               SMON_CPU_CLUSTER2_FIRST, SMON_CPU_CLUSTER2_LAST);
+               mStatFd, SMON_CPU_CLUSTER0_FIRST, SMON_CPU_CLUSTER0_LAST, SMON_CPU_CLUSTER1_FIRST,
+               SMON_CPU_CLUSTER1_LAST, SMON_CPU_CLUSTER2_FIRST, SMON_CPU_CLUSTER2_LAST);
 
         // Perform first read to populate mPrev — first sample will output 0% which is fine
         CoreStat dummy[kMaxCores + 1];
@@ -95,35 +96,32 @@ public:
         return true;
     }
 
-    void sample(const PublishFn& publishFn) override {
-        CoreStat cur[kMaxCores + 1];  // index 0 = "cpu" total, 1..N = cpu0..cpuN-1
-        if (!readStats(cur)) return;
+    void sample(const PublishFn &publishFn) override {
+        CoreStat cur[kMaxCores + 1];    // index 0 = "cpu" total, 1..N = cpu0..cpuN-1
+        if (!readStats(cur))
+            return;
 
         struct timespec ts;
         ::clock_gettime(CLOCK_MONOTONIC, &ts);
         const int64_t nowNs = ts.tv_sec * 1'000'000'000LL + ts.tv_nsec;
 
         // Total CPU utilization (index 0)
-        publishFn(MetricId::CPU_UTIL_TOTAL,
-                  calcUtil(mPrev[0], cur[0]), nowNs);
+        publishFn(MetricId::CPU_UTIL_TOTAL, calcUtil(mPrev[0], cur[0]), nowNs);
 
         // Per-cluster: average over cores in the cluster
-        publishCluster(publishFn, MetricId::CPU_UTIL_CLUSTER0,
-                       SMON_CPU_CLUSTER0_FIRST, SMON_CPU_CLUSTER0_LAST,
-                       cur, nowNs);
-        publishCluster(publishFn, MetricId::CPU_UTIL_CLUSTER1,
-                       SMON_CPU_CLUSTER1_FIRST, SMON_CPU_CLUSTER1_LAST,
-                       cur, nowNs);
-        publishCluster(publishFn, MetricId::CPU_UTIL_CLUSTER2,
-                       SMON_CPU_CLUSTER2_FIRST, SMON_CPU_CLUSTER2_LAST,
-                       cur, nowNs);
+        publishCluster(publishFn, MetricId::CPU_UTIL_CLUSTER0, SMON_CPU_CLUSTER0_FIRST,
+                       SMON_CPU_CLUSTER0_LAST, cur, nowNs);
+        publishCluster(publishFn, MetricId::CPU_UTIL_CLUSTER1, SMON_CPU_CLUSTER1_FIRST,
+                       SMON_CPU_CLUSTER1_LAST, cur, nowNs);
+        publishCluster(publishFn, MetricId::CPU_UTIL_CLUSTER2, SMON_CPU_CLUSTER2_FIRST,
+                       SMON_CPU_CLUSTER2_LAST, cur, nowNs);
 
         memcpy(mPrev, cur, sizeof(mPrev));
     }
 
     int32_t getIntervalMs() const override { return SampleInterval::FAST; }
-    const char* getName()   const override { return "CpuCollector"; }
-    bool isAvailable()      const override { return mAvailable; }
+    const char *getName() const override { return "CpuCollector"; }
+    bool isAvailable() const override { return mAvailable; }
 
 private:
     /**
@@ -132,7 +130,7 @@ private:
      * stats[1..N] = individual "cpu0".."cpuN-1" lines
      * Returns false on IO error.
      */
-    bool readStats(CoreStat* stats) {
+    bool readStats(CoreStat *stats) {
         // Seek to beginning (fd stays open between calls)
         if (::lseek(mStatFd, 0, SEEK_SET) < 0) {
             SMLOGE("lseek /proc/stat failed: errno=%d", errno);
@@ -152,15 +150,16 @@ private:
         // Zero-init output
         memset(stats, 0, sizeof(CoreStat) * (kMaxCores + 1));
 
-        char* line = buf;
-        int   coreIdx = 0;  // 1-based core index (1..kMaxCores)
+        char *line = buf;
+        int coreIdx = 0;    // 1-based core index (1..kMaxCores)
 
         while (line && *line) {
-            char* next = strchr(line, '\n');
-            if (next) *next = '\0';
+            char *next = strchr(line, '\n');
+            if (next)
+                *next = '\0';
 
             if (strncmp(line, "cpu", 3) == 0) {
-                const char* numStart = line + 3;
+                const char *numStart = line + 3;
                 if (*numStart == ' ' || *numStart == '\t') {
                     // Aggregate "cpu " line → index 0
                     parseLine(line + 3, &stats[0]);
@@ -169,13 +168,13 @@ private:
                     int cpuNum = atoi(numStart);
                     if (cpuNum >= 0 && cpuNum < kMaxCores) {
                         // Skip past the number to the stats
-                        const char* p = numStart;
-                        while (*p && *p != ' ') ++p;
+                        const char *p = numStart;
+                        while (*p && *p != ' ')
+                            ++p;
                         parseLine(p, &stats[cpuNum + 1]);
-                        SMLOGV("cpu%d: user=%llu idle=%llu",
-                               cpuNum,
-                               (unsigned long long)stats[cpuNum+1].user,
-                               (unsigned long long)stats[cpuNum+1].idle);
+                        SMLOGV("cpu%d: user=%llu idle=%llu", cpuNum,
+                               (unsigned long long)stats[cpuNum + 1].user,
+                               (unsigned long long)stats[cpuNum + 1].idle);
                     }
                 }
             } else if (strncmp(line, "intr", 4) == 0) {
@@ -189,62 +188,66 @@ private:
         return true;
     }
 
-    static void parseLine(const char* p, CoreStat* s) {
+    static void parseLine(const char *p, CoreStat *s) {
         // Format: " user nice system idle iowait irq softirq steal ..."
-        sscanf(p, " %llu %llu %llu %llu %llu %llu %llu %llu",
-               (unsigned long long*)&s->user,
-               (unsigned long long*)&s->nice,
-               (unsigned long long*)&s->system,
-               (unsigned long long*)&s->idle,
-               (unsigned long long*)&s->iowait,
-               (unsigned long long*)&s->irq,
-               (unsigned long long*)&s->softirq,
-               (unsigned long long*)&s->steal);
+        sscanf(p, " %llu %llu %llu %llu %llu %llu %llu %llu", (unsigned long long *)&s->user,
+               (unsigned long long *)&s->nice, (unsigned long long *)&s->system,
+               (unsigned long long *)&s->idle, (unsigned long long *)&s->iowait,
+               (unsigned long long *)&s->irq, (unsigned long long *)&s->softirq,
+               (unsigned long long *)&s->steal);
     }
 
     /** Calculate utilization percentage (0-100) between two snapshots. */
-    static int64_t calcUtil(const CoreStat& prev, const CoreStat& cur) {
+    static int64_t calcUtil(const CoreStat &prev, const CoreStat &cur) {
         uint64_t totalDelta = cur.totalTime() - prev.totalTime();
-        uint64_t idleDelta  = cur.idleTime()  - prev.idleTime();
-        if (totalDelta == 0) return 0;
+        uint64_t idleDelta = cur.idleTime() - prev.idleTime();
+        if (totalDelta == 0)
+            return 0;
         uint64_t busyDelta = (totalDelta > idleDelta) ? (totalDelta - idleDelta) : 0;
         return static_cast<int64_t>((busyDelta * 100ULL) / totalDelta);
     }
 
-    void publishCluster(const PublishFn& publishFn, MetricId id,
-                        int first, int last,
-                        const CoreStat* cur, int64_t nowNs) {
+    void publishCluster(const PublishFn &publishFn, MetricId id, int first, int last,
+                        const CoreStat *cur, int64_t nowNs) {
         // Aggregate cores in range [first, last] for cluster average
         CoreStat clusterPrev{}, clusterCur{};
         for (int c = first; c <= last && c < kMaxCores; ++c) {
-            const CoreStat& p = mPrev[c + 1];
-            const CoreStat& n = cur[c + 1];
-            clusterPrev.user    += p.user;    clusterCur.user    += n.user;
-            clusterPrev.nice    += p.nice;    clusterCur.nice    += n.nice;
-            clusterPrev.system  += p.system;  clusterCur.system  += n.system;
-            clusterPrev.idle    += p.idle;    clusterCur.idle    += n.idle;
-            clusterPrev.iowait  += p.iowait;  clusterCur.iowait  += n.iowait;
-            clusterPrev.irq     += p.irq;     clusterCur.irq     += n.irq;
-            clusterPrev.softirq += p.softirq; clusterCur.softirq += n.softirq;
-            clusterPrev.steal   += p.steal;   clusterCur.steal   += n.steal;
+            const CoreStat &p = mPrev[c + 1];
+            const CoreStat &n = cur[c + 1];
+            clusterPrev.user += p.user;
+            clusterCur.user += n.user;
+            clusterPrev.nice += p.nice;
+            clusterCur.nice += n.nice;
+            clusterPrev.system += p.system;
+            clusterCur.system += n.system;
+            clusterPrev.idle += p.idle;
+            clusterCur.idle += n.idle;
+            clusterPrev.iowait += p.iowait;
+            clusterCur.iowait += n.iowait;
+            clusterPrev.irq += p.irq;
+            clusterCur.irq += n.irq;
+            clusterPrev.softirq += p.softirq;
+            clusterCur.softirq += n.softirq;
+            clusterPrev.steal += p.steal;
+            clusterCur.steal += n.steal;
         }
         int64_t util = calcUtil(clusterPrev, clusterCur);
         SMLOGD("cluster[%d-%d] util=%lld%%", first, last, (long long)util);
         publishFn(id, util, nowNs);
     }
 
-    int      mStatFd    = -1;
-    bool     mAvailable = false;
-    CoreStat mPrev[kMaxCores + 1];  // Previous snapshot for delta calculation
+    int mStatFd = -1;
+    bool mAvailable = false;
+    CoreStat mPrev[kMaxCores + 1];    // Previous snapshot for delta calculation
 };
 
 // ---------------------------------------------------------------------------
 // Factory function — used by SysMonitor to instantiate
 // ---------------------------------------------------------------------------
-ICollector* createCpuCollector() {
+ICollector *createCpuCollector() {
     return new CpuCollector();
 }
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor

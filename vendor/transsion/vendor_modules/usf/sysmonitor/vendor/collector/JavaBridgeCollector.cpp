@@ -1,13 +1,14 @@
 #define LOG_TAG "SMon-JBridge"
 
+#include <time.h>
+
+#include <atomic>
+#include <cstdint>
+
 #include "ICollector.h"
 #include "MetricDef.h"
 #include "MetricStore.h"
 #include "SysMonLog.h"
-
-#include <atomic>
-#include <cstdint>
-#include <time.h>
 
 /**
  * JavaBridgeCollector - Receives metrics pushed from the Java layer via JNI
@@ -37,8 +38,7 @@ namespace sysmonitor {
 
 class JavaBridgeCollector : public ICollector {
 public:
-    explicit JavaBridgeCollector(MetricStore* store)
-        : mStore(store) {}
+    explicit JavaBridgeCollector(MetricStore *store) : mStore(store) {}
 
     ~JavaBridgeCollector() override = default;
 
@@ -53,11 +53,11 @@ public:
     }
 
     // No-op: data arrives via push(), not via the tick loop
-    void sample(const PublishFn& /*publishFn*/) override {}
+    void sample(const PublishFn & /*publishFn*/) override {}
 
     int32_t getIntervalMs() const override { return SampleInterval::JAVA; }
-    const char* getName()   const override { return "JavaBridgeCollector"; }
-    bool isAvailable()      const override { return mAvailable; }
+    const char *getName() const override { return "JavaBridgeCollector"; }
+    bool isAvailable() const override { return mAvailable; }
 
     /**
      * Called directly from JNI thread when Java layer has new data.
@@ -92,25 +92,23 @@ public:
      * Return singleton instance pointer for JNI access.
      * Set by SysMonitor during initialization.
      */
-    static void setInstance(JavaBridgeCollector* inst) {
+    static void setInstance(JavaBridgeCollector *inst) {
         sInstance.store(inst, std::memory_order_release);
     }
 
-    static JavaBridgeCollector* getInstance() {
-        return sInstance.load(std::memory_order_acquire);
-    }
+    static JavaBridgeCollector *getInstance() { return sInstance.load(std::memory_order_acquire); }
 
 private:
-    MetricStore* mStore     = nullptr;
-    bool         mAvailable = false;
+    MetricStore *mStore = nullptr;
+    bool mAvailable = false;
 
     // Global pointer accessed by JNI layer — set once at init, never changes
-    static std::atomic<JavaBridgeCollector*> sInstance;
+    static std::atomic<JavaBridgeCollector *> sInstance;
 };
 
-std::atomic<JavaBridgeCollector*> JavaBridgeCollector::sInstance{nullptr};
+std::atomic<JavaBridgeCollector *> JavaBridgeCollector::sInstance{nullptr};
 
-ICollector* createJavaBridgeCollector(MetricStore* store) {
+ICollector *createJavaBridgeCollector(MetricStore *store) {
     return new JavaBridgeCollector(store);
 }
 
@@ -119,7 +117,7 @@ ICollector* createJavaBridgeCollector(MetricStore* store) {
  * Looks up the singleton and forwards the push.
  */
 void javaBridgePush(int metricIdInt, int64_t value) {
-    JavaBridgeCollector* inst = JavaBridgeCollector::getInstance();
+    JavaBridgeCollector *inst = JavaBridgeCollector::getInstance();
     if (__builtin_expect(inst == nullptr, 0)) {
         SMLOGW("javaBridgePush: collector not yet initialized (id=%d)", metricIdInt);
         return;
@@ -128,6 +126,6 @@ void javaBridgePush(int metricIdInt, int64_t value) {
     inst->push(id, value);
 }
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor

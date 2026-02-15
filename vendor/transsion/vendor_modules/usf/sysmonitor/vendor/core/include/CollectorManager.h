@@ -5,6 +5,7 @@
 #include <memory>
 #include <thread>
 #include <vector>
+
 #include "ICollector.h"
 #include "MetricStore.h"
 
@@ -34,19 +35,19 @@ namespace sysmonitor {
 
 class CollectorManager {
 public:
-    explicit CollectorManager(MetricStore* store);
+    explicit CollectorManager(MetricStore *store);
     ~CollectorManager();
 
     // Prevent copy
-    CollectorManager(const CollectorManager&) = delete;
-    CollectorManager& operator=(const CollectorManager&) = delete;
+    CollectorManager(const CollectorManager &) = delete;
+    CollectorManager &operator=(const CollectorManager &) = delete;
 
     /**
      * Register a collector. Must be called before start().
      * Ownership is NOT transferred; caller manages lifetime.
      * (In practice all collectors live as long as the process.)
      */
-    void registerCollector(ICollector* collector);
+    void registerCollector(ICollector *collector);
 
     /**
      * Initialize all registered collectors (calls init() on each).
@@ -88,13 +89,13 @@ private:
     // Base tick: GCD of all sample intervals = 200ms
     static constexpr int32_t kBaseTickMs = 200;
 
-    MetricStore*              mStore;
-    std::vector<ICollector*>  mCollectors;
-    std::thread               mThread;
-    std::atomic<bool>         mRunning{false};
-    std::atomic<bool>         mStopRequested{false};
+    MetricStore *mStore;
+    std::vector<ICollector *> mCollectors;
+    std::thread mThread;
+    std::atomic<bool> mRunning{false};
+    std::atomic<bool> mStopRequested{false};
 };
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor

@@ -3,6 +3,7 @@
 #include <atomic>
 #include <cstdint>
 #include <cstring>
+
 #include "MetricDef.h"
 
 /**
@@ -39,7 +40,7 @@ namespace sysmonitor {
 // All fields must be trivially copyable and have fixed size.
 // ---------------------------------------------------------------------------
 
-static constexpr uint32_t kShmMagic   = 0x534D4F4E;  // "SMON"
+static constexpr uint32_t kShmMagic = 0x534D4F4E;    // "SMON"
 static constexpr uint32_t kShmVersion = 1;
 
 /**
@@ -47,9 +48,9 @@ static constexpr uint32_t kShmVersion = 1;
  * Aligned to 64 bytes to avoid false sharing between adjacent slots.
  */
 struct alignas(64) MetricSlot {
-    std::atomic<int64_t> value;        // Raw metric value
-    std::atomic<int64_t> timestampNs;  // CLOCK_MONOTONIC ns, 0 = never written
-    std::atomic<uint8_t> valid;        // 1 = valid sample exists, 0 = no data
+    std::atomic<int64_t> value;          // Raw metric value
+    std::atomic<int64_t> timestampNs;    // CLOCK_MONOTONIC ns, 0 = never written
+    std::atomic<uint8_t> valid;          // 1 = valid sample exists, 0 = no data
 
     // Pad to exactly 64 bytes (cacheline size on ARM64)
     // value(8) + timestampNs(8) + valid(1) + pad(47) = 64
@@ -68,17 +69,16 @@ static_assert(sizeof(MetricSlot) == 64, "MetricSlot must be 64 bytes");
  * Reader validates magic/version before accessing slots.
  */
 struct ShmHeader {
-    uint32_t magic;      // kShmMagic
-    uint32_t version;    // kShmVersion
-    int32_t  writerPid;  // PID of the writer process (for debugging)
-    uint32_t slotCount;  // Number of MetricSlot entries following this header
-    uint8_t  _pad[48];   // Pad header to 64 bytes
+    uint32_t magic;        // kShmMagic
+    uint32_t version;      // kShmVersion
+    int32_t writerPid;     // PID of the writer process (for debugging)
+    uint32_t slotCount;    // Number of MetricSlot entries following this header
+    uint8_t _pad[48];      // Pad header to 64 bytes
 };
 static_assert(sizeof(ShmHeader) == 64, "ShmHeader must be 64 bytes");
 
 // Total shared memory size
-static constexpr size_t kShmSize =
-    sizeof(ShmHeader) + sizeof(MetricSlot) * kMetricSlotCount;
+static constexpr size_t kShmSize = sizeof(ShmHeader) + sizeof(MetricSlot) * kMetricSlotCount;
 
 // ---------------------------------------------------------------------------
 // MetricStore
@@ -89,8 +89,8 @@ public:
     ~MetricStore();
 
     // Prevent copy
-    MetricStore(const MetricStore&) = delete;
-    MetricStore& operator=(const MetricStore&) = delete;
+    MetricStore(const MetricStore &) = delete;
+    MetricStore &operator=(const MetricStore &) = delete;
 
     // -----------------------------------------------------------------------
     // Writer API (called from sysmonitor-service / CollectorManager)
@@ -149,7 +149,7 @@ public:
      * @param out  Output array, indexed by metricIndex(id)
      * @param size Array size, must be >= kMetricSlotCount
      */
-    void snapshot(MetricValue* out, size_t size) const;
+    void snapshot(MetricValue *out, size_t size) const;
 
     // -----------------------------------------------------------------------
     // Common
@@ -172,16 +172,16 @@ private:
     int mShmFd = -1;
 
     // Base address of the mapped region (nullptr = not mapped)
-    void* mMappedAddr = nullptr;
+    void *mMappedAddr = nullptr;
 
     // Convenience pointers into the mapped region (set after mapping)
-    ShmHeader*  mHeader = nullptr;
-    MetricSlot* mSlots  = nullptr;
+    ShmHeader *mHeader = nullptr;
+    MetricSlot *mSlots = nullptr;
 
     // True = this instance is the writer (owns the ashmem region)
     bool mIsWriter = false;
 };
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor

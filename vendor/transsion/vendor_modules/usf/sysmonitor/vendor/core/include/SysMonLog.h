@@ -30,11 +30,11 @@ namespace transsion {
 namespace sysmonitor {
 
 enum class LogLevel : int {
-    V      = ANDROID_LOG_VERBOSE,
-    D      = ANDROID_LOG_DEBUG,
-    I      = ANDROID_LOG_INFO,
-    W      = ANDROID_LOG_WARN,
-    E      = ANDROID_LOG_ERROR,
+    V = ANDROID_LOG_VERBOSE,
+    D = ANDROID_LOG_DEBUG,
+    I = ANDROID_LOG_INFO,
+    W = ANDROID_LOG_WARN,
+    E = ANDROID_LOG_ERROR,
     SILENT = 99,
 };
 
@@ -50,7 +50,7 @@ public:
         (void)level;
         return false;
 #endif
-        char prop[92];  // PROP_VALUE_MAX = 92
+        char prop[92];    // PROP_VALUE_MAX = 92
         if (__system_property_get("debug.sysmon.log.level", prop) > 0) {
             int sysLevel = atoi(prop);
             if (static_cast<int>(level) < sysLevel) {
@@ -61,30 +61,30 @@ public:
     }
 };
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor
 
 // ---------------------------------------------------------------------------
 // Internal print macro — not for direct use
 // ---------------------------------------------------------------------------
-#define SMON_PRINT_LOG(level, tag, fmt, ...)                                        \
-    do {                                                                            \
+#define SMON_PRINT_LOG(level, tag, fmt, ...)                                       \
+    do {                                                                           \
         if (vendor::transsion::sysmonitor::SysMonLogger::isLoggable(level)) {      \
             __android_log_print(static_cast<int>(level), tag, fmt, ##__VA_ARGS__); \
-        }                                                                           \
+        }                                                                          \
     } while (0)
 
 // ---------------------------------------------------------------------------
 // Verbose / Debug — include file, line, function for quick debugging
 // ---------------------------------------------------------------------------
-#define SMON_LOGV(tag, fmt, ...)                                                                 \
-    SMON_PRINT_LOG(vendor::transsion::sysmonitor::LogLevel::V, tag,                             \
-                   "[%s:%d] %s: " fmt, __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define SMON_LOGV(tag, fmt, ...)                                                                  \
+    SMON_PRINT_LOG(vendor::transsion::sysmonitor::LogLevel::V, tag, "[%s:%d] %s: " fmt, __FILE__, \
+                   __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
-#define SMON_LOGD(tag, fmt, ...)                                                                 \
-    SMON_PRINT_LOG(vendor::transsion::sysmonitor::LogLevel::D, tag,                             \
-                   "[%s:%d] %s: " fmt, __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define SMON_LOGD(tag, fmt, ...)                                                                  \
+    SMON_PRINT_LOG(vendor::transsion::sysmonitor::LogLevel::D, tag, "[%s:%d] %s: " fmt, __FILE__, \
+                   __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
 // ---------------------------------------------------------------------------
 // Info / Warn / Error — clean output, no metadata overhead

@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+
 #include "MetricDef.h"
 
 /**
@@ -43,7 +44,7 @@ public:
      * @param id  MetricId to look up
      * @return    Null-terminated path string, or nullptr if not found
      */
-    static const char* getPath(MetricId id);
+    static const char *getPath(MetricId id);
 
     /**
      * Dump all probe results to logcat.
@@ -60,7 +61,7 @@ private:
      * Probe a nullptr-terminated candidate path array.
      * Returns the first path that is readable, or empty string if none.
      */
-    static std::string probeDirectPath(const char* const* candidates);
+    static std::string probeDirectPath(const char *const *candidates);
 
     /**
      * Scan thermal zones to find one whose "type" matches any name in the
@@ -69,13 +70,13 @@ private:
      *
      * @param zoneCandidates  nullptr-terminated list of zone type name strings
      */
-    static std::string probeThermalZone(const char* const* zoneCandidates);
+    static std::string probeThermalZone(const char *const *zoneCandidates);
 
     /**
      * Store a resolved path for the given MetricId.
      * Ignores empty string (probe failed → path stays nullptr).
      */
-    static void store(MetricId id, const std::string& path);
+    static void store(MetricId id, const std::string &path);
 
     // ---------------------------------------------------------------------------
     // Per-group probe functions (called from probeAll)
@@ -92,6 +93,6 @@ private:
     static bool sProbeCompleted;
 };
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor

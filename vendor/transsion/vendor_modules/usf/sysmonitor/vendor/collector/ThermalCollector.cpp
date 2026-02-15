@@ -1,13 +1,14 @@
 #define LOG_TAG "SMon-Therm"
 
+#include <fcntl.h>
+#include <unistd.h>
+
+#include <cstdlib>
+
 #include "ICollector.h"
 #include "MetricDef.h"
 #include "NodeProbe.h"
 #include "SysMonLog.h"
-
-#include <fcntl.h>
-#include <unistd.h>
-#include <cstdlib>
 
 /**
  * ThermalCollector - CPU cluster, GPU, skin, SoC temperature
@@ -32,26 +33,30 @@ namespace sysmonitor {
 
 // Map from MetricId → open fd (index in kSlots array)
 struct ThermalSlot {
-    MetricId    id;
-    const char* name;   // for logging
-    int         fd;
+    MetricId id;
+    const char *name;    // for logging
+    int fd;
 };
 
 class ThermalCollector : public ICollector {
 public:
     ThermalCollector() {
-        for (auto& s : mSlots) s.fd = -1;
+        for (auto &s : mSlots)
+            s.fd = -1;
     }
     ~ThermalCollector() override {
-        for (auto& s : mSlots) {
-            if (s.fd >= 0) { ::close(s.fd); s.fd = -1; }
+        for (auto &s : mSlots) {
+            if (s.fd >= 0) {
+                ::close(s.fd);
+                s.fd = -1;
+            }
         }
     }
 
     bool init() override {
         int opened = 0;
-        for (auto& s : mSlots) {
-            const char* path = NodeProbe::getPath(s.id);
+        for (auto &s : mSlots) {
+            const char *path = NodeProbe::getPath(s.id);
             if (!path) {
                 SMLOGW("init: %s zone path not found", s.name);
                 continue;
@@ -65,27 +70,30 @@ public:
             }
         }
         mAvailable = (opened > 0);
-        if (!mAvailable) SMLOGE("init: no thermal nodes available");
+        if (!mAvailable)
+            SMLOGE("init: no thermal nodes available");
         return mAvailable;
     }
 
-    void sample(const PublishFn& publishFn) override {
+    void sample(const PublishFn &publishFn) override {
         struct timespec ts;
         ::clock_gettime(CLOCK_MONOTONIC, &ts);
         const int64_t nowNs = ts.tv_sec * 1'000'000'000LL + ts.tv_nsec;
 
-        for (const auto& s : mSlots) {
-            if (s.fd < 0) continue;
+        for (const auto &s : mSlots) {
+            if (s.fd < 0)
+                continue;
             int64_t val = readMilliCelsius(s.fd);
-            if (val == kReadError) continue;
+            if (val == kReadError)
+                continue;
             SMLOGD("%s = %lld mC", s.name, (long long)val);
             publishFn(s.id, val, nowNs);
         }
     }
 
     int32_t getIntervalMs() const override { return SampleInterval::MEDIUM; }
-    const char* getName()   const override { return "ThermalCollector"; }
-    bool isAvailable()      const override { return mAvailable; }
+    const char *getName() const override { return "ThermalCollector"; }
+    bool isAvailable() const override { return mAvailable; }
 
 private:
     static constexpr int64_t kReadError = INT64_MIN;
@@ -95,10 +103,12 @@ private:
      * Thermal zone /temp values < 1000 are assumed to be plain Celsius.
      */
     static int64_t readMilliCelsius(int fd) {
-        if (::lseek(fd, 0, SEEK_SET) < 0) return kReadError;
+        if (::lseek(fd, 0, SEEK_SET) < 0)
+            return kReadError;
         char buf[24];
         ssize_t n = ::read(fd, buf, sizeof(buf) - 1);
-        if (n <= 0) return kReadError;
+        if (n <= 0)
+            return kReadError;
         buf[n] = '\0';
         int64_t raw = strtoll(buf, nullptr, 10);
         // Normalize: values like "45" → treat as Celsius → 45000 mC
@@ -107,18 +117,20 @@ private:
 
     // Slot table — all thermal metrics in one array for uniform handling
     ThermalSlot mSlots[6] = {
-        { MetricId::CPU_TEMP_CLUSTER0, "CPU_TEMP_C0",   -1 },
-        { MetricId::CPU_TEMP_CLUSTER1, "CPU_TEMP_C1",   -1 },
-        { MetricId::CPU_TEMP_PRIME,    "CPU_TEMP_PRIME", -1 },
-        { MetricId::GPU_TEMP,          "GPU_TEMP",       -1 },
-        { MetricId::SKIN_TEMP,         "SKIN_TEMP",      -1 },
-        { MetricId::SOC_TEMP,          "SOC_TEMP",       -1 },
+        {MetricId::CPU_TEMP_CLUSTER0, "CPU_TEMP_C0", -1},
+        {MetricId::CPU_TEMP_CLUSTER1, "CPU_TEMP_C1", -1},
+        {MetricId::CPU_TEMP_PRIME, "CPU_TEMP_PRIME", -1},
+        {MetricId::GPU_TEMP, "GPU_TEMP", -1},
+        {MetricId::SKIN_TEMP, "SKIN_TEMP", -1},
+        {MetricId::SOC_TEMP, "SOC_TEMP", -1},
     };
     bool mAvailable = false;
 };
 
-ICollector* createThermalCollector() { return new ThermalCollector(); }
+ICollector *createThermalCollector() {
+    return new ThermalCollector();
+}
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor

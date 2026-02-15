@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <functional>
+
 #include "MetricDef.h"
 
 /**
@@ -52,7 +53,7 @@ public:
      *
      * @param publishFn  Callback to store each MetricId/value pair.
      */
-    virtual void sample(const PublishFn& publishFn) = 0;
+    virtual void sample(const PublishFn &publishFn) = 0;
 
     /**
      * Preferred sample interval in milliseconds.
@@ -63,7 +64,7 @@ public:
     /**
      * Human-readable name for logging / debug dumps.
      */
-    virtual const char* getName() const = 0;
+    virtual const char *getName() const = 0;
 
     /**
      * Whether this collector is currently usable.
@@ -72,6 +73,6 @@ public:
     virtual bool isAvailable() const = 0;
 };
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor

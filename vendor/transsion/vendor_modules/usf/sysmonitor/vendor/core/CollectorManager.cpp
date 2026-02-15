@@ -1,13 +1,15 @@
 #define LOG_TAG "SMon-ColMgr"
 
 #include "CollectorManager.h"
-#include "SysMonLog.h"
-#include "NodeProbe.h"
 
 #include <sched.h>
 #include <sys/resource.h>
 #include <time.h>
+
 #include <cstring>
+
+#include "NodeProbe.h"
+#include "SysMonLog.h"
 
 namespace vendor {
 namespace transsion {
@@ -17,8 +19,7 @@ namespace sysmonitor {
 // Constructor / Destructor
 // ---------------------------------------------------------------------------
 
-CollectorManager::CollectorManager(MetricStore* store)
-    : mStore(store) {
+CollectorManager::CollectorManager(MetricStore *store) : mStore(store) {
     SMLOGD("CollectorManager created");
 }
 
@@ -31,14 +32,14 @@ CollectorManager::~CollectorManager() {
 // Registration
 // ---------------------------------------------------------------------------
 
-void CollectorManager::registerCollector(ICollector* collector) {
+void CollectorManager::registerCollector(ICollector *collector) {
     if (collector == nullptr) {
         SMLOGW("registerCollector: null collector, skip");
         return;
     }
     mCollectors.push_back(collector);
-    SMLOGD("Registered collector: %s (interval=%dms)",
-           collector->getName(), collector->getIntervalMs());
+    SMLOGD("Registered collector: %s (interval=%dms)", collector->getName(),
+           collector->getIntervalMs());
 }
 
 // ---------------------------------------------------------------------------
@@ -52,7 +53,7 @@ int CollectorManager::initCollectors() {
 
     // Step 2: init each collector
     int successCount = 0;
-    for (ICollector* c : mCollectors) {
+    for (ICollector *c : mCollectors) {
         SMLOGD("init collector: %s", c->getName());
         bool ok = c->init();
         if (ok) {
@@ -63,8 +64,7 @@ int CollectorManager::initCollectors() {
         }
     }
 
-    SMLOGI("initCollectors: %d/%zu collectors ready",
-           successCount, mCollectors.size());
+    SMLOGI("initCollectors: %d/%zu collectors ready", successCount, mCollectors.size());
     return successCount;
 }
 
@@ -87,8 +87,7 @@ bool CollectorManager::start() {
 
     mThread = std::thread(&CollectorManager::samplingLoop, this);
 
-    SMLOGI("Sampling thread started (%zu collectors, tick=%dms)",
-           mCollectors.size(), kBaseTickMs);
+    SMLOGI("Sampling thread started (%zu collectors, tick=%dms)", mCollectors.size(), kBaseTickMs);
     return true;
 }
 
@@ -114,7 +113,7 @@ void CollectorManager::samplingLoop() {
 
     // Lower the thread priority slightly to avoid competing with UI threads.
     // SCHED_BATCH: CPU-bound work, yields to interactive threads.
-    struct sched_param param = { .sched_priority = 0 };
+    struct sched_param param = {.sched_priority = 0};
     if (::sched_setscheduler(0, SCHED_BATCH, &param) != 0) {
         SMLOGW("sched_setscheduler SCHED_BATCH failed: errno=%d", errno);
     }
@@ -124,27 +123,25 @@ void CollectorManager::samplingLoop() {
     // Build per-collector tick counters.
     // countdown[i] = how many base ticks until collector[i] fires next.
     const size_t n = mCollectors.size();
-    std::vector<int32_t> countdown(n, 0);  // Start at 0 → fire on first tick
+    std::vector<int32_t> countdown(n, 0);    // Start at 0 → fire on first tick
 
     // Pre-build the PublishFn closure once (heap alloc only here, not hot path)
-    MetricStore* store = mStore;
+    MetricStore *store = mStore;
     PublishFn publishFn = [store](MetricId id, int64_t value, int64_t ts) {
         store->publish(id, value, ts);
     };
 
-    const int64_t tickIntervalNs =
-        static_cast<int64_t>(kBaseTickMs) * 1'000'000LL;
+    const int64_t tickIntervalNs = static_cast<int64_t>(kBaseTickMs) * 1'000'000LL;
 
     // Compute first tick boundary
     struct timespec ts;
     ::clock_gettime(CLOCK_MONOTONIC, &ts);
-    int64_t nextNs = nextTickNs(
-        ts.tv_sec * 1'000'000'000LL + ts.tv_nsec, tickIntervalNs);
+    int64_t nextNs = nextTickNs(ts.tv_sec * 1'000'000'000LL + ts.tv_nsec, tickIntervalNs);
 
     while (!mStopRequested.load(std::memory_order_acquire)) {
         // Sleep until the next tick boundary (drift-corrected)
         struct timespec sleepTs;
-        sleepTs.tv_sec  = nextNs / 1'000'000'000LL;
+        sleepTs.tv_sec = nextNs / 1'000'000'000LL;
         sleepTs.tv_nsec = nextNs % 1'000'000'000LL;
 
         // clock_nanosleep: restarts from remaining time if interrupted by signal
@@ -153,24 +150,26 @@ void CollectorManager::samplingLoop() {
             rc = ::clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &sleepTs, nullptr);
         } while (rc == EINTR && !mStopRequested.load(std::memory_order_acquire));
 
-        if (mStopRequested.load(std::memory_order_acquire)) break;
+        if (mStopRequested.load(std::memory_order_acquire))
+            break;
 
         // Get current timestamp once — shared by all collectors this tick
         struct timespec nowTs;
         ::clock_gettime(CLOCK_MONOTONIC, &nowTs);
-        const int64_t nowNs =
-            nowTs.tv_sec * 1'000'000'000LL + nowTs.tv_nsec;
+        const int64_t nowNs = nowTs.tv_sec * 1'000'000'000LL + nowTs.tv_nsec;
 
         // Fire collectors whose countdown has expired
         for (size_t i = 0; i < n; ++i) {
-            ICollector* c = mCollectors[i];
-            if (!c->isAvailable()) continue;
+            ICollector *c = mCollectors[i];
+            if (!c->isAvailable())
+                continue;
 
             if (countdown[i] <= 0) {
                 // Reset countdown for this collector
                 // Round interval to nearest base-tick multiple
                 int32_t ticks = c->getIntervalMs() / kBaseTickMs;
-                if (ticks < 1) ticks = 1;
+                if (ticks < 1)
+                    ticks = 1;
                 countdown[i] = ticks;
 
                 SMLOGV("tick: fire collector '%s'", c->getName());
@@ -197,6 +196,6 @@ int64_t CollectorManager::nextTickNs(int64_t nowNs, int64_t tickIntervalNs) {
     return nowNs + (tickIntervalNs - elapsed);
 }
 
-}  // namespace sysmonitor
-}  // namespace transsion
-}  // namespace vendor
+}    // namespace sysmonitor
+}    // namespace transsion
+}    // namespace vendor
