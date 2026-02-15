@@ -1,3 +1,20 @@
+// Android.bp — vendor/transsion/vendor_modules/usf/sysmonitor/
+//
+// Targets:
+//   libsysmonitor                    vendor .so  (core + collectors)
+//   libsysmonitor_jni                system_ext .so  (JNI bridge)
+//   vendor.transsion.sysmonitor-service  vendor daemon
+//   sysmonitor_tests                 device unit tests
+//
+// Part 6 changes vs Part 1 draft:
+//   • srcs paths updated: vendor/core/, vendor/collector/, vendor/dispatch/,
+//     vendor/platform/, vendor/service/ (all Part 1-4 deliverable locations)
+//   • system JNI src path: system/native/jni/
+//   • JavaBridgeSetInstance.cpp added to libsysmonitor
+//   • AIDL deps added to libsysmonitor / libsysmonitor_jni
+//   • android.sharedmem added to jni shared_libs
+//   • java_library for system Java collectors
+
 // ---------------------------------------------------------------------------
 // Soong config: platform selection
 // ---------------------------------------------------------------------------
@@ -48,6 +65,162 @@ cc_defaults {
     },
 }
 
+// ---------------------------------------------------------------------------
+// libsysmonitor — core monitoring library (vendor partition)
+// ---------------------------------------------------------------------------
+cc_library_shared {
+    name: "libsysmonitor",
+    defaults: ["sysmonitor_cc_base"],
+    vendor: true,
+
+    srcs: [
+        // Core facade + store + scheduler
+        "vendor/core/SysMonitor.cpp",
+        "vendor/core/CollectorManager.cpp",
+        "vendor/core/MetricStore.cpp",
+        "vendor/core/JavaBridgeSetInstance.cpp",
+
+        // Platform node probing (init-time only)
+        "vendor/platform/NodeProbe.cpp",
+
+        // Collectors
+        "vendor/collector/CpuCollector.cpp",
+        "vendor/collector/MemCollector.cpp",
+        "vendor/collector/GpuCollector.cpp",
+        "vendor/collector/ThermalCollector.cpp",
+        "vendor/collector/PowerCollector.cpp",
+        "vendor/collector/JavaBridgeCollector.cpp",
+
+        // Threshold dispatch
+        "vendor/dispatch/DispatchManager.cpp",
+    ],
+
+    // Headers exported to consumers (MetricDef.h, MetricStore.h, SysMonitor.h)
+    export_include_dirs: [
+        "vendor/core/include",
+        "vendor/dispatch/include",
+        "vendor/platform/include",
+    ],
+
+    local_include_dirs: [
+        "vendor/core/include",
+        "vendor/dispatch/include",
+        "vendor/platform/include",
+        "vendor/collector",         // for intra-collector includes
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libutils",
+        "libbinder_ndk",
+        "libandroid",               // ASharedMemory_create
+        // AIDL NDK backend (DispatchManager / SysMonitor use ISysMonitor types)
+        "vendor.transsion.hardware.sysmonitor-V1-ndk",
+    ],
+
+    // Stable C-only symbol export (C++ ABI not exposed across process boundary)
+    version_script: "libsysmonitor.map",
+}
+
+// ---------------------------------------------------------------------------
+// libsysmonitor_jni — JNI bridge (system_ext partition)
+//   Loaded by SysMonitorBridge.java inside the system Java process.
+//   Reads MetricStore via ashmem (zero-copy); pushes Java metrics via AIDL.
+// ---------------------------------------------------------------------------
+cc_library_shared {
+    name: "libsysmonitor_jni",
+    system_ext_specific: true,
+
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-fno-exceptions",
+        "-fno-rtti",
+    ],
+
+    srcs: [
+        "system/native/jni/SysMonitorJNI.cpp",
+    ],
+
+    local_include_dirs: [
+        "vendor/core/include",       // MetricStore.h, MetricDef.h
+        "vendor/platform/include",   // SysMonLog.h (optional)
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libnativehelper",
+        "libandroid_runtime",
+        "libandroid",                // ASharedMemory_*
+        "libbinder_ndk",
+        // AIDL NDK backend (for ISysMonitor client calls)
+        "vendor.transsion.hardware.sysmonitor-V1-ndk",
+    ],
+}
+
+// ---------------------------------------------------------------------------
+// sysmonitor-service — standalone vendor daemon
+// ---------------------------------------------------------------------------
+cc_binary {
+    name: "vendor.transsion.sysmonitor-service",
+    defaults: ["sysmonitor_cc_base"],
+    vendor: true,
+
+    srcs: [
+        "vendor/service/sysmonitor_service.cpp",
+    ],
+
+    init_rc: [
+        "vendor/service/vendor.transsion.sysmonitor-service.rc",
+    ],
+
+    vintf_fragments: [
+        "vintf/vendor.transsion.sysmonitor.xml",
+    ],
+
+    local_include_dirs: [
+        "vendor/core/include",
+        "vendor/platform/include",
+    ],
+
+    shared_libs: [
+        "libsysmonitor",
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libbinder_ndk",
+        "libutils",
+    ],
+}
+
+// ---------------------------------------------------------------------------
+// sysmonitor-java — Java collectors + bridge (system_ext partition)
+// ---------------------------------------------------------------------------
+java_library {
+    name: "sysmonitor-java",
+    installable: true,
+    system_ext_specific: true,
+
+    srcs: [
+        "system/java/**/*.java",
+    ],
+
+    sdk_version: "system_current",
+
+    libs: [
+        "framework",
+    ],
+
+    required: [
+        "libsysmonitor_jni",
+    ],
+}
 
 // ---------------------------------------------------------------------------
 // Unit tests
@@ -78,35 +251,5 @@ cc_test {
     static_libs: [
         "libgtest",
         "libgmock",
-    ],
-}
-
-
-// ==================== System 分区模块聚合 ====================
-
-phony {
-    name: "sysmonitor_system",
-    required: [
-        // Java 实现层
-        "sysmonitor-java",
-        // JNI 层
-        "libsysmonitor_jni",
-
-        // AIDL 接口
-        "vendor.transsion.hardware.sysmonitor-V1-ndk",
-        "vendor.transsion.hardware.sysmonitor-V1-java",
-    ],
-}
-
-// ==================== Vendor 分区模块聚合 ====================
-
-phony {
-    name: "sysmonitor_vendor",
-    required: [
-        // Vendor Service
-        "libsysmonitor",
-        "vendor.transsion.sysmonitor-service",
-        // AIDL 接口
-        "vendor.transsion.hardware.sysmonitor-V1-ndk",
     ],
 }
