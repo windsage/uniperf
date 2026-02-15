@@ -1,0 +1,10 @@
+service vendor_sysmonitor /vendor/bin/vendor.transsion.sysmonitor-service
+    class hal
+    user system
+    group system readproc
+    capabilities KILL
+    onrestart restart vendor_sysmonitor
+    disabled
+
+on post-fs-data
+    start vendor_sysmonitor
