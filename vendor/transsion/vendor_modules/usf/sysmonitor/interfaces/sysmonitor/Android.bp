@@ -1,0 +1,31 @@
+// interfaces/sysmonitor/Android.bp
+// AIDL interface for vendor.transsion.hardware.sysmonitor
+//
+// Generates:
+//   vendor.transsion.hardware.sysmonitor-V1-ndk   (for vendor C++ consumers)
+//   vendor.transsion.hardware.sysmonitor-V1-java  (for system Java consumers, optional)
+
+aidl_interface {
+    name: "vendor.transsion.hardware.sysmonitor",
+    vendor_available: true,
+    srcs: [
+        "vendor/transsion/hardware/sysmonitor/ISysMonitor.aidl",
+        "vendor/transsion/hardware/sysmonitor/IMetricListener.aidl",
+    ],
+    stability: "vintf",
+    backend: {
+        cpp: {
+            enabled: false,  // Use NDK backend only
+        },
+        java: {
+            enabled: true,   // For system Java consumers (PerfEngine.jar etc.)
+        },
+        ndk: {
+            enabled: true,   // Primary backend for vendor native code
+        },
+    },
+    versions_with_info: [
+        // frozen versions populated by: m vendor.transsion.hardware.sysmonitor-freeze-api
+    ],
+    owner: "transsion",
+}
