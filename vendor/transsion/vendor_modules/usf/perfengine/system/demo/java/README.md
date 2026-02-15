@@ -1,2 +1,1 @@
-PerfEngineListenerDemo 是一个既有发送又有接收的demo
-PerfEngineListenerDemo2是一个单纯接受的demo
+PerfEngineDemo 是一个Android App，可以发送也可以接受事件，但是该app必须通过platform签名验证
