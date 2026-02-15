@@ -83,6 +83,18 @@ interface ISysMonitor {
     long readMetric(in int metricId);
 
     /**
+     * Push a metric value from a Java-side collector.
+     * oneway: non-blocking from caller's perspective.
+     * Server routes to JavaBridgeCollector::push() → MetricStore::publish().
+     *
+     * @param metricId  MetricId (uint32) — must be a Java-side metric:
+     *                  WIFI_RSSI / CELL_SIGNAL / FRAME_JANKY_RATE /
+     *                  FRAME_MISSED / BG_PROCESS_COUNT
+     * @param value     Sampled value
+     */
+    oneway void pushMetric(in int metricId, in long value);
+
+    /**
      * Dump current state to a string for debugging.
      * Equivalent to: adb shell dumpsys vendor.transsion.sysmonitor
      *

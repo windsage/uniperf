@@ -1,0 +1,25 @@
+# =============================================================================
+# system_ext.te — system_server / system_ext access to sysmonitor service
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# system_server: find + call the AIDL service (SysMonitorBridge init path)
+# ---------------------------------------------------------------------------
+allow system_server vendor_sysmonitor_service:service_manager find;
+allow system_server vendor_sysmonitor_service:binder { call transfer };
+
+# Callback direction: sysmonitor-service → system_server (IMetricListener oneway)
+allow vendor_sysmonitor system_server:binder transfer;
+
+# ---------------------------------------------------------------------------
+# system_server: access ashmem fd received from getSharedMemoryFd()
+# mmap read-only into system_server address space
+# ---------------------------------------------------------------------------
+allow system_server ashmem_device:chr_file { open read ioctl };
+
+# ---------------------------------------------------------------------------
+# platform_app: apps using SysMonitorBridge directly (optional, if exposed)
+# ---------------------------------------------------------------------------
+allow platform_app vendor_sysmonitor_service:service_manager find;
+allow platform_app vendor_sysmonitor_service:binder { call transfer };
+allow vendor_sysmonitor platform_app:binder transfer;

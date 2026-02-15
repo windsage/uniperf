@@ -1,0 +1,22 @@
+se_build_files {
+    name: "sysmonitor_sepolicy_public",
+    srcs: [
+        "public/service.te",
+        "public/file_contexts",
+        "public/service_contexts",
+    ],
+}
+
+se_build_files {
+    name: "sysmonitor_sepolicy_private",
+    srcs: [
+        "private/system_ext.te",
+    ],
+}
+
+se_build_files {
+    name: "sysmonitor_sepolicy_vendor",
+    srcs: [
+        "vendor/vendor_sysmonitor.te",
+    ],
+}

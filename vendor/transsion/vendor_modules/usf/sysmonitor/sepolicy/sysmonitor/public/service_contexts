@@ -1,0 +1,3 @@
+# SysMonitor AIDL service context
+# Service name must match kServiceName in sysmonitor_service.cpp
+vendor\.transsion\.hardware\.sysmonitor\.ISysMonitor/default  u:object_r:vendor_sysmonitor_service:s0

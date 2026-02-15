@@ -1,0 +1,64 @@
+# =============================================================================
+# vendor_sysmonitor.te — SELinux policy for sysmonitor-service (vendor domain)
+# =============================================================================
+
+# Declare the domain for the sysmonitor daemon binary
+type vendor_sysmonitor, domain;
+type vendor_sysmonitor_exec, exec_type, vendor_file_type, file_type;
+
+# Transition: init spawns vendor.transsion.sysmonitor-service into this domain
+init_daemon_domain(vendor_sysmonitor)
+
+# ---------------------------------------------------------------------------
+# ServiceManager: register the AIDL service
+# ---------------------------------------------------------------------------
+allow vendor_sysmonitor vendor_sysmonitor_service:service_manager add;
+
+# ---------------------------------------------------------------------------
+# Binder: serve AIDL calls from system_server and platform_app
+# ---------------------------------------------------------------------------
+allow vendor_sysmonitor vendor_sysmonitor_service:binder { call transfer };
+binder_call(vendor_sysmonitor, system_server)
+binder_call(vendor_sysmonitor, platform_app)
+
+# ---------------------------------------------------------------------------
+# procfs: /proc/stat, /proc/meminfo, /proc/pressure/*
+# ---------------------------------------------------------------------------
+allow vendor_sysmonitor proc_stat:file { open read };
+allow vendor_sysmonitor proc_meminfo:file { open read };
+# PSI nodes (kernel 4.20+)
+allow vendor_sysmonitor proc:file { open read };
+
+# ---------------------------------------------------------------------------
+# sysfs: GPU nodes (QCOM kgsl / MTK ged)
+# ---------------------------------------------------------------------------
+allow vendor_sysmonitor sysfs_gpu:file { open read };
+allow vendor_sysmonitor sysfs:file { open read getattr };
+
+# ---------------------------------------------------------------------------
+# sysfs: thermal zones (/sys/class/thermal/thermal_zoneN/*)
+# ---------------------------------------------------------------------------
+allow vendor_sysmonitor sysfs_thermal:file { open read };
+allow vendor_sysmonitor sysfs_thermal:dir  { open read search };
+
+# ---------------------------------------------------------------------------
+# sysfs: power supply / battery (/sys/class/power_supply/*)
+# ---------------------------------------------------------------------------
+allow vendor_sysmonitor sysfs_batteryinfo:file { open read };
+allow vendor_sysmonitor sysfs_batteryinfo:dir  { open read search };
+
+# ---------------------------------------------------------------------------
+# ashmem: create shared memory region for MetricStore
+# ---------------------------------------------------------------------------
+allow vendor_sysmonitor ashmem_device:chr_file { open read write ioctl };
+
+# ---------------------------------------------------------------------------
+# Logging
+# ---------------------------------------------------------------------------
+allow vendor_sysmonitor logd:unix_dgram_socket sendto;
+allow vendor_sysmonitor logcat_exec:file { read execute };
+
+# ---------------------------------------------------------------------------
+# Self: allow reading /proc/self/* for diagnostics
+# ---------------------------------------------------------------------------
+allow vendor_sysmonitor self:capability { kill setnice };

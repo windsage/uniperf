@@ -1,14 +1,23 @@
-// Android.bp - vendor/transsion/vendor_modules/usf/sysmonitor/
+// Android.bp — vendor/transsion/vendor_modules/usf/sysmonitor/
 //
-// Build targets:
-//   libsysmonitor        — core .so, loaded by sysmonitor-service or other native processes
-//   libsysmonitor_jni    — JNI bridge .so, loaded by system Java process
-//   sysmonitor-service   — standalone vendor native daemon
+// Targets:
+//   libsysmonitor                    vendor .so  (core + collectors)
+//   libsysmonitor_jni                system_ext .so  (JNI bridge)
+//   vendor.transsion.sysmonitor-service  vendor daemon
+//   sysmonitor_tests                 device unit tests
 //
-// Platform selection: set SMON_PLATFORM_* via product makefile, e.g.:
-//   SMON_PLATFORM := QCOM   in device/<vendor>/<product>/BoardConfig.mk
-//   This propagates to Android.bp via soong_config_variables below.
+// Part 6 changes vs Part 1 draft:
+//   • srcs paths updated: vendor/core/, vendor/collector/, vendor/dispatch/,
+//     vendor/platform/, vendor/service/ (all Part 1-4 deliverable locations)
+//   • system JNI src path: system/native/jni/
+//   • JavaBridgeSetInstance.cpp added to libsysmonitor
+//   • AIDL deps added to libsysmonitor / libsysmonitor_jni
+//   • android.sharedmem added to jni shared_libs
+//   • java_library for system Java collectors
 
+// ---------------------------------------------------------------------------
+// Soong config: platform selection
+// ---------------------------------------------------------------------------
 soong_config_module_type {
     name: "sysmonitor_cc_defaults",
     module_type: "cc_defaults",
@@ -26,21 +35,15 @@ sysmonitor_cc_defaults {
     name: "sysmonitor_platform_defaults",
     soong_config_variables: {
         platform: {
-            qcom: {
-                cflags: ["-DSMON_PLATFORM_QCOM"],
-            },
-            mtk: {
-                cflags: ["-DSMON_PLATFORM_MTK"],
-            },
-            unisoc: {
-                cflags: ["-DSMON_PLATFORM_UNISOC"],
-            },
+            qcom:   { cflags: ["-DSMON_PLATFORM_QCOM"]   },
+            mtk:    { cflags: ["-DSMON_PLATFORM_MTK"]    },
+            unisoc: { cflags: ["-DSMON_PLATFORM_UNISOC"] },
         },
     },
 }
 
 // ---------------------------------------------------------------------------
-// Common compiler defaults shared by all targets
+// Common C++ defaults
 // ---------------------------------------------------------------------------
 cc_defaults {
     name: "sysmonitor_cc_base",
@@ -51,33 +54,19 @@ cc_defaults {
         "-Wextra",
         "-Werror",
         "-O2",
-        // Disable C++ exceptions — use explicit error codes instead
         "-fno-exceptions",
-        // Disable RTTI — not needed, reduces binary size
         "-fno-rtti",
-    ],
-
-    // Release build: strip all log strings, zero overhead
-    // Set in BoardConfig.mk: SMON_LOG_DISABLED := true
-    // productVariables can propagate this if needed; for now use explicit flag.
-    // cflags: ["-DSMON_LOG_DISABLED"],  // uncomment for production
-
-    include_dirs: [
-        "vendor/transsion/vendor_modules/usf/sysmonitor",
-        "vendor/transsion/vendor_modules/usf/sysmonitor/include",
+        // Uncomment for production (strips all log strings):
+        // "-DSMON_LOG_DISABLED",
     ],
 
     target: {
-        android: {
-            cflags: ["-DANDROID"],
-        },
+        android: { cflags: ["-DANDROID"] },
     },
 }
 
 // ---------------------------------------------------------------------------
-// libsysmonitor — core monitoring library
-// Loaded by: sysmonitor-service (vendor process)
-//            perf2-hal-service (optional, if chosen as host process)
+// libsysmonitor — core monitoring library (vendor partition)
 // ---------------------------------------------------------------------------
 cc_library_shared {
     name: "libsysmonitor",
@@ -85,45 +74,63 @@ cc_library_shared {
     vendor: true,
 
     srcs: [
-        // Core
-        "core/SysMonitor.cpp",
-        "core/CollectorManager.cpp",
-        "core/MetricStore.cpp",
-        // Node probing (init-time only, not hot path)
-        "core/NodeProbe.cpp",
+        // Core facade + store + scheduler
+        "vendor/core/SysMonitor.cpp",
+        "vendor/core/CollectorManager.cpp",
+        "vendor/core/MetricStore.cpp",
+        "vendor/core/JavaBridgeSetInstance.cpp",
+
+        // Platform node probing (init-time only)
+        "vendor/platform/NodeProbe.cpp",
+
         // Collectors
-        "collector/CpuCollector.cpp",
-        "collector/MemCollector.cpp",
-        "collector/GpuCollector.cpp",
-        "collector/ThermalCollector.cpp",
-        "collector/PowerCollector.cpp",
-        "collector/JavaBridgeCollector.cpp",
-        // Dispatch / subscription
-        "dispatch/DispatchManager.cpp",
+        "vendor/collector/CpuCollector.cpp",
+        "vendor/collector/MemCollector.cpp",
+        "vendor/collector/GpuCollector.cpp",
+        "vendor/collector/ThermalCollector.cpp",
+        "vendor/collector/PowerCollector.cpp",
+        "vendor/collector/JavaBridgeCollector.cpp",
+
+        // Threshold dispatch
+        "vendor/dispatch/DispatchManager.cpp",
     ],
 
-    export_include_dirs: ["include"],
+    // Headers exported to consumers (MetricDef.h, MetricStore.h, SysMonitor.h)
+    export_include_dirs: [
+        "vendor/core/include",
+        "vendor/dispatch/include",
+        "vendor/platform/include",
+    ],
+
+    local_include_dirs: [
+        "vendor/core/include",
+        "vendor/dispatch/include",
+        "vendor/platform/include",
+        "vendor/collector",         // for intra-collector includes
+    ],
 
     shared_libs: [
         "liblog",
         "libcutils",
         "libbase",
         "libutils",
+        "libbinder_ndk",
+        "libandroid",               // ASharedMemory_create
+        // AIDL NDK backend (DispatchManager / SysMonitor use ISysMonitor types)
+        "vendor.transsion.hardware.sysmonitor-V1-ndk",
     ],
 
-    static_libs: [],
-
-    // Export stable C API only; C++ ABI not exposed across process boundary
+    // Stable C-only symbol export (C++ ABI not exposed across process boundary)
     version_script: "libsysmonitor.map",
 }
 
 // ---------------------------------------------------------------------------
-// libsysmonitor_jni — JNI bridge, loaded into system Java process
-// Placed in system partition; calls back into libsysmonitor via ashmem
+// libsysmonitor_jni — JNI bridge (system_ext partition)
+//   Loaded by SysMonitorBridge.java inside the system Java process.
+//   Reads MetricStore via ashmem (zero-copy); pushes Java metrics via AIDL.
 // ---------------------------------------------------------------------------
 cc_library_shared {
     name: "libsysmonitor_jni",
-    // system partition (loaded by Java framework)
     system_ext_specific: true,
 
     cflags: [
@@ -135,13 +142,13 @@ cc_library_shared {
         "-fno-rtti",
     ],
 
-    include_dirs: [
-        "vendor/transsion/vendor_modules/usf/sysmonitor/include",
-        "libnativehelper/include",
+    srcs: [
+        "system/native/jni/SysMonitorJNI.cpp",
     ],
 
-    srcs: [
-        "jni/SysMonitorJNI.cpp",
+    local_include_dirs: [
+        "vendor/core/include",       // MetricStore.h, MetricDef.h
+        "vendor/platform/include",   // SysMonLog.h (optional)
     ],
 
     shared_libs: [
@@ -150,6 +157,10 @@ cc_library_shared {
         "libbase",
         "libnativehelper",
         "libandroid_runtime",
+        "libandroid",                // ASharedMemory_*
+        "libbinder_ndk",
+        // AIDL NDK backend (for ISysMonitor client calls)
+        "vendor.transsion.hardware.sysmonitor-V1-ndk",
     ],
 }
 
@@ -160,10 +171,22 @@ cc_binary {
     name: "vendor.transsion.sysmonitor-service",
     defaults: ["sysmonitor_cc_base"],
     vendor: true,
-    init_rc: ["vendor.transsion.sysmonitor-service.rc"],
 
     srcs: [
-        "service/sysmonitor_service.cpp",
+        "vendor/service/sysmonitor_service.cpp",
+    ],
+
+    init_rc: [
+        "vendor/service/vendor.transsion.sysmonitor-service.rc",
+    ],
+
+    vintf_fragments: [
+        "vintf/vendor.transsion.sysmonitor.xml",
+    ],
+
+    local_include_dirs: [
+        "vendor/core/include",
+        "vendor/platform/include",
     ],
 
     shared_libs: [
@@ -177,7 +200,30 @@ cc_binary {
 }
 
 // ---------------------------------------------------------------------------
-// Unit tests (host + device)
+// sysmonitor-java — Java collectors + bridge (system_ext partition)
+// ---------------------------------------------------------------------------
+java_library {
+    name: "sysmonitor-java",
+    installable: true,
+    system_ext_specific: true,
+
+    srcs: [
+        "system/java/**/*.java",
+    ],
+
+    sdk_version: "system_current",
+
+    libs: [
+        "framework",
+    ],
+
+    required: [
+        "libsysmonitor_jni",
+    ],
+}
+
+// ---------------------------------------------------------------------------
+// Unit tests
 // ---------------------------------------------------------------------------
 cc_test {
     name: "sysmonitor_tests",
@@ -189,6 +235,11 @@ cc_test {
         "tests/MetricStoreTest.cpp",
         "tests/CpuCollectorTest.cpp",
         "tests/NodeProbeTest.cpp",
+    ],
+
+    local_include_dirs: [
+        "vendor/core/include",
+        "vendor/platform/include",
     ],
 
     shared_libs: [

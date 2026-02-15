@@ -154,15 +154,12 @@ JNIEXPORT void JNICALL Java_com_transsion_sysmonitor_SysMonitorBridge_nativePush
                             "nativePush: not connected, drop metricId=%d", metricId);
         return;
     }
-    // pushMetric() is a one-way AIDL call — defined in ISysMonitor.aidl Part 5 addendum
-    // For now delegate through readMetric path as a fire-and-forget stub
-    // until pushMetric is added to the AIDL interface.
-    // Actual call when interface is updated:
-    //   gService->pushMetric(static_cast<int32_t>(metricId), static_cast<int64_t>(value));
-    (void)metricId;
-    (void)value;
-    __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "nativePush: metricId=%d value=%lld", metricId,
-                        (long long)value);
+    // pushMetric is oneway — non-blocking, fire-and-forget
+    auto status = gService->pushMetric(static_cast<int32_t>(metricId), static_cast<int64_t>(value));
+    if (!status.isOk()) {
+        __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "nativePush: pushMetric failed: %s",
+                            status.getMessage());
+    }
 }
 
 /**

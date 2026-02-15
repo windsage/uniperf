@@ -1,0 +1,3 @@
+# SysMonitor AIDL service type
+# Must be public so both vendor (server) and system_ext (client) can reference it.
+type vendor_sysmonitor_service, service_manager_type;

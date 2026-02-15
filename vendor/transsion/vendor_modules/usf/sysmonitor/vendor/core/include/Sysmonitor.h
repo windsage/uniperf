@@ -92,7 +92,7 @@ public:
         const std::shared_ptr<IMetricListener> &listener) override;
 
     ::ndk::ScopedAStatus readMetric(int32_t metricId, int64_t *out) override;
-
+    ::ndk::ScopedAStatus pushMetric(int32_t metricId, int64_t value) override;
     ::ndk::ScopedAStatus dump(std::string *out) override;
 
 private:

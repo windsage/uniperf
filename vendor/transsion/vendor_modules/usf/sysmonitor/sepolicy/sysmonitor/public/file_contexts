@@ -1,0 +1,2 @@
+# sysmonitor-service binary label
+/vendor/bin/vendor\.transsion\.sysmonitor-service  u:object_r:vendor_sysmonitor_exec:s0
