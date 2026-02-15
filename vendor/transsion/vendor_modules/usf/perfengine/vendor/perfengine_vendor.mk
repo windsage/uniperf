@@ -20,9 +20,6 @@ ifneq ($(filter ums% unisoc%,$(TARGET_BOARD_PLATFORM)),)
     PERFENGINE_CHIP_NAME := $(TARGET_BOARD_PLATFORM)
 endif
 
-PERFENGINE_BASE_DIR := vendor/transsion/vendor_modules/usf/perfengine
-PERFENGINE_CONFIG_DIR := $(PERFENGINE_BASE_DIR)/vendor/configs
-
 ifeq ($(PERFENGINE_PLATFORM_TYPE),qcom)
     PERFENGINE_CHIP_CONFIG_DIR := $(PERFENGINE_CONFIG_DIR)/qcom/$(PERFENGINE_CHIP_NAME)
     PERFENGINE_MAPPING_PATH := $(PERFENGINE_CONFIG_DIR)/platform_mappings_qcom.xml
