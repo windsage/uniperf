@@ -1,211 +1,4922 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
-  MTK Platform Parameter Mappings
-  
-  Document Reference: PowerHAL_command_introduction_unlocked.pdf
-  
-  Note: MTK uses generic Cluster 0/1/2 naming without Silver/Gold/Prime distinction
+    MTK Platform Parameter Mapping Table
+    Source: mtk/vendor/vendor/mediatek/proprietary/hardware/power/include/mtkperf_resource.h
+    All opcode values are copied verbatim from the source header file.
+    Typo fixes applied (source header errors, not added by this file):
+      PREF_RES_FPS_FSTB_NOTIFY_FPS_BY_PID -> PERF_RES_FPS_FSTB_NOTIFY_FPS_BY_PID (0x02088000)
+      PREF_RES_FPS_FSTB_CAM_FPS          -> PERF_RES_FPS_FSTB_CAM_FPS          (0x02088100)
+    DO NOT modify opcode values manually.
 -->
-
 <PlatformMapping platform="MTK" version="1.0">
-    
-    <Metadata>
-        <Description>MTK PowerHAL Command Mappings (Core Parameters)</Description>
-        <Author>CHAO</Author>
-        <LastUpdate>2025-02-07</LastUpdate>
-        <DocumentRef>PowerHAL_command_introduction.pdf</DocumentRef>
-    </Metadata>
 
-    <!-- ==================== CPU Frequency Control ==================== -->
-    
-    <ParamMap 
-        name="CPU_CLUSTER0_MIN_FREQ" 
-        command="0x00400000"
-        cmdname="PERF_RES_CPUFREQ_MIN_CLUSTER_0"
-        description="Cluster 0 Min Frequency (Unit: KHz)"
-        note="The floor of CPU freq for cluster 0/1/2"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER1_MIN_FREQ" 
-        command="0x00400100"
-        cmdname="PERF_RES_CPUFREQ_MIN_CLUSTER_1"
-        description="Cluster 1 Min Frequency (Unit: KHz)"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER2_MIN_FREQ" 
-        command="0x00400200"
-        cmdname="PERF_RES_CPUFREQ_MIN_CLUSTER_2"
-        description="Cluster 2 Min Frequency (Unit: KHz)"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER0_MAX_FREQ" 
-        command="0x00404000"
-        cmdname="PERF_RES_CPUFREQ_MAX_CLUSTER_0"
-        description="Cluster 0 Max Frequency (Unit: KHz)"
-        note="The ceiling of CPU freq for cluster 0/1/2"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER1_MAX_FREQ" 
-        command="0x00404100"
-        cmdname="PERF_RES_CPUFREQ_MAX_CLUSTER_1"
-        description="Cluster 1 Max Frequency (Unit: KHz)"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER2_MAX_FREQ" 
-        command="0x00404200"
-        cmdname="PERF_RES_CPUFREQ_MAX_CLUSTER_2"
-        description="Cluster 2 Max Frequency (Unit: KHz)"/>
+    <!-- ==================== MAJOR=1 CPU Freq (30) ==================== -->
 
-    <!-- ==================== CPU Core Control ==================== -->
-    
-    <ParamMap 
-        name="CPU_CLUSTER0_MIN_CORES" 
-        command="0x00800000"
-        cmdname="PERF_RES_CPUCORE_MIN_CLUSTER_0"
-        description="Cluster 0 Minimum Online Cores"
-        note="minimum number of cores for cluster 0/1/2"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER1_MIN_CORES" 
-        command="0x00800100"
-        cmdname="PERF_RES_CPUCORE_MIN_CLUSTER_1"
-        description="Cluster 1 Minimum Online Cores"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER2_MIN_CORES" 
-        command="0x00800200"
-        cmdname="PERF_RES_CPUCORE_MIN_CLUSTER_2"
-        description="Cluster 2 Minimum Online Cores"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER0_MAX_CORES" 
-        command="0x00804000"
-        cmdname="PERF_RES_CPUCORE_MAX_CLUSTER_0"
-        description="Cluster 0 Maximum Online Cores"
-        note="maximum number of cores for cluster 0/1/2"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER1_MAX_CORES" 
-        command="0x00804100"
-        cmdname="PERF_RES_CPUCORE_MAX_CLUSTER_1"
-        description="Cluster 1 Maximum Online Cores"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER2_MAX_CORES" 
-        command="0x00804200"
-        cmdname="PERF_RES_CPUCORE_MAX_CLUSTER_2"
-        description="Cluster 2 Maximum Online Cores"/>
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_CLUSTER_0"
+        opcode="0x00400000"
+        description="CPU min freq - cluster 0"/>
 
-    <!-- ==================== GPU Control ==================== -->
-    
-    <ParamMap 
-        name="GPU_MIN_FREQ" 
-        command="0x00c00000"
-        cmdname="PERF_RES_GPU_FREQ_MIN"
-        description="GPU Min Frequency (Unit: OPP)"
-        note="The floor of GPU freq"/>
-    
-    <ParamMap 
-        name="GPU_MAX_FREQ" 
-        command="0x00c04000"
-        cmdname="PERF_RES_GPU_FREQ_MAX"
-        description="GPU Max Frequency (Unit: OPP)"
-        note="The ceiling of GPU freq"/>
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_CLUSTER_1"
+        opcode="0x00400100"
+        description="CPU min freq - cluster 1"/>
 
-    <!-- ==================== DRAM Control ==================== -->
-    
-    <ParamMap 
-        name="DDR_OPP_MIN" 
-        command="0x01000000"
-        cmdname="PERF_RES_DRAM_OPP_MIN"
-        description="DRAM OPP Min Level"
-        note="The floor of DRAM freq (Unit: OPP)"/>
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_CLUSTER_2"
+        opcode="0x00400200"
+        description="CPU min freq - cluster 2"/>
 
-    <!-- ==================== Scheduler Control ==================== -->
-    
-    <ParamMap 
-        name="SCHED_BOOST" 
-        command="0x01404300"
-        cmdname="PERF_RES_SCHED_PREFER_IDLE_TA"
-        description="Scheduler Prefer Idle for Top-App"
-        note="prefer idle of top-app"/>
-    
-    <ParamMap 
-        name="SCHED_UCLAMP_MIN_FG" 
-        command="0x01408100"
-        cmdname="PERF_RES_SCHED_UCLAMP_MIN_FG"
-        description="Scheduler UCLAMP Min for Foreground"
-        note="uclamp min of foreground"/>
-    
-    <ParamMap 
-        name="SCHED_UCLAMP_MIN_TA" 
-        command="0x01408300"
-        cmdname="PERF_RES_SCHED_UCLAMP_MIN_TA"
-        description="Scheduler UCLAMP Min for Top-App"
-        note="uclamp min of top-app"/>
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_CLUSTER_0"
+        opcode="0x00404000"
+        description="CPU max freq - cluster 0"/>
 
-    <!-- ==================== MTK-Specific Parameters ==================== -->
-    
-    <!-- Performance Mode -->
-    <ParamMap 
-        name="MTK_CPU_PERF_MODE" 
-        command="0x00414000"
-        cmdname="PERF_RES_CPUFREQ_PERF_MODE"
-        description="CPU Performance Mode"
-        note="De-isolate all CPU core (Lower priority, limited by core ceiling and forced isolation)"/>
-    
-    <!-- Power Management -->
-    <ParamMap 
-        name="MTK_PM_QOS_CPUIDLE_MCDI_ENABLE" 
-        command="0x01c3c100"
-        cmdname="PERF_RES_PM_QOS_CPUIDLE_MCDI_ENABLE"
-        description="Enable/Disable MCDI (Multi-Core Deep Idle)"
-        note="Default enable. Turn off MCDI improves performance but increases power consumption"/>
-    
-    <ParamMap 
-        name="MTK_PM_QOS_CPU_DMA_LATENCY" 
-        command="0x01c3c200"
-        cmdname="PERF_RES_PM_QOS_CPU_DMA_LATENCY_VALUE"
-        description="CPU DMA Latency Value (Unit: us)"
-        note="Set minimum CPU wake-up time requirement. Limits CPU idle states"/>
-    
-    <!-- Cache Partition Control -->
-    <ParamMap 
-        name="MTK_SCHED_CACHE_SET_CT_ROOT" 
-        command="0x01420200"
-        cmdname="PERF_RES_SCHED_CACHE_SET_CT_ROOT"
-        description="Set Root as Critical Task Group for Cache"
-        note="Whether to set root as critical task group"/>
-    
-    <ParamMap 
-        name="MTK_SCHED_CACHE_SET_CT_TA" 
-        command="0x01420300"
-        cmdname="PERF_RES_SCHED_CACHE_SET_CT_TA"
-        description="Set Top-App as Critical Task Group for Cache"
-        note="Whether to set top-app as critical task group"/>
-    
-    <!-- FPSGO / Frame Pacing -->
-    <ParamMap 
-        name="MTK_FPS_FPSGO_ENABLE" 
-        command="0x01808000"
-        cmdname="PERF_RES_FPS_FPSGO_ENABLE"
-        description="Enable FPSGO (Frame Pacing System)"
-        note="Whether to enable FPSGO module"/>
-    
-    <ParamMap 
-        name="MTK_FPS_FBT_BHR" 
-        command="0x01810000"
-        cmdname="PERF_RES_FPS_FBT_BHR"
-        description="Frame Boost Hint Ratio"
-        note="FBT boost hint ratio (0-100)"/>
-    
-    <!-- Peak Power Budget -->
-    <ParamMap 
-        name="MTK_PEAK_POWER_BUDGET_MODE" 
-        command="0x03c04000"
-        cmdname="PERF_RES_PEAK_POWER_BUDGET_MODE"
-        description="Peak Power Budget Mode"
-        note="0: Disable PPB, 1: Enable PPB, 12: Enable PPB 2.0"/>
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_CLUSTER_1"
+        opcode="0x00404100"
+        description="CPU max freq - cluster 1"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_CLUSTER_2"
+        opcode="0x00404200"
+        description="CPU max freq - cluster 2"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_HL_CLUSTER_0"
+        opcode="0x00408000"
+        description="CPU min freq HL - cluster 0"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_HL_CLUSTER_1"
+        opcode="0x00408100"
+        description="CPU min freq HL - cluster 1"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_HL_CLUSTER_2"
+        opcode="0x00408200"
+        description="CPU min freq HL - cluster 2"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_HL_CLUSTER_0"
+        opcode="0x0040c000"
+        description="CPU max freq HL - cluster 0"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_HL_CLUSTER_1"
+        opcode="0x0040c100"
+        description="CPU max freq HL - cluster 1"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_HL_CLUSTER_2"
+        opcode="0x0040c200"
+        description="CPU max freq HL - cluster 2"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_CCI_FREQ"
+        opcode="0x00410000"
+        description="CCI freq"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_PERF_MODE"
+        opcode="0x00414000"
+        description="CPU freq perf mode"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_CORE_0"
+        opcode="0x00418000"
+        description="CPU min freq - core 0"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_CORE_1"
+        opcode="0x00418100"
+        description="CPU min freq - core 1"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_CORE_2"
+        opcode="0x00418200"
+        description="CPU min freq - core 2"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_CORE_3"
+        opcode="0x00418300"
+        description="CPU min freq - core 3"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_CORE_4"
+        opcode="0x00418400"
+        description="CPU min freq - core 4"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_CORE_5"
+        opcode="0x00418500"
+        description="CPU min freq - core 5"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_CORE_6"
+        opcode="0x00418600"
+        description="CPU min freq - core 6"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MIN_CORE_7"
+        opcode="0x00418700"
+        description="CPU min freq - core 7"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_CORE_0"
+        opcode="0x0041c000"
+        description="CPU max freq - core 0"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_CORE_1"
+        opcode="0x0041c100"
+        description="CPU max freq - core 1"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_CORE_2"
+        opcode="0x0041c200"
+        description="CPU max freq - core 2"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_CORE_3"
+        opcode="0x0041c300"
+        description="CPU max freq - core 3"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_CORE_4"
+        opcode="0x0041c400"
+        description="CPU max freq - core 4"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_CORE_5"
+        opcode="0x0041c500"
+        description="CPU max freq - core 5"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_CORE_6"
+        opcode="0x0041c600"
+        description="CPU max freq - core 6"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_CORE_7"
+        opcode="0x0041c700"
+        description="CPU max freq - core 7"/>
+
+    <!-- ==================== MAJOR=2 CPU Core (24) ==================== -->
+
+    <ParamMap
+        name="MTK_CPUCORE_MIN_CLUSTER_0"
+        opcode="0x00800000"
+        description="CPU core min - cluster 0"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_MIN_CLUSTER_1"
+        opcode="0x00800100"
+        description="CPU core min - cluster 1"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_MIN_CLUSTER_2"
+        opcode="0x00800200"
+        description="CPU core min - cluster 2"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_MAX_CLUSTER_0"
+        opcode="0x00804000"
+        description="CPU core max - cluster 0"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_MAX_CLUSTER_1"
+        opcode="0x00804100"
+        description="CPU core max - cluster 1"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_MAX_CLUSTER_2"
+        opcode="0x00804200"
+        description="CPU core max - cluster 2"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_PERF_MODE"
+        opcode="0x00808000"
+        description="CPU core perf mode"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_FORCE_PAUSE_CPU"
+        opcode="0x0080c000"
+        description="Force pause CPU (all)"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_FORCE_PAUSE_CPU_0"
+        opcode="0x0080c100"
+        description="Force pause CPU 0"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_FORCE_PAUSE_CPU_1"
+        opcode="0x0080c200"
+        description="Force pause CPU 1"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_FORCE_PAUSE_CPU_2"
+        opcode="0x0080c300"
+        description="Force pause CPU 2"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_FORCE_PAUSE_CPU_3"
+        opcode="0x0080c400"
+        description="Force pause CPU 3"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_FORCE_PAUSE_CPU_4"
+        opcode="0x0080c500"
+        description="Force pause CPU 4"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_FORCE_PAUSE_CPU_5"
+        opcode="0x0080c600"
+        description="Force pause CPU 5"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_FORCE_PAUSE_CPU_6"
+        opcode="0x0080c700"
+        description="Force pause CPU 6"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_FORCE_PAUSE_CPU_7"
+        opcode="0x0080c800"
+        description="Force pause CPU 7"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_ONLINE_CPU_0"
+        opcode="0x00810000"
+        description="Online CPU 0"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_ONLINE_CPU_1"
+        opcode="0x00810100"
+        description="Online CPU 1"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_ONLINE_CPU_2"
+        opcode="0x00810200"
+        description="Online CPU 2"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_ONLINE_CPU_3"
+        opcode="0x00810300"
+        description="Online CPU 3"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_ONLINE_CPU_4"
+        opcode="0x00810400"
+        description="Online CPU 4"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_ONLINE_CPU_5"
+        opcode="0x00810500"
+        description="Online CPU 5"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_ONLINE_CPU_6"
+        opcode="0x00810600"
+        description="Online CPU 6"/>
+
+    <ParamMap
+        name="MTK_CPUCORE_ONLINE_CPU_7"
+        opcode="0x00810700"
+        description="Online CPU 7"/>
+
+    <!-- ==================== MAJOR=3 GPU (30) ==================== -->
+
+    <ParamMap
+        name="MTK_GPU_FREQ_MIN"
+        opcode="0x00c00000"
+        description="GPU min freq"/>
+
+    <ParamMap
+        name="MTK_GPU_FREQ_MIN_HL"
+        opcode="0x00c00100"
+        description="GPU min freq HL"/>
+
+    <ParamMap
+        name="MTK_GPU_FREQ_MAX"
+        opcode="0x00c04000"
+        description="GPU max freq"/>
+
+    <ParamMap
+        name="MTK_GPU_FREQ_MAX_HL"
+        opcode="0x00c04100"
+        description="GPU max freq HL"/>
+
+    <ParamMap
+        name="MTK_GPU_FREQ_LOW_LATENCY"
+        opcode="0x00c08000"
+        description="GPU freq low latency mode"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_BENCHMARK_ON"
+        opcode="0x00c0c000"
+        description="GPU GED benchmark on"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_MARGIN_MODE"
+        opcode="0x00c0c100"
+        description="GPU GED margin mode"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_TIMER_BASE_DVFS_MARGIN"
+        opcode="0x00c0c200"
+        description="GPU GED timer-based DVFS margin"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_LOADING_BASE_DVFS_STEP"
+        opcode="0x00c0c300"
+        description="GPU GED loading-based DVFS step"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_CWAITG"
+        opcode="0x00c0c400"
+        description="GPU GED cwaitg"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_GX_BOOST"
+        opcode="0x00c0c500"
+        description="GPU GED GX boost"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_DVFS_LOADING_MODE"
+        opcode="0x00c0c600"
+        description="GPU GED DVFS loading mode"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_DVFS_WORKLOAD_MODE"
+        opcode="0x00c0c700"
+        description="GPU GED DVFS workload mode"/>
+
+    <ParamMap
+        name="MTK_GPU_POWER_POLICY"
+        opcode="0x00c10000"
+        description="GPU power policy"/>
+
+    <ParamMap
+        name="MTK_GPU_POWER_ONOFF_INTERVAL"
+        opcode="0x00c10100"
+        description="GPU power on/off interval"/>
+
+    <ParamMap
+        name="MTK_GPU_ACP_HINT"
+        opcode="0x00c14000"
+        description="GPU ACP hint"/>
+
+    <ParamMap
+        name="MTK_GPU_BW_MODE_HINT"
+        opcode="0x00c18000"
+        description="GPU BW mode hint"/>
+
+    <ParamMap
+        name="MTK_GPU_DCS_POLICY"
+        opcode="0x00c1c000"
+        description="GPU DCS policy"/>
+
+    <ParamMap
+        name="MTK_GPU_FW_IDLE"
+        opcode="0x00c20000"
+        description="GPU firmware idle"/>
+
+    <ParamMap
+        name="MTK_GPU_BLOCK_API_BOOST"
+        opcode="0x00c24000"
+        description="GPU block API boost"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_LOADING_BASE_WINDOW_SIZE"
+        opcode="0x00c28100"
+        description="GPU GED loading-based window size"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_LOADING_BASE_STRIDE_SIZE"
+        opcode="0x00c28200"
+        description="GPU GED loading-based stride size"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_FALLBACK_TIMING"
+        opcode="0x00c2c100"
+        description="GPU GED fallback timing"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_FALLBACK_INTERVAL"
+        opcode="0x00c2c200"
+        description="GPU GED fallback interval"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_FALLBACK_WINDOW_SIZE"
+        opcode="0x00c2c300"
+        description="GPU GED fallback window size"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_FALLBACK_FREQUENCY_ADJUST"
+        opcode="0x00c2c400"
+        description="GPU GED fallback frequency adjust"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_FORCE_LOADING_BASE"
+        opcode="0x00c30000"
+        description="GPU GED force loading base"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_FRAME_BASE_THRESHOLD"
+        opcode="0x00c30100"
+        description="GPU GED frame-based threshold"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_NPU_HINT"
+        opcode="0x00c30200"
+        description="GPU GED NPU hint"/>
+
+    <ParamMap
+        name="MTK_GPU_GED_LOWPWR_MODE"
+        opcode="0x00c34000"
+        description="GPU GED low power mode"/>
+
+    <!-- ==================== MAJOR=4 DRAM / VCORE / CM MGR / EMI (50) ==================== -->
+
+    <ParamMap
+        name="MTK_DRAM_OPP_MIN"
+        opcode="0x01000000"
+        description="DRAM OPP min"/>
+
+    <ParamMap
+        name="MTK_DRAM_OPP_MIN_LP5"
+        opcode="0x01000100"
+        description="DRAM OPP min LP5"/>
+
+    <ParamMap
+        name="MTK_DRAM_OPP_MIN_LP5_HFR"
+        opcode="0x01000200"
+        description="DRAM OPP min LP5 HFR"/>
+
+    <ParamMap
+        name="MTK_DRAM_OPP_THERMAL_ENABLE"
+        opcode="0x01000300"
+        description="DRAM OPP thermal enable"/>
+
+    <ParamMap
+        name="MTK_DRAM_VCORE_MIN"
+        opcode="0x01004000"
+        description="DRAM Vcore min"/>
+
+    <ParamMap
+        name="MTK_DRAM_VCORE_MIN_LP3"
+        opcode="0x01004100"
+        description="DRAM Vcore min LP3"/>
+
+    <ParamMap
+        name="MTK_DRAM_VCORE_BW_ENABLE"
+        opcode="0x01008000"
+        description="DRAM Vcore BW enable"/>
+
+    <ParamMap
+        name="MTK_DRAM_VCORE_BW_THRES"
+        opcode="0x01008100"
+        description="DRAM Vcore BW threshold"/>
+
+    <ParamMap
+        name="MTK_DRAM_VCORE_BW_THRESH_LP3"
+        opcode="0x01008200"
+        description="DRAM Vcore BW threshold LP3"/>
+
+    <ParamMap
+        name="MTK_DRAM_VCORE_POLICY"
+        opcode="0x0100c000"
+        description="DRAM Vcore policy"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR"
+        opcode="0x01010000"
+        description="DRAM CM manager"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_CAM_ENABLE"
+        opcode="0x01010100"
+        description="DRAM CM manager CAM enable"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_MAP_DRAM_ENABLE"
+        opcode="0x01010200"
+        description="DRAM CM manager map DRAM enable"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_AGGRESSIVE"
+        opcode="0x01010300"
+        description="DRAM CM manager aggressive"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_CM_HINT_MASK"
+        opcode="0x01010400"
+        description="DRAM CM manager hint mask"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_DSU_HINT"
+        opcode="0x01010500"
+        description="DRAM CM manager DSU hint"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_DSU_LMODE"
+        opcode="0x01010600"
+        description="DRAM CM manager DSU low mode"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_DRAM_OPP_FLOOR"
+        opcode="0x01010700"
+        description="DRAM CM manager DRAM OPP floor"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_DRAM_OPP_CEIL"
+        opcode="0x01010800"
+        description="DRAM CM manager DRAM OPP ceil"/>
+
+    <ParamMap
+        name="MTK_DRAM_DVFS_QOS_MODE"
+        opcode="0x01010900"
+        description="DRAM DVFS QOS mode"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_MAP_DRAM_OPP"
+        opcode="0x01010a00"
+        description="DRAM CM manager map DRAM OPP"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_TIMES"
+        opcode="0x01010b00"
+        description="DRAM CM manager times"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_PERF_THD"
+        opcode="0x01010c00"
+        description="DRAM CM manager perf threshold"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_MGR_EXP"
+        opcode="0x01010d00"
+        description="DRAM CM manager exp"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_RATIO_UP_X_0"
+        opcode="0x01014000"
+        description="DRAM CM ratio up X 0"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_RATIO_UP_X_1"
+        opcode="0x01014100"
+        description="DRAM CM ratio up X 1"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_RATIO_UP_X_2"
+        opcode="0x01014200"
+        description="DRAM CM ratio up X 2"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_RATIO_UP_X_3"
+        opcode="0x01014300"
+        description="DRAM CM ratio up X 3"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_RATIO_UP_X_4"
+        opcode="0x01014400"
+        description="DRAM CM ratio up X 4"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_PASSIVE"
+        opcode="0x01014500"
+        description="DRAM CM passive"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_PERF_MODE_ENABLE"
+        opcode="0x01014600"
+        description="DRAM CM perf mode enable"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_PERF_MODE_CEILING_OPP"
+        opcode="0x01014700"
+        description="DRAM CM perf mode ceiling OPP"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_PERF_MODE_THD"
+        opcode="0x01014800"
+        description="DRAM CM perf mode threshold"/>
+
+    <ParamMap
+        name="MTK_DRAM_CM_THERMAL_HINT"
+        opcode="0x01014900"
+        description="DRAM CM thermal hint"/>
+
+    <ParamMap
+        name="MTK_DRAM_VM_SWAPINESS"
+        opcode="0x0102c000"
+        description="VM swappiness"/>
+
+    <ParamMap
+        name="MTK_DRAM_VM_DROP_CACHES"
+        opcode="0x0102c100"
+        description="VM drop caches"/>
+
+    <ParamMap
+        name="MTK_DRAM_VM_WATERMARK_EXTRAKBYTESADJ"
+        opcode="0x0102c200"
+        description="VM watermark extra kbytes adj"/>
+
+    <ParamMap
+        name="MTK_DRAM_VM_WATERMARK_SCALEFACTOR"
+        opcode="0x0102c300"
+        description="VM watermark scale factor"/>
+
+    <ParamMap
+        name="MTK_DRAM_LMK_KILL_TIMEOUT"
+        opcode="0x01030000"
+        description="LMK kill timeout"/>
+
+    <ParamMap
+        name="MTK_DRAM_LMK_KILL_HEAVIEST_TASK"
+        opcode="0x01030100"
+        description="LMK kill heaviest task"/>
+
+    <ParamMap
+        name="MTK_DRAM_LMK_RELEASE_MEM"
+        opcode="0x01030200"
+        description="LMK release memory"/>
+
+    <ParamMap
+        name="MTK_DRAM_LMK_THRASHING_LIMIT"
+        opcode="0x01030300"
+        description="LMK thrashing limit"/>
+
+    <ParamMap
+        name="MTK_DRAM_LMK_SWAP_FREE_LOW_PERCENT"
+        opcode="0x01030400"
+        description="LMK swap free low percent"/>
+
+    <ParamMap
+        name="MTK_DRAM_LMK_MINFREE_SCALEFACTOR"
+        opcode="0x01030500"
+        description="LMK minfree scale factor"/>
+
+    <ParamMap
+        name="MTK_DRAM_DURASPEED_CPUTHRESHOLD"
+        opcode="0x01054000"
+        description="DuraSpeed CPU threshold"/>
+
+    <ParamMap
+        name="MTK_DRAM_DURASPEED_CPUTARGET"
+        opcode="0x01054100"
+        description="DuraSpeed CPU target"/>
+
+    <ParamMap
+        name="MTK_DRAM_DURASPEED_POLICYLEVEL"
+        opcode="0x01054200"
+        description="DuraSpeed policy level"/>
+
+    <ParamMap
+        name="MTK_DRAM_DVFS_QOSMM_MODE"
+        opcode="0x01058000"
+        description="DRAM DVFS QOSMM mode"/>
+
+    <ParamMap
+        name="MTK_MEM_HUGEPAGE"
+        opcode="0x0105c000"
+        description="Memory hugepage"/>
+
+    <ParamMap
+        name="MTK_MEM_RENAMING_OPTIMIZATION"
+        opcode="0x0105c100"
+        description="Memory renaming optimization"/>
+
+    <!-- ==================== MAJOR=5 Scheduler (130) ==================== -->
+
+    <ParamMap
+        name="MTK_SCHED_BOOST_VALUE_ROOT"
+        opcode="0x01400000"
+        description="Sched boost value - root cgroup"/>
+
+    <ParamMap
+        name="MTK_SCHED_BOOST_VALUE_FG"
+        opcode="0x01400100"
+        description="Sched boost value - foreground"/>
+
+    <ParamMap
+        name="MTK_SCHED_BOOST_VALUE_BG"
+        opcode="0x01400200"
+        description="Sched boost value - background"/>
+
+    <ParamMap
+        name="MTK_SCHED_BOOST_VALUE_TA"
+        opcode="0x01400300"
+        description="Sched boost value - top-app"/>
+
+    <ParamMap
+        name="MTK_SCHED_BOOST_VALUE_RT"
+        opcode="0x01400400"
+        description="Sched boost value - RT"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_IDLE_ROOT"
+        opcode="0x01404000"
+        description="Sched prefer idle - root cgroup"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_IDLE_FG"
+        opcode="0x01404100"
+        description="Sched prefer idle - foreground"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_IDLE_BG"
+        opcode="0x01404200"
+        description="Sched prefer idle - background"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_IDLE_TA"
+        opcode="0x01404300"
+        description="Sched prefer idle - top-app"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_IDLE_RT"
+        opcode="0x01404400"
+        description="Sched prefer idle - RT"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_IDLE_PER_TASK"
+        opcode="0x01404500"
+        description="Sched prefer idle per task"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_IDLE_SYS"
+        opcode="0x01404600"
+        description="Sched prefer idle - system"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_IDLE_SYSBG"
+        opcode="0x01404700"
+        description="Sched prefer idle - system background"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MIN_ROOT"
+        opcode="0x01408000"
+        description="Sched uclamp min - root cgroup"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MIN_FG"
+        opcode="0x01408100"
+        description="Sched uclamp min - foreground"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MIN_BG"
+        opcode="0x01408200"
+        description="Sched uclamp min - background"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MIN_TA"
+        opcode="0x01408300"
+        description="Sched uclamp min - top-app"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MIN_RT"
+        opcode="0x01408400"
+        description="Sched uclamp min - RT"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MIN_SYS"
+        opcode="0x01408500"
+        description="Sched uclamp min - system"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MAX_ROOT"
+        opcode="0x01408600"
+        description="Sched uclamp max - root cgroup"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MAX_FG"
+        opcode="0x01408700"
+        description="Sched uclamp max - foreground"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MAX_BG"
+        opcode="0x01408800"
+        description="Sched uclamp max - background"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MAX_TA"
+        opcode="0x01408900"
+        description="Sched uclamp max - top-app"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MAX_RT"
+        opcode="0x01408a00"
+        description="Sched uclamp max - RT"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MAX_SYS"
+        opcode="0x01408b00"
+        description="Sched uclamp max - system"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MIN_SYSBG"
+        opcode="0x01408c00"
+        description="Sched uclamp min - system background"/>
+
+    <ParamMap
+        name="MTK_SCHED_UCLAMP_MAX_SYSBG"
+        opcode="0x01408d00"
+        description="Sched uclamp max - system background"/>
+
+    <ParamMap
+        name="MTK_SCHED_TUNE_THRES"
+        opcode="0x0140c000"
+        description="Sched tune threshold"/>
+
+    <ParamMap
+        name="MTK_SCHED_BOOST"
+        opcode="0x01410000"
+        description="Sched boost"/>
+
+    <ParamMap
+        name="MTK_SCHED_MIGRATE_COST"
+        opcode="0x01414000"
+        description="Sched migrate cost"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPU_PREFER_TASK_1_BIG"
+        opcode="0x01418000"
+        description="Sched CPU prefer task 1 - big cluster"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPU_PREFER_TASK_1_LITTLE"
+        opcode="0x01418100"
+        description="Sched CPU prefer task 1 - little cluster"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPU_PREFER_TASK_1_RESERVED"
+        opcode="0x01418200"
+        description="Sched CPU prefer task 1 - reserved"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPU_PREFER_TASK_2_BIG"
+        opcode="0x01418300"
+        description="Sched CPU prefer task 2 - big cluster"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPU_PREFER_TASK_2_LITTLE"
+        opcode="0x01418400"
+        description="Sched CPU prefer task 2 - little cluster"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPU_PREFER_TASK_2_RESERVED"
+        opcode="0x01418500"
+        description="Sched CPU prefer task 2 - reserved"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUSET_TA"
+        opcode="0x01418600"
+        description="Sched cpuset top-app"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUSET_DEX2OAT"
+        opcode="0x01418700"
+        description="Sched cpuset dex2oat (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_SCHED_THERMAL_DEX2OAT"
+        opcode="0x01418800"
+        description="Sched thermal dex2oat (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_SCHED_BTASK_ROTATE"
+        opcode="0x0141c000"
+        description="Sched big task rotate"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_AUDIT"
+        opcode="0x01420000"
+        description="Sched cache audit"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_PART_CTRL"
+        opcode="0x01420100"
+        description="Sched cache partition control"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_SET_CT_ROOT"
+        opcode="0x01420200"
+        description="Sched cache set CT - root"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_SET_CT_TA"
+        opcode="0x01420300"
+        description="Sched cache set CT - top-app"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_SET_CT_FG"
+        opcode="0x01420400"
+        description="Sched cache set CT - foreground"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_SET_CT_BG"
+        opcode="0x01420500"
+        description="Sched cache set CT - background"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_SET_CT_SYSBG"
+        opcode="0x01420600"
+        description="Sched cache set CT - system background"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_SET_CT_RT"
+        opcode="0x01420700"
+        description="Sched cache set CT - RT"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_SET_CT_SYS"
+        opcode="0x01420800"
+        description="Sched cache set CT - system"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_SET_CT_TASK"
+        opcode="0x01420900"
+        description="Sched cache set CT - task"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_SET_NCT_TASK"
+        opcode="0x01420a00"
+        description="Sched cache set NCT - task"/>
+
+    <ParamMap
+        name="MTK_SCHED_CACHE_CPUQOS_MODE"
+        opcode="0x01420b00"
+        description="Sched cache CPUQOS mode"/>
+
+    <ParamMap
+        name="MTK_SCHED_PLUS_DOWN_THROTTLE_NS"
+        opcode="0x01424000"
+        description="Sched+ down throttle (ns)"/>
+
+    <ParamMap
+        name="MTK_SCHED_PLUS_UP_THROTTLE_NS"
+        opcode="0x01424100"
+        description="Sched+ up throttle (ns)"/>
+
+    <ParamMap
+        name="MTK_SCHED_PLUS_SYNC_FLAG"
+        opcode="0x01424200"
+        description="Sched+ sync flag"/>
+
+    <ParamMap
+        name="MTK_SCHED_PLUS_DOWN_THROTTLE_US"
+        opcode="0x01424300"
+        description="Sched+ down throttle (us)"/>
+
+    <ParamMap
+        name="MTK_SCHED_PLUS_UP_THROTTLE_US"
+        opcode="0x01424400"
+        description="Sched+ up throttle (us)"/>
+
+    <ParamMap
+        name="MTK_SCHED_MTK_PREFER_IDLE"
+        opcode="0x01428000"
+        description="MTK sched prefer idle"/>
+
+    <ParamMap
+        name="MTK_SCHED_HEAVY_TASK_THRES"
+        opcode="0x0142c000"
+        description="Sched heavy task threshold"/>
+
+    <ParamMap
+        name="MTK_SCHED_HEAVY_TASK_AVG_HTASK_AC"
+        opcode="0x0142c100"
+        description="Sched heavy task avg htask AC"/>
+
+    <ParamMap
+        name="MTK_SCHED_HEAVY_TASK_AVG_HTASK_THRES"
+        opcode="0x0142c200"
+        description="Sched heavy task avg htask threshold"/>
+
+    <ParamMap
+        name="MTK_SCHED_WALT"
+        opcode="0x01430000"
+        description="WALT scheduler enable"/>
+
+    <ParamMap
+        name="MTK_SCHED_PELT_HALFLIFE"
+        opcode="0x01430100"
+        description="PELT half-life"/>
+
+    <ParamMap
+        name="MTK_SCHED_PELT_THROTTLE_MS"
+        opcode="0x01430200"
+        description="PELT throttle (ms)"/>
+
+    <ParamMap
+        name="MTK_SCHED_PELT_HALFLIFE_HIGH_PRIORITY"
+        opcode="0x01430300"
+        description="PELT half-life for high priority"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_CPU_ROOT"
+        opcode="0x01434000"
+        description="Sched prefer CPU - root cgroup"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_CPU_FG"
+        opcode="0x01434100"
+        description="Sched prefer CPU - foreground"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_CPU_BG"
+        opcode="0x01434200"
+        description="Sched prefer CPU - background"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_CPU_TA"
+        opcode="0x01434300"
+        description="Sched prefer CPU - top-app"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_CPU_RT"
+        opcode="0x01434400"
+        description="Sched prefer CPU - RT"/>
+
+    <ParamMap
+        name="MTK_SCHED_PREFER_CPU_SYSBG"
+        opcode="0x01434500"
+        description="Sched prefer CPU - system background"/>
+
+    <ParamMap
+        name="MTK_SCHED_UTIL_RATE_LIMIT_US_CLUSTER_0"
+        opcode="0x01438000"
+        description="Sched util rate limit us - cluster 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_UTIL_RATE_LIMIT_US_CLUSTER_1"
+        opcode="0x01438100"
+        description="Sched util rate limit us - cluster 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_UTIL_RATE_LIMIT_US_CLUSTER_2"
+        opcode="0x01438200"
+        description="Sched util rate limit us - cluster 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_UTIL_UP_RATE_LIMIT_US_CLUSTER_0"
+        opcode="0x01438300"
+        description="Sched util up rate limit us - cluster 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_UTIL_UP_RATE_LIMIT_US_CLUSTER_1"
+        opcode="0x01438400"
+        description="Sched util up rate limit us - cluster 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_UTIL_UP_RATE_LIMIT_US_CLUSTER_2"
+        opcode="0x01438500"
+        description="Sched util up rate limit us - cluster 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_UTIL_DOWN_RATE_LIMIT_US_CLUSTER_0"
+        opcode="0x01438600"
+        description="Sched util down rate limit us - cluster 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_UTIL_DOWN_RATE_LIMIT_US_CLUSTER_1"
+        opcode="0x01438700"
+        description="Sched util down rate limit us - cluster 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_UTIL_DOWN_RATE_LIMIT_US_CLUSTER_2"
+        opcode="0x01438800"
+        description="Sched util down rate limit us - cluster 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_ISOLATION_CPU"
+        opcode="0x0143c000"
+        description="Sched isolation CPU"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_POLICY_ENABLE"
+        opcode="0x0143c100"
+        description="Sched core control policy enable"/>
+
+    <ParamMap
+        name="MTK_SCHED_OFFLINE_THROTTLE_MS_CLUSTER_0"
+        opcode="0x0143c200"
+        description="Sched offline throttle ms - cluster 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_OFFLINE_THROTTLE_MS_CLUSTER_1"
+        opcode="0x0143c300"
+        description="Sched offline throttle ms - cluster 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_OFFLINE_THROTTLE_MS_CLUSTER_2"
+        opcode="0x0143c400"
+        description="Sched offline throttle ms - cluster 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_BTASK_UP_THRESH_CLUSTER_0"
+        opcode="0x0143c500"
+        description="Sched big task up threshold - cluster 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_BTASK_UP_THRESH_CLUSTER_1"
+        opcode="0x0143c600"
+        description="Sched big task up threshold - cluster 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPU_CORE_NOT_PREFERRED"
+        opcode="0x0143c700"
+        description="Sched CPU core not preferred"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_CPU_BUSY_THRES_0"
+        opcode="0x0143c800"
+        description="Sched core ctl CPU busy threshold 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_CPU_BUSY_THRES_1"
+        opcode="0x0143c900"
+        description="Sched core ctl CPU busy threshold 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_CPU_BUSY_THRES_2"
+        opcode="0x0143ca00"
+        description="Sched core ctl CPU busy threshold 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_THERMAL_UP_THRES_CLUSTER_0"
+        opcode="0x0143cb00"
+        description="Sched core ctl thermal up threshold - cluster 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_THERMAL_UP_THRES_CLUSTER_1"
+        opcode="0x0143cc00"
+        description="Sched core ctl thermal up threshold - cluster 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_BTASK_UP_THRESH_CLUSTER_2"
+        opcode="0x0143cd00"
+        description="Sched big task up threshold - cluster 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_THERMAL_UP_THRES_CLUSTER_2"
+        opcode="0x0143ce00"
+        description="Sched core ctl thermal up threshold - cluster 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_CPU_NONBUSY_THRES_0"
+        opcode="0x0143cf00"
+        description="Sched core ctl CPU non-busy threshold 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_CPU_NONBUSY_THRES_1"
+        opcode="0x0143d000"
+        description="Sched core ctl CPU non-busy threshold 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_CPU_NONBUSY_THRES_2"
+        opcode="0x0143d100"
+        description="Sched core ctl CPU non-busy threshold 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_NR_TASK_THRES_0"
+        opcode="0x0143d200"
+        description="Sched core ctl nr task threshold 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_NR_TASK_THRES_1"
+        opcode="0x0143d300"
+        description="Sched core ctl nr task threshold 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_NR_TASK_THRES_2"
+        opcode="0x0143d400"
+        description="Sched core ctl nr task threshold 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_FREQ_MIN_THRES_0"
+        opcode="0x0143d500"
+        description="Sched core ctl freq min threshold 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_FREQ_MIN_THRES_1"
+        opcode="0x0143d600"
+        description="Sched core ctl freq min threshold 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_FREQ_MIN_THRES_2"
+        opcode="0x0143d700"
+        description="Sched core ctl freq min threshold 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_ACT_LOAD_THRES_0"
+        opcode="0x0143d800"
+        description="Sched core ctl active load threshold 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_ACT_LOAD_THRES_1"
+        opcode="0x0143d900"
+        description="Sched core ctl active load threshold 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_ACT_LOAD_THRES_2"
+        opcode="0x0143da00"
+        description="Sched core ctl active load threshold 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_RT_NR_TASK_THRES_0"
+        opcode="0x0143db00"
+        description="Sched core ctl RT nr task threshold 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_RT_NR_TASK_THRES_1"
+        opcode="0x0143dc00"
+        description="Sched core ctl RT nr task threshold 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_CORE_CTL_RT_NR_TASK_THRES_2"
+        opcode="0x0143dd00"
+        description="Sched core ctl RT nr task threshold 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_NEWLY_IDLE_BALANCE_INTERVAL"
+        opcode="0x01440000"
+        description="Sched newly idle balance interval"/>
+
+    <ParamMap
+        name="MTK_SCHED_THERMAL_HEADROOM_INTERVAL_TICK"
+        opcode="0x01440100"
+        description="Sched thermal headroom interval tick"/>
+
+    <ParamMap
+        name="MTK_SCHED_SYSTEM_MASK"
+        opcode="0x01440200"
+        description="Sched system mask"/>
+
+    <ParamMap
+        name="MTK_SCHED_GAS_ENABLE"
+        opcode="0x01440300"
+        description="Sched GAS enable"/>
+
+    <ParamMap
+        name="MTK_SCHED_GAS_THRESHOLD"
+        opcode="0x01440400"
+        description="Sched GAS threshold"/>
+
+    <ParamMap
+        name="MTK_SCHED_SBB_ALL_SET"
+        opcode="0x01444000"
+        description="Sched SBB all set"/>
+
+    <ParamMap
+        name="MTK_SCHED_SBB_ALL_UNSET"
+        opcode="0x01444100"
+        description="Sched SBB all unset"/>
+
+    <ParamMap
+        name="MTK_SCHED_SBB_GROUP_SET"
+        opcode="0x01444200"
+        description="Sched SBB group set"/>
+
+    <ParamMap
+        name="MTK_SCHED_SBB_GROUP_UNSET"
+        opcode="0x01444300"
+        description="Sched SBB group unset"/>
+
+    <ParamMap
+        name="MTK_SCHED_SBB_TASK_SET"
+        opcode="0x01444400"
+        description="Sched SBB task set"/>
+
+    <ParamMap
+        name="MTK_SCHED_SBB_TASK_UNSET"
+        opcode="0x01444500"
+        description="Sched SBB task unset"/>
+
+    <ParamMap
+        name="MTK_SCHED_SBB_ACTIVE_RATIO"
+        opcode="0x01444600"
+        description="Sched SBB active ratio"/>
+
+    <ParamMap
+        name="MTK_SCHED_TASK_IDLE_PREFER_SET"
+        opcode="0x01444700"
+        description="Sched task idle prefer set"/>
+
+    <ParamMap
+        name="MTK_SCHED_UTIL_EST_CONTROL"
+        opcode="0x01444800"
+        description="Sched util estimation control"/>
+
+    <ParamMap
+        name="MTK_SCHED_TARGET_FREQ_C0"
+        opcode="0x01444900"
+        description="Sched target freq - cluster 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_TARGET_MARGIN_C0"
+        opcode="0x01444a00"
+        description="Sched target margin - cluster 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_TARGET_FREQ_C1"
+        opcode="0x01444b00"
+        description="Sched target freq - cluster 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_TARGET_MARGIN_C1"
+        opcode="0x01444c00"
+        description="Sched target margin - cluster 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_TARGET_FREQ_C2"
+        opcode="0x01444d00"
+        description="Sched target freq - cluster 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_TARGET_MARGIN_C2"
+        opcode="0x01444e00"
+        description="Sched target margin - cluster 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_TARGET_MARGIN_LOW_C0"
+        opcode="0x01444f00"
+        description="Sched target margin low - cluster 0"/>
+
+    <ParamMap
+        name="MTK_SCHED_TARGET_MARGIN_LOW_C1"
+        opcode="0x01445000"
+        description="Sched target margin low - cluster 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_TARGET_MARGIN_LOW_C2"
+        opcode="0x01445100"
+        description="Sched target margin low - cluster 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_TA_MASK"
+        opcode="0x01448000"
+        description="Sched top-app CPU mask"/>
+
+    <ParamMap
+        name="MTK_SCHED_FG_MASK"
+        opcode="0x01448100"
+        description="Sched foreground CPU mask"/>
+
+    <ParamMap
+        name="MTK_SCHED_BG_MASK"
+        opcode="0x01448200"
+        description="Sched background CPU mask"/>
+
+    <ParamMap
+        name="MTK_SCHED_TASK_LS_SET"
+        opcode="0x01448300"
+        description="Sched task LS set"/>
+
+    <ParamMap
+        name="MTK_SCHED_IGNORE_IDLE_UTIL_CTRL"
+        opcode="0x0144c000"
+        description="Sched ignore idle util control"/>
+
+    <ParamMap
+        name="MTK_SCHED_TASK_VIP_SET"
+        opcode="0x01450000"
+        description="Sched task VIP set"/>
+
+    <ParamMap
+        name="MTK_SCHED_TA_VIP_SET"
+        opcode="0x01450100"
+        description="Sched top-app VIP set"/>
+
+    <ParamMap
+        name="MTK_SCHED_FG_VIP_SET"
+        opcode="0x01450200"
+        description="Sched foreground VIP set"/>
+
+    <ParamMap
+        name="MTK_SCHED_BG_VIP_SET"
+        opcode="0x01450300"
+        description="Sched background VIP set"/>
+
+    <ParamMap
+        name="MTK_SCHED_LS_VIP_SET"
+        opcode="0x01450400"
+        description="Sched LS VIP set"/>
+
+    <ParamMap
+        name="MTK_SCHED_GEAR_MIGR_DN_PCT"
+        opcode="0x01454000"
+        description="Sched gear migration down pct"/>
+
+    <ParamMap
+        name="MTK_SCHED_GEAR_MIGR_UP_PCT"
+        opcode="0x01454100"
+        description="Sched gear migration up pct"/>
+
+    <ParamMap
+        name="MTK_SCHED_GEAR_MIGR_SET"
+        opcode="0x01454200"
+        description="Sched gear migration set"/>
+
+    <ParamMap
+        name="MTK_SCHED_TASK_GEAR_HINTS_START"
+        opcode="0x01458000"
+        description="Sched task gear hints start"/>
+
+    <ParamMap
+        name="MTK_SCHED_TASK_GEAR_HINTS_NUM"
+        opcode="0x01458100"
+        description="Sched task gear hints num"/>
+
+    <ParamMap
+        name="MTK_SCHED_TASK_GEAR_HINTS_REVERSE"
+        opcode="0x01458200"
+        description="Sched task gear hints reverse"/>
+
+    <ParamMap
+        name="MTK_SCHED_TASK_GEAR_HINTS_SET"
+        opcode="0x01458300"
+        description="Sched task gear hints set"/>
+
+    <ParamMap
+        name="MTK_SCHED_CURR_TASK_UCLAMP"
+        opcode="0x01458400"
+        description="Sched current task uclamp"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_USER_GROUP_1"
+        opcode="0x0145c000"
+        description="Sched CPUQOS user group 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_USER_GROUP_2"
+        opcode="0x0145c100"
+        description="Sched CPUQOS user group 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_USER_GROUP_3"
+        opcode="0x0145c200"
+        description="Sched CPUQOS user group 3"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_USER_GROUP_4"
+        opcode="0x0145c300"
+        description="Sched CPUQOS user group 4"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_USER_GROUP_5"
+        opcode="0x0145c400"
+        description="Sched CPUQOS user group 5"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_USER_GROUP_6"
+        opcode="0x0145c500"
+        description="Sched CPUQOS user group 6"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_CCL_TO_USER_GROUP_1"
+        opcode="0x01460000"
+        description="Sched CPUQOS CCL to user group 1"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_CCL_TO_USER_GROUP_2"
+        opcode="0x01460100"
+        description="Sched CPUQOS CCL to user group 2"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_CCL_TO_USER_GROUP_3"
+        opcode="0x01460200"
+        description="Sched CPUQOS CCL to user group 3"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_CCL_TO_USER_GROUP_4"
+        opcode="0x01460300"
+        description="Sched CPUQOS CCL to user group 4"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_CCL_TO_USER_GROUP_5"
+        opcode="0x01460400"
+        description="Sched CPUQOS CCL to user group 5"/>
+
+    <ParamMap
+        name="MTK_SCHED_CPUQOS_CCL_TO_USER_GROUP_6"
+        opcode="0x01460500"
+        description="Sched CPUQOS CCL to user group 6"/>
+
+    <ParamMap
+        name="MTK_SCHED_DPT_CTRL"
+        opcode="0x01464000"
+        description="Sched DPT control"/>
+
+    <ParamMap
+        name="MTK_SCHED_RUNNABLE_BOOST"
+        opcode="0x01468000"
+        description="Sched runnable boost"/>
+
+    <ParamMap
+        name="MTK_SCHED_UTIL_EST_BOOST"
+        opcode="0x01468100"
+        description="Sched util estimation boost"/>
+
+    <ParamMap
+        name="MTK_SCHED_DSU_IDLE"
+        opcode="0x0146c000"
+        description="Sched DSU idle"/>
+
+    <ParamMap
+        name="MTK_SCHED_RT_NON_IDLE_PREEMPT"
+        opcode="0x01470000"
+        description="Sched RT non-idle preempt"/>
+
+    <!-- ==================== MAJOR=6 AI (9) ==================== -->
+
+    <ParamMap
+        name="MTK_AI_VPU_FREQ_MIN_CORE_0"
+        opcode="0x01800000"
+        description="VPU min freq - core 0"/>
+
+    <ParamMap
+        name="MTK_AI_VPU_FREQ_MIN_CORE_1"
+        opcode="0x01800100"
+        description="VPU min freq - core 1"/>
+
+    <ParamMap
+        name="MTK_AI_VPU_FREQ_MAX_CORE_0"
+        opcode="0x01804000"
+        description="VPU max freq - core 0"/>
+
+    <ParamMap
+        name="MTK_AI_VPU_FREQ_MAX_CORE_1"
+        opcode="0x01804100"
+        description="VPU max freq - core 1"/>
+
+    <ParamMap
+        name="MTK_AI_MDLA_FREQ_MIN"
+        opcode="0x01808000"
+        description="MDLA min freq"/>
+
+    <ParamMap
+        name="MTK_AI_MDLA_FREQ_MAX"
+        opcode="0x0180c000"
+        description="MDLA max freq"/>
+
+    <ParamMap
+        name="MTK_AI_APUSYS_BOOST_IPU_IF"
+        opcode="0x01810000"
+        description="APU system boost IPU IF"/>
+
+    <ParamMap
+        name="MTK_AI_NPUSYS_FREQ_MIN"
+        opcode="0x01814000"
+        description="NPU system min freq"/>
+
+    <ParamMap
+        name="MTK_AI_NPUSYS_FREQ_MAX"
+        opcode="0x01818000"
+        description="NPU system max freq"/>
+
+    <!-- ==================== MAJOR=7 Low Power Policy (38) ==================== -->
+
+    <ParamMap
+        name="MTK_POWER_CPUFREQ_HISPEED_FREQ"
+        opcode="0x01c00000"
+        description="CPU freq hispeed freq"/>
+
+    <ParamMap
+        name="MTK_POWER_CPUFREQ_MIN_SAMPLE_TIME"
+        opcode="0x01c04000"
+        description="CPU freq min sample time"/>
+
+    <ParamMap
+        name="MTK_POWER_CPUFREQ_ABOVE_HISPEED_DELAY"
+        opcode="0x01c08000"
+        description="CPU freq above hispeed delay"/>
+
+    <ParamMap
+        name="MTK_POWER_CPUFREQ_POWER_MODE"
+        opcode="0x01c0c000"
+        description="CPU freq power mode"/>
+
+    <ParamMap
+        name="MTK_POWER_HPS_THRESH_UP"
+        opcode="0x01c10000"
+        description="HPS threshold up"/>
+
+    <ParamMap
+        name="MTK_POWER_HPS_THRESH_DOWN"
+        opcode="0x01c10100"
+        description="HPS threshold down"/>
+
+    <ParamMap
+        name="MTK_POWER_HPS_TIMES_UP"
+        opcode="0x01c14000"
+        description="HPS times up"/>
+
+    <ParamMap
+        name="MTK_POWER_HPS_TIMES_DOWN"
+        opcode="0x01c14100"
+        description="HPS times down"/>
+
+    <ParamMap
+        name="MTK_POWER_HPS_RUSH_BOOST_ENABLE"
+        opcode="0x01c18000"
+        description="HPS rush boost enable"/>
+
+    <ParamMap
+        name="MTK_POWER_HPS_RUSH_BOOST_THRESH"
+        opcode="0x01c18100"
+        description="HPS rush boost threshold"/>
+
+    <ParamMap
+        name="MTK_POWER_HPS_HEAVY_TASK"
+        opcode="0x01c1c000"
+        description="HPS heavy task"/>
+
+    <ParamMap
+        name="MTK_POWER_HPS_POWER_MODE"
+        opcode="0x01c20000"
+        description="HPS power mode"/>
+
+    <ParamMap
+        name="MTK_POWER_PPM_ROOT_CLUSTER"
+        opcode="0x01c24000"
+        description="PPM root cluster"/>
+
+    <ParamMap
+        name="MTK_POWER_PPM_MODE"
+        opcode="0x01c28000"
+        description="PPM mode"/>
+
+    <ParamMap
+        name="MTK_POWER_PPM_HICA_VAR"
+        opcode="0x01c2c000"
+        description="PPM HICA variable"/>
+
+    <ParamMap
+        name="MTK_POWER_PPM_LIMIT_BIG"
+        opcode="0x01c30000"
+        description="PPM limit big cluster"/>
+
+    <ParamMap
+        name="MTK_POWER_PPM_SPORTS_MODE"
+        opcode="0x01c34000"
+        description="PPM sports mode"/>
+
+    <ParamMap
+        name="MTK_POWER_PPM_USERLIMIT_BOOST"
+        opcode="0x01c38000"
+        description="PPM user limit boost"/>
+
+    <ParamMap
+        name="MTK_POWER_CPUIDLE_MCDI_ENABLE"
+        opcode="0x01c3c000"
+        description="CPU idle MCDI enable"/>
+
+    <ParamMap
+        name="MTK_PM_QOS_CPUIDLE_MCDI_ENABLE"
+        opcode="0x01c3c100"
+        description="PM QoS CPU idle MCDI enable"/>
+
+    <ParamMap
+        name="MTK_PM_QOS_CPU_DMA_LATENCY_VALUE"
+        opcode="0x01c3c200"
+        description="PM QoS CPU DMA latency value"/>
+
+    <ParamMap
+        name="MTK_POWER_SYSLIMITER_60"
+        opcode="0x01c40000"
+        description="System limiter - 60fps"/>
+
+    <ParamMap
+        name="MTK_POWER_SYSLIMITER_90"
+        opcode="0x01c40100"
+        description="System limiter - 90fps"/>
+
+    <ParamMap
+        name="MTK_POWER_SYSLIMITER_120"
+        opcode="0x01c40200"
+        description="System limiter - 120fps"/>
+
+    <ParamMap
+        name="MTK_POWER_SYSLIMITER_144"
+        opcode="0x01c40300"
+        description="System limiter - 144fps"/>
+
+    <ParamMap
+        name="MTK_POWER_SYSLIMITER"
+        opcode="0x01c40400"
+        description="System limiter"/>
+
+    <ParamMap
+        name="MTK_POWER_SYSLIMITER_DISABLE"
+        opcode="0x01c44000"
+        description="System limiter disable"/>
+
+    <ParamMap
+        name="MTK_POWER_SYSLIMITER_TARGET_FPS_TOLERANCE_PERCENT"
+        opcode="0x01c44100"
+        description="System limiter target FPS tolerance percent"/>
+
+    <ParamMap
+        name="MTK_POWER_MPMM_ENABLE"
+        opcode="0x01c48000"
+        description="MPMM enable"/>
+
+    <ParamMap
+        name="MTK_POWER_THROTTLE_ENABLE"
+        opcode="0x01c4c000"
+        description="Power throttle enable"/>
+
+    <ParamMap
+        name="MTK_POWER_THROTTLE_SWITCH_LVBAT_TABLE"
+        opcode="0x01c4c100"
+        description="Power throttle switch LVBAT table"/>
+
+    <ParamMap
+        name="MTK_POWER_THROTTLE_SWITCH_LVSYS_TABLE"
+        opcode="0x01c4c200"
+        description="Power throttle switch LVSYS table"/>
+
+    <ParamMap
+        name="MTK_POWER_THROTTLE_SWITCH_CPU_TABLE"
+        opcode="0x01c4c300"
+        description="Power throttle switch CPU table"/>
+
+    <ParamMap
+        name="MTK_POWER_THROTTLE_SWITCH_GPU_TABLE"
+        opcode="0x01c4c400"
+        description="Power throttle switch GPU table"/>
+
+    <ParamMap
+        name="MTK_POWER_THROTTLE_SWITCH_APU_TABLE"
+        opcode="0x01c4c500"
+        description="Power throttle switch APU table"/>
+
+    <ParamMap
+        name="MTK_POWER_THROTTLE_SWITCH_LOW_BATTERY_PCT_ENABLE_TABLE"
+        opcode="0x01c4c600"
+        description="Power throttle switch low battery pct enable table"/>
+
+    <!-- ==================== MAJOR=8 FPS Policy / FPSGO (see sub-sections below) ==================== -->
+    <!-- Sub: FSTB basic (9) -->
+
+    <ParamMap
+        name="MTK_FPS_FSTB_FPS_LOWER"
+        opcode="0x02000000"
+        description="FSTB FPS lower bound"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_FPS_UPPER"
+        opcode="0x02000100"
+        description="FSTB FPS upper bound"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_TARGET_FPS_PID"
+        opcode="0x02000200"
+        description="FSTB target FPS by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CTL"
+        opcode="0x02000300"
+        description="FPSGO control"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_NOCTL"
+        opcode="0x02000400"
+        description="FPSGO no control"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_RENDER_PID"
+        opcode="0x02000500"
+        description="FPSGO render PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_RENDER_TID"
+        opcode="0x02000600"
+        description="FPSGO render TID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_RENDER_BQID_HIGH_BITS"
+        opcode="0x02000700"
+        description="FPSGO render BQID high bits"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_RENDER_BQID_LOW_BITS"
+        opcode="0x02000800"
+        description="FPSGO render BQID low bits"/>
+
+    <!-- Sub: FPSGO enable/control (27) -->
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_ENABLE"
+        opcode="0x02004000"
+        description="FPSGO enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_FORCE_ONOFF"
+        opcode="0x02004100"
+        description="FPSGO force on/off"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_STOP_BOOST"
+        opcode="0x02004200"
+        description="FPSGO stop boost"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CONTROL"
+        opcode="0x02004300"
+        description="FPSGO control"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_BYPASS_NONSF"
+        opcode="0x02004400"
+        description="FPSGO bypass non-SF"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CONTROL_API_MASK"
+        opcode="0x02004500"
+        description="FPSGO control API mask"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CONTROL_HWUI"
+        opcode="0x02004600"
+        description="FPSGO control HWUI"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CONTROL_BY_PID"
+        opcode="0x02004700"
+        description="FPSGO control by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_BYPASS_NONSF_BY_PID"
+        opcode="0x02004800"
+        description="FPSGO bypass non-SF by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CONTROL_API_MASK_BY_PID"
+        opcode="0x02004900"
+        description="FPSGO control API mask by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CONTROL_HWUI_BY_PID"
+        opcode="0x02004a00"
+        description="FPSGO control HWUI by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CAM_FPS_MARGIN_BY_PID"
+        opcode="0x02004b00"
+        description="FPSGO CAM FPS margin by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CAM_TIME_RATIO_BY_PID"
+        opcode="0x02004c00"
+        description="FPSGO CAM time ratio by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_DEP_LOADING_THR_BY_PID"
+        opcode="0x02004d00"
+        description="FPSGO dep loading threshold by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CONTROL_MFRC_ACTIVE"
+        opcode="0x02004e00"
+        description="FPSGO control MFRC active"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CAM_WINDOW_MS_BY_PID"
+        opcode="0x02004f00"
+        description="FPSGO CAM window ms by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CONTROL_BY_RENDER"
+        opcode="0x02005000"
+        description="FPSGO control by render"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_NO_BOOST_BY_PROCESS"
+        opcode="0x02005100"
+        description="FPSGO no boost by process"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_NO_BOOST_BY_THREAD"
+        opcode="0x02005200"
+        description="FPSGO no boost by thread"/>
+
+    <!-- Sub: FSTB tuning (6) -->
+
+    <ParamMap
+        name="MTK_FPS_FSTB_FORCE_VAG"
+        opcode="0x02008000"
+        description="FSTB force VAG"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_JUMP_CHECK_NUM"
+        opcode="0x02008100"
+        description="FSTB jump check num"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_JUMP_CHECK_Q_PCT"
+        opcode="0x02008200"
+        description="FSTB jump check Q pct"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_ADOPT_LOW_FPS"
+        opcode="0x02008300"
+        description="FSTB adopt low FPS"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CAM"
+        opcode="0x02008400"
+        description="FPSGO CAM"/>
+
+    <ParamMap
+        name="MTK_FPS_CAM_ACTIVE_FPSGO_OFF"
+        opcode="0x02008500"
+        description="CAM active FPSGO off"/>
+
+    <!-- Sub: FBT rescue (5) -->
+
+    <ParamMap
+        name="MTK_FPS_FBT_SHORT_RESCUE_NS"
+        opcode="0x0200c000"
+        description="FBT short rescue (ns)"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_MIN_RESCUE_PERCENT"
+        opcode="0x0200c100"
+        description="FBT min rescue percent"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_PERCENT_90"
+        opcode="0x0200c200"
+        description="FBT rescue percent - 90fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_PERCENT_120"
+        opcode="0x0200c300"
+        description="FBT rescue percent - 120fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SHORT_MIN_RESCUE_P"
+        opcode="0x0200c400"
+        description="FBT short min rescue P"/>
+
+    <!-- Sub: FBT timing/floor/kmin/variance (5) -->
+
+    <ParamMap
+        name="MTK_FPS_FBT_DEQTIME_BOUND"
+        opcode="0x02010000"
+        description="FBT dequeue time bound"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_FLOOR_BOUND"
+        opcode="0x02014000"
+        description="FBT floor bound"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_KMIN"
+        opcode="0x02018000"
+        description="FBT kmin"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_VARIANCE"
+        opcode="0x02018100"
+        description="FBT variance"/>
+
+    <!-- Sub: FSTB soft FPS / BHR (6) -->
+
+    <ParamMap
+        name="MTK_FPS_FSTB_SOFT_FPS_LOWER"
+        opcode="0x0201c000"
+        description="FSTB soft FPS lower"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_SOFT_FPS_UPPER"
+        opcode="0x0201c100"
+        description="FSTB soft FPS upper"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_BHR_OPP"
+        opcode="0x02020000"
+        description="FBT BHR OPP"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_BHR_OPP_L"
+        opcode="0x02020100"
+        description="FBT BHR OPP L"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_BHR"
+        opcode="0x02024000"
+        description="FBT BHR"/>
+
+    <!-- Sub: EARA / GPU block / misc FBT (4) -->
+
+    <ParamMap
+        name="MTK_FPS_EARA_BENCH"
+        opcode="0x02028000"
+        description="EARA benchmark"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_GPU_BLOCK_BOOST"
+        opcode="0x0202c000"
+        description="FPSGO GPU block boost"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_BOOST_TA"
+        opcode="0x02030000"
+        description="FBT boost top-app"/>
+
+    <!-- Sub: FPSGO margin mode (4) -->
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_MARGIN_MODE"
+        opcode="0x02034000"
+        description="FPSGO margin mode"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_MARGIN_MODE_DBNC_A"
+        opcode="0x02034100"
+        description="FPSGO margin mode debounce A"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_MARGIN_MODE_DBNC_B"
+        opcode="0x02034200"
+        description="FPSGO margin mode debounce B"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_TARGET_FPS_MARGIN"
+        opcode="0x02034300"
+        description="FSTB target FPS margin"/>
+
+    <!-- Sub: EARA thermal / FBT rescue extended (37) -->
+
+    <ParamMap
+        name="MTK_FPS_EARA_THERMAL_ENABLE"
+        opcode="0x02038000"
+        description="EARA thermal enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_F"
+        opcode="0x0203c000"
+        description="FBT rescue F"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_PERCENT"
+        opcode="0x0203c100"
+        description="FBT rescue percent"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_ULTRA_RESCUE"
+        opcode="0x0203c200"
+        description="FBT ultra rescue"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_C"
+        opcode="0x0203c300"
+        description="FBT rescue C"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_CHECK"
+        opcode="0x0203c400"
+        description="FBT rescue check"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_SECOND_ENABLE"
+        opcode="0x0203c500"
+        description="FBT rescue second enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_SECOND_TIME"
+        opcode="0x0203c600"
+        description="FBT rescue second time"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_SECOND_GROUP"
+        opcode="0x0203c700"
+        description="FBT rescue second group"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_SECOND_RESCUE_F"
+        opcode="0x0203c800"
+        description="FBT rescue second rescue F"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_F_OPP"
+        opcode="0x0203c900"
+        description="FBT rescue F OPP"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_SECOND_GAME_ENABLE"
+        opcode="0x0203ca00"
+        description="FBT rescue second game enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_SECOND_ENABLE_BY_PID"
+        opcode="0x0203cb00"
+        description="FBT rescue second enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_ENABLE"
+        opcode="0x0203cc00"
+        description="FBT rescue enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESCUE_ENABLE_BY_PID"
+        opcode="0x0203cd00"
+        description="FBT rescue enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CHECK_BUFFER_QUOTA_BY_PID"
+        opcode="0x0203ce00"
+        description="FBT check buffer quota by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_BOOST_VIP"
+        opcode="0x0203cf00"
+        description="FBT boost VIP"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_BOOST_VIP_BY_PID"
+        opcode="0x0203d000"
+        description="FBT boost VIP by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RTPRIO1"
+        opcode="0x0203d100"
+        description="FBT RT priority 1"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RTPRIO1_BY_PID"
+        opcode="0x0203d200"
+        description="FBT RT priority 1 by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RTPRIO2"
+        opcode="0x0203d300"
+        description="FBT RT priority 2"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RTPRIO2_BY_PID"
+        opcode="0x0203d400"
+        description="FBT RT priority 2 by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RTPRIO3"
+        opcode="0x0203d500"
+        description="FBT RT priority 3"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RTPRIO3_BY_PID"
+        opcode="0x0203d600"
+        description="FBT RT priority 3 by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GROUP_BY_LR"
+        opcode="0x0203d700"
+        description="FBT group by LR"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GROUP_BY_LR_BY_PID"
+        opcode="0x0203d800"
+        description="FBT group by LR by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_HEAVY_NUM"
+        opcode="0x0203d900"
+        description="FBT heavy num"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_HEAVY_NUM_BY_PID"
+        opcode="0x0203da00"
+        description="FBT heavy num by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SECOND_NUM"
+        opcode="0x0203db00"
+        description="FBT second num"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SECOND_NUM_BY_PID"
+        opcode="0x0203dc00"
+        description="FBT second num by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SET_LS"
+        opcode="0x0203dd00"
+        description="FBT set LS"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SET_LS_BY_PID"
+        opcode="0x0203de00"
+        description="FBT set LS by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LS_GROUPMASK"
+        opcode="0x0203df00"
+        description="FBT LS group mask"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LS_GROUPMASK_BY_PID"
+        opcode="0x0203e000"
+        description="FBT LS group mask by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_VIP_MASK"
+        opcode="0x0203e100"
+        description="FBT VIP mask"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_VIP_MASK_BY_PID"
+        opcode="0x0203e200"
+        description="FBT VIP mask by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SET_VVIP"
+        opcode="0x0203e300"
+        description="FBT set VVIP"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SET_VVIP_BY_PID"
+        opcode="0x0203e400"
+        description="FBT set VVIP by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TUNEPOINT_BM_TH"
+        opcode="0x0203e500"
+        description="FBT tunepoint BM threshold"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TUNEPOINT_BM_TH_BY_PID"
+        opcode="0x0203e600"
+        description="FBT tunepoint BM threshold by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TUNEPOINT_ML_TH"
+        opcode="0x0203e700"
+        description="FBT tunepoint ML threshold"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TUNEPOINT_ML_TH_BY_PID"
+        opcode="0x0203e800"
+        description="FBT tunepoint ML threshold by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TUNEPOINT_POLICY"
+        opcode="0x0203e900"
+        description="FBT tunepoint policy"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TUNEPOINT_POLICY_BY_PID"
+        opcode="0x0203ea00"
+        description="FBT tunepoint policy by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GEARHINT_PREFER"
+        opcode="0x0203eb00"
+        description="FBT gear hint prefer"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GEARHINT_PREFER_BY_PID"
+        opcode="0x0203ec00"
+        description="FBT gear hint prefer by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_VIP_FOLLOW_GH"
+        opcode="0x0203ed00"
+        description="FBT VIP follow gear hint"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_VIP_THROTTLE"
+        opcode="0x0203ee00"
+        description="FBT VIP throttle"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_VIP_THROTTLE_BY_PID"
+        opcode="0x0203ef00"
+        description="FBT VIP throttle by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SET_L3_CACHE_CT"
+        opcode="0x0203f000"
+        description="FBT set L3 cache CT"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SET_L3_CACHE_CT_BY_PID"
+        opcode="0x0203f100"
+        description="FBT set L3 cache CT by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TP_STRICT_MIDDLE"
+        opcode="0x0203f200"
+        description="FBT tunepoint strict middle"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TP_STRICT_MIDDLE_BY_PID"
+        opcode="0x0203f300"
+        description="FBT tunepoint strict middle by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TP_STRICT_LITTLE"
+        opcode="0x0203f400"
+        description="FBT tunepoint strict little"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TP_STRICT_LITTLE_BY_PID"
+        opcode="0x0203f500"
+        description="FBT tunepoint strict little by PID"/>
+
+    <!-- Sub: FPSGO adj loading (11) -->
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_ADJ_LOADING"
+        opcode="0x02040000"
+        description="FPSGO adj loading"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_ADJ_CNT"
+        opcode="0x02040100"
+        description="FPSGO adj count"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_ADJ_DEBNC_CNT"
+        opcode="0x02040200"
+        description="FPSGO adj debounce count"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_ADJ_LOADING_TIMEDIFF"
+        opcode="0x02040300"
+        description="FPSGO adj loading time diff"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_ADJ_LOADING_HWUI_HINT"
+        opcode="0x02040400"
+        description="FPSGO adj loading HWUI hint"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_AA_B_MINUS_IDLE_BY_PID"
+        opcode="0x02040500"
+        description="FPSGO AA B minus idle by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_POWERRL_ENABLE_BY_PID"
+        opcode="0x02040600"
+        description="FPSGO power RL enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_POWERRL_FPS_MARGIN_BY_PID"
+        opcode="0x02040700"
+        description="FPSGO power RL FPS margin by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_POWERRL_CAP_LIMIT_RANGE_BY_PID"
+        opcode="0x02040800"
+        description="FPSGO power RL cap limit range by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_AA_ENABLE_BY_PID"
+        opcode="0x02040900"
+        description="FPSGO AA enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_AA_ENABLE_BY_TID"
+        opcode="0x02040a00"
+        description="FPSGO AA enable by TID"/>
+
+    <!-- Sub: FPSGO LLF policy (11) -->
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_LLF_TH"
+        opcode="0x02044000"
+        description="FPSGO LLF threshold"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_LLF_POLICY"
+        opcode="0x02044100"
+        description="FPSGO LLF policy"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_LLF_LIGHT_LOADING_POLICY"
+        opcode="0x02044200"
+        description="FPSGO LLF light loading policy"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_LLF_POLICY_90"
+        opcode="0x02044300"
+        description="FPSGO LLF policy - 90fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_LLF_LIGHT_LOADING_POLICY_90"
+        opcode="0x02044400"
+        description="FPSGO LLF light loading policy - 90fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_LLF_POLICY_120"
+        opcode="0x02044500"
+        description="FPSGO LLF policy - 120fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_LLF_LIGHT_LOADING_POLICY_120"
+        opcode="0x02044600"
+        description="FPSGO LLF light loading policy - 120fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_LLF_LOADING_IGNORE_ENABLE"
+        opcode="0x02044700"
+        description="FPSGO LLF loading ignore enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_LLF_POLICY_BY_PID"
+        opcode="0x02044800"
+        description="FPSGO LLF policy by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_LLF_TH_BY_PID"
+        opcode="0x02044a00"
+        description="FPSGO LLF threshold by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_LLF_LIGHT_LOADING_POLICY_BY_PID"
+        opcode="0x02044c00"
+        description="FPSGO LLF light loading policy by PID"/>
+
+    <!-- Sub: FBT separate cap / uclamp limit (24) -->
+
+    <ParamMap
+        name="MTK_FPS_FBT_SEPERATECAP_ENABLE"
+        opcode="0x02044d00"
+        description="FBT separate cap enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_UCLAMP"
+        opcode="0x02044e00"
+        description="FBT limit uclamp"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_R_UCLAMP"
+        opcode="0x02044f00"
+        description="FBT limit R uclamp"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_UCLAMP_M"
+        opcode="0x02045000"
+        description="FBT limit uclamp M"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_R_UCLAMP_M"
+        opcode="0x02045100"
+        description="FBT limit R uclamp M"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SEPARATE_AA_BY_PID"
+        opcode="0x02045200"
+        description="FBT separate AA by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_UCLAMP_BY_PID"
+        opcode="0x02045300"
+        description="FBT limit uclamp by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_RUCLAMP_BY_PID"
+        opcode="0x02045400"
+        description="FBT limit R uclamp by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_UCLAMP_M_BY_PID"
+        opcode="0x02045500"
+        description="FBT limit uclamp M by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_RUCLAMP_M_BY_PID"
+        opcode="0x02045600"
+        description="FBT limit R uclamp M by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SEPARATE_RELEASE_SEC"
+        opcode="0x02045700"
+        description="FBT separate release sec"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SEPARATE_RELEASE_SEC_BY_PID"
+        opcode="0x02045800"
+        description="FBT separate release sec by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SEPARATE_PCT_M_BY_PID"
+        opcode="0x02045900"
+        description="FBT separate pct M by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SEPARATE_PCT_B_BY_PID"
+        opcode="0x02045a00"
+        description="FBT separate pct B by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_BLC_BOOST"
+        opcode="0x02045b00"
+        description="FBT BLC boost"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_BLC_BOOST_BY_PID"
+        opcode="0x02045c00"
+        description="FBT BLC boost by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SEPARATE_PCT_OTHER_BY_PID"
+        opcode="0x02045d00"
+        description="FBT separate pct other by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_CFREQ2CAP_BY_PID"
+        opcode="0x02045e00"
+        description="FBT limit cfreq2cap by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_RFREQ2CAP_BY_PID"
+        opcode="0x02045f00"
+        description="FBT limit rfreq2cap by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_CFREQ2CAP_M_BY_PID"
+        opcode="0x02046000"
+        description="FBT limit cfreq2cap M by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_RFREQ2CAP_M_BY_PID"
+        opcode="0x02046100"
+        description="FBT limit rfreq2cap M by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TARGET_T_UP_BOUND"
+        opcode="0x02046200"
+        description="FBT target T up bound"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TARGET_T_UP_BOUND_BY_PID"
+        opcode="0x02046300"
+        description="FBT target T up bound by PID"/>
+
+    <!-- Sub: FPSGO dep/SP/EMA/uboost (9) -->
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_DEP_FRAMES"
+        opcode="0x02048000"
+        description="FPSGO dep frames"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_SP_NAME_ID"
+        opcode="0x02048100"
+        description="FPSGO SP name ID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_SP_SUB"
+        opcode="0x02048200"
+        description="FPSGO SP sub"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_SP_CK_PERIOD"
+        opcode="0x02048300"
+        description="FPSGO SP check period"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_SUB_QUE_DEQUE_PERIOD"
+        opcode="0x02048400"
+        description="FPSGO sub queue dequeue period"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_EMA_DIVIDEND"
+        opcode="0x02048500"
+        description="FPSGO EMA dividend"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_STDDEV_MULTI"
+        opcode="0x02048600"
+        description="FPSGO stddev multiplier"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_UBOOST"
+        opcode="0x02048700"
+        description="FPSGO uboost"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_UBOOST_F"
+        opcode="0x02048800"
+        description="FPSGO uboost F"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_FORCE_NO_SUB_QUE_DEQUE_PERIOD"
+        opcode="0x02048900"
+        description="FPSGO force no sub queue dequeue period"/>
+
+    <!-- Sub: GBE (10) -->
+
+    <ParamMap
+        name="MTK_FPS_GBE1_ENABLE"
+        opcode="0x0204c000"
+        description="GBE1 enable"/>
+
+    <ParamMap
+        name="MTK_FPS_GBE2_ENABLE"
+        opcode="0x0204c100"
+        description="GBE2 enable"/>
+
+    <ParamMap
+        name="MTK_FPS_GBE2_TIMER2_MS"
+        opcode="0x0204c200"
+        description="GBE2 timer2 (ms)"/>
+
+    <ParamMap
+        name="MTK_FPS_GBE2_LOADING_TH"
+        opcode="0x0204c300"
+        description="GBE2 loading threshold"/>
+
+    <ParamMap
+        name="MTK_FPS_GBE2_MAX_BOOST_CNT"
+        opcode="0x0204c400"
+        description="GBE2 max boost count"/>
+
+    <ParamMap
+        name="MTK_FPS_GBE_POLICY_MASK"
+        opcode="0x0204c500"
+        description="GBE policy mask"/>
+
+    <ParamMap
+        name="MTK_FPS_GBE2_TIMER1_MS"
+        opcode="0x0204c600"
+        description="GBE2 timer1 (ms)"/>
+
+    <ParamMap
+        name="MTK_FPS_GBE_THRM_HDRM_THRS"
+        opcode="0x0204c700"
+        description="GBE thermal headroom threshold"/>
+
+    <ParamMap
+        name="MTK_FPS_GBE_CPU_1"
+        opcode="0x0204c800"
+        description="GBE CPU 1"/>
+
+    <ParamMap
+        name="MTK_FPS_GBE_CPU_0"
+        opcode="0x0204c900"
+        description="GBE CPU 0"/>
+
+    <!-- Sub: FPSGO idle prefer / thermal (6) -->
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_IDLEPREFER"
+        opcode="0x02050000"
+        description="FPSGO idle prefer"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_THRM_TEMP_TH"
+        opcode="0x02054000"
+        description="FPSGO thermal temp threshold"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_THRM_LIMIT_CPU"
+        opcode="0x02054100"
+        description="FPSGO thermal limit CPU"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_THRM_SUB_CPU"
+        opcode="0x02054200"
+        description="FPSGO thermal sub CPU"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_THRM_ACTIVATE_FPS"
+        opcode="0x02054300"
+        description="FPSGO thermal activate FPS"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_THRM_ENABLE"
+        opcode="0x02054400"
+        description="FPSGO thermal enable"/>
+
+    <!-- Sub: FPSGO CM big cap (6) -->
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CM_BIG_CAP"
+        opcode="0x02058000"
+        description="FPSGO CM big cap"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CM_TDIFF"
+        opcode="0x02058100"
+        description="FPSGO CM Tdiff"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CM_BIG_CAP_90"
+        opcode="0x02058200"
+        description="FPSGO CM big cap - 90fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CM_TDIFF_90"
+        opcode="0x02058300"
+        description="FPSGO CM Tdiff - 90fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CM_BIG_CAP_120"
+        opcode="0x02058400"
+        description="FPSGO CM big cap - 120fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CM_TDIFF_120"
+        opcode="0x02058500"
+        description="FPSGO CM Tdiff - 120fps"/>
+
+    <!-- Sub: FPSGO boost affinity / FBT cpu mask (24) -->
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_BOOST_AFFINITY"
+        opcode="0x0205c000"
+        description="FPSGO boost affinity"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_BOOST_AFFINITY_90"
+        opcode="0x0205c100"
+        description="FPSGO boost affinity - 90fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_BOOST_AFFINITY_120"
+        opcode="0x0205c200"
+        description="FPSGO boost affinity - 120fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_BOOST_LR"
+        opcode="0x0205c300"
+        description="FPSGO boost LR"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_BOOST_AFFINITY_BY_PID"
+        opcode="0x0205c400"
+        description="FBT boost affinity by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_BOOST_LR_BY_PID"
+        opcode="0x0205c500"
+        description="FBT boost LR by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_RESET_TASKMASK_BY_PID"
+        opcode="0x0205c600"
+        description="FBT reset task mask by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CPUMASK_HEAVY"
+        opcode="0x0205c700"
+        description="FBT CPU mask heavy"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CPUMASK_HEAVY_BY_PID"
+        opcode="0x0205c800"
+        description="FBT CPU mask heavy by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CPUMASK_SECOND"
+        opcode="0x0205c900"
+        description="FBT CPU mask second"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CPUMASK_SECOND_BY_PID"
+        opcode="0x0205ca00"
+        description="FBT CPU mask second by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CPUMASK_OTHERS"
+        opcode="0x0205cb00"
+        description="FBT CPU mask others"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CPUMASK_OTHERS_BY_PID"
+        opcode="0x0205cc00"
+        description="FBT CPU mask others by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SET_SOFT_AFFINITY"
+        opcode="0x0205cd00"
+        description="FBT set soft affinity"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SET_SOFT_AFFINITY_BY_PID"
+        opcode="0x0205ce00"
+        description="FBT set soft affinity by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SEP_LOADING_CTRL"
+        opcode="0x0205cf00"
+        description="FBT sep loading ctrl"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_SEP_LOADING_CTRL_BY_PID"
+        opcode="0x0205d000"
+        description="FBT sep loading ctrl by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LOAD_CTRL_TH"
+        opcode="0x0205d100"
+        description="FBT load ctrl threshold"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LOAD_CTRL_TH_BY_PID"
+        opcode="0x0205d200"
+        description="FBT load ctrl threshold by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LC_TH_UPBOUND"
+        opcode="0x0205d300"
+        description="FBT LC threshold upbound"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LC_TH_UPBOUND_BY_PID"
+        opcode="0x0205d400"
+        description="FBT LC threshold upbound by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LC_FRAME_LOWBD"
+        opcode="0x0205d500"
+        description="FBT LC frame low bound"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LC_FRAME_LOWBD_BY_PID"
+        opcode="0x0205d600"
+        description="FBT LC frame low bound by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LC_FRAME_UPBD"
+        opcode="0x0205d700"
+        description="FBT LC frame up bound"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LC_FRAME_UPBD_BY_PID"
+        opcode="0x0205d800"
+        description="FBT LC frame up bound by PID"/>
+
+    <!-- Sub: FPSGO SPID / CAM server / filter dep (6) -->
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_SPID"
+        opcode="0x02060000"
+        description="FPSGO SPID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CAM_HAL_PID"
+        opcode="0x02060100"
+        description="FPSGO CAM HAL PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CAM_SERVER_PID"
+        opcode="0x02060200"
+        description="FPSGO CAM server PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_FILTER_DEP_TASK_ENABLE"
+        opcode="0x02060300"
+        description="FPSGO filter dep task enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_FILTER_DEP_TASK_ENABLE_BY_PID"
+        opcode="0x02060400"
+        description="FPSGO filter dep task enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_FORCE_SET_PERF_MIN"
+        opcode="0x02060500"
+        description="FPSGO force set perf min"/>
+
+    <!-- Sub: FBT ceiling / minitop / c minfreq (13) -->
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_CFREQ"
+        opcode="0x02064000"
+        description="FBT limit cfreq"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_RFREQ"
+        opcode="0x02064100"
+        description="FBT limit rfreq"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_CFREQ_M"
+        opcode="0x02064200"
+        description="FBT limit cfreq M"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_RFREQ_M"
+        opcode="0x02064300"
+        description="FBT limit rfreq M"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CEILING_ENABLE"
+        opcode="0x02064400"
+        description="FBT ceiling enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_MINITOP_ENABLE"
+        opcode="0x02064500"
+        description="FBT minitop enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_MINITOP_THRS_HEAVY"
+        opcode="0x02064600"
+        description="FBT minitop threshold heavy"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_FILTERFRAME_ENABLE"
+        opcode="0x02064700"
+        description="FBT filter frame enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_FILTER_FRAME_ENABLE_BY_PID"
+        opcode="0x02064800"
+        description="FBT filter frame enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_L_MIN_CAP_ENABLE"
+        opcode="0x02064900"
+        description="L min cap enable"/>
+
+    <ParamMap
+        name="MTK_FPS_C_MINFREQ"
+        opcode="0x02064a00"
+        description="C min freq"/>
+
+    <ParamMap
+        name="MTK_FPS_C_MINFREQ_M"
+        opcode="0x02064b00"
+        description="C min freq M"/>
+
+    <ParamMap
+        name="MTK_FPS_C_MINFREQ_ENABLE"
+        opcode="0x02064c00"
+        description="C min freq enable"/>
+
+    <!-- Sub: FBT QR (14) -->
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_ENABLE"
+        opcode="0x02068000"
+        description="FBT QR enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_HWUI_HINT"
+        opcode="0x02068100"
+        description="FBT QR HWUI hint"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_X"
+        opcode="0x02068200"
+        description="FBT QR T2WNT X"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_Y_P"
+        opcode="0x02068300"
+        description="FBT QR T2WNT Y P"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_Y_N"
+        opcode="0x02068400"
+        description="FBT QR T2WNT Y N"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_X_90"
+        opcode="0x02068500"
+        description="FBT QR T2WNT X - 90fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_Y_P_90"
+        opcode="0x02068600"
+        description="FBT QR T2WNT Y P - 90fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_Y_N_90"
+        opcode="0x02068700"
+        description="FBT QR T2WNT Y N - 90fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_X_120"
+        opcode="0x02068800"
+        description="FBT QR T2WNT X - 120fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_Y_P_120"
+        opcode="0x02068900"
+        description="FBT QR T2WNT Y P - 120fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_Y_N_120"
+        opcode="0x02068A00"
+        description="FBT QR T2WNT Y N - 120fps"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_ENABLE_BY_PID"
+        opcode="0x02068b00"
+        description="FBT QR enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_X_BY_PID"
+        opcode="0x02068c00"
+        description="FBT QR T2WNT X by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_Y_P_BY_PID"
+        opcode="0x02068d00"
+        description="FBT QR T2WNT Y P by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QR_T2WNT_Y_N_BY_PID"
+        opcode="0x02068e00"
+        description="FBT QR T2WNT Y N by PID"/>
+
+    <!-- Sub: FBT GCC (33) -->
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_ENQ_BOUND_THRS"
+        opcode="0x0206c100"
+        description="FBT GCC enqueue bound threshold"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_ENQ_BOUND_QUOTA"
+        opcode="0x0206c200"
+        description="FBT GCC enqueue bound quota"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_DEQ_BOUND_THRS"
+        opcode="0x0206c300"
+        description="FBT GCC dequeue bound threshold"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_DEQ_BOUND_QUOTA"
+        opcode="0x0206c400"
+        description="FBT GCC dequeue bound quota"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_FPS_MARGIN"
+        opcode="0x0206c500"
+        description="FBT GCC FPS margin"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_UP_SEC_PCT"
+        opcode="0x0206c600"
+        description="FBT GCC up sec pct"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_DOWN_STEP"
+        opcode="0x0206c700"
+        description="FBT GCC down step"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_UPPER_CLAMP"
+        opcode="0x0206c800"
+        description="FBT GCC upper clamp"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_UP_QUOTA_PCT"
+        opcode="0x0206c900"
+        description="FBT GCC up quota pct"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_DOWN_QUOTA_PCT"
+        opcode="0x0206cA00"
+        description="FBT GCC down quota pct"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_POSITIVE_CLAMP"
+        opcode="0x0206cB00"
+        description="FBT GCC positive clamp"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_DOWN_SEC_PCT"
+        opcode="0x0206cc00"
+        description="FBT GCC down sec pct"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_UP_STEP"
+        opcode="0x0206cd00"
+        description="FBT GCC up step"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_HWUI_HINT"
+        opcode="0x0206ce00"
+        description="FBT GCC HWUI hint"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_ENABLE_BY_PID"
+        opcode="0x0206cf00"
+        description="FBT GCC enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_FPS_MARGIN_BY_PID"
+        opcode="0x0206d000"
+        description="FBT GCC FPS margin by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_ENQ_BOUND_THRS_BY_PID"
+        opcode="0x0206d100"
+        description="FBT GCC enqueue bound threshold by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_ENQ_BOUND_QUOTA_BY_PID"
+        opcode="0x0206d200"
+        description="FBT GCC enqueue bound quota by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_DEQ_BOUND_THRS_BY_PID"
+        opcode="0x0206d300"
+        description="FBT GCC dequeue bound threshold by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_DEQ_BOUND_QUOTA_BY_PID"
+        opcode="0x0206d400"
+        description="FBT GCC dequeue bound quota by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_UP_SEC_PCT_BY_PID"
+        opcode="0x0206d500"
+        description="FBT GCC up sec pct by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_UP_STEP_BY_PID"
+        opcode="0x0206d600"
+        description="FBT GCC up step by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_DOWN_STEP_BY_PID"
+        opcode="0x0206d700"
+        description="FBT GCC down step by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_DOWN_SEC_PCT_BY_PID"
+        opcode="0x0206d800"
+        description="FBT GCC down sec pct by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_UP_QUOTA_PCT_BY_PID"
+        opcode="0x0206d900"
+        description="FBT GCC up quota pct by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_DOWN_QUOTA_PCT_BY_PID"
+        opcode="0x0206da00"
+        description="FBT GCC down quota pct by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_QR_FILTER_OUTLIER"
+        opcode="0x0206db00"
+        description="FBT GCC QR filter outlier"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_EXPECTED_FPS_MARGIN_BY_PID"
+        opcode="0x0206dc00"
+        description="FBT expected FPS margin by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QUOTA_DIFF_CLAMP_MIN_BY_PID"
+        opcode="0x0206dd00"
+        description="FBT quota diff clamp min by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_QUOTA_DIFF_CLAMP_MAX_BY_PID"
+        opcode="0x0206de00"
+        description="FBT quota diff clamp max by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_GCC_ENABLE"
+        opcode="0x0206df00"
+        description="FBT GCC enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_L2Q_ENABLE_BY_PID"
+        opcode="0x0206e000"
+        description="FBT L2Q enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_L2Q_EXP_US_BY_PID"
+        opcode="0x0206e100"
+        description="FBT L2Q exp us by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_TARGET_RAW_FPS_ENABLE"
+        opcode="0x0206e200"
+        description="FBT target raw FPS enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_VSYNC_FPKS_ENABLE"
+        opcode="0x0206e300"
+        description="FBT vsync FPKS enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_NORMALIZED_FPS_PCT"
+        opcode="0x0206e400"
+        description="FBT normalized FPS pct"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_LIMIT_MIN_CAP_TIME_BY_PID"
+        opcode="0x0206e500"
+        description="FBT limit min cap time by PID"/>
+
+    <!-- Sub: FRS (38) -->
+
+    <ParamMap
+        name="MTK_FRS_ENABLE"
+        opcode="0x02070000"
+        description="FRS enable"/>
+
+    <ParamMap
+        name="MTK_FRS_THRESHOLD"
+        opcode="0x02070100"
+        description="FRS threshold"/>
+
+    <ParamMap
+        name="MTK_FRS_TARGET_TEMP"
+        opcode="0x02070200"
+        description="FRS target temperature"/>
+
+    <ParamMap
+        name="MTK_FRS_MAX_FPS"
+        opcode="0x02070300"
+        description="FRS max FPS"/>
+
+    <ParamMap
+        name="MTK_FRS_MIN_FPS"
+        opcode="0x02070400"
+        description="FRS min FPS"/>
+
+    <ParamMap
+        name="MTK_FRS_CEILING"
+        opcode="0x02070500"
+        description="FRS ceiling"/>
+
+    <ParamMap
+        name="MTK_FRS_CEILING_TH"
+        opcode="0x02070600"
+        description="FRS ceiling threshold"/>
+
+    <ParamMap
+        name="MTK_FRS_PTIME"
+        opcode="0x02070700"
+        description="FRS P time"/>
+
+    <ParamMap
+        name="MTK_FRS_OT_PTIME"
+        opcode="0x02070800"
+        description="FRS OT P time"/>
+
+    <ParamMap
+        name="MTK_FRS_THROTTLED"
+        opcode="0x02070900"
+        description="FRS throttled"/>
+
+    <ParamMap
+        name="MTK_FRS_OT_THROTTLED"
+        opcode="0x02070a00"
+        description="FRS OT throttled"/>
+
+    <ParamMap
+        name="MTK_FRS_MAX_THROTTLED_FPS"
+        opcode="0x02070b00"
+        description="FRS max throttled FPS"/>
+
+    <ParamMap
+        name="MTK_FRS_FPS_RATIO"
+        opcode="0x02070c00"
+        description="FRS FPS ratio"/>
+
+    <ParamMap
+        name="MTK_FRS_FPS_RATIO_STEP"
+        opcode="0x02070d00"
+        description="FRS FPS ratio step"/>
+
+    <ParamMap
+        name="MTK_FRS_MODE"
+        opcode="0x02070e00"
+        description="FRS mode"/>
+
+    <ParamMap
+        name="MTK_FRS_MAX_FPS_DIFF"
+        opcode="0x02070f00"
+        description="FRS max FPS diff"/>
+
+    <ParamMap
+        name="MTK_FRS_UR_PTIME"
+        opcode="0x02071000"
+        description="FRS UR P time"/>
+
+    <ParamMap
+        name="MTK_FRS_URGENT_TEMP_OFFSET"
+        opcode="0x02071100"
+        description="FRS urgent temp offset"/>
+
+    <ParamMap
+        name="MTK_FRS_TZ_INDEX"
+        opcode="0x02071200"
+        description="FRS thermal zone index"/>
+
+    <ParamMap
+        name="MTK_FRS_SYS_CEILING_ENABLE"
+        opcode="0x02071300"
+        description="FRS system ceiling enable"/>
+
+    <ParamMap
+        name="MTK_FRS_COLD_THRESHOLD"
+        opcode="0x02071400"
+        description="FRS cold threshold"/>
+
+    <ParamMap
+        name="MTK_FRS_LIMIT_CFREQ"
+        opcode="0x02071500"
+        description="FRS limit cfreq"/>
+
+    <ParamMap
+        name="MTK_FRS_LIMIT_RFREQ"
+        opcode="0x02071600"
+        description="FRS limit rfreq"/>
+
+    <ParamMap
+        name="MTK_FRS_LIMIT_CFREQ_M"
+        opcode="0x02071700"
+        description="FRS limit cfreq M"/>
+
+    <ParamMap
+        name="MTK_FRS_LIMIT_RFREQ_M"
+        opcode="0x02071800"
+        description="FRS limit rfreq M"/>
+
+    <ParamMap
+        name="MTK_FRS_CT_PTIME"
+        opcode="0x02071900"
+        description="FRS CT P time"/>
+
+    <ParamMap
+        name="MTK_FRS_MIN_FPS_TARGET_TEMP"
+        opcode="0x02071a00"
+        description="FRS min FPS target temp"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER0_1"
+        opcode="0x02071b00"
+        description="FRS freq-temp mapping cluster0 1"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER0_2"
+        opcode="0x02071c00"
+        description="FRS freq-temp mapping cluster0 2"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER0_3"
+        opcode="0x02071d00"
+        description="FRS freq-temp mapping cluster0 3"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER0_4"
+        opcode="0x02071e00"
+        description="FRS freq-temp mapping cluster0 4"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER0_5"
+        opcode="0x02071f00"
+        description="FRS freq-temp mapping cluster0 5"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER0_6"
+        opcode="0x02072000"
+        description="FRS freq-temp mapping cluster0 6"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER0_7"
+        opcode="0x02072100"
+        description="FRS freq-temp mapping cluster0 7"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER0_8"
+        opcode="0x02072200"
+        description="FRS freq-temp mapping cluster0 8"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER1_1"
+        opcode="0x02072300"
+        description="FRS freq-temp mapping cluster1 1"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER1_2"
+        opcode="0x02072400"
+        description="FRS freq-temp mapping cluster1 2"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER1_3"
+        opcode="0x02072500"
+        description="FRS freq-temp mapping cluster1 3"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER1_4"
+        opcode="0x02072600"
+        description="FRS freq-temp mapping cluster1 4"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER1_5"
+        opcode="0x02072700"
+        description="FRS freq-temp mapping cluster1 5"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER1_6"
+        opcode="0x02072800"
+        description="FRS freq-temp mapping cluster1 6"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER1_7"
+        opcode="0x02072900"
+        description="FRS freq-temp mapping cluster1 7"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER1_8"
+        opcode="0x02072a00"
+        description="FRS freq-temp mapping cluster1 8"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER2_1"
+        opcode="0x02072b00"
+        description="FRS freq-temp mapping cluster2 1"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER2_2"
+        opcode="0x02072c00"
+        description="FRS freq-temp mapping cluster2 2"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER2_3"
+        opcode="0x02072d00"
+        description="FRS freq-temp mapping cluster2 3"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER2_4"
+        opcode="0x02072e00"
+        description="FRS freq-temp mapping cluster2 4"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER2_5"
+        opcode="0x02072f00"
+        description="FRS freq-temp mapping cluster2 5"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER2_6"
+        opcode="0x02073000"
+        description="FRS freq-temp mapping cluster2 6"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER2_7"
+        opcode="0x02073100"
+        description="FRS freq-temp mapping cluster2 7"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_CLUSTER2_8"
+        opcode="0x02073200"
+        description="FRS freq-temp mapping cluster2 8"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_HYSTERESIS"
+        opcode="0x02073300"
+        description="FRS freq-temp mapping hysteresis"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_PTIME"
+        opcode="0x02073400"
+        description="FRS freq-temp mapping P time"/>
+
+    <ParamMap
+        name="MTK_FRS_FREQ_TEMP_MAPPING_TZ_INDEX"
+        opcode="0x02073500"
+        description="FRS freq-temp mapping TZ index"/>
+
+    <ParamMap
+        name="MTK_FRS_RESET"
+        opcode="0x02073600"
+        description="FRS reset"/>
+
+    <!-- Sub: FPSGO margin mode GPU / EMA2 / FSTB self ctrl (9) -->
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_MARGIN_MODE_GPU"
+        opcode="0x02074000"
+        description="FPSGO margin mode GPU"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_MARGIN_MODE_GPU_DBNC_A"
+        opcode="0x02074100"
+        description="FPSGO margin mode GPU debounce A"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_MARGIN_MODE_GPU_DBNC_B"
+        opcode="0x02074200"
+        description="FPSGO margin mode GPU debounce B"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_EMA2_ENABLE"
+        opcode="0x02078000"
+        description="FPSGO EMA2 enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_EMA2_ENABLE_BY_PID"
+        opcode="0x02078100"
+        description="FPSGO EMA2 enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CALCULATE_DEP_ENABLE_BY_PID"
+        opcode="0x02078200"
+        description="FPSGO calculate dep enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_SELF_CTRL_FPS_ENABLE"
+        opcode="0x0207c000"
+        description="FSTB self ctrl FPS enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_CONSIDER_DEQ"
+        opcode="0x0207c100"
+        description="FSTB consider dequeue"/>
+
+    <!-- Sub: FSTB target FPS / video (9) -->
+
+    <ParamMap
+        name="MTK_FPS_FSTB_TFPS_TO_POWERHAL_ENABLE"
+        opcode="0x02080000"
+        description="FSTB target FPS to PowerHAL enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_TARGET_FPS_ENABLE_BY_PID"
+        opcode="0x02080100"
+        description="FSTB target FPS enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_GPU_SLOWDOWN_CHECK"
+        opcode="0x02080200"
+        description="FSTB GPU slowdown check"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_TARGET_DETECT_ENABLE_BY_RENDER"
+        opcode="0x02080300"
+        description="FSTB target detect enable by render"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTBV2_ENABLE_BY_PID"
+        opcode="0x02080400"
+        description="FSTBv2 enable by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_SET_VIDEO_PID"
+        opcode="0x02084000"
+        description="FPSGO set video PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CLEAR_VIDEO_PID"
+        opcode="0x02084100"
+        description="FPSGO clear video PID"/>
+
+    <!-- NOTE: PREF_RES_FPS_FSTB_NOTIFY_FPS_BY_PID and PREF_RES_FPS_FSTB_CAM_FPS
+         are typos in the source header (PREF_ instead of PERF_). Corrected here. -->
+    <ParamMap
+        name="MTK_FPS_FSTB_NOTIFY_FPS_BY_PID"
+        opcode="0x02088000"
+        description="FSTB notify FPS by PID [source typo: PREF_RES corrected to PERF_RES]"/>
+
+    <ParamMap
+        name="MTK_FPS_FSTB_CAM_FPS"
+        opcode="0x02088100"
+        description="FSTB CAM FPS [source typo: PREF_RES corrected to PERF_RES]"/>
+
+    <!-- Sub: FBT CAM rescue/GCC (13) -->
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_RESCUE_PCT_1"
+        opcode="0x0208c000"
+        description="FBT CAM rescue pct 1"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_RESCUE_PCT_2"
+        opcode="0x0208c100"
+        description="FBT CAM rescue pct 2"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_RESCUE_F_1"
+        opcode="0x0208c200"
+        description="FBT CAM rescue F 1"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_RESCUE_F_2"
+        opcode="0x0208c300"
+        description="FBT CAM rescue F 2"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_GCC_HISTORY_WINDOW"
+        opcode="0x0208c400"
+        description="FBT CAM GCC history window"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_GCC_STD_FILTER"
+        opcode="0x0208c500"
+        description="FBT CAM GCC std filter"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_GCC_UP_CHECK"
+        opcode="0x0208c600"
+        description="FBT CAM GCC up check"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_GCC_UP_THRS"
+        opcode="0x0208c700"
+        description="FBT CAM GCC up threshold"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_GCC_UP_STEP"
+        opcode="0x0208c800"
+        description="FBT CAM GCC up step"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_GCC_DOWN_CHECK"
+        opcode="0x0208c900"
+        description="FBT CAM GCC down check"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_GCC_DOWN_THRS"
+        opcode="0x0208ca00"
+        description="FBT CAM GCC down threshold"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_GCC_DOWN_STEP"
+        opcode="0x0208cb00"
+        description="FBT CAM GCC down step"/>
+
+    <ParamMap
+        name="MTK_FPS_FBT_CAM_GCC_ENABLE"
+        opcode="0x0208cc00"
+        description="FBT CAM GCC enable"/>
+
+    <!-- Sub: FPSGO acquire hint / KFPS / jank (12) -->
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_ACQUIRE_HINT_ENABLE"
+        opcode="0x02090000"
+        description="FPSGO acquire hint enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_RECEIVE_FW_INFO_ENABLE"
+        opcode="0x02090100"
+        description="FPSGO receive FW info enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_RECORD_TRACE_ENABLE"
+        opcode="0x02090200"
+        description="FPSGO record trace enable"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_KFPS_CPU_MASK"
+        opcode="0x02094000"
+        description="FPSGO KFPS CPU mask"/>
+
+    <ParamMap
+        name="MTK_FPS_JANK_DETECTION_MASK"
+        opcode="0x02098000"
+        description="Jank detection mask"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_JANK_MIN_CAP_RATIO"
+        opcode="0x02098100"
+        description="FPSGO jank min cap ratio"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_JANK_MAX_CAP_RATIO"
+        opcode="0x02098200"
+        description="FPSGO jank max cap ratio"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_JANK_PRIORITY"
+        opcode="0x02098300"
+        description="FPSGO jank priority"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_JANK_CPU_MASK"
+        opcode="0x02098400"
+        description="FPSGO jank CPU mask"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_DETECT_FRAME_INTERPOLATE"
+        opcode="0x0209c000"
+        description="FPSGO detect frame interpolate"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_CONTROL_MFRC_ACTIVE_BY_PID"
+        opcode="0x0209c100"
+        description="FPSGO control MFRC active by PID"/>
+
+    <ParamMap
+        name="MTK_FPS_FPSGO_FI_SET_TARGET_FPS_BY_PID"
+        opcode="0x0209c200"
+        description="FPSGO FI set target FPS by PID"/>
+
+    <!-- Sub: Game engine cooler / VIP LOOM / game kernel (6) -->
+
+    <ParamMap
+        name="MTK_FPS_GAME_ENGINE_COOLER_ENABLE"
+        opcode="0x020a0000"
+        description="Game engine cooler enable"/>
+
+    <ParamMap
+        name="MTK_VIP_LOOM_CFP_APPLY_BY_PID"
+        opcode="0x020a4000"
+        description="VIP LOOM CFP apply by PID"/>
+
+    <ParamMap
+        name="MTK_VIP_LOOM_DISABLE_FPSGO_PASSIVE_MODE_PID"
+        opcode="0x020a4100"
+        description="VIP LOOM disable FPSGO passive mode PID"/>
+
+    <ParamMap
+        name="MTK_VIP_LOOM_OFP_ENABLE"
+        opcode="0x020a4200"
+        description="VIP LOOM OFP enable"/>
+
+    <ParamMap
+        name="MTK_VIP_LOOM_EARLY_BYPASS_ENABLE"
+        opcode="0x020a4300"
+        description="VIP LOOM early bypass enable"/>
+
+    <ParamMap
+        name="MTK_FPS_GAME_KERNEL_CORE_CTRL_FORCE_MODE"
+        opcode="0x020a8000"
+        description="Game kernel core ctrl force mode"/>
+
+    <!-- ==================== MAJOR=9 Display / DFPS (21) ==================== -->
+
+    <ParamMap
+        name="MTK_DISP_DFPS_MODE"
+        opcode="0x02400000"
+        description="Display DFPS mode"/>
+
+    <ParamMap
+        name="MTK_DISP_DFPS_FPS"
+        opcode="0x02400100"
+        description="Display DFPS FPS"/>
+
+    <ParamMap
+        name="MTK_DISP_VIDEO_MODE"
+        opcode="0x02404000"
+        description="Display video mode"/>
+
+    <ParamMap
+        name="MTK_DISP_DECOUPLE"
+        opcode="0x02408000"
+        description="Display decouple"/>
+
+    <ParamMap
+        name="MTK_DISP_IDLE_TIME"
+        opcode="0x0240c000"
+        description="Display idle time"/>
+
+    <ParamMap
+        name="MTK_VIDEO_COLOR_CONVERT_MODE"
+        opcode="0x02410000"
+        description="Video color convert mode"/>
+
+    <ParamMap
+        name="MTK_VGO_SC_VP_LP_LOOM_ENABLE"
+        opcode="0x02410100"
+        description="VGO SC VP LP LOOM enable"/>
+
+    <ParamMap
+        name="MTK_DISP_LPHRT_MODE"
+        opcode="0x02414000"
+        description="Display LPHRT mode"/>
+
+    <ParamMap
+        name="MTK_VIDEO_HIGH_CPU_FREQ_MODE"
+        opcode="0x02418000"
+        description="Video high CPU freq mode"/>
+
+    <ParamMap
+        name="MTK_VIDEO_LOW_LATENCY_MODE"
+        opcode="0x0241c000"
+        description="Video low latency mode"/>
+
+    <ParamMap
+        name="MTK_DISP_APP_DUR_60"
+        opcode="0x02420100"
+        description="Display app duration - 60fps"/>
+
+    <ParamMap
+        name="MTK_DISP_SF_DUR_60"
+        opcode="0x02420200"
+        description="Display SF duration - 60fps"/>
+
+    <ParamMap
+        name="MTK_DISP_APP_DUR_90"
+        opcode="0x02420300"
+        description="Display app duration - 90fps"/>
+
+    <ParamMap
+        name="MTK_DISP_SF_DUR_90"
+        opcode="0x02420400"
+        description="Display SF duration - 90fps"/>
+
+    <ParamMap
+        name="MTK_DISP_APP_DUR_120"
+        opcode="0x02420500"
+        description="Display app duration - 120fps"/>
+
+    <ParamMap
+        name="MTK_DISP_SF_DUR_120"
+        opcode="0x02420600"
+        description="Display SF duration - 120fps"/>
+
+    <ParamMap
+        name="MTK_SF_LOW_POWER_HINT_ENABLE"
+        opcode="0x02420700"
+        description="SF low power hint enable"/>
+
+    <ParamMap
+        name="MTK_SF_CPU_MASK"
+        opcode="0x02420800"
+        description="SF CPU mask"/>
+
+    <ParamMap
+        name="MTK_SF_SWITCH_LATCH_UNSIGNAL_CONFIG"
+        opcode="0x02420900"
+        description="SF switch latch unsignal config"/>
+
+    <ParamMap
+        name="MTK_SF_DISPLAY_DEJITTER_PROCESS_ID"
+        opcode="0x02420a00"
+        description="SF display dejitter process ID"/>
+
+    <ParamMap
+        name="MTK_DISP_WEBP_USE_THREADS"
+        opcode="0x02424000"
+        description="Display WebP use threads"/>
+
+    <!-- ==================== MAJOR=10 CONSYS + MD (20) ==================== -->
+
+    <ParamMap
+        name="MTK_NET_WIFI_CAM"
+        opcode="0x02800000"
+        description="WiFi CAM mode"/>
+
+    <ParamMap
+        name="MTK_NET_WIFI_LOW_LATENCY"
+        opcode="0x02804000"
+        description="WiFi low latency"/>
+
+    <ParamMap
+        name="MTK_NET_WIFI_SMART_PREDICT"
+        opcode="0x02804100"
+        description="WiFi smart predict"/>
+
+    <ParamMap
+        name="MTK_NET_WIFI_TWT_SMART_STA"
+        opcode="0x02804200"
+        description="WiFi TWT smart STA"/>
+
+    <ParamMap
+        name="MTK_NET_WIFI_INFO_DELAY_BOUND_UDP"
+        opcode="0x02804300"
+        description="WiFi info delay bound UDP"/>
+
+    <ParamMap
+        name="MTK_NET_WIFI_INFO_DELAY_BOUND_TCP"
+        opcode="0x02804400"
+        description="WiFi info delay bound TCP"/>
+
+    <ParamMap
+        name="MTK_NET_WIFI_INFO_PHY_RATE"
+        opcode="0x02804500"
+        description="WiFi info PHY rate"/>
+
+    <ParamMap
+        name="MTK_NET_WIFI_INFO_PRIORITY_UDP"
+        opcode="0x02804600"
+        description="WiFi info priority UDP"/>
+
+    <ParamMap
+        name="MTK_NET_WIFI_INFO_PRIORITY_TCP"
+        opcode="0x02804700"
+        description="WiFi info priority TCP"/>
+
+    <ParamMap
+        name="MTK_NET_WIFI_INFO_MONITOR_PROTOCOL"
+        opcode="0x02804800"
+        description="WiFi info monitor protocol"/>
+
+    <ParamMap
+        name="MTK_NET_NETD_BOOST_UID"
+        opcode="0x02808000"
+        description="NETD boost UID"/>
+
+    <ParamMap
+        name="MTK_NET_NETD_BLOCK_UID"
+        opcode="0x02808100"
+        description="NETD block UID"/>
+
+    <ParamMap
+        name="MTK_NET_NETD_BOOST_UID_2"
+        opcode="0x02808200"
+        description="NETD boost UID 2"/>
+
+    <ParamMap
+        name="MTK_NET_MD_LOW_LATENCY"
+        opcode="0x0280c000"
+        description="MD low latency"/>
+
+    <ParamMap
+        name="MTK_NET_MD_GAME_MODE"
+        opcode="0x0280c100"
+        description="MD game mode"/>
+
+    <ParamMap
+        name="MTK_NET_MD_CERT_PID"
+        opcode="0x0280c200"
+        description="MD cert PID"/>
+
+    <ParamMap
+        name="MTK_NET_MD_CRASH_PID"
+        opcode="0x0280c300"
+        description="MD crash PID"/>
+
+    <ParamMap
+        name="MTK_NET_MD_WEAK_SIG_OPT"
+        opcode="0x0280c400"
+        description="MD weak signal opt"/>
+
+    <ParamMap
+        name="MTK_NET_MD_HSR_MODE"
+        opcode="0x0280c500"
+        description="MD HSR mode"/>
+
+    <ParamMap
+        name="MTK_NET_BT_AUDIO_LOW_LATENCY"
+        opcode="0x02810000"
+        description="BT audio low latency"/>
+
+    <ParamMap
+        name="MTK_NET_BT_AUDIO_ULTRA_LOW_LATENCY"
+        opcode="0x02810100"
+        description="BT audio ultra low latency"/>
+
+    <!-- ==================== MAJOR=11 IO (17) ==================== -->
+
+    <ParamMap
+        name="MTK_IO_BOOST_VALUE"
+        opcode="0x02c00000"
+        description="IO boost value"/>
+
+    <ParamMap
+        name="MTK_IO_UCLAMP_MIN"
+        opcode="0x02c00100"
+        description="IO uclamp min"/>
+
+    <ParamMap
+        name="MTK_IO_F2FS_UFS_BOOST"
+        opcode="0x02c04000"
+        description="IO F2FS UFS boost"/>
+
+    <ParamMap
+        name="MTK_IO_F2FS_UFS_BOOST_ULTRA"
+        opcode="0x02c04100"
+        description="IO F2FS UFS boost ultra"/>
+
+    <ParamMap
+        name="MTK_IO_F2FS_EMMC_BOOST"
+        opcode="0x02c08000"
+        description="IO F2FS eMMC boost"/>
+
+    <ParamMap
+        name="MTK_IO_BLKDEV_READAHEAD"
+        opcode="0x02c0c000"
+        description="IO block device readahead"/>
+
+    <ParamMap
+        name="MTK_IO_EXT4_DATA_BOOST"
+        opcode="0x02c10000"
+        description="IO ext4 data boost"/>
+
+    <ParamMap
+        name="MTK_IO_DATA_FS_BOOST"
+        opcode="0x02c14000"
+        description="IO data filesystem boost"/>
+
+    <ParamMap
+        name="MTK_IO_UFS_CLKSCALE"
+        opcode="0x02c18000"
+        description="IO UFS clock scaling"/>
+
+    <ParamMap
+        name="MTK_IO_UFS1_CLKSCALE"
+        opcode="0x02c18100"
+        description="IO UFS1 clock scaling"/>
+
+    <ParamMap
+        name="MTK_IO_UFS_AUTO_HIBERN8"
+        opcode="0x02c1c000"
+        description="IO UFS auto hibernate 8"/>
+
+    <ParamMap
+        name="MTK_IO_UFS1_AUTO_HIBERN8"
+        opcode="0x02c1c100"
+        description="IO UFS1 auto hibernate 8"/>
+
+    <ParamMap
+        name="MTK_IO_UFS_IRQ_AFFINITY"
+        opcode="0x02c20000"
+        description="IO UFS IRQ affinity"/>
+
+    <ParamMap
+        name="MTK_IO_UFS1_IRQ_AFFINITY"
+        opcode="0x02c20100"
+        description="IO UFS1 IRQ affinity"/>
+
+    <ParamMap
+        name="MTK_IO_SCHEDULER"
+        opcode="0x02c24000"
+        description="IO scheduler"/>
+
+    <ParamMap
+        name="MTK_IO_UFS_TRACING_MODE"
+        opcode="0x02c28000"
+        description="IO UFS tracing mode"/>
+
+    <ParamMap
+        name="MTK_IO_UFS1_TRACING_MODE"
+        opcode="0x02c28100"
+        description="IO UFS1 tracing mode"/>
+
+    <!-- ==================== MAJOR=12 Misc. (Thermal / Touch / SysPerf) (62) ==================== -->
+
+    <ParamMap
+        name="MTK_THERMAL_POLICY"
+        opcode="0x03000000"
+        description="Thermal policy"/>
+
+    <ParamMap
+        name="MTK_UX_PREDICT_LOW_LATENCY"
+        opcode="0x03004000"
+        description="UX predict low latency"/>
+
+    <ParamMap
+        name="MTK_UX_PREDICT_GAME_MODE"
+        opcode="0x03004100"
+        description="UX predict game mode"/>
+
+    <ParamMap
+        name="MTK_UX_SCROLL_SAVE_POWER"
+        opcode="0x03004200"
+        description="UX scroll save power"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_RESCUE_ENHANS"
+        opcode="0x03004300"
+        description="UX SBE rescue enhancement"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_CHECKPOINT"
+        opcode="0x03004400"
+        description="UX SBE checkpoint"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_HORIZONTAL_SCROLL_DURATION"
+        opcode="0x03004500"
+        description="UX SBE horizontal scroll duration"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_VERTICAL_SCROLL_DURATION"
+        opcode="0x03004600"
+        description="UX SBE vertical scroll duration"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_SBB_ENABLE_LATER"
+        opcode="0x03004700"
+        description="UX SBE SBB enable later"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_SCROLL_FREQ_FLOOR"
+        opcode="0x03004800"
+        description="UX SBE scroll freq floor"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_FRAME_DECISION"
+        opcode="0x03004900"
+        description="UX SBE frame decision"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_DY_FRAME_THRESHOLD"
+        opcode="0x03004c00"
+        description="UX SBE dynamic frame threshold"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_DY_MAX_ENHANCE"
+        opcode="0x03004d00"
+        description="UX SBE dynamic max enhance"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_DY_RESCUE_ENABLE"
+        opcode="0x03004e00"
+        description="UX SBE dynamic rescue enable"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_SCROLL_CNT"
+        opcode="0x03004f00"
+        description="UX SBE scroll count"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_CHECKPOINT_TRAVERSAL"
+        opcode="0x03005000"
+        description="UX SBE checkpoint traversal"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_THRESHOLD_TRAVERSAL"
+        opcode="0x03005100"
+        description="UX SBE threshold traversal"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_CRITICAL_THREAD_BASIC_CAP"
+        opcode="0x03005200"
+        description="UX SBE critical thread basic cap"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_AI_BOOST_ENABLE"
+        opcode="0x03005300"
+        description="UX SBE AI boost enable"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_GAS_THRESHOLD_FOR_HIGH_TLP"
+        opcode="0x03005400"
+        description="UX SBE GAS threshold for high TLP"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_GAS_THRESHOLD_FOR_LOW_TLP"
+        opcode="0x03005500"
+        description="UX SBE GAS threshold for low TLP"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_AFFINITY_TASK_LOW_THRESHOLD_CAP"
+        opcode="0x03005600"
+        description="UX SBE affinity task low threshold cap"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_AFFINITY_TASK_MIN_CAP"
+        opcode="0x03005700"
+        description="UX SBE affinity task min cap"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_ENHANCE_F"
+        opcode="0x03005800"
+        description="UX SBE enhance F"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_EXTRA_SUB_DEQUE_MARGIN_TIME"
+        opcode="0x03005900"
+        description="UX SBE extra sub dequeue margin time"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_EXTRA_SUB_EN_DEQUE_ENABLE"
+        opcode="0x03005a00"
+        description="UX SBE extra sub en dequeue enable"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_FORCE_BYPASS_DPTV2"
+        opcode="0x03005b00"
+        description="UX SBE force bypass DPTv2"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_IGNORE_VIP_TASK_ENABLE"
+        opcode="0x03005c00"
+        description="UX SBE ignore VIP task enable"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_RESCUE_ENABLE"
+        opcode="0x03005d00"
+        description="UX SBE rescue enable"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_RUNNABLE_UTIL_EST_DISABLE"
+        opcode="0x03005e00"
+        description="UX SBE runnable util est disable"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_UCLAMP_MARGIN"
+        opcode="0x03005f00"
+        description="UX SBE uclamp margin"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_SET_DEPLIST_AFFINITY"
+        opcode="0x03006000"
+        description="UX SBE set deplist affinity"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_SET_DEPLIST_LS"
+        opcode="0x03006100"
+        description="UX SBE set deplist LS"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_SET_DEPLIST_VIP"
+        opcode="0x03006200"
+        description="UX SBE set deplist VIP"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_SMART_LAUNCH_OFF_ON"
+        opcode="0x03006300"
+        description="UX SBE smart launch off/on"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_UX_GENERAL_POLICY"
+        opcode="0x03006400"
+        description="UX SBE UX general policy"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_UX_GENERAL_POLICY_DPT_SETWL"
+        opcode="0x03006500"
+        description="UX SBE UX general policy DPT setWL"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_UX_GENERAL_POLICY_TYPE"
+        opcode="0x03006600"
+        description="UX SBE UX general policy type"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_UX_DPTV2_ENABLE"
+        opcode="0x03006700"
+        description="UX SBE UX DPTv2 enable"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_UX_DY_ENHANCE_MARGIN"
+        opcode="0x03006800"
+        description="UX SBE UX dynamic enhance margin"/>
+
+    <ParamMap
+        name="MTK_UX_SBE_CORE_CTRL_ENABLE"
+        opcode="0x03006900"
+        description="UX SBE core ctrl enable"/>
+
+    <ParamMap
+        name="MTK_CFP_ENABLE"
+        opcode="0x03008000"
+        description="CFP enable"/>
+
+    <ParamMap
+        name="MTK_CFP_POLLING_MS"
+        opcode="0x03008100"
+        description="CFP polling ms"/>
+
+    <ParamMap
+        name="MTK_CFP_UP_LOADING"
+        opcode="0x03008200"
+        description="CFP up loading"/>
+
+    <ParamMap
+        name="MTK_CFP_DOWN_LOADING"
+        opcode="0x03008300"
+        description="CFP down loading"/>
+
+    <ParamMap
+        name="MTK_CFP_UP_TIME"
+        opcode="0x03008400"
+        description="CFP up time"/>
+
+    <ParamMap
+        name="MTK_CFP_DOWN_TIME"
+        opcode="0x03008500"
+        description="CFP down time"/>
+
+    <ParamMap
+        name="MTK_CFP_UP_OPP"
+        opcode="0x03008600"
+        description="CFP up OPP"/>
+
+    <ParamMap
+        name="MTK_CFP_DOWN_OPP"
+        opcode="0x03008700"
+        description="CFP down OPP"/>
+
+    <ParamMap
+        name="MTK_PERF_TASK_TURBO"
+        opcode="0x0300c000"
+        description="Perf task turbo"/>
+
+    <ParamMap
+        name="MTK_SMART_LAUNCH_TIME_TARGET"
+        opcode="0x0300c100"
+        description="Smart launch time target"/>
+
+    <ParamMap
+        name="MTK_SMART_LAUNCH_CLUSTER_2_CPU_MAX_FREQ"
+        opcode="0x0300c200"
+        description="Smart launch cluster 2 CPU max freq"/>
+
+    <ParamMap
+        name="MTK_SMART_LAUNCH_CLUSTER_2_CAP_RATION"
+        opcode="0x0300c300"
+        description="Smart launch cluster 2 cap ratio"/>
+
+    <ParamMap
+        name="MTK_SMART_LAUNCH_CLUSTER_2_OPP_SPA_MAX"
+        opcode="0x0300c400"
+        description="Smart launch cluster 2 OPP SPA max"/>
+
+    <ParamMap
+        name="MTK_PERF_TASK_TURBO_ENFORCE_CT_VIP_ENABLE"
+        opcode="0x0300c500"
+        description="Perf task turbo enforce CT VIP enable"/>
+
+    <ParamMap
+        name="MTK_PERF_TASK_TURBO_PER_TASK_VIP_ENABLE"
+        opcode="0x0300c600"
+        description="Perf task turbo per-task VIP enable"/>
+
+    <ParamMap
+        name="MTK_PERF_TASK_TURBO_PER_TASK_VIP"
+        opcode="0x0300c700"
+        description="Perf task turbo per-task VIP"/>
+
+    <ParamMap
+        name="MTK_SMART_LAUNCH_MEM_PSI_THRESHOLD"
+        opcode="0x0300c800"
+        description="Smart launch mem PSI threshold"/>
+
+    <ParamMap
+        name="MTK_SMART_LAUNCH_CPU_PSI_THRESHOLD"
+        opcode="0x0300c900"
+        description="Smart launch CPU PSI threshold"/>
+
+    <ParamMap
+        name="MTK_SMART_LAUNCH_IO_PSI_THRESHOLD"
+        opcode="0x0300ca00"
+        description="Smart launch IO PSI threshold"/>
+
+    <ParamMap
+        name="MTK_TOUCH_CHANGE_RATE"
+        opcode="0x03010000"
+        description="Touch change rate"/>
+
+    <ParamMap
+        name="MTK_THERMAL_SPORTS_CG_POLICY"
+        opcode="0x03014000"
+        description="Thermal sports CG policy"/>
+
+    <ParamMap
+        name="MTK_MAGT_THERMAL_AWARE_THRESHOLD"
+        opcode="0x03018000"
+        description="MAGT thermal aware threshold"/>
+
+    <ParamMap
+        name="MTK_MAGT_FPSDROP_AWARE_THRESHOLD"
+        opcode="0x03018100"
+        description="MAGT FPS drop aware threshold"/>
+
+    <ParamMap
+        name="MTK_MAGT_ADVICE_BAT_AVG_CURRENT"
+        opcode="0x03018200"
+        description="MAGT advice battery avg current"/>
+
+    <ParamMap
+        name="MTK_MAGT_ADVICE_BAT_MAX_CURRENT"
+        opcode="0x03018300"
+        description="MAGT advice battery max current"/>
+
+    <ParamMap
+        name="MTK_MAGT_TARGETFPS_THROTTLING_TEMP"
+        opcode="0x03018400"
+        description="MAGT target FPS throttling temp"/>
+
+    <ParamMap
+        name="MTK_MAGT_THERMAL_AWARE_LIGHT_THRESHOLD"
+        opcode="0x03018500"
+        description="MAGT thermal aware light threshold"/>
+
+    <ParamMap
+        name="MTK_MAGT_GAME_SUGGESTION_JOBWORKER"
+        opcode="0x03018600"
+        description="MAGT game suggestion job worker"/>
+
+    <!-- ==================== MAJOR=13 PowerHAL Internal Control (41) ==================== -->
+
+    <ParamMap
+        name="MTK_POWERHAL_SCREEN_OFF_STATE"
+        opcode="0x03400000"
+        description="PowerHAL screen off state"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_SCN_CRASH"
+        opcode="0x03400100"
+        description="PowerHAL scene crash"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_SPORTS_MODE"
+        opcode="0x03404000"
+        description="PowerHAL sports mode"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_SPORTS_MODE_APP_SMART_MODE"
+        opcode="0x03404100"
+        description="PowerHAL sports mode app smart mode"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_GAME_MODE_ENABLE"
+        opcode="0x03404200"
+        description="PowerHAL game mode enable"/>
+
+    <ParamMap
+        name="MTK_ADPF_CPU_TIMING_HINT_ENABLE"
+        opcode="0x03404300"
+        description="ADPF CPU timing hint enable"/>
+
+    <ParamMap
+        name="MTK_ADPF_CPU_LOAD_UP_BOOST_DURATION"
+        opcode="0x03404400"
+        description="ADPF CPU load up boost duration"/>
+
+    <ParamMap
+        name="MTK_ADPF_CPU_LOAD_SPIKE_BOOST_DURATION"
+        opcode="0x03404500"
+        description="ADPF CPU load spike boost duration"/>
+
+    <ParamMap
+        name="MTK_ADPF_CPU_LOAD_UP_BOOST_SCALE"
+        opcode="0x03404600"
+        description="ADPF CPU load up boost scale"/>
+
+    <ParamMap
+        name="MTK_ADPF_CPU_LOAD_SPIKE_BOOST_SCALE"
+        opcode="0x03404700"
+        description="ADPF CPU load spike boost scale"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_OPP"
+        opcode="0x03408000"
+        description="PowerHAL touch boost OPP"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_DURATION"
+        opcode="0x03408100"
+        description="PowerHAL touch boost duration"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_ACTIVE_TIME"
+        opcode="0x03408200"
+        description="PowerHAL touch boost active time"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_EAS_BOOST"
+        opcode="0x03408300"
+        description="PowerHAL touch boost EAS boost"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_TIME_TO_LAST_TOUCH"
+        opcode="0x03408400"
+        description="PowerHAL touch boost time to last touch"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_ENABLE"
+        opcode="0x03408500"
+        description="PowerHAL touch boost enable"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_NOTIFY_FBC"
+        opcode="0x03408600"
+        description="PowerHAL touch boost notify FBC"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_DEBOOST_WHEN_RENDER"
+        opcode="0x03408700"
+        description="PowerHAL touch boost deboost when render"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_CLUSTER_0_OPP"
+        opcode="0x03408800"
+        description="PowerHAL touch boost cluster 0 OPP"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_CLUSTER_1_OPP"
+        opcode="0x03408900"
+        description="PowerHAL touch boost cluster 1 OPP"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_CLUSTER_2_OPP"
+        opcode="0x03408a00"
+        description="PowerHAL touch boost cluster 2 OPP"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_NOTIFY_TOUCH_EVENT"
+        opcode="0x03408b00"
+        description="PowerHAL touch boost notify touch event"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_EAS_BOOST_FG"
+        opcode="0x03408c00"
+        description="PowerHAL touch boost EAS boost FG"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_PREFER_IDLE_TA"
+        opcode="0x03408d00"
+        description="PowerHAL touch boost prefer idle top-app"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_PREFER_IDLE_FG"
+        opcode="0x03408e00"
+        description="PowerHAL touch boost prefer idle FG"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_UP"
+        opcode="0x03408f00"
+        description="PowerHAL touch boost up"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_DOWN"
+        opcode="0x03409000"
+        description="PowerHAL touch boost down"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_TA_GAS_ENABLE"
+        opcode="0x03409100"
+        description="PowerHAL touch boost TA GAS enable"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_TA_GAS_THRESHOLD"
+        opcode="0x03409200"
+        description="PowerHAL touch boost TA GAS threshold"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_CLUSTER_0"
+        opcode="0x03409300"
+        description="PowerHAL touch boost cluster 0"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_CLUSTER_1"
+        opcode="0x03409400"
+        description="PowerHAL touch boost cluster 1"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TOUCH_BOOST_CLUSTER_2"
+        opcode="0x03409500"
+        description="PowerHAL touch boost cluster 2"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_WHITELIST_APP_LAUNCH_TIME_COLD"
+        opcode="0x0340c000"
+        description="PowerHAL whitelist app launch time cold"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_WHITELIST_APP_LAUNCH_TIME_WARM"
+        opcode="0x0340c100"
+        description="PowerHAL whitelist app launch time warm"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_WHITELIST_ACT_SWITCH_TIME"
+        opcode="0x0340c200"
+        description="PowerHAL whitelist activity switch time"/>
+
+    <ParamMap
+        name="MTK_POWER_HINT_HOLD_TIME"
+        opcode="0x03410000"
+        description="Power hint hold time"/>
+
+    <ParamMap
+        name="MTK_POWER_HINT_EXT_HINT"
+        opcode="0x03410100"
+        description="Power hint ext hint"/>
+
+    <ParamMap
+        name="MTK_POWER_HINT_EXT_HINT_HOLD_TIME"
+        opcode="0x03410200"
+        description="Power hint ext hint hold time"/>
+
+    <ParamMap
+        name="MTK_POWER_END_HINT_HOLD_TIME"
+        opcode="0x03410300"
+        description="Power end hint hold time"/>
+
+    <ParamMap
+        name="MTK_POWER_HINT_INSTALL_MAX_DURATION"
+        opcode="0x03410400"
+        description="Power hint install max duration"/>
+
+    <ParamMap
+        name="MTK_POWER_HINT_EXT_HINT_FOR_GAME"
+        opcode="0x03410500"
+        description="Power hint ext hint for game"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_HIDE_LOG"
+        opcode="0x03414000"
+        description="PowerHAL hide log"/>
+
+    <ParamMap
+        name="MTK_SLC_CPU_SETTING"
+        opcode="0x03414100"
+        description="SLC CPU setting"/>
+
+    <ParamMap
+        name="MTK_APPLIST_FPS_TOLERANCE_PERCENT"
+        opcode="0x03418000"
+        description="App list FPS tolerance percent"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_PRIORITY"
+        opcode="0x0341c000"
+        description="PowerHAL priority"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_TEST_CMD"
+        opcode="0x03420000"
+        description="PowerHAL test command"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_ONESHOT_RESET"
+        opcode="0x03424000"
+        description="PowerHAL oneshot reset"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_CUS_HINT_ENABLE"
+        opcode="0x03428000"
+        description="PowerHAL custom hint enable"/>
+
+    <!-- ==================== MAJOR=14 C2PS Camera Policy (18) ==================== -->
+
+    <ParamMap
+        name="MTK_C2PS_UCLAMP_POLICY_MODE"
+        opcode="0x03800000"
+        description="C2PS uclamp policy mode"/>
+
+    <ParamMap
+        name="MTK_C2PS_UCLAMP_SIMPLE_POLICY_UP_MARGIN"
+        opcode="0x03800100"
+        description="C2PS uclamp simple policy up margin"/>
+
+    <ParamMap
+        name="MTK_C2PS_UCLAMP_SIMPLE_POLICY_DOWN_MARGIN"
+        opcode="0x03800200"
+        description="C2PS uclamp simple policy down margin"/>
+
+    <ParamMap
+        name="MTK_C2PS_UCLAMP_SIMPLE_POLICY_BASE_UPDATE_UCLAMP"
+        opcode="0x03800300"
+        description="C2PS uclamp simple policy base update uclamp"/>
+
+    <ParamMap
+        name="MTK_C2PS_PROC_TIME_WINDOW_SIZE"
+        opcode="0x03804000"
+        description="C2PS proc time window size"/>
+
+    <ParamMap
+        name="MTK_C2PS_BG_UCLAMP_POLICY_UP_MARGIN_CLUSTER_0"
+        opcode="0x03808000"
+        description="C2PS BG uclamp policy up margin - cluster 0"/>
+
+    <ParamMap
+        name="MTK_C2PS_BG_UCLAMP_POLICY_UP_MARGIN_CLUSTER_1"
+        opcode="0x03808100"
+        description="C2PS BG uclamp policy up margin - cluster 1"/>
+
+    <ParamMap
+        name="MTK_C2PS_BG_UCLAMP_POLICY_UP_MARGIN_CLUSTER_2"
+        opcode="0x03808200"
+        description="C2PS BG uclamp policy up margin - cluster 2"/>
+
+    <ParamMap
+        name="MTK_C2PS_BG_UCLAMP_POLICY_IDLERATE_ALERT"
+        opcode="0x03808300"
+        description="C2PS BG uclamp policy idle rate alert"/>
+
+    <ParamMap
+        name="MTK_C2PS_BG_UCLAMP_POLICY_BASE_UPDATE_UCLAMP"
+        opcode="0x03808400"
+        description="C2PS BG uclamp policy base update uclamp"/>
+
+    <ParamMap
+        name="MTK_C2PS_BG_UCLAMP_POLICY_MONITOR_DURATION"
+        opcode="0x03808500"
+        description="C2PS BG uclamp policy monitor duration"/>
+
+    <ParamMap
+        name="MTK_C2PS_BG_UCLAMP_POLICY_DANGEROUS_IDLERATE"
+        opcode="0x03808600"
+        description="C2PS BG uclamp policy dangerous idle rate"/>
+
+    <ParamMap
+        name="MTK_C2PS_BG_UCLAMP_POLICY_FAST_UPDATE_UCLAMP"
+        opcode="0x03808700"
+        description="C2PS BG uclamp policy fast update uclamp"/>
+
+    <ParamMap
+        name="MTK_C2PS_BG_UCLAMP_POLICY_PLACEHOLDER"
+        opcode="0x03808800"
+        description="C2PS BG uclamp policy placeholder"/>
+
+    <ParamMap
+        name="MTK_C2PS_BG_UM_POLICY_PLACEHOLDER"
+        opcode="0x0380c000"
+        description="C2PS BG UM policy placeholder"/>
+
+    <ParamMap
+        name="MTK_C2PS_ENABLE_DYNAMIC_CPU_ISOLATION_POLICY"
+        opcode="0x03810000"
+        description="C2PS enable dynamic CPU isolation policy"/>
+
+    <ParamMap
+        name="MTK_C2PS_ENABLE_RUNNABLE_MONITOR_POLICY"
+        opcode="0x03810100"
+        description="C2PS enable runnable monitor policy"/>
+
+    <ParamMap
+        name="MTK_C2PS_ENABLE_CAM_APP_BINDER_VIP"
+        opcode="0x03810200"
+        description="C2PS enable CAM app binder VIP"/>
+
+    <!-- ==================== MAJOR=15 Peak Power Budgeting (19) ==================== -->
+
+    <ParamMap
+        name="MTK_PEAK_POWER_BUDGET_MODE"
+        opcode="0x03c04000"
+        description="Peak power budget mode"/>
+
+    <ParamMap
+        name="MTK_PEAK_POWER_BUDGET_CG_MIN_POWER"
+        opcode="0x03c04100"
+        description="Peak power budget CG min power"/>
+
+    <ParamMap
+        name="MTK_PEAK_POWER_FAVOR_MULTISCENE"
+        opcode="0x03c04200"
+        description="Peak power favor multiscene"/>
+
+    <ParamMap
+        name="MTK_PEAK_POWER_BUDGET_SWITCH_PREUV_TABLE"
+        opcode="0x03c04300"
+        description="Peak power budget switch pre-UV table"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_BACKLIGHT_LIMIT"
+        opcode="0x03c08000"
+        description="Limit peripherals backlight limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_FLASHLIGHT_LIMIT"
+        opcode="0x03c08100"
+        description="Limit peripherals flashlight limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_WIFI_LIMIT"
+        opcode="0x03c08200"
+        description="Limit peripherals WiFi limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_AUTONOMOUS_CTRL"
+        opcode="0x03c08300"
+        description="Limit peripherals MD autonomous ctrl"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_UL_THROTTLE_LIMIT"
+        opcode="0x03c08400"
+        description="Limit peripherals MD UL throttle limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_TXPOWER_LTE_LIMIT"
+        opcode="0x03c08500"
+        description="Limit peripherals MD TX power LTE limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_CC_CTRL_LIMIT"
+        opcode="0x03c08600"
+        description="Limit peripherals MD CC ctrl limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_HEADSWITCH_LIMIT"
+        opcode="0x03c08700"
+        description="Limit peripherals MD headswitch limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_RAS_LIMIT"
+        opcode="0x03c08800"
+        description="Limit peripherals MD RAS limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_TXPOWER_FR2_LIMIT"
+        opcode="0x03c08900"
+        description="Limit peripherals MD TX power FR2 limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_FLIGHTMODE_LIMIT"
+        opcode="0x03c08a00"
+        description="Limit peripherals MD flight mode limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_CHARGER_LIMIT"
+        opcode="0x03c08b00"
+        description="Limit peripherals MD charger limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_TXPOWER_FR1_LIMIT"
+        opcode="0x03c08c00"
+        description="Limit peripherals MD TX power FR1 limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_UAI_LIMIT"
+        opcode="0x03c08d00"
+        description="Limit peripherals MD UAI limit"/>
+
+    <ParamMap
+        name="MTK_LIMIT_PERIPHERALS_MD_SW_SHUTDOWN_LIMIT"
+        opcode="0x03c08e00"
+        description="Limit peripherals MD SW shutdown limit"/>
+
+    <!-- ==================== MAJOR=16 MBrain (1) ==================== -->
+
+    <ParamMap
+        name="MTK_MBRAIN_GAME_MODE_ENABLE"
+        opcode="0x04000000"
+        description="MBrain game mode enable"/>
+
+    <!-- ==================== MAJOR=64 Custom / Transsion Extensions ==================== -->
+
+    <ParamMap
+        name="MTK_CUSTOM_RESOURCE_1"
+        opcode="0x10000000"
+        description="Custom resource 1"/>
+
+    <ParamMap
+        name="MTK_DRAM_VM_KSWAPD0_BIND_CORE_ENABLE"
+        opcode="0x10000002"
+        description="VM kswapd0 bind core enable (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_THERMALUX_CLUSTER_0"
+        opcode="0x10000100"
+        description="CPU max freq thermal UX - cluster 0 (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_THERMALUX_CLUSTER_1"
+        opcode="0x10000101"
+        description="CPU max freq thermal UX - cluster 1 (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_THERMALUX_CLUSTER_2"
+        opcode="0x10000102"
+        description="CPU max freq thermal UX - cluster 2 (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_CHANGE_GAME_MODE"
+        opcode="0x10000020"
+        description="PowerHAL change game mode (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_THERMAL_POLICY_BY_GAME_MODE"
+        opcode="0x10002100"
+        description="Thermal policy by game mode (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_CHANGE_AMBIENT_TEMPERATURE"
+        opcode="0x10000022"
+        description="PowerHAL change ambient temperature (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_THERMAL_POLICY_BY_AMBIENT_TEMPERATURE"
+        opcode="0x10002300"
+        description="Thermal policy by ambient temperature (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_POWERHAL_CHANGE_FOLD_STATE"
+        opcode="0x10002400"
+        description="PowerHAL change fold state (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_THERMAL_POLICY_BY_FOLDED"
+        opcode="0x10002500"
+        description="Thermal policy by folded state (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_THERMAL_POLICY_BY_MULTI_WINDOW"
+        opcode="0x10000026"
+        description="Thermal policy by multi-window (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_THERMAL_POLICY_CLOSE_BY_ENGINEER_MODE"
+        opcode="0x10000027"
+        description="Thermal policy close by engineer mode (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_TRAN_THERMAL_CLUSTER_0"
+        opcode="0x10000210"
+        description="CPU max freq Transsion thermal - cluster 0 (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_TRAN_THERMAL_CLUSTER_1"
+        opcode="0x10000211"
+        description="CPU max freq Transsion thermal - cluster 1 (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_CPUFREQ_MAX_TRAN_THERMAL_CLUSTER_2"
+        opcode="0x10000212"
+        description="CPU max freq Transsion thermal - cluster 2 (Transsion custom)"/>
+
+    <ParamMap
+        name="MTK_TRAN_SCHED_SCENE"
+        opcode="0x11000000"
+        description="Transsion sched scene (touch=0x10, fling=0x20, launch=0x01, anim=0x04)"/>
 
 </PlatformMapping>

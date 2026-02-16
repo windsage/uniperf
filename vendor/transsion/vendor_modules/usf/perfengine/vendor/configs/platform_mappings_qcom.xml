@@ -1,199 +1,1760 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
-  QCOM Platform Parameter Mappings
-  
-  Document Reference: KBA200524182546_REV_8_Perflock_Opcode_explanation.pdf
-  
-  Cluster Naming Convention:
-    - Silver (小核) = Little Core / Cluster 0
-    - Gold   (中核) = Big Core / Cluster 1  
-    - Prime  (大核) = Prime Core / Cluster 2
+    QCOM Platform Parameter Mapping Table
+    Source: qcom/vendor/vendor/qcom/proprietary/perf-core/mp-ctl/VendorIPerf.h
+    Total: 340 entries
+    All opcode values are copied verbatim from the source header file.
+    DO NOT modify opcode values manually.
 -->
-
 <PlatformMapping platform="QCOM" version="1.0">
-    
-    <Metadata>
-        <Description>QCOM Perflock Opcode Mappings (Core Parameters)</Description>
-        <Author>CHAO</Author>
-        <LastUpdate>2025-02-07</LastUpdate>
-        <DocumentRef>KBA200524182546_REV_8_Perflock_Opcode_explanation.pdf</DocumentRef>
-    </Metadata>
 
-    <!-- ==================== CPU Frequency Control ==================== -->
-    
-    <!-- Silver Cluster (Little Core / Cluster 0) -->
-    <ParamMap 
-        name="CPU_CLUSTER0_MIN_FREQ" 
-        opcode="0x40800100"
-        description="Silver Cluster Min Frequency"
-        sysnode="/sys/module/msm_performance/parameters/cpu_min_freq"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER0_MAX_FREQ" 
-        opcode="0x40804100"
-        description="Silver Cluster Max Frequency"
-        sysnode="/sys/module/msm_performance/parameters/cpu_max_freq"/>
-    
-    <!-- Gold Cluster (Big Core / Cluster 1) -->
-    <ParamMap 
-        name="CPU_CLUSTER1_MIN_FREQ" 
-        opcode="0x40800000"
-        description="Gold Cluster Min Frequency"
-        sysnode="/sys/module/msm_performance/parameters/cpu_min_freq"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER1_MAX_FREQ" 
-        opcode="0x40804000"
-        description="Gold Cluster Max Frequency"
-        sysnode="/sys/module/msm_performance/parameters/cpu_max_freq"/>
-    
-    <!-- Prime Cluster (Prime Core / Cluster 2) -->
-    <ParamMap 
-        name="CPU_CLUSTER2_MIN_FREQ" 
-        opcode="0x40800200"
-        description="Prime Cluster Min Frequency"
-        sysnode="/sys/module/msm_performance/parameters/cpu_min_freq"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER2_MAX_FREQ" 
-        opcode="0x40804200"
-        description="Prime Cluster Max Frequency"
-        sysnode="/sys/module/msm_performance/parameters/cpu_max_freq"/>
+    <!-- ==================== LPM / Power Collapse (6) ==================== -->
 
-    <!-- ==================== CPU Core Control ==================== -->
-    
-    <ParamMap 
-        name="CPU_CLUSTER0_MIN_CORES" 
-        opcode="0x41000100"
-        description="Silver Cluster Min Online Cores"
-        sysnode="/sys/devices/system/cpu/cpu0/core_ctl/min_cpus"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER1_MIN_CORES" 
-        opcode="0x41000000"
-        description="Gold Cluster Min Online Cores"
-        sysnode="/sys/devices/system/cpu/cpu4/core_ctl/min_cpus"/>
-    
-    <ParamMap 
-        name="CPU_CLUSTER2_MIN_CORES" 
-        opcode="0x41000200"
-        description="Prime Cluster Min Online Cores"
-        sysnode="/sys/devices/system/cpu/cpu7/core_ctl/min_cpus"/>
-
-    <!-- ==================== GPU Control ==================== -->
-    
-    <ParamMap 
-        name="GPU_MIN_FREQ" 
-        opcode="0x42804000"
-        description="GPU Min Frequency"
-        sysnode="/sys/class/kgsl/kgsl-3d0/min_pwrlevel"/>
-    
-    <ParamMap 
-        name="GPU_MAX_FREQ" 
-        opcode="0x42808000"
-        description="GPU Max Frequency"
-        sysnode="/sys/class/kgsl/kgsl-3d0/max_pwrlevel"/>
-
-    <!-- ==================== Scheduler Control ==================== -->
-    
-    <ParamMap 
-        name="SCHED_BOOST" 
-        opcode="0x40C00000"
-        description="Scheduler Boost Level (0-3)"
-        sysnode="/proc/sys/kernel/sched_boost"/>
-    
-    <ParamMap 
-        name="SCHED_UPMIGRATE" 
-        opcode="0x40C1C000"
-        description="Scheduler Up-migrate Threshold"
-        sysnode="/proc/sys/kernel/sched_upmigrate"/>
-    
-    <ParamMap 
-        name="SCHED_DOWNMIGRATE" 
-        opcode="0x40C20000"
-        description="Scheduler Down-migrate Threshold"
-        sysnode="/proc/sys/kernel/sched_downmigrate"/>
-
-    <!-- ==================== Memory & Bandwidth ==================== -->
-    
-    <ParamMap 
-        name="LLCC_DDR_BW_MIN_FREQ" 
-        opcode="0x43000000"
-        description="LLCC to DDR Min Bandwidth"
-        sysnode="/sys/class/devfreq/soc:qcom,cpu-llcc-ddr-bw/min_freq"/>
-    
-    <ParamMap 
-        name="LLCC_DDR_BW_MAX_FREQ" 
-        opcode="0x43004000"
-        description="LLCC to DDR Max Bandwidth"
-        sysnode="/sys/class/devfreq/soc:qcom,cpu-llcc-ddr-bw/max_freq"/>
-    
-    <ParamMap 
-        name="CPU_LLCC_BW_MIN_FREQ" 
-        opcode="0x41844000"
-        description="CPU to LLCC Min Bandwidth"
-        sysnode="/sys/class/devfreq/soc:qcom,cpu-cpu-llcc-bw/min_freq"/>
-    
-    <ParamMap 
-        name="L3_MEMLAT_MIN_FREQ" 
-        opcode="0x43400000"
-        description="L3 Cache Memory Latency Min Freq"
-        sysnode="/sys/class/devfreq/soc:qcom,l3-cpu*/min_freq"/>
-
-    <!-- ==================== QCOM-Specific Parameters ==================== -->
-    
-    <!-- WALT Scheduler -->
-    <ParamMap 
-        name="QCOM_WALT_ADAPTIVE_HIGH_FREQ_GOLD" 
-        opcode="0x4080C000"
-        description="WALT Adaptive High Freq - Gold Cluster"
-        sysnode="/proc/sys/kernel/sched_walt_cpu_high_irqload"/>
-    
-    <ParamMap 
-        name="QCOM_WALT_ADAPTIVE_HIGH_FREQ_SILVER" 
-        opcode="0x4080C100"
-        description="WALT Adaptive High Freq - Silver Cluster"
-        sysnode="/proc/sys/kernel/sched_walt_cpu_high_irqload"/>
-    
-    <ParamMap 
-        name="QCOM_WALT_ADAPTIVE_HIGH_FREQ_PRIME" 
-        opcode="0x4080C200"
-        description="WALT Adaptive High Freq - Prime Cluster"
-        sysnode="/proc/sys/kernel/sched_walt_cpu_high_irqload"/>
-    
-    <!-- Power Management -->
-    <ParamMap 
-        name="QCOM_LPM_BIAS_HYST" 
-        opcode="0x40408000"
-        description="Low Power Mode Bias Hysteresis"
-        sysnode="/sys/module/lpm_levels/parameters/bias_hyst"/>
-    
-    <ParamMap 
-        name="QCOM_POWER_COLLAPSE_TOGGLE" 
+    <ParamMap
+        name="QCOM_TOGGLE_POWER_COLLAPSE"
         opcode="0x40400000"
-        description="Toggle CPU Power Collapse"
-        sysnode="/dev/cpu_dma_latency"/>
-    
-    <!-- Storage -->
-    <ParamMap 
-        name="QCOM_STORAGE_CLK_SCALING" 
-        opcode="0x42C10000"
-        description="Storage Clock Scaling Disable"
-        sysnode="/sys/class/scsi_host/host0/clkscale_enable"/>
-    
-    <!-- GPU Extensions -->
-    <ParamMap 
-        name="QCOM_GPU_TOUCH_WAKEUP" 
-        opcode="0x42834000"
-        description="GPU Touch Wakeup Enable"
-        sysnode="/sys/class/kgsl/kgsl-3d0/wake_timeout"/>
-    
-    <!-- Core Control -->
-    <ParamMap 
-        name="QCOM_CPU_CORE_CTL_NOT_PREFERRED" 
+        description="Toggle power collapse"/>
+
+    <ParamMap
+        name="QCOM_L2_POWER_COLLAPSE_PERF"
+        opcode="0x40404000"
+        description="L2 power collapse perf"/>
+
+    <ParamMap
+        name="QCOM_LPM_BIAS_HYST"
+        opcode="0x40408000"
+        description="LPM bias hysteresis"/>
+
+    <ParamMap
+        name="QCOM_LPM_LEVELS_REF_STDDEV"
+        opcode="0x4040C000"
+        description="LPM levels reference stddev"/>
+
+    <ParamMap
+        name="QCOM_LPM_LEVELS_TMR_ADD"
+        opcode="0x40410000"
+        description="LPM levels timer add"/>
+
+    <ParamMap
+        name="QCOM_LPM_IPI_PREDICTION"
+        opcode="0x40414000"
+        description="LPM IPI prediction"/>
+
+    <!-- ==================== CPU MIN FREQ (11) ==================== -->
+
+    <ParamMap
+        name="QCOM_MIN_FREQ_CLUSTER_BIG_CORE_0"
+        opcode="0x40800000"
+        description="Big cluster core 0 min freq"/>
+
+    <ParamMap
+        name="QCOM_MIN_FREQ_CLUSTER_BIG_CORE_1"
+        opcode="0x40800010"
+        description="Big cluster core 1 min freq"/>
+
+    <ParamMap
+        name="QCOM_MIN_FREQ_CLUSTER_BIG_CORE_2"
+        opcode="0x40800020"
+        description="Big cluster core 2 min freq"/>
+
+    <ParamMap
+        name="QCOM_MIN_FREQ_CLUSTER_BIG_CORE_3"
+        opcode="0x40800030"
+        description="Big cluster core 3 min freq"/>
+
+    <ParamMap
+        name="QCOM_MIN_FREQ_CLUSTER_LITTLE_CORE_0"
+        opcode="0x40800100"
+        description="Little cluster core 0 min freq"/>
+
+    <ParamMap
+        name="QCOM_MIN_FREQ_CLUSTER_LITTLE_CORE_1"
+        opcode="0x40800110"
+        description="Little cluster core 1 min freq"/>
+
+    <ParamMap
+        name="QCOM_MIN_FREQ_CLUSTER_LITTLE_CORE_2"
+        opcode="0x40800120"
+        description="Little cluster core 2 min freq"/>
+
+    <ParamMap
+        name="QCOM_MIN_FREQ_CLUSTER_LITTLE_CORE_3"
+        opcode="0x40800130"
+        description="Little cluster core 3 min freq"/>
+
+    <ParamMap
+        name="QCOM_MIN_FREQ_CLUSTER_PRIME_CORE_0"
+        opcode="0x40800200"
+        description="Prime cluster core 0 min freq"/>
+
+    <ParamMap
+        name="QCOM_MIN_FREQ_CLUSTER_TITANIUM_CORE_0"
+        opcode="0x40800300"
+        description="Titanium cluster core 0 min freq"/>
+
+    <ParamMap
+        name="QCOM_MIN_FREQ_CLUSTER_TITANIUM_CORE_1"
+        opcode="0x40800310"
+        description="Titanium cluster core 1 min freq"/>
+
+    <!-- ==================== CPU MAX FREQ (11) ==================== -->
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_CLUSTER_BIG_CORE_0"
+        opcode="0x40804000"
+        description="Big cluster core 0 max freq"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_CLUSTER_BIG_CORE_1"
+        opcode="0x40804010"
+        description="Big cluster core 1 max freq"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_CLUSTER_BIG_CORE_2"
+        opcode="0x40804020"
+        description="Big cluster core 2 max freq"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_CLUSTER_BIG_CORE_3"
+        opcode="0x40804030"
+        description="Big cluster core 3 max freq"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_CLUSTER_LITTLE_CORE_0"
+        opcode="0x40804100"
+        description="Little cluster core 0 max freq"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_CLUSTER_LITTLE_CORE_1"
+        opcode="0x40804110"
+        description="Little cluster core 1 max freq"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_CLUSTER_LITTLE_CORE_2"
+        opcode="0x40804120"
+        description="Little cluster core 2 max freq"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_CLUSTER_LITTLE_CORE_3"
+        opcode="0x40804130"
+        description="Little cluster core 3 max freq"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_CLUSTER_PRIME_CORE_0"
+        opcode="0x40804200"
+        description="Prime cluster core 0 max freq"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_CLUSTER_TITANIUM_CORE_0"
+        opcode="0x40804300"
+        description="Titanium cluster core 0 max freq"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_CLUSTER_TITANIUM_CORE_1"
+        opcode="0x40804310"
+        description="Titanium cluster core 1 max freq"/>
+
+    <!-- ==================== WALT Adaptive Low Freq (4) ==================== -->
+
+    <ParamMap
+        name="QCOM_WALT_ADAPTIVE_LOW_FREQ_BIG"
+        opcode="0x40808000"
+        description="WALT adaptive low freq - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_WALT_ADAPTIVE_LOW_FREQ_LITTLE"
+        opcode="0x40808100"
+        description="WALT adaptive low freq - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_WALT_ADAPTIVE_LOW_FREQ_PRIME"
+        opcode="0x40808200"
+        description="WALT adaptive low freq - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_WALT_ADAPTIVE_LOW_FREQ_TITANIUM"
+        opcode="0x40808300"
+        description="WALT adaptive low freq - Titanium cluster"/>
+
+    <!-- ==================== WALT Adaptive High Freq (4) ==================== -->
+
+    <ParamMap
+        name="QCOM_WALT_ADAPTIVE_HIGH_FREQ_BIG"
+        opcode="0x4080C000"
+        description="WALT adaptive high freq - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_WALT_ADAPTIVE_HIGH_FREQ_LITTLE"
+        opcode="0x4080C100"
+        description="WALT adaptive high freq - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_WALT_ADAPTIVE_HIGH_FREQ_PRIME"
+        opcode="0x4080C200"
+        description="WALT adaptive high freq - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_WALT_ADAPTIVE_HIGH_FREQ_TITANIUM"
+        opcode="0x4080C300"
+        description="WALT adaptive high freq - Titanium cluster"/>
+
+    <!-- ==================== Scaling Min Freq (3) ==================== -->
+
+    <ParamMap
+        name="QCOM_SCALING_MIN_FREQ_BIG"
+        opcode="0x40810000"
+        description="Scaling min freq - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_SCALING_MIN_FREQ_LITTLE"
+        opcode="0x40810100"
+        description="Scaling min freq - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_SCALING_MIN_FREQ_PRIME"
+        opcode="0x40810200"
+        description="Scaling min freq - Prime cluster"/>
+
+    <!-- ==================== Scheduler (SCHED) - 40C segment (66) ==================== -->
+
+    <ParamMap
+        name="QCOM_SCHED_BOOST"
+        opcode="0x40C00000"
+        description="Scheduler boost level"/>
+
+    <ParamMap
+        name="QCOM_SCHED_PREFER_IDLE"
+        opcode="0x40C04000"
+        description="Scheduler prefer idle"/>
+
+    <ParamMap
+        name="QCOM_SCHED_MIGRATE_COST"
+        opcode="0x40C08000"
+        description="Scheduler migrate cost"/>
+
+    <ParamMap
+        name="QCOM_SCHED_SMALL_TASK"
+        opcode="0x40C0C000"
+        description="Scheduler small task threshold"/>
+
+    <ParamMap
+        name="QCOM_SCHED_MOSTLY_IDLE_LOAD"
+        opcode="0x40C10000"
+        description="Scheduler mostly idle load"/>
+
+    <ParamMap
+        name="QCOM_SCHED_MOSTLY_IDLE_NR_RUN"
+        opcode="0x40C14000"
+        description="Scheduler mostly idle nr run"/>
+
+    <ParamMap
+        name="QCOM_SCHED_INIT_TASK_LOAD"
+        opcode="0x40C18000"
+        description="Scheduler init task load"/>
+
+    <ParamMap
+        name="QCOM_SCHED_UPMIGRATE"
+        opcode="0x40C1C000"
+        description="Scheduler up-migrate threshold"/>
+
+    <ParamMap
+        name="QCOM_SCHED_DOWNMIGRATE"
+        opcode="0x40C20000"
+        description="Scheduler down-migrate threshold"/>
+
+    <ParamMap
+        name="QCOM_SCHED_MOSTLY_IDLE_FREQ"
+        opcode="0x40C24000"
+        description="Scheduler mostly idle freq"/>
+
+    <ParamMap
+        name="QCOM_SCHED_GROUP"
+        opcode="0x40C28000"
+        description="Scheduler group"/>
+
+    <ParamMap
+        name="QCOM_SCHED_SPILL_NR_RUN"
+        opcode="0x40C2C000"
+        description="Scheduler spill nr run"/>
+
+    <ParamMap
+        name="QCOM_SCHED_STATIC_CPU_PWR_COST"
+        opcode="0x40C30000"
+        description="Scheduler static CPU power cost"/>
+
+    <ParamMap
+        name="QCOM_SCHED_RESTRICT_CLUSTER_SPILL"
+        opcode="0x40C34000"
+        description="Scheduler restrict cluster spill"/>
+
+    <ParamMap
+        name="QCOM_SCHED_FREQ_AGGR_GROUP"
+        opcode="0x40C38000"
+        description="Scheduler freq aggregation group"/>
+
+    <ParamMap
+        name="QCOM_SCHED_CPUSET_TOP_APP"
+        opcode="0x40C3C000"
+        description="Scheduler cpuset top-app"/>
+
+    <ParamMap
+        name="QCOM_SCHED_CPUSET_FOREGROUND"
+        opcode="0x40C40000"
+        description="Scheduler cpuset foreground"/>
+
+    <ParamMap
+        name="QCOM_SCHED_CPUSET_SYSTEM_BACKGROUND"
+        opcode="0x40C44000"
+        description="Scheduler cpuset system-background"/>
+
+    <ParamMap
+        name="QCOM_SCHED_CPUSET_BACKGROUND"
+        opcode="0x40C48000"
+        description="Scheduler cpuset background"/>
+
+    <ParamMap
+        name="QCOM_SCHED_SET_FREQ_AGGR"
+        opcode="0x40C4C000"
+        description="Scheduler set freq aggregation"/>
+
+    <ParamMap
+        name="QCOM_SCHED_ENABLE_THREAD_GROUPING"
+        opcode="0x40C50000"
+        description="Scheduler enable thread grouping"/>
+
+    <ParamMap
+        name="QCOM_SCHED_GROUP_UPMIGRATE"
+        opcode="0x40C54000"
+        description="Scheduler group up-migrate"/>
+
+    <ParamMap
+        name="QCOM_SCHED_GROUP_DOWNMIGRATE"
+        opcode="0x40C58000"
+        description="Scheduler group down-migrate"/>
+
+    <ParamMap
+        name="QCOM_SCHED_FREQ_AGGR_THRESHOLD"
+        opcode="0x40C5C000"
+        description="Scheduler freq aggregation threshold"/>
+
+    <ParamMap
+        name="QCOM_SCHEDTUNE_PREFER_IDLE"
+        opcode="0x40C60000"
+        description="Schedtune prefer idle"/>
+
+    <ParamMap
+        name="QCOM_SCHED_INITIAL_TASK_UTIL"
+        opcode="0x40C64000"
+        description="Scheduler initial task util"/>
+
+    <ParamMap
+        name="QCOM_SCHED_LOAD_BOOST"
+        opcode="0x40C68000"
+        description="Scheduler load boost"/>
+
+    <ParamMap
+        name="QCOM_SCHED_LITTLE_CLUSTER_COLOC_FMIN_KHZ"
+        opcode="0x40C6C000"
+        description="Scheduler little cluster colocation fmin (KHz)"/>
+
+    <ParamMap
+        name="QCOM_SCHEDTUNE_BOOST"
+        opcode="0x40C70000"
+        description="Schedtune boost"/>
+
+    <ParamMap
+        name="QCOM_SCHED_BUSY_HYSTERSIS_CPU_MASK"
+        opcode="0x40C74000"
+        description="Scheduler busy hysteresis CPU mask"/>
+
+    <ParamMap
+        name="QCOM_SCHED_MIN_TASK_UTIL_FOR_COLOCATION"
+        opcode="0x40C78000"
+        description="Scheduler min task util for colocation"/>
+
+    <ParamMap
+        name="QCOM_SCHED_MIN_TASK_UTIL_FOR_BOOST"
+        opcode="0x40C7C000"
+        description="Scheduler min task util for boost"/>
+
+    <ParamMap
+        name="QCOM_SCHED_TASK_BOOST"
+        opcode="0x40C80000"
+        description="Scheduler task boost"/>
+
+    <ParamMap
+        name="QCOM_SCHED_USER_HINT"
+        opcode="0x40C84000"
+        description="Scheduler user hint"/>
+
+    <ParamMap
+        name="QCOM_SCHED_TASK_UNFILTER_NR_WINDOWS"
+        opcode="0x40C88000"
+        description="Scheduler task unfilter nr windows"/>
+
+    <ParamMap
+        name="QCOM_SCHED_COLOC_DOWNMIGRATE_NS"
+        opcode="0x40C8C000"
+        description="Scheduler colocation down-migrate (ns)"/>
+
+    <ParamMap
+        name="QCOM_SCHED_BUSY_HYSTERESIS_ENABLE_COLOC_CPUS"
+        opcode="0x40C90000"
+        description="Scheduler busy hysteresis enable coloc CPUs"/>
+
+    <ParamMap
+        name="QCOM_SCHED_COLOC_BIAS_HYST"
+        opcode="0x40C94000"
+        description="Scheduler colocation bias hysteresis"/>
+
+    <ParamMap
+        name="QCOM_SCHED_WINDOW_STATS_POLICY"
+        opcode="0x40C98000"
+        description="Scheduler window stats policy"/>
+
+    <ParamMap
+        name="QCOM_SCHED_MANY_WAKEUP_THRESHOLD"
+        opcode="0x40C9C000"
+        description="Scheduler many wakeup threshold"/>
+
+    <ParamMap
+        name="QCOM_SCHED_SYNC_HINT_ENABLE"
+        opcode="0x40CA0000"
+        description="Scheduler sync hint enable"/>
+
+    <ParamMap
+        name="QCOM_SCHED_WINDOW_TICKS_UPDATE"
+        opcode="0x40CA4000"
+        description="Scheduler window ticks update"/>
+
+    <ParamMap
+        name="QCOM_SCHED_PREFER_SPREAD"
+        opcode="0x40CA8000"
+        description="Scheduler prefer spread"/>
+
+    <ParamMap
+        name="QCOM_SCHED_UCLAMP_BOOST"
+        opcode="0x40CAC000"
+        description="Scheduler uclamp boost"/>
+
+    <ParamMap
+        name="QCOM_SCHED_ENABLE_TASK_BOOST_RENDERTHREAD"
+        opcode="0x40CB0000"
+        description="Scheduler enable task boost for render thread"/>
+
+    <ParamMap
+        name="QCOM_SCHED_DISABLE_TASK_BOOST_RENDERTHREAD"
+        opcode="0x40CB4000"
+        description="Scheduler disable task boost for render thread"/>
+
+    <ParamMap
+        name="QCOM_SCHED_TASK_UNFILTER_PERIOD"
+        opcode="0x40CB8000"
+        description="Scheduler task unfilter period"/>
+
+    <ParamMap
+        name="QCOM_SCHED_CONSERVATIVE_PL"
+        opcode="0x40CBC000"
+        description="Scheduler conservative power level"/>
+
+    <ParamMap
+        name="QCOM_SCHED_COLOC_BUZY_HYST_CPU_PCT"
+        opcode="0x40CC0000"
+        description="Scheduler colocation busy hysteresis CPU pct"/>
+
+    <ParamMap
+        name="QCOM_SCHED_COLOC_BUZY_HYST_CPU_NS"
+        opcode="0x40CC4000"
+        description="Scheduler colocation busy hysteresis CPU (ns)"/>
+
+    <ParamMap
+        name="QCOM_WALT_RTG_CFS_BOOST_PRIO"
+        opcode="0x40CC8000"
+        description="WALT RTG CFS boost priority"/>
+
+    <ParamMap
+        name="QCOM_SCHED_FORCE_LB_ENABLE"
+        opcode="0x40CCC000"
+        description="Scheduler force load balance enable"/>
+
+    <ParamMap
+        name="QCOM_SCHED_LOW_LATENCY"
+        opcode="0x40CD0000"
+        description="Scheduler low latency mode"/>
+
+    <ParamMap
+        name="QCOM_SCHED_MIN_GRANULARITY_NS"
+        opcode="0x40CD4000"
+        description="Scheduler min granularity (ns)"/>
+
+    <ParamMap
+        name="QCOM_WALT_LOW_LATENCY_TASK_THRESHOLD"
+        opcode="0x40CD8000"
+        description="WALT low latency task threshold"/>
+
+    <ParamMap
+        name="QCOM_SCHED_TUNE_PREFER_IDLE_FOREGROUND"
+        opcode="0x40CDC000"
+        description="Schedtune prefer idle foreground"/>
+
+    <ParamMap
+        name="QCOM_SCHED_UP_DOWN_MIGRATE"
+        opcode="0x40CE0000"
+        description="Scheduler up/down migrate threshold"/>
+
+    <ParamMap
+        name="QCOM_STUNE_TOPAPP_SCHEDTUNE_COLOCATE"
+        opcode="0x40CE4000"
+        description="Schedtune top-app colocate"/>
+
+    <ParamMap
+        name="QCOM_CPUCTL_TOPAPP_UCLAMP_LATENCY_SENSITIVE"
+        opcode="0x40CE8000"
+        description="CPU control top-app uclamp latency sensitive"/>
+
+    <ParamMap
+        name="QCOM_CPUCTL_FG_UCLAMP_LATENCY_SENSITIVE"
+        opcode="0x40CEC000"
+        description="CPU control foreground uclamp latency sensitive"/>
+
+    <ParamMap
+        name="QCOM_SCHED_WAKE_UP_IDLE"
+        opcode="0x40CF0000"
+        description="Scheduler wake up idle"/>
+
+    <ParamMap
+        name="QCOM_SCHED_GROUP_UP_DOWN_MIGRATE"
+        opcode="0x40CF4000"
+        description="Scheduler group up/down migrate"/>
+
+    <ParamMap
+        name="QCOM_SCHED_UTIL_BUSY_HYST_CPU_NS_BIG"
+        opcode="0x40CF8000"
+        description="Scheduler util busy hysteresis CPU ns - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_UTIL_BUSY_HYST_CPU_NS_LITTLE"
+        opcode="0x40CF8100"
+        description="Scheduler util busy hysteresis CPU ns - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_UTIL_BUSY_HYST_CPU_NS_PRIME"
+        opcode="0x40CF8200"
+        description="Scheduler util busy hysteresis CPU ns - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_MIN_TASK_UTIL_FOR_UCLAMP"
+        opcode="0x40CFC000"
+        description="Scheduler min task util for uclamp"/>
+
+    <!-- ==================== CPU Online / Core Control (12) ==================== -->
+
+    <ParamMap
+        name="QCOM_MIN_ONLINE_CPU_CLUSTER_BIG"
+        opcode="0x41000000"
+        description="Min online CPUs - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_MIN_ONLINE_CPU_CLUSTER_LITTLE"
+        opcode="0x41000100"
+        description="Min online CPUs - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_MIN_ONLINE_CPU_CLUSTER_PRIME"
+        opcode="0x41000200"
+        description="Min online CPUs - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_MAX_ONLINE_CPU_CLUSTER_BIG"
+        opcode="0x41004000"
+        description="Max online CPUs - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_MAX_ONLINE_CPU_CLUSTER_LITTLE"
+        opcode="0x41004100"
+        description="Max online CPUs - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_CORE_CTL_ENABLE_BIG"
+        opcode="0x41008000"
+        description="Core control enable - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_CORE_CTL_CPU_NOT_PREFERRED_BIG"
         opcode="0x4100C000"
-        description="CPU Core Control Not Preferred Mask"
-        sysnode="/sys/devices/system/cpu/cpu*/core_ctl/not_preferred"/>
+        description="Core control CPU not preferred - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_CORE_CTL_OFFLINE_DELAY_MS_BIG"
+        opcode="0x41014000"
+        description="Core control offline delay ms - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_CORE_CTL_MIN_PARTIAL_CPUS_BIG"
+        opcode="0x41010000"
+        description="Core control min partial CPUs - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_CORE_CTL_MIN_PARTIAL_CPUS_LITTLE"
+        opcode="0x41010100"
+        description="Core control min partial CPUs - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_CORE_CTL_MIN_PARTIAL_CPUS_PRIME"
+        opcode="0x41010200"
+        description="Core control min partial CPUs - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_CORE_CTL_MIN_PARTIAL_CPUS_TITANIUM"
+        opcode="0x41010300"
+        description="Core control min partial CPUs - Titanium cluster"/>
+
+    <!-- ==================== Interactive / Schedutil Governor - Big cluster (20) ==================== -->
+
+    <ParamMap
+        name="QCOM_ABOVE_HISPEED_DELAY_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x41400000"
+        description="Above hispeed delay interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_BOOST_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x41404000"
+        description="Boost interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_BOOSTPULSE_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x41408000"
+        description="Boostpulse interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_BOOSTPULSE_DURATION_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x4140C000"
+        description="Boostpulse duration interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_GO_HISPEED_LOAD_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x41410000"
+        description="Go hispeed load interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_HISPEED_FREQ_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x41414000"
+        description="Hispeed freq interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_IO_IS_BUSY_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x41418000"
+        description="IO is busy interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_MIN_SAMPLE_TIME_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x4141C000"
+        description="Min sample time interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_TARGET_LOADS_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x41420000"
+        description="Target loads interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_TIMER_RATE_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x41424000"
+        description="Timer rate interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_TIMER_SLACK_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x41428000"
+        description="Timer slack interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_HYSTERESIS_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x4142C000"
+        description="Max freq hysteresis interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_USE_SCHED_LOAD_INTERACTIVE_CLUSTER_BIG"
+        opcode="0x41430000"
+        description="Use sched load interactive - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_USE_MIGRATION_NOTIF_CLUSTER_BIG"
+        opcode="0x41434000"
+        description="Use migration notif - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_IGNORE_HISPEED_NOTIF_CLUSTER_BIG"
+        opcode="0x41438000"
+        description="Ignore hispeed notif - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHEDUTIL_HISPEED_FREQ_CLUSTER_BIG"
+        opcode="0x4143C000"
+        description="Schedutil hispeed freq - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHEDUTIL_HISPEED_LOAD_CLUSTER_BIG"
+        opcode="0x41440000"
+        description="Schedutil hispeed load - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHEDUTIL_PREDICTIVE_LOAD_CLUSTER_BIG"
+        opcode="0x41444000"
+        description="Schedutil predictive load - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHEDUTIL_DOWN_RATE_LIMIT_CLUSTER_BIG"
+        opcode="0x41448000"
+        description="Schedutil down rate limit - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHEDUTIL_RTG_BOOST_FREQ_CLUSTER_BIG"
+        opcode="0x4144C000"
+        description="Schedutil RTG boost freq - Big cluster"/>
+
+    <!-- ==================== Interactive / Schedutil Governor - Little cluster (20) ==================== -->
+
+    <ParamMap
+        name="QCOM_ABOVE_HISPEED_DELAY_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x41400100"
+        description="Above hispeed delay interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_BOOST_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x41404100"
+        description="Boost interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_BOOSTPULSE_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x41408100"
+        description="Boostpulse interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_BOOSTPULSE_DURATION_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x4140C100"
+        description="Boostpulse duration interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_GO_HISPEED_LOAD_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x41410100"
+        description="Go hispeed load interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_HISPEED_FREQ_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x41414100"
+        description="Hispeed freq interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_IO_IS_BUSY_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x41418100"
+        description="IO is busy interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_MIN_SAMPLE_TIME_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x4141C100"
+        description="Min sample time interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_TARGET_LOADS_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x41420100"
+        description="Target loads interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_TIMER_RATE_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x41424100"
+        description="Timer rate interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_TIMER_SLACK_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x41428100"
+        description="Timer slack interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_MAX_FREQ_HYSTERESIS_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x4142C100"
+        description="Max freq hysteresis interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_USE_SCHED_LOAD_INTERACTIVE_CLUSTER_LITTLE"
+        opcode="0x41430100"
+        description="Use sched load interactive - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_USE_MIGRATION_NOTIF_CLUSTER_LITTLE"
+        opcode="0x41434100"
+        description="Use migration notif - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_IGNORE_HISPEED_NOTIF_CLUSTER_LITTLE"
+        opcode="0x41438100"
+        description="Ignore hispeed notif - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHEDUTIL_HISPEED_FREQ_CLUSTER_LITTLE"
+        opcode="0x4143C100"
+        description="Schedutil hispeed freq - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHEDUTIL_HISPEED_LOAD_CLUSTER_LITTLE"
+        opcode="0x41440100"
+        description="Schedutil hispeed load - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHEDUTIL_PREDICTIVE_LOAD_CLUSTER_LITTLE"
+        opcode="0x41444100"
+        description="Schedutil predictive load - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHEDUTIL_DOWN_RATE_LIMIT_CLUSTER_LITTLE"
+        opcode="0x41448100"
+        description="Schedutil down rate limit - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHEDUTIL_RTG_BOOST_FREQ_CLUSTER_LITTLE"
+        opcode="0x4144C100"
+        description="Schedutil RTG boost freq - Little cluster"/>
+
+    <!-- ==================== Target Load / Up Rate Limit (15) ==================== -->
+
+    <ParamMap
+        name="QCOM_TARGET_LOAD_THRESH_CLUSTER_BIG"
+        opcode="0x41450000"
+        description="Target load threshold - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_TARGET_LOAD_THRESH_CLUSTER_LITTLE"
+        opcode="0x41450100"
+        description="Target load threshold - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_TARGET_LOAD_THRESH_CLUSTER_PRIME"
+        opcode="0x41450200"
+        description="Target load threshold - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_TARGET_LOAD_SHIFT_CLUSTER_BIG"
+        opcode="0x41454000"
+        description="Target load shift - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_TARGET_LOAD_SHIFT_CLUSTER_LITTLE"
+        opcode="0x41454100"
+        description="Target load shift - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_TARGET_LOAD_SHIFT_CLUSTER_PRIME"
+        opcode="0x41454200"
+        description="Target load shift - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_UP_RATE_LIMIT_US_BIG"
+        opcode="0x41458000"
+        description="Up rate limit us - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_UP_RATE_LIMIT_US_LITTLE"
+        opcode="0x41458100"
+        description="Up rate limit us - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_UP_RATE_LIMIT_US_PRIME"
+        opcode="0x41458200"
+        description="Up rate limit us - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_TRAN_POLICY0_DOWN_RATE_LIMIT"
+        opcode="0x4145C000"
+        description="Transsion custom: policy0 down rate limit"/>
+
+    <ParamMap
+        name="QCOM_TRAN_POLICY0_UP_RATE_LIMIT"
+        opcode="0x41460000"
+        description="Transsion custom: policy0 up rate limit"/>
+
+    <ParamMap
+        name="QCOM_TRAN_POLICY4_DOWN_RATE_LIMIT"
+        opcode="0x41464000"
+        description="Transsion custom: policy4 down rate limit"/>
+
+    <ParamMap
+        name="QCOM_TRAN_POLICY4_UP_RATE_LIMIT"
+        opcode="0x41468000"
+        description="Transsion custom: policy4 up rate limit"/>
+
+    <ParamMap
+        name="QCOM_TRAN_POLICY7_DOWN_RATE_LIMIT"
+        opcode="0x4146C000"
+        description="Transsion custom: policy7 down rate limit"/>
+
+    <ParamMap
+        name="QCOM_TRAN_POLICY7_UP_RATE_LIMIT"
+        opcode="0x41470000"
+        description="Transsion custom: policy7 up rate limit"/>
+
+    <!-- ==================== CPUBW HWMON / CPU-LLCC BW (19) ==================== -->
+
+    <ParamMap
+        name="QCOM_CPUBW_HWMON_MIN_FREQ"
+        opcode="0x41800000"
+        description="CPUBW hwmon min freq"/>
+
+    <ParamMap
+        name="QCOM_CPUBW_HWMON_DECAY_RATE"
+        opcode="0x41804000"
+        description="CPUBW hwmon decay rate"/>
+
+    <ParamMap
+        name="QCOM_CPUBW_HWMON_IO_PERCENT"
+        opcode="0x41808000"
+        description="CPUBW hwmon IO percent"/>
+
+    <ParamMap
+        name="QCOM_CPUBW_HWMON_HYST_OPT"
+        opcode="0x4180C000"
+        description="CPUBW hwmon hysteresis option"/>
+
+    <ParamMap
+        name="QCOM_CPUBW_HWMON_LOW_POWER_CEIL_MBPS"
+        opcode="0x41810000"
+        description="CPUBW hwmon low power ceil Mbps"/>
+
+    <ParamMap
+        name="QCOM_CPUBW_HWMON_LOW_POWER_IO_PERCENT"
+        opcode="0x41814000"
+        description="CPUBW hwmon low power IO percent"/>
+
+    <ParamMap
+        name="QCOM_CPUBW_HWMON_MAX_FREQ"
+        opcode="0x41818000"
+        description="CPUBW hwmon max freq"/>
+
+    <ParamMap
+        name="QCOM_CPUBW_HWMON_POLLING_INTERVAL"
+        opcode="0x4181C000"
+        description="CPUBW hwmon polling interval"/>
+
+    <ParamMap
+        name="QCOM_CPUBW_HWMON_SAMPLE_MS"
+        opcode="0x41820000"
+        description="CPUBW hwmon sample ms"/>
+
+    <ParamMap
+        name="QCOM_CPUBW_HWMON_IDLE_MBPS"
+        opcode="0x41824000"
+        description="CPUBW hwmon idle Mbps"/>
+
+    <ParamMap
+        name="QCOM_CPU_LLCC_BW_MIN_FREQ"
+        opcode="0x41828000"
+        description="CPU to LLCC BW min freq"/>
+
+    <ParamMap
+        name="QCOM_CPU_LLCC_BW_UP_SCALE"
+        opcode="0x4182C000"
+        description="CPU to LLCC BW up scale"/>
+
+    <ParamMap
+        name="QCOM_CPU_LLCC_BW_USE_AB"
+        opcode="0x41830000"
+        description="CPU to LLCC BW use AB"/>
+
+    <ParamMap
+        name="QCOM_CPU_LLCC_BW_IO_PERCENT"
+        opcode="0x41834000"
+        description="CPU to LLCC BW IO percent"/>
+
+    <ParamMap
+        name="QCOM_CPU_LLCC_BW_HYST_OPT"
+        opcode="0x41838000"
+        description="CPU to LLCC BW hysteresis option"/>
+
+    <ParamMap
+        name="QCOM_CPU_LLCC_BW_SAMPLE_MS"
+        opcode="0x4183C000"
+        description="CPU to LLCC BW sample ms"/>
+
+    <ParamMap
+        name="QCOM_CPU_LLCC_BW_POLLING_INTERVAL"
+        opcode="0x41840000"
+        description="CPU to LLCC BW polling interval"/>
+
+    <ParamMap
+        name="QCOM_CPU_LLCC_BW_MIN_FREQ_V2"
+        opcode="0x41844000"
+        description="CPU to LLCC BW min freq V2"/>
+
+    <ParamMap
+        name="QCOM_CPU_LLCC_BW_MAX_FREQ_V2"
+        opcode="0x41848000"
+        description="CPU to LLCC BW max freq V2"/>
+
+    <!-- ==================== Video / Display (4) ==================== -->
+
+    <ParamMap
+        name="QCOM_VIDEO_ENCODE_PB_HINT"
+        opcode="0x41C00000"
+        description="Video encode playback hint"/>
+
+    <ParamMap
+        name="QCOM_VIDEO_DECODE_PB_HINT"
+        opcode="0x41C04000"
+        description="Video decode playback hint"/>
+
+    <ParamMap
+        name="QCOM_VIDEO_DISPLAY_PB_HINT"
+        opcode="0x41C08000"
+        description="Video display playback hint"/>
+
+    <ParamMap
+        name="QCOM_DISPLAY_EARLY_WAKEUP_HINT"
+        opcode="0x41C0C000"
+        description="Display early wakeup hint"/>
+
+    <!-- ==================== KSM (2) ==================== -->
+
+    <ParamMap
+        name="QCOM_KSM_RUN_STATUS"
+        opcode="0x42000000"
+        description="KSM run status"/>
+
+    <ParamMap
+        name="QCOM_KSM_PARAMS"
+        opcode="0x42004000"
+        description="KSM parameters"/>
+
+    <!-- ==================== Ondemand Governor (8) ==================== -->
+
+    <ParamMap
+        name="QCOM_SAMPLING_RATE_ONDEMAND"
+        opcode="0x42400000"
+        description="Ondemand governor sampling rate"/>
+
+    <ParamMap
+        name="QCOM_IO_IS_BUSY_ONDEMAND"
+        opcode="0x42404000"
+        description="Ondemand governor IO is busy"/>
+
+    <ParamMap
+        name="QCOM_SAMPLING_DOWN_FACTOR_ONDEMAND"
+        opcode="0x42408000"
+        description="Ondemand governor sampling down factor"/>
+
+    <ParamMap
+        name="QCOM_SYNC_FREQ_ONDEMAND"
+        opcode="0x4240C000"
+        description="Ondemand governor sync freq"/>
+
+    <ParamMap
+        name="QCOM_OPTIMAL_FREQ_ONDEMAND"
+        opcode="0x42410000"
+        description="Ondemand governor optimal freq"/>
+
+    <ParamMap
+        name="QCOM_ENABLE_STEP_UP_ONDEMAND"
+        opcode="0x42414000"
+        description="Ondemand governor enable step up"/>
+
+    <ParamMap
+        name="QCOM_MAX_INTERMEDIATE_STEPS_ONDEMAND"
+        opcode="0x42418000"
+        description="Ondemand governor max intermediate steps"/>
+
+    <ParamMap
+        name="QCOM_NOTIFY_ON_MIGRATE"
+        opcode="0x4241C000"
+        description="Notify on migrate"/>
+
+    <!-- ==================== GPU (17) ==================== -->
+
+    <ParamMap
+        name="QCOM_GPU_POWER_LEVEL"
+        opcode="0x42800000"
+        description="GPU power level"/>
+
+    <ParamMap
+        name="QCOM_GPU_MIN_POWER_LEVEL"
+        opcode="0x42804000"
+        description="GPU min power level"/>
+
+    <ParamMap
+        name="QCOM_GPU_MAX_POWER_LEVEL"
+        opcode="0x42808000"
+        description="GPU max power level"/>
+
+    <ParamMap
+        name="QCOM_GPU_MIN_FREQ"
+        opcode="0x4280C000"
+        description="GPU min freq"/>
+
+    <ParamMap
+        name="QCOM_GPU_MAX_FREQ"
+        opcode="0x42810000"
+        description="GPU max freq"/>
+
+    <ParamMap
+        name="QCOM_GPU_BUS_MIN_FREQ"
+        opcode="0x42814000"
+        description="GPU bus min freq"/>
+
+    <ParamMap
+        name="QCOM_GPU_BUS_MAX_FREQ"
+        opcode="0x42818000"
+        description="GPU bus max freq"/>
+
+    <ParamMap
+        name="QCOM_GPU_DISABLE_GPU_NAP"
+        opcode="0x4281C000"
+        description="GPU disable GPU NAP"/>
+
+    <ParamMap
+        name="QCOM_GPU_IS_APP_FG"
+        opcode="0x42820000"
+        description="GPU is app foreground"/>
+
+    <ParamMap
+        name="QCOM_GPU_IS_APP_BG"
+        opcode="0x42824000"
+        description="GPU is app background"/>
+
+    <ParamMap
+        name="QCOM_GPU_LOAD_MOD_PERCENT"
+        opcode="0x42828000"
+        description="GPU load mod percent"/>
+
+    <ParamMap
+        name="QCOM_GPU_IDLE_TIMER"
+        opcode="0x4282C000"
+        description="GPU idle timer"/>
+
+    <ParamMap
+        name="QCOM_GPU_MIN_FREQ_MHZ"
+        opcode="0x42830000"
+        description="GPU min freq (MHz)"/>
+
+    <ParamMap
+        name="QCOM_GPU_TOUCH_WAKEUP"
+        opcode="0x42834000"
+        description="GPU touch wakeup"/>
+
+    <ParamMap
+        name="QCOM_GPU_DCVS_TUNING_MINGAP"
+        opcode="0x42838000"
+        description="GPU DCVS tuning min gap"/>
+
+    <ParamMap
+        name="QCOM_GPU_DCVS_TUNING_NUMBUSY"
+        opcode="0x4283C000"
+        description="GPU DCVS tuning num busy"/>
+
+    <ParamMap
+        name="QCOM_GPU_DCVS_TUNING_PENALTY"
+        opcode="0x42840000"
+        description="GPU DCVS tuning penalty"/>
+
+    <!-- ==================== Misc - 42C segment (17) ==================== -->
+
+    <ParamMap
+        name="QCOM_UNSUPPORTED"
+        opcode="0x42C00000"
+        description="Unsupported opcode placeholder"/>
+
+    <ParamMap
+        name="QCOM_IRQ_BALANCER"
+        opcode="0x42C04000"
+        description="IRQ balancer"/>
+
+    <ParamMap
+        name="QCOM_INPUT_BOOST_RESET"
+        opcode="0x42C08000"
+        description="Input boost reset"/>
+
+    <ParamMap
+        name="QCOM_SWAP_RATIO"
+        opcode="0x42C0C000"
+        description="Swap ratio"/>
+
+    <ParamMap
+        name="QCOM_STORAGE_CLK_SCALING_DISABLE"
+        opcode="0x42C10000"
+        description="Storage clock scaling disable"/>
+
+    <ParamMap
+        name="QCOM_KEEP_ALIVE"
+        opcode="0x42C14000"
+        description="Keep alive"/>
+
+    <ParamMap
+        name="QCOM_DISABLE_PPR"
+        opcode="0x42C18000"
+        description="Disable PPR"/>
+
+    <ParamMap
+        name="QCOM_DISABLE_PASR"
+        opcode="0x42C1C000"
+        description="Disable PASR"/>
+
+    <ParamMap
+        name="QCOM_PID_AFFINE"
+        opcode="0x42C20000"
+        description="PID affine"/>
+
+    <ParamMap
+        name="QCOM_FPS_HYST_OPCODE"
+        opcode="0x42C24000"
+        description="FPS hysteresis opcode"/>
+
+    <ParamMap
+        name="QCOM_ALWAYS_ALLOW_OPCODE"
+        opcode="0x42C28000"
+        description="Always allow opcode"/>
+
+    <ParamMap
+        name="QCOM_SET_SCHEDULER"
+        opcode="0x42C2C000"
+        description="Set scheduler"/>
+
+    <ParamMap
+        name="QCOM_SCHED_THREAD_PIPELINE"
+        opcode="0x42C30000"
+        description="Scheduler thread pipeline"/>
+
+    <ParamMap
+        name="QCOM_DISPLAY_DOZE_OPCODE"
+        opcode="0x42C34000"
+        description="Display doze opcode"/>
+
+    <ParamMap
+        name="QCOM_DISPLAY_HEAVY_RT_AFFINE"
+        opcode="0x42C38000"
+        description="Display heavy RT affine"/>
+
+    <ParamMap
+        name="QCOM_CONTENT_FPS_OPCODE"
+        opcode="0x42C3C000"
+        description="Content FPS opcode"/>
+
+    <ParamMap
+        name="QCOM_GOLD_DYNPREFETCHER_OPCODE"
+        opcode="0x42C40000"
+        description="Gold dynamic prefetcher opcode"/>
+
+    <!-- ==================== LLCC DDR BW - 43000 segment (19) ==================== -->
+
+    <ParamMap
+        name="QCOM_LLCBW_HWMON_MIN_FREQ"
+        opcode="0x43000000"
+        description="LLCBW hwmon min freq"/>
+
+    <ParamMap
+        name="QCOM_LLCBW_HWMON_IO_PERCENT"
+        opcode="0x43004000"
+        description="LLCBW hwmon IO percent"/>
+
+    <ParamMap
+        name="QCOM_LLCBW_HWMON_HYST_OPT"
+        opcode="0x43008000"
+        description="LLCBW hwmon hysteresis option"/>
+
+    <ParamMap
+        name="QCOM_LLCBW_HWMON_SAMPLE_MS"
+        opcode="0x4300C000"
+        description="LLCBW hwmon sample ms"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_MIN_FREQ"
+        opcode="0x43010000"
+        description="LLCC to DDR BW min freq"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_UP_SCALE"
+        opcode="0x43014000"
+        description="LLCC to DDR BW up scale"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_MAX_FREQ"
+        opcode="0x43018000"
+        description="LLCC to DDR BW max freq"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_DECAY_RATE"
+        opcode="0x4301C000"
+        description="LLCC to DDR BW decay rate"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_IO_PERCENT"
+        opcode="0x43020000"
+        description="LLCC to DDR BW IO percent"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_HYST_OPT"
+        opcode="0x43024000"
+        description="LLCC to DDR BW hysteresis option"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_LOW_POWER_CEIL_MBPS"
+        opcode="0x43028000"
+        description="LLCC to DDR BW low power ceil Mbps"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_LOW_POWER_IO_PERCENT"
+        opcode="0x4302C000"
+        description="LLCC to DDR BW low power IO percent"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_POLLING_INTERVAL"
+        opcode="0x43030000"
+        description="LLCC to DDR BW polling interval"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_SAMPLE_MS"
+        opcode="0x43034000"
+        description="LLCC to DDR BW sample ms"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_IDLE_MBPS"
+        opcode="0x43038000"
+        description="LLCC to DDR BW idle Mbps"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_MIN_FREQ_V2"
+        opcode="0x4303C000"
+        description="LLCC to DDR BW min freq V2"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_MAX_FREQ_V2"
+        opcode="0x43040000"
+        description="LLCC to DDR BW max freq V2"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_USE_AB"
+        opcode="0x43044000"
+        description="LLCC to DDR BW use AB"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_BW_AB_SCALE"
+        opcode="0x43048000"
+        description="LLCC to DDR BW AB scale"/>
+
+    <!-- ==================== L3 MemLat / BUS DCVS - 43400 segment (41) ==================== -->
+
+    <ParamMap
+        name="QCOM_L3_MEMLAT_MIN_FREQ"
+        opcode="0x43400000"
+        description="L3 memory latency min freq"/>
+
+    <ParamMap
+        name="QCOM_L2_MEMLAT_RATIO_CEIL_0"
+        opcode="0x43404000"
+        description="L2 memory latency ratio ceil 0"/>
+
+    <ParamMap
+        name="QCOM_L2_MEMLAT_RATIO_CEIL_1"
+        opcode="0x43408000"
+        description="L2 memory latency ratio ceil 1"/>
+
+    <ParamMap
+        name="QCOM_L3_MEMLAT_STALL_FLOOR_0"
+        opcode="0x4340C000"
+        description="L3 memory latency stall floor 0"/>
+
+    <ParamMap
+        name="QCOM_L3_MEMLAT_STALL_FLOOR_1"
+        opcode="0x43410000"
+        description="L3 memory latency stall floor 1"/>
+
+    <ParamMap
+        name="QCOM_MEMLAT_MIN_FREQ_0"
+        opcode="0x43414000"
+        description="Memory latency min freq 0"/>
+
+    <ParamMap
+        name="QCOM_MEMLAT_MIN_FREQ_1"
+        opcode="0x43418000"
+        description="Memory latency min freq 1"/>
+
+    <ParamMap
+        name="QCOM_LLCC_MEMLAT_MIN_FREQ"
+        opcode="0x4341C000"
+        description="LLCC memory latency min freq"/>
+
+    <ParamMap
+        name="QCOM_LLCC_MEMLAT_RATIO_CELL_0"
+        opcode="0x43420000"
+        description="LLCC memory latency ratio cell 0"/>
+
+    <ParamMap
+        name="QCOM_LLCC_MEMLAT_RATIO_CELL_1"
+        opcode="0x43424000"
+        description="LLCC memory latency ratio cell 1"/>
+
+    <ParamMap
+        name="QCOM_LLCC_MEMLAT_STALL_FLOOR_0"
+        opcode="0x43428000"
+        description="LLCC memory latency stall floor 0"/>
+
+    <ParamMap
+        name="QCOM_LLCC_MEMLAT_STALL_FLOOR_1"
+        opcode="0x4342C000"
+        description="LLCC memory latency stall floor 1"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_LAT_MIN_FREQ_0"
+        opcode="0x43430000"
+        description="LLCC to DDR latency min freq 0"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_LAT_RATIO_CELL_0"
+        opcode="0x43434000"
+        description="LLCC to DDR latency ratio cell 0"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_LAT_RATIO_CELL_1"
+        opcode="0x43438000"
+        description="LLCC to DDR latency ratio cell 1"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_LAT_STALL_FLOOR_0"
+        opcode="0x4343C000"
+        description="LLCC to DDR latency stall floor 0"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_LAT_STALL_FLOOR_1"
+        opcode="0x43440000"
+        description="LLCC to DDR latency stall floor 1"/>
+
+    <ParamMap
+        name="QCOM_L3_MEMLAT_MAX_FREQ"
+        opcode="0x43444000"
+        description="L3 memory latency max freq"/>
+
+    <ParamMap
+        name="QCOM_CPU_CPU_DDR_LATFLOOR_MINFREQ"
+        opcode="0x43448000"
+        description="CPU-CPU DDR latency floor min freq"/>
+
+    <ParamMap
+        name="QCOM_CPU_CPU_DDR_LATFLOOR_MAXFREQ"
+        opcode="0x4344C000"
+        description="CPU-CPU DDR latency floor max freq"/>
+
+    <ParamMap
+        name="QCOM_LLCC_MEMLAT_MAX_FREQ"
+        opcode="0x43450000"
+        description="LLCC memory latency max freq"/>
+
+    <ParamMap
+        name="QCOM_LLCC_DDR_LAT_MAX_FREQ"
+        opcode="0x43454000"
+        description="LLCC to DDR latency max freq"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_L3_MEMLAT_MIN_FREQ_PRIME"
+        opcode="0x43458000"
+        description="Bus DCVS L3 memlat min freq - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_MEMLAT_MIN_FREQ_SILVER"
+        opcode="0x4345C000"
+        description="Bus DCVS LLCC memlat min freq - Silver cluster"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_DDR_LAT_MINFREQ_SILVER"
+        opcode="0x43460000"
+        description="Bus DCVS LLCC DDR latency min freq - Silver cluster"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_DDR_LAT_FREQ_SCALE_PCT"
+        opcode="0x43464000"
+        description="Bus DCVS LLCC DDR latency freq scale pct"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_MEMLAT_SAMPLE_MS"
+        opcode="0x43468000"
+        description="Bus DCVS memlat sample ms"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_DDR_GOLD_COMPUTE_MAX_FREQ"
+        opcode="0x4346C000"
+        description="Bus DCVS DDR Gold compute max freq"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_GOLD_COMPUTE_MAX_FREQ"
+        opcode="0x43470000"
+        description="Bus DCVS LLCC Gold compute max freq"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_DDR_PRIME_LATFLOOR_IPM_CEIL"
+        opcode="0x43474000"
+        description="Bus DCVS DDR Prime latency floor IPM ceil"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_DDR_MEMLAT_ADAPTIVE_HIGH_FREQ"
+        opcode="0x43478000"
+        description="Bus DCVS DDR memlat adaptive high freq"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_DDR_MEMLAT_ADAPTIVE_LOW_FREQ"
+        opcode="0x4347C000"
+        description="Bus DCVS DDR memlat adaptive low freq"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_L3_MEMLAT_MIN_FREQ_GOLD"
+        opcode="0x43480000"
+        description="Bus DCVS L3 memlat min freq - Gold cluster"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_DDR_LAT_MINFREQ_PRIME"
+        opcode="0x43484000"
+        description="Bus DCVS LLCC DDR latency min freq - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_DDR_LAT_MINFREQ_GOLD"
+        opcode="0x43488000"
+        description="Bus DCVS DDR latency min freq - Gold cluster"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_MEMLAT_MIN_FREQ_GOLD"
+        opcode="0x4348C000"
+        description="Bus DCVS LLCC memlat min freq - Gold cluster"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_DDR_GOLD_LAT_EN_SPM_VOTE"
+        opcode="0x43490000"
+        description="Bus DCVS LLCC DDR Gold latency enable SPM vote"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_DDR_PRIME_LAT_EN_SPM_VOTE"
+        opcode="0x43494000"
+        description="Bus DCVS LLCC DDR Prime latency enable SPM vote"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_DDR_BOOST_FREQ"
+        opcode="0x43498000"
+        description="Bus DCVS LLCC DDR boost freq"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_L3_BOOST_FREQ"
+        opcode="0x4349C000"
+        description="Bus DCVS LLCC L3 boost freq"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_LLCC_BOOST_FREQ"
+        opcode="0x434A0000"
+        description="Bus DCVS LLCC-LLCC boost freq"/>
+
+    <ParamMap
+        name="QCOM_BUS_DCVS_LLCC_DDRQOS_BOOST_FREQ"
+        opcode="0x434A4000"
+        description="Bus DCVS LLCC DDR QoS boost freq"/>
+
+    <!-- ==================== NPU (6) ==================== -->
+
+    <ParamMap
+        name="QCOM_NPU_LLCC_BW_SAMPLE_MS"
+        opcode="0x43800000"
+        description="NPU LLCC BW sample ms"/>
+
+    <ParamMap
+        name="QCOM_NPU_LLCC_BW_IO_PERCENT"
+        opcode="0x43804000"
+        description="NPU LLCC BW IO percent"/>
+
+    <ParamMap
+        name="QCOM_NPU_LLCC_BW_HYST_OPT"
+        opcode="0x43808000"
+        description="NPU LLCC BW hysteresis option"/>
+
+    <ParamMap
+        name="QCOM_NPU_LLCC_DDR_BW_SAMPLE_MS"
+        opcode="0x4380C000"
+        description="NPU LLCC DDR BW sample ms"/>
+
+    <ParamMap
+        name="QCOM_NPU_LLCC_DDR_BW_IO_PERCENT"
+        opcode="0x43810000"
+        description="NPU LLCC DDR BW IO percent"/>
+
+    <ParamMap
+        name="QCOM_NPU_LLCC_DDR_BW_HYST_OPT"
+        opcode="0x43814000"
+        description="NPU LLCC DDR BW hysteresis option"/>
+
+    <!-- ==================== SCHED Extended - 43C segment (24) ==================== -->
+
+    <ParamMap
+        name="QCOM_SCHED_ASYMCAP_BOOST"
+        opcode="0x43C00000"
+        description="Scheduler asymmetric capacity boost"/>
+
+    <ParamMap
+        name="QCOM_SCHED_TASK_LOAD_BOOST"
+        opcode="0x43C04000"
+        description="Scheduler task load boost"/>
+
+    <ParamMap
+        name="QCOM_SCHED_CLUSTER_UTIL_THRES_PCT"
+        opcode="0x43C08000"
+        description="Scheduler cluster utilization threshold pct"/>
+
+    <ParamMap
+        name="QCOM_SCHED_IDLE_ENOUGH"
+        opcode="0x43C0C000"
+        description="Scheduler idle enough"/>
+
+    <ParamMap
+        name="QCOM_SCHED_EM_INFLATE_PCT"
+        opcode="0x43C10000"
+        description="Scheduler EM inflate pct"/>
+
+    <ParamMap
+        name="QCOM_SCHED_EM_INFLATE_THRES"
+        opcode="0x43C14000"
+        description="Scheduler EM inflate threshold"/>
+
+    <ParamMap
+        name="QCOM_SCHED_HEAVY_NR"
+        opcode="0x43C18000"
+        description="Scheduler heavy nr tasks"/>
+
+    <ParamMap
+        name="QCOM_SCHED_FMAX_CAP_BIG"
+        opcode="0x43C1C000"
+        description="Scheduler fmax cap - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_FMAX_CAP_LITTLE"
+        opcode="0x43C1C100"
+        description="Scheduler fmax cap - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_FMAX_CAP_PRIME"
+        opcode="0x43C1C200"
+        description="Scheduler fmax cap - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_FMAX_CAP_TITANIUM"
+        opcode="0x43C1C300"
+        description="Scheduler fmax cap - Titanium cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_MAX_FREQ_PARTIAL_HALT"
+        opcode="0x43C20000"
+        description="Scheduler max freq partial halt"/>
+
+    <ParamMap
+        name="QCOM_SCHED_IDLE_ENOUGH_CLUST_BIG"
+        opcode="0x43C24000"
+        description="Scheduler idle enough - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_IDLE_ENOUGH_CLUST_LITTLE"
+        opcode="0x43C24100"
+        description="Scheduler idle enough - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_IDLE_ENOUGH_CLUST_PRIME"
+        opcode="0x43C24200"
+        description="Scheduler idle enough - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_IDLE_ENOUGH_CLUST_TITANIUM"
+        opcode="0x43C24300"
+        description="Scheduler idle enough - Titanium cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_UTIL_THRES_PCT_CLUST_BIG"
+        opcode="0x43C28000"
+        description="Scheduler util threshold pct - Big cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_UTIL_THRES_PCT_CLUST_LITTLE"
+        opcode="0x43C28100"
+        description="Scheduler util threshold pct - Little cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_UTIL_THRES_PCT_CLUST_TITANIUM"
+        opcode="0x43C28200"
+        description="Scheduler util threshold pct - Titanium cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_UTIL_THRES_PCT_CLUST_PRIME"
+        opcode="0x43C28300"
+        description="Scheduler util threshold pct - Prime cluster"/>
+
+    <ParamMap
+        name="QCOM_SCHED_WALT_ROTATE_BIG_TASKS"
+        opcode="0x43C2C000"
+        description="WALT rotate big tasks"/>
+
+    <ParamMap
+        name="QCOM_SCHED_CPUSET_AUDIO_APP"
+        opcode="0x43C30000"
+        description="Scheduler cpuset audio app"/>
+
+    <ParamMap
+        name="QCOM_SCHED_PIPELINE_EVAL_MS"
+        opcode="0x43C34000"
+        description="Scheduler pipeline eval ms"/>
+
+    <ParamMap
+        name="QCOM_SCHED_PIPELINE_SWAP_WINDOW_HYSTERESIS"
+        opcode="0x43C38000"
+        description="Scheduler pipeline swap window hysteresis"/>
+
+    <!-- ==================== Transsion Custom Opcodes - 44000 segment (11) ==================== -->
+
+    <ParamMap
+        name="QCOM_TRAN_INPUT_BOOST_FREQ"
+        opcode="0x44000000"
+        description="Transsion custom: input boost freq"/>
+
+    <ParamMap
+        name="QCOM_TRAN_INPUT_BOOST_DURATION_MS"
+        opcode="0x44004000"
+        description="Transsion custom: input boost duration ms"/>
+
+    <ParamMap
+        name="QCOM_TRAN_DISPLAY_OFF_CANCEL_CTRL"
+        opcode="0x44008000"
+        description="Transsion custom: display off cancel control"/>
+
+    <ParamMap
+        name="QCOM_TRAN_VM_TRANSPARENT_HUGEPAGE_ENABLED"
+        opcode="0x4400C000"
+        description="Transsion custom: VM transparent hugepage enabled"/>
+
+    <ParamMap
+        name="QCOM_TRAN_VM_TRANSPARENT_HUGEPAGE_DEFRAG"
+        opcode="0x44010000"
+        description="Transsion custom: VM transparent hugepage defrag"/>
+
+    <ParamMap
+        name="QCOM_TRAN_VM_SWAPPINESS"
+        opcode="0x44014000"
+        description="Transsion custom: VM swappiness"/>
+
+    <ParamMap
+        name="QCOM_TRAN_VM_VFS_CACHE_PRESSURE"
+        opcode="0x44018000"
+        description="Transsion custom: VM VFS cache pressure"/>
+
+    <ParamMap
+        name="QCOM_TRAN_IO_SCHEDULER_POLICY"
+        opcode="0x4401C000"
+        description="Transsion custom: IO scheduler policy"/>
+
+    <ParamMap
+        name="QCOM_TRAN_IO_READ_AHEAD_KB"
+        opcode="0x44020000"
+        description="Transsion custom: IO read ahead kb"/>
+
+    <ParamMap
+        name="QCOM_TRAN_SCHED_SCENE"
+        opcode="0x44024000"
+        description="Transsion custom: sched scene"/>
+
+    <ParamMap
+        name="QCOM_TRAN_THERMALUX_BOOST_FREQ"
+        opcode="0x44028000"
+        description="Transsion custom: thermal UX boost freq"/>
 
 </PlatformMapping>
