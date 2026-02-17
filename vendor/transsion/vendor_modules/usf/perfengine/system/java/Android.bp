@@ -8,7 +8,10 @@ java_library {
     srcs: ["com/transsion/perfengine/PerfEngine.java"],
     installable: true,
     platform_apis: true,
-    required: ["libperfengine-jni"],
+    required: [
+        "libperfengine-jni",
+        "com.transsion.perfengine.xml",
+    ],
     static_libs: [
         "vendor.transsion.hardware.perfengine-V1-java",
     //    "com.transsion.perfengine.flags-aconfig-java",

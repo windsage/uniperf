@@ -16,10 +16,6 @@ phony {
     required: [
         // Framework 实现层
         "perfengine_impl",
-        "com.transsion.perfengine.xml",
-
-        // JNI 层
-        "libperfengine-jni",
 
         // System Native Client
         "libperfengine-client",
