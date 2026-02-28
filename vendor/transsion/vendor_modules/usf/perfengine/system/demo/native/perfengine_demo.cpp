@@ -317,7 +317,8 @@ static int modeBothRun(const std::vector<int32_t> &filter) {
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
         std::cout << "[BOTH] Sending test events..." << std::endl;
         for (int32_t id : kAllEvents) {
-            if (!gRunning) break;
+            if (!gRunning)
+                break;
             sendOneEvent(id, "com.transsion.demo", 1000, true);
             std::this_thread::sleep_for(std::chrono::milliseconds(600));
         }
@@ -329,7 +330,8 @@ static int modeBothRun(const std::vector<int32_t> &filter) {
     while (!senderDone && gRunning) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
-    if (sender.joinable()) sender.join();
+    if (sender.joinable())
+        sender.join();
 
     TranPerfEvent::unregisterEventListener(listener);
     std::cout << "[BOTH] Done" << std::endl;

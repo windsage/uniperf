@@ -77,7 +77,8 @@ private:
     } mQcomFuncs;
 
     int32_t qcomAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                          const std::vector<int32_t> &platformParams);
+                                          const std::vector<int32_t> &platformParams,
+                                          const std::string &packageName);
 
     void qcomReleasePerfLock(int32_t handle);
 

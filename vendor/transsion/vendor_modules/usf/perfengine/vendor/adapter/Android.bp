@@ -37,7 +37,7 @@ cc_library_shared {
         "-Wno-unused-parameter",
         "-DLOG_TAG=\"PerfEngine\"",
         "-DPERFENGINE_USE_HARDCODED_MAPPINGS=0",
-        "-DPERFENGINE_PRODUCTION=1"，
+        "-DPERFENGINE_PRODUCTION=1",
         // "-DTRAN_LOG_DISABLED",
     ],
 

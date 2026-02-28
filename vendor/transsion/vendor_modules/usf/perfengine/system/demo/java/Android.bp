@@ -9,13 +9,17 @@ android_app {
     system_ext_specific: true,
     platform_apis: true,
 
-    srcs: ["src/**/*.java"],
+    srcs: [
+        "src/**/*.java",
+    ],
 
     resource_dirs: ["res"],
 
     manifest: "AndroidManifest.xml",
 
-    static_libs: [],
+    static_libs: [
+        "vendor.transsion.hardware.perfengine-V1-java",
+    ],
 
     certificate: "platform",    // platform 签名
 

@@ -15,16 +15,16 @@ cc_binary {
         "libutils",
         "libcutils",
         "libbinder_ndk",
-        "libandroid-base",
+        "libbase",
         "libperfengine-client",
         "vendor.transsion.hardware.perfengine-V1-ndk",
     ],
 
-    header_libs: [
-        "libperfengine-client-headers",
-        "libandroid-base",
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-fexceptions",
     ],
-
-    cflags: ["-Wall", "-Wextra", "-Wno-unused-parameter"],
     cppflags: ["-std=c++17"],
 }

@@ -90,8 +90,8 @@ static void ensureBinderThreadSetup() {
     // Single source of truth: parse all context here
     EventContext ctx = EventContext::parse(eventId, intParams, extraStrings.value_or(""));
 
-    TLOGI("notifyEventStart: eventId=%d pkg='%s' act='%s' fps=%d duration=%d", ctx.eventId,
-          ctx.package.c_str(), ctx.activity.c_str(), ctx.fps, ctx.duration);
+    TLOGI("notifyEventStart: eventId=%d pkg='%s' act='%s' param0=%d param1=%d", ctx.eventId,
+          ctx.package.c_str(), ctx.activity.c_str(), ctx.intParam0, ctx.intParam1);
 
     // 1. Broadcast to listeners first (non-blocking, oneway)
     broadcastEventStart(eventId, timestamp, numParams, intParams, extraStrings);
@@ -317,7 +317,7 @@ void ServiceBridge::removeListener(const std::shared_ptr<IEventListener> &listen
             AIBinder_unlinkToDeath(it->listener->asBinder().get(), it->deathRecipient.get(),
                                    it->cookie);
             delete it->cookie;
-            it = listeners.erase(it);
+            it = mListeners.erase(it);
         } else {
             ++it;
         }

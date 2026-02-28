@@ -4,6 +4,8 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
 
+import androidx.annotation.NonNull;
+
 import java.lang.reflect.Method;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -161,9 +163,9 @@ public final class TranPerfEvent {
      *
      * @param listener TrEventListener implementation
      * @hide
+     * @suppress
      */
-    @SystemApi
-    public static void registerListener(TrEventListener listener) {
+    public static void registerListener(@NonNull TrEventListener listener) {
         if (listener != null && !sSimplifiedListeners.contains(listener)) {
             sSimplifiedListeners.add(listener);
             if (DEBUG) {
@@ -177,9 +179,9 @@ public final class TranPerfEvent {
      *
      * @param listener TrEventListener implementation to remove
      * @hide
+     * @suppress
      */
-    @SystemApi
-    public static void unregisterListener(TrEventListener listener) {
+    public static void unregisterListener(@NonNull TrEventListener listener) {
         sSimplifiedListeners.remove(listener);
         if (DEBUG) {
             Log.d(TAG,
@@ -212,6 +214,14 @@ public final class TranPerfEvent {
                 @Override
                 public void onEventEnd(int id, long ts, String s) {
                     listener.onEventEnd(id, ts, s);
+                }
+                @Override
+                public String getInterfaceHash() {
+                    return IEventListener.HASH;
+                }
+                @Override
+                public int getInterfaceVersion() {
+                    return IEventListener.VERSION;
                 }
             };
             listener.mStub = stub;

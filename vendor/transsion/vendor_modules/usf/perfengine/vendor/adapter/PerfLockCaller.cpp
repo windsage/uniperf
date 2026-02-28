@@ -170,14 +170,14 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
     }
 
     TLOGI("=== acquirePerfLock START: eventId=%d fps=%d pkg='%s' act='%s' duration=%d ===",
-          ctx.eventId, ctx.fps, ctx.package.c_str(), ctx.activity.c_str(), ctx.duration);
+          ctx.eventId, ctx.intParam0, ctx.package.c_str(), ctx.activity.c_str(), ctx.intParam1);
 
     // Find best-matching scenario config (6-level priority)
     const ScenarioConfig *config = XmlConfigParser::getInstance().getScenarioConfig(
-        ctx.eventId, ctx.fps, ctx.package, ctx.activity);
+        ctx.eventId, ctx.intParam0, ctx.package, ctx.activity);
 
     if (!config) {
-        TLOGE("No config: eventId=%d fps=%d pkg='%s' act='%s'", ctx.eventId, ctx.fps,
+        TLOGE("No config: eventId=%d param0=%d pkg='%s' act='%s'", ctx.eventId, ctx.intParam0,
               ctx.package.c_str(), ctx.activity.c_str());
         return -1;
     }
@@ -199,13 +199,13 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
     }
 
     // Config timeout takes priority; fall back to caller-supplied duration
-    int32_t effectiveTimeout = (config->timeout > 0) ? config->timeout : ctx.duration;
+    int32_t effectiveTimeout = (config->timeout > 0) ? config->timeout : ctx.intParam0;
 
     int32_t platformHandle = -1;
     switch (mPlatform) {
         case Platform::QCOM:
             platformHandle = qcomAcquirePerfLockWithParams(ctx.eventId, effectiveTimeout,
-                                                           config->platformParams);
+                                                           config->platformParams, ctx.package);
             break;
         case Platform::MTK:
             platformHandle =
@@ -226,9 +226,9 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
 }
 
 // ==================== QCOM 平台调用 ====================
-
 int32_t PerfLockCaller::qcomAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                                      const std::vector<int32_t> &platformParams) {
+                                                      const std::vector<int32_t> &platformParams,
+                                                      const std::string &packageName) {
     typedef int (*perfmodule_submit_request_t)(mpctl_msg_t *);
     auto submitRequest = reinterpret_cast<perfmodule_submit_request_t>(mQcomFuncs.submitRequest);
 
@@ -262,7 +262,6 @@ int32_t PerfLockCaller::qcomAcquirePerfLockWithParams(int32_t eventId, int32_t d
         strncpy(msg.usrdata_str, packageName.c_str(), MAX_MSG_APP_NAME_LEN - 1);
         msg.usrdata_str[MAX_MSG_APP_NAME_LEN - 1] = '\0';
     }
-
     TLOGI("QCOM perfmodule_submit_request: duration=%dms, numArgs=%u", duration, msg.data);
 
     int32_t handle = submitRequest(&msg);

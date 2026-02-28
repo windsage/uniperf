@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "ParamMapper.h"
 #include "TranLog.h"
 
 #ifdef LOG_TAG
@@ -279,16 +280,16 @@ bool XmlConfigParser::parseXmlDocument(const std::string &xmlPath) {
             continue;
         }
 
+#if !PERFENGINE_PRODUCTION
         if (cfg.params.empty()) {
             TLOGW("Scenario id=%d name='%s' has no params, skipping", cfg.id, cfg.name.c_str());
             continue;
         }
 
-        TLOGI(
-            "Parsed Scenario: id=%d name='%s' fps=%d pkg='%s' act='%s' "
-            "timeout=%d release=%s params=%zu",
-            cfg.id, cfg.name.c_str(), cfg.fps, cfg.package.c_str(), cfg.activity.c_str(),
-            cfg.timeout, cfg.release.c_str(), cfg.params.size());
+        TLOGI("Pre-converting: id=%d name='%s' fps=%d pkg='%s' act='%s' timeout=%d params=%zu",
+              cfg.id, cfg.name.c_str(), cfg.fps, cfg.package.c_str(), cfg.activity.c_str(),
+              cfg.timeout, cfg.release.c_str(), cfg.params.size());
+#endif
 
         mConfigCache[cfg.id].push_back(std::move(cfg));
         parsedCount++;
@@ -311,7 +312,9 @@ ScenarioConfig XmlConfigParser::parseScenarioNode(void *node) {
         config.id = std::atoi(idStr.c_str());
     }
 
+#if !PERFENGINE_PRODUCTION
     config.name = getXmlAttribute(scenarioNode, "name");
+#endif
 
     std::string fpsStr = getXmlAttribute(scenarioNode, "fps");
     config.fps = fpsStr.empty() ? 0 : std::atoi(fpsStr.c_str());
@@ -321,8 +324,13 @@ ScenarioConfig XmlConfigParser::parseScenarioNode(void *node) {
     config.activity = getXmlAttribute(scenarioNode, "activity");
 
     // description is doc-only, no need to store
-    TLOGD("parseScenarioNode: id=%d name='%s' fps=%d pkg='%s' act='%s'", config.id,
+#if !PERFENGINE_PRODUCTION
+    TLOGD("Parsed scenario: id=%d name='%s' fps=%d pkg='%s' act='%s'", config.id,
           config.name.c_str(), config.fps, config.package.c_str(), config.activity.c_str());
+#else
+    TLOGD("Parsed scenario: id=%d fps=%d pkg='%s' act='%s'", config.id, config.fps,
+          config.package.c_str(), config.activity.c_str());
+#endif
 
     // --- Find <Config> child ---
     xmlNodePtr configNode = nullptr;

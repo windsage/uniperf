@@ -33,13 +33,11 @@ public class MainActivity extends Activity {
     // ==================== Event definitions ====================
 
     private static final int[] EVENT_IDS = {
-            TranPerfEvent.EVENT_APP_LAUNCH,
-            TranPerfEvent.EVENT_APP_SWITCH,
-            TranPerfEvent.EVENT_SCROLL,
-            TranPerfEvent.EVENT_CAMERA_OPEN,
-            TranPerfEvent.EVENT_GAME_START,
-            TranPerfEvent.EVENT_VIDEO_PLAY,
-            TranPerfEvent.EVENT_ANIMATION,
+            TranPerfEvent.RANGE_LAUNCH,
+            TranPerfEvent.RANGE_SCROLLING,
+            TranPerfEvent.RANGE_INPUT_TOUCH,
+            TranPerfEvent.RANGE_TRANSITION,
+            TranPerfEvent.RANGE_SYSTEMUI,
     };
 
     private static final String[] EVENT_NAMES = {
@@ -48,26 +46,20 @@ public class MainActivity extends Activity {
             "SCROLL (3)",
             "CAMERA_OPEN (4)",
             "GAME_START (5)",
-            "VIDEO_PLAY (6)",
-            "ANIMATION (7)",
     };
 
     private static String idToName(int id) {
         switch (id) {
-            case TranPerfEvent.EVENT_APP_LAUNCH:
+            case TranPerfEvent.RANGE_LAUNCH:
                 return "APP_LAUNCH";
-            case TranPerfEvent.EVENT_APP_SWITCH:
-                return "APP_SWITCH";
-            case TranPerfEvent.EVENT_SCROLL:
+            case TranPerfEvent.RANGE_SCROLLING:
                 return "SCROLL";
-            case TranPerfEvent.EVENT_CAMERA_OPEN:
-                return "CAMERA_OPEN";
-            case TranPerfEvent.EVENT_GAME_START:
-                return "GAME_START";
-            case TranPerfEvent.EVENT_VIDEO_PLAY:
-                return "VIDEO_PLAY";
-            case TranPerfEvent.EVENT_ANIMATION:
-                return "ANIMATION";
+            case TranPerfEvent.RANGE_INPUT_TOUCH:
+                return "INPUT_TOUCH";
+            case TranPerfEvent.RANGE_TRANSITION:
+                return "UI_TRANSITION";
+            case TranPerfEvent.RANGE_SYSTEMUI:
+                return "SYSTEMUI";
             default:
                 return "UNKNOWN(" + id + ")";
         }
@@ -333,6 +325,15 @@ public class MainActivity extends Activity {
                 String line = ts() + " [ END ] id=" + eventId + "(" + idToName(eventId) + ")"
                               + (extraStrings != null ? " extra=" + extraStrings : "");
                 appendLog(line);
+            }
+
+            @Override
+            public String getInterfaceHash() {
+                return IEventListener.HASH;
+            }
+            @Override
+            public int getInterfaceVersion() {
+                return IEventListener.VERSION;
             }
         };
 
