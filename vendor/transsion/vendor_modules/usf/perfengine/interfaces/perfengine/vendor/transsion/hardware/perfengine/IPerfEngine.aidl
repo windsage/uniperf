@@ -4,7 +4,7 @@ import vendor.transsion.hardware.perfengine.IEventListener;
 
 /**
  * PerfEngine AIDL Interface
- * 
+ *
  * Performance event notification interface for cross-process communication
  * between System and Vendor partitions.
  */

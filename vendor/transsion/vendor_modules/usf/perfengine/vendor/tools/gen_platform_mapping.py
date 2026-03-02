@@ -21,7 +21,7 @@ Usage:
     python3 gen_platform_mapping.py --all
 
 Author: chao.xu5
-Date: 2025-02-08
+Date: 2026-02-08
 """
 
 import argparse

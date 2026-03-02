@@ -7,7 +7,7 @@ package {
 filegroup {
     name: "transsion_framework_overlay_sources",
     srcs: [
-        "core/java/android/util/TranPerfEvent.java",
+        "core/java/android/util/*.java",
     ],
     path: "core/java",
     visibility: ["//frameworks/base"],

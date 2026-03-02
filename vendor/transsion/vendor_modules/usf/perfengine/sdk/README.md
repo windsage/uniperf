@@ -25,17 +25,17 @@ IEventListener listener = new IEventListener.Stub() {
                              int[] intParams, String extraStrings) {
         // 处理事件
     }
-    
+
     @Override
     public void onEventEnd(int eventId, long timestamp, String extraStrings) {
         // 处理事件
     }
-    
+
     @Override
     public int getInterfaceVersion() {
         return IEventListener.VERSION;
     }
-    
+
     @Override
     public String getInterfaceHash() {
         return IEventListener.HASH;

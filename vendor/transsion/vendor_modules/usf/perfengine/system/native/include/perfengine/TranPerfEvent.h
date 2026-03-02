@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Transsion Holdings Limited
+ * Copyright (C) 2026 Transsion Holdings Limited
  *
  * TranPerfEvent - Native API for Performance Events
  */
@@ -12,6 +12,9 @@
 #include <memory>
 #include <string>
 #include <vector>
+
+#include "TranPerfEventConstants.h"
+#include "TranPerfEventImportMacro.h"
 
 // Forward declaration
 namespace aidl {
@@ -63,29 +66,7 @@ namespace transsion {
  */
 class TranPerfEvent {
 public:
-    // ==================== Event Type Constants ====================
-
-    /** App launch event */
-    static constexpr int32_t EVENT_APP_LAUNCH = 1;
-
-    /** App switch event */
-    static constexpr int32_t EVENT_APP_SWITCH = 2;
-
-    /** Scroll event */
-    static constexpr int32_t EVENT_SCROLL = 3;
-
-    /** Camera open event */
-    static constexpr int32_t EVENT_CAMERA_OPEN = 4;
-
-    /** Game start event */
-    static constexpr int32_t EVENT_GAME_START = 5;
-
-    /** Video play event */
-    static constexpr int32_t EVENT_VIDEO_PLAY = 6;
-
-    /** Animation event */
-    static constexpr int32_t EVENT_ANIMATION = 7;
-
+    PERFENGINE_IMPORT_EVENT_CONSTANTS
     // ==================== String Separator Constant ====================
 
     /** String array separator (ASCII 31 - Unit Separator) */

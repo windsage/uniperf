@@ -1,5 +1,7 @@
 package com.transsion.perfengine.demo;
 
+import static android.util.TranPerfEventConstants.*;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,43 +28,32 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import vendor.transsion.hardware.perfengine.IEventListener;
-
 public class MainActivity extends Activity {
     private static final String TAG = "PerfEngineDemo";
 
     // ==================== Event definitions ====================
 
     private static final int[] EVENT_IDS = {
-            TranPerfEvent.RANGE_LAUNCH,
-            TranPerfEvent.RANGE_SCROLLING,
-            TranPerfEvent.RANGE_INPUT_TOUCH,
-            TranPerfEvent.RANGE_TRANSITION,
-            TranPerfEvent.RANGE_SYSTEMUI,
+            EVENT_SYS_APP_LAUNCH, EVENT_SYS_ACTIVITY_SWITCH, EVENT_SYS_SCROLL,
+            EVENT_SYS_CAMERA_OPEN,
+            // ...
     };
 
     private static final String[] EVENT_NAMES = {
-            "APP_LAUNCH (1)",
-            "APP_SWITCH (2)",
-            "SCROLL (3)",
-            "CAMERA_OPEN (4)",
-            "GAME_START (5)",
+            "APP_LAUNCH (0x00002)", "ACTIVITY_SWITCH (0x00004)", "SCROLL (0x00005)",
+            "CAMERA_OPEN (0x00008)",
+            // ...
     };
 
     private static String idToName(int id) {
-        switch (id) {
-            case TranPerfEvent.RANGE_LAUNCH:
-                return "APP_LAUNCH";
-            case TranPerfEvent.RANGE_SCROLLING:
-                return "SCROLL";
-            case TranPerfEvent.RANGE_INPUT_TOUCH:
-                return "INPUT_TOUCH";
-            case TranPerfEvent.RANGE_TRANSITION:
-                return "UI_TRANSITION";
-            case TranPerfEvent.RANGE_SYSTEMUI:
-                return "SYSTEMUI";
-            default:
-                return "UNKNOWN(" + id + ")";
-        }
+        if (id == EVENT_SYS_APP_LAUNCH)
+            return "APP_LAUNCH";
+        if (id == EVENT_SYS_ACTIVITY_SWITCH)
+            return "ACTIVITY_SWITCH";
+        if (id == EVENT_SYS_SCROLL)
+            return "SCROLL";
+        // ...
+        return "UNKNOWN(0x" + Integer.toHexString(id) + ")";
     }
 
     // ==================== Views ====================

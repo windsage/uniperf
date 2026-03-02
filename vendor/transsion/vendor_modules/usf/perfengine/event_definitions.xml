@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    PerfEngine Event ID Definitions (Single Source of Truth)
+
+    Auto-generates:
+      - Java constants for Framework overlay
+      - Java constants for SDK
+      - C++ constants for Native layer
+      - Markdown documentation
+
+    Encoding: 16-bit hex (0x00000 - 0xFFFFF)
+
+    Naming conventions:
+      - System events: EVENT_SYS_<ACTION>
+      - App events: EVENT_APP_<APP>_<ACTION>
+-->
+<PerfEngineEvents version="2.0">
+
+    <!-- ========== Range Definitions ========== -->
+    <Ranges>
+        <Range name="RANGE_SYS"              start="0x00000" end="0x00FFF"
+               description="System-level events (Framework internal hooks)"/>
+        <Range name="RANGE_APP_SYSTEMUI"     start="0x01000" end="0x01FFF"
+               description="SystemUI application events"/>
+        <Range name="RANGE_APP_LAUNCHER"     start="0x02000" end="0x02FFF"
+               description="Launcher application events"/>
+        <Range name="RANGE_APP_WALLPAPER"    start="0x03000" end="0x03FFF"
+               description="Wallpaper application events"/>
+        <Range name="RANGE_APP_SETTINGS"     start="0x04000" end="0x04FFF"
+               description="Settings application events"/>
+        <Range name="RANGE_APP_RESERVED"     start="0x05000" end="0x0FFFF"
+               description="Reserved for future system apps"/>
+        <Range name="RANGE_APP_THIRDPARTY"   start="0x10000" end="0xEFFFF"
+               description="Third-party application events"/>
+        <Range name="RANGE_INTERNAL"         start="0xF0000" end="0xFFFFF"
+               description="Internal test/debug events"/>
+    </Ranges>
+
+    <!-- ========== System Events (0x00000 - 0x00FFF) ========== -->
+    <SystemEvents>
+        <Event id="0x00001" name="EVENT_SYS_INPUT"
+               description="Input event (touch/key) detected"
+               hook="InputDispatcher.cpp"/>
+
+        <Event id="0x00002" name="EVENT_SYS_APP_LAUNCH"
+               description="Application launch started"
+               hook="ActivityTaskManagerService.java"/>
+
+        <Event id="0x00003" name="EVENT_SYS_BIND_APPLICATION"
+               description="Application bind (process created)"
+               hook="ActivityThread.java:handleBindApplication()"/>
+
+        <Event id="0x00004" name="EVENT_SYS_ACTIVITY_SWITCH"
+               description="Activity switch/resume"
+               hook="ActivityRecord.java"/>
+
+        <Event id="0x00005" name="EVENT_SYS_SCROLL"
+               description="Scroll gesture started"
+               hook="RecyclerView.java"/>
+
+        <Event id="0x00006" name="EVENT_SYS_FLING"
+               description="Fling gesture detected"
+               hook="GestureDetector.java"/>
+
+        <Event id="0x00007" name="EVENT_SYS_ANIMATION"
+               description="Window animation started"
+               hook="WindowAnimator.java"/>
+
+        <Event id="0x00008" name="EVENT_SYS_CAMERA_OPEN"
+               description="Camera HAL open requested"
+               hook="CameraService.cpp"/>
+
+        <Event id="0x00009" name="EVENT_SYS_VIDEO_DECODE"
+               description="Video decoder initialization"
+               hook="MediaCodec.cpp"/>
+
+        <Event id="0x0000A" name="EVENT_SYS_BOOT_COMPLETED"
+               description="System boot completed broadcast"
+               hook="ActivityManagerService.java"/>
+
+        <!-- Reserved: 0x0000B - 0x00FFF for future system events -->
+    </SystemEvents>
+
+    <!-- ========== SystemUI Events (0x01000 - 0x01FFF) ========== -->
+    <AppEvents app="SystemUI">
+        <Event id="0x01001" name="EVENT_APP_SYSTEMUI_PANEL_EXPAND"
+               description="Notification panel expand gesture started"/>
+
+        <Event id="0x01002" name="EVENT_APP_SYSTEMUI_NOTIFICATION_POST"
+               description="New notification posted"/>
+
+        <Event id="0x01003" name="EVENT_APP_SYSTEMUI_QUICK_SETTINGS"
+               description="Quick settings panel toggled"/>
+
+        <Event id="0x01004" name="EVENT_APP_SYSTEMUI_STATUS_BAR_SCROLL"
+               description="Status bar notification list scrolled"/>
+
+        <Event id="0x01005" name="EVENT_APP_SYSTEMUI_KEYGUARD_UNLOCK"
+               description="Keyguard unlock animation started"/>
+
+        <!-- Reserved: 0x01006 - 0x01FFF -->
+    </AppEvents>
+
+    <!-- ========== Launcher Events (0x02000 - 0x02FFF) ========== -->
+    <AppEvents app="Launcher">
+        <Event id="0x02001" name="EVENT_APP_LAUNCHER_SWIPE_UP"
+               description="Swipe up gesture to home screen"/>
+
+        <Event id="0x02002" name="EVENT_APP_LAUNCHER_FOLDER_OPEN"
+               description="App folder opened"/>
+
+        <Event id="0x02003" name="EVENT_APP_LAUNCHER_WIDGET_RESIZE"
+               description="Home screen widget resize started"/>
+
+        <Event id="0x02004" name="EVENT_APP_LAUNCHER_ICON_DRAG"
+               description="App icon drag operation started"/>
+
+        <Event id="0x02005" name="EVENT_APP_LAUNCHER_APP_DRAWER_OPEN"
+               description="App drawer opened"/>
+
+        <!-- Reserved: 0x02006 - 0x02FFF -->
+    </AppEvents>
+
+    <!-- ========== Wallpaper Events (0x03000 - 0x03FFF) ========== -->
+    <AppEvents app="Wallpaper">
+        <Event id="0x03001" name="EVENT_APP_WALLPAPER_CHANGE"
+               description="Wallpaper change operation started"/>
+
+        <Event id="0x03002" name="EVENT_APP_WALLPAPER_PREVIEW"
+               description="Wallpaper preview rendering"/>
+
+        <Event id="0x03003" name="EVENT_APP_WALLPAPER_LIVE_RENDER"
+               description="Live wallpaper frame rendering"/>
+
+        <!-- Reserved: 0x03004 - 0x03FFF -->
+    </AppEvents>
+
+    <!-- ========== Third-party App Events (0x10000 - 0xEFFFF) ========== -->
+    <!-- These are examples; apps can define their own in this range -->
+    <AppEvents app="ThirdParty">
+        <Event id="0x10001" name="EVENT_APP_GAME_LEVEL_START"
+               description="Game level/stage loading started"/>
+
+        <Event id="0x10002" name="EVENT_APP_GAME_BOSS_FIGHT"
+               description="Boss fight encounter started"/>
+
+        <Event id="0x10003" name="EVENT_APP_VIDEO_PLAYER_DECODE"
+               description="Video player decoder initialization"/>
+
+        <Event id="0x10004" name="EVENT_APP_BROWSER_PAGE_LOAD"
+               description="Browser page load started"/>
+
+        <Event id="0x10005" name="EVENT_APP_CAMERA_CAPTURE"
+               description="Camera capture shutter pressed"/>
+
+        <!-- Reserved: 0x10006 - 0xEFFFF for app-defined events -->
+    </AppEvents>
+
+    <!-- ========== Internal Test Events (0xF0000 - 0xFFFFF) ========== -->
+    <InternalEvents>
+        <Event id="0xF0001" name="EVENT_INTERNAL_TEST_BENCHMARK"
+               description="Performance benchmark test"/>
+
+        <Event id="0xF0002" name="EVENT_INTERNAL_DEBUG_TRACE"
+               description="Debug trace marker"/>
+
+        <!-- Reserved: 0xF0003 - 0xFFFFF for internal use -->
+    </InternalEvents>
+
+</PerfEngineEvents>

@@ -47,38 +47,27 @@ static std::atomic<bool> gRunning{true};
 // ==================== Helpers ====================
 
 static const std::unordered_map<std::string, int32_t> kEventNameMap = {
-    {"app_launch", TranPerfEvent::EVENT_APP_LAUNCH},
-    {"app_switch", TranPerfEvent::EVENT_APP_SWITCH},
-    {"scroll", TranPerfEvent::EVENT_SCROLL},
-    {"camera_open", TranPerfEvent::EVENT_CAMERA_OPEN},
-    {"game_start", TranPerfEvent::EVENT_GAME_START},
-    {"video_play", TranPerfEvent::EVENT_VIDEO_PLAY},
-    {"animation", TranPerfEvent::EVENT_ANIMATION},
+    {"input", TranPerfEvent::EVENT_SYS_INPUT},
+    {"app_launch", TranPerfEvent::EVENT_SYS_APP_LAUNCH},
+    {"scroll", TranPerfEvent::EVENT_SYS_SCROLL},
+    {"fling", TranPerfEvent::EVENT_SYS_FLING},
+    {"animation", TranPerfEvent::EVENT_SYS_ANIMATION},
+    {"camera_open", TranPerfEvent::EVENT_SYS_CAMERA_OPEN},
 };
 
 static const std::vector<int32_t> kAllEvents = {
-    TranPerfEvent::EVENT_APP_LAUNCH, TranPerfEvent::EVENT_APP_SWITCH,
-    TranPerfEvent::EVENT_SCROLL,     TranPerfEvent::EVENT_CAMERA_OPEN,
-    TranPerfEvent::EVENT_GAME_START, TranPerfEvent::EVENT_VIDEO_PLAY,
-    TranPerfEvent::EVENT_ANIMATION,
+    TranPerfEvent::EVENT_SYS_INPUT, TranPerfEvent::EVENT_SYS_APP_LAUNCH,
+    TranPerfEvent::EVENT_SYS_SCROLL, TranPerfEvent::EVENT_SYS_CAMERA_OPEN,
+    // ...
 };
 
 static const char *eventName(int32_t id) {
     switch (id) {
-        case TranPerfEvent::EVENT_APP_LAUNCH:
+        case TranPerfEvent::EVENT_SYS_INPUT:
+            return "INPUT";
+        case TranPerfEvent::EVENT_SYS_APP_LAUNCH:
             return "APP_LAUNCH";
-        case TranPerfEvent::EVENT_APP_SWITCH:
-            return "APP_SWITCH";
-        case TranPerfEvent::EVENT_SCROLL:
-            return "SCROLL";
-        case TranPerfEvent::EVENT_CAMERA_OPEN:
-            return "CAMERA_OPEN";
-        case TranPerfEvent::EVENT_GAME_START:
-            return "GAME_START";
-        case TranPerfEvent::EVENT_VIDEO_PLAY:
-            return "VIDEO_PLAY";
-        case TranPerfEvent::EVENT_ANIMATION:
-            return "ANIMATION";
+        // ...
         default:
             return "UNKNOWN";
     }
@@ -403,3 +392,4 @@ int main(int argc, char **argv) {
         return 1;
     }
 }
+

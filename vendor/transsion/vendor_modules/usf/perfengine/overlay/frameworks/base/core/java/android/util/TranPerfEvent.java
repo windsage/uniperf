@@ -1,5 +1,7 @@
 package android.util;
 
+import static android.util.TranPerfEventConstants.*;
+
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
@@ -58,55 +60,32 @@ public final class TranPerfEvent {
     // Latency threshold for warning (10ms)
     private static final long LATENCY_THRESHOLD_NS = 10_000_000L;
 
-    // ========================================================================
-    // EVENT RANGE DEFINITIONS
-    // Each range is allocated 1000 IDs to allow sub-categorization.
-    // ========================================================================
-
-    // ==================== Core / Base Events (0 - 999) ====================
-    /** Most common system-level events */
-    public static final int RANGE_CORE = 0;
-    public static final int EVENT_ID_UNKNOWN = 0;
-
-    // ==================== Interaction & UX (1000 - 4999) ====================
-    /** Application launch (Cold, Warm, Hot start) */
-    public static final int RANGE_LAUNCH = 1000;
-    /** Scrolling scenarios (List fling, Page scroll) */
-    public static final int RANGE_SCROLLING = 1100;
-    /** Input response (Key click, Touch gesture) */
-    public static final int RANGE_INPUT_TOUCH = 1200;
-    /** Interface transition (Activity jump, Fragment switch) */
-    public static final int RANGE_TRANSITION = 1300;
-
-    // ==================== System Components (5000 - 9999) ====================
-    /** SystemUI scenarios (Notification shade, Control Center, Keyguard) */
-    public static final int RANGE_SYSTEMUI = 5000;
-    /** Home screen scenarios (Launcher, Minus-one screen, App drawer) */
-    public static final int RANGE_HOME_SCREEN = 6000;
-    /** Multi-window & Split-screen (Task switching, Freeform) */
-    public static final int RANGE_MULTI_WINDOW = 7000;
-
-    // ==================== Multimedia & Communication (10000 - 19999) ====================
-    /** Camera scenarios (Preview, Capture, Recording) */
-    public static final int RANGE_CAMERA = 10000;
-    /** Audio scenarios (Playback, Recording, Audio Effects) */
-    public static final int RANGE_AUDIO = 11000;
-    /** Video scenarios (Encoding, Decoding, Rendering) */
-    public static final int RANGE_VIDEO = 12000;
-    /** WebView & Browser (Page loading, JS execution) */
-    public static final int RANGE_WEBVIEW = 13000;
-    /** Telephony scenarios (Voice call, CS/IMS call setup) */
-    public static final int RANGE_TELEPHONY = 14000;
-    /** Video Call scenarios (VoLTE/ViLTE, VoIP, Screen sharing) */
-    public static final int RANGE_VIDEO_CALL = 15000;
-
-    // ==================== Vertical Domains (20000+) ====================
-    /** Game scenarios (Frame drops, Asset loading) */
-    public static final int RANGE_GAME = 20000;
-    /** Location scenarios (GNSS signal, Network positioning) */
-    public static final int RANGE_LOCATION = 21000;
     private static final boolean ENABLE_PERFENGINE = false;
 
+    /**
+     * Get event name by ID (for debugging)
+     */
+    public static String getEventName(int eventId) {
+        // 使用生成的常量
+        if (eventId == EVENT_SYS_INPUT)
+            return "INPUT";
+        if (eventId == EVENT_SYS_APP_LAUNCH)
+            return "APP_LAUNCH";
+        if (eventId == EVENT_SYS_BIND_APPLICATION)
+            return "BIND_APPLICATION";
+        if (eventId == EVENT_SYS_ACTIVITY_SWITCH)
+            return "ACTIVITY_SWITCH";
+        if (eventId == EVENT_SYS_SCROLL)
+            return "SCROLL";
+        if (eventId == EVENT_SYS_FLING)
+            return "FLING";
+        if (eventId == EVENT_SYS_ANIMATION)
+            return "ANIMATION";
+        if (eventId == EVENT_SYS_CAMERA_OPEN)
+            return "CAMERA_OPEN";
+        // ... 其他事件 ...
+        return "UNKNOWN(0x" + Integer.toHexString(eventId) + ")";
+    }
     // ==================== Listener Interfaces ====================
 
     /**

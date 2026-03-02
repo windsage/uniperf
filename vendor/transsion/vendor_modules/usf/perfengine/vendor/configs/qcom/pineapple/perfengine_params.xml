@@ -10,7 +10,7 @@
         package     - 包名过滤（可选），未指定则匹配所有应用
         activity    - Activity过滤（可选），需配合 package 使用
         description - 可读描述（文档用）
-    
+
     匹配优先级（由高到低）：
         1. id + fps + package + activity
         2. id + fps + package

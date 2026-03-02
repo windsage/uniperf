@@ -22,49 +22,7 @@
 
 ## 支持的事件类型
 
-事件 ID 被分配为不同的范围，每个范围包含 1000 个 ID，允许在同一类别内进行细粒度分类。
-
-### 核心事件 (0 - 999)
-
-| 常量 | 范围 | 说明 |
-|------|------|------|
-| `RANGE_CORE` | 0-999 | 系统级基础事件 |
-| `EVENT_ID_UNKNOWN` | 0 | 未知事件 |
-
-### 交互与 UX (1000 - 4999)
-
-| 常量 | 范围 | 说明 |
-|------|------|------|
-| `RANGE_LAUNCH` | 1000-1099 | 应用启动事件（冷启、温启、热启） |
-| `RANGE_SCROLLING` | 1100-1199 | 滚动事件（列表 Fling、页面滚动） |
-| `RANGE_INPUT_TOUCH` | 1200-1299 | 输入响应（按键点击、触摸手势） |
-| `RANGE_TRANSITION` | 1300-1399 | 界面转换（Activity 跳转、Fragment 切换） |
-
-### 系统组件 (5000 - 9999)
-
-| 常量 | 范围 | 说明 |
-|------|------|------|
-| `RANGE_SYSTEMUI` | 5000-5999 | SystemUI 场景（通知栏、控制中心、锁屏） |
-| `RANGE_HOME_SCREEN` | 6000-6999 | 主屏幕场景（启动器、负一屏、应用抽屉） |
-| `RANGE_MULTI_WINDOW` | 7000-7999 | 多窗口与分屏（任务切换、自由形式） |
-
-### 多媒体与通讯 (10000 - 19999)
-
-| 常量 | 范围 | 说明 |
-|------|------|------|
-| `RANGE_CAMERA` | 10000-10999 | 相机场景（预览、拍照、录制） |
-| `RANGE_AUDIO` | 11000-11999 | 音频场景（播放、录制、音效处理） |
-| `RANGE_VIDEO` | 12000-12999 | 视频场景（编码、解码、渲染） |
-| `RANGE_WEBVIEW` | 13000-13999 | WebView 与浏览器（页面加载、JS 执行） |
-| `RANGE_TELEPHONY` | 14000-14999 | 电话场景（语音通话、CS/IMS 通话建立） |
-| `RANGE_VIDEO_CALL` | 15000-15999 | 视频通话（VoLTE/ViLTE、VoIP、屏幕共享） |
-
-### 垂直领域 (20000+)
-
-| 常量 | 范围 | 说明 |
-|------|------|------|
-| `RANGE_GAME` | 20000-20999 | 游戏场景（帧率下降、资源加载） |
-| `RANGE_LOCATION` | 21000-21999 | 位置场景（GNSS 信号、网络定位） |
+[参考文档](../../../docs/EVENT_ID_REFERENCE.md)
 
 ---
 
@@ -110,7 +68,7 @@ public abstract static class PerfEventListener {
             int[] intParams,       // 整数参数数组
             String extraStrings    // 额外字符串参数
     );
-    
+
     public abstract void onEventEnd(
             int eventId,           // 事件 ID
             long timestamp,        // 时间戳（纳秒）

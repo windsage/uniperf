@@ -7,30 +7,30 @@ plugins {
 android {
     namespace 'com.transsion.perfengine.sdk'
     compileSdkVersion 34
-    
+
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 34
-        
+
         // 库版本信息
         versionCode 1
         versionName "1.0.0"
-        
+
         consumerProguardFiles 'consumer-rules.pro'
     }
-    
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    
+
     // 配置 libs 目录
     sourceSets {
         main {
@@ -67,31 +67,31 @@ afterEvaluate {
             release(MavenPublication) {
                 // 使用 Android Library 组件
                 from components.release
-                
+
                 // Maven 坐标
                 groupId = libraryGroupId
                 artifactId = libraryArtifactId
                 version = libraryVersion
-                
+
                 // 生成源码 JAR (可选)
                 artifact androidSourcesJar
-                
+
                 // 生成 Javadoc JAR (可选)
                 artifact androidJavadocsJar
-                
+
                 // 配置 POM
                 pom {
                     name = 'TranPerfEvent SDK'
                     description = 'Performance event notification SDK for Transsion devices'
                     url = 'https://github.com/transsion/perfengine'
-                    
+
                     licenses {
                         license {
                             name = 'The Apache License, Version 2.0'
                             url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                         }
                     }
-                    
+
                     developers {
                         developer {
                             id = 'transsion'
@@ -99,17 +99,17 @@ afterEvaluate {
                             email = 'developer@transsion.com'
                         }
                     }
-                    
+
                     scm {
                         connection = 'scm:git:git://github.com/transsion/perfengine.git'
                         developerConnection = 'scm:git:ssh://github.com/transsion/perfengine.git'
                         url = 'https://github.com/transsion/perfengine'
                     }
-                    
+
                     // 声明 AIDL JAR 为 provided 依赖
                     withXml {
                         def dependenciesNode = asNode().appendNode('dependencies')
-                        
+
                         // AIDL JAR 依赖
                         def aidlDep = dependenciesNode.appendNode('dependency')
                         aidlDep.appendNode('groupId', 'vendor.transsion.hardware')
@@ -120,14 +120,14 @@ afterEvaluate {
                 }
             }
         }
-        
+
         repositories {
             // ==================== 本地 Maven 仓库 ====================
             maven {
                 name = "Local"
                 url = uri("${rootProject.projectDir}/maven-repo")
             }
-            
+
             // ==================== 远程 Maven 仓库 ====================
             maven {
                 name = "Release"
@@ -137,7 +137,7 @@ afterEvaluate {
                     password = findProperty("maven.password") ?: System.getenv("MAVEN_PASSWORD")
                 }
             }
-            
+
             // ==================== Nexus / Artifactory 示例 ====================
             /*
             maven {
@@ -168,10 +168,10 @@ task androidJavadocs(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     classpath += files('libs/vendor.transsion.hardware.perfengine-V1-java.jar')
-    
+
     // 排除错误
     failOnError false
-    
+
     options {
         encoding = 'UTF-8'
         charSet = 'UTF-8'

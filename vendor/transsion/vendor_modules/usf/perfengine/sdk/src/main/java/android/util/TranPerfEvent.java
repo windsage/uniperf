@@ -1,7 +1,8 @@
 package android.util;
 
-import android.os.IBinder;
+import static android.util.TranPerfEventConstants.*;
 
+import android.os.IBinder;
 /**
  * TranPerfEvent - Performance Event API (SDK Stub)
  *
@@ -11,16 +12,6 @@ import android.os.IBinder;
  * packaged into an APK; it should be used with 'compileOnly' dependency.
  */
 public final class TranPerfEvent {
-    // ==================== Event Type Constants ====================
-
-    public static final int EVENT_APP_LAUNCH = 1;
-    public static final int EVENT_APP_SWITCH = 2;
-    public static final int EVENT_SCROLL = 3;
-    public static final int EVENT_CAMERA_OPEN = 4;
-    public static final int EVENT_GAME_START = 5;
-    public static final int EVENT_VIDEO_PLAY = 6;
-    public static final int EVENT_ANIMATION = 7;
-
     // ==================== Listener Interfaces ====================
 
     /**
