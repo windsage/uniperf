@@ -1,4 +1,5 @@
 PRODUCT_PACKAGES += \
+    libperfengine-client \
     libperfengine-adapter \
     vendor.transsion.perfengine-V1-ndk
 

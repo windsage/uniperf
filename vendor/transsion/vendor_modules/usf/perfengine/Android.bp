@@ -9,6 +9,38 @@ license {
     ],
 }
 
+// ==================== Event Constants Generation ====================
+
+python_binary_host {
+    name: "perfengine-event-generator",
+    main: "tools/generate_events.py",
+    srcs: ["tools/generate_events.py"],
+    version: {
+        py3: {
+            enabled: true,
+        },
+    },
+}
+
+genrule {
+    name: "perfengine-event-constants-cpp",
+    srcs: ["event_definitions.xml"],
+    out: [
+        "TranPerfEventConstants.h",
+        "TranPerfEventImportMacro.h",
+    ],
+    tools: ["perfengine-event-generator"],
+    cmd: "$(location perfengine-event-generator) $(in) --out-cpp-dir $(genDir)",
+}
+
+genrule {
+    name: "perfengine-event-constants-java-overlay",
+    srcs: ["event_definitions.xml"],
+    out: ["TranPerfEventConstants.java"],
+    tools: ["perfengine-event-generator"],
+    cmd: "$(location perfengine-event-generator) $(in) --out-java $(out)",
+}
+
 // ==================== System 分区模块聚合 ====================
 
 phony {

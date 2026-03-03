@@ -16,6 +16,7 @@ import vendor.transsion.hardware.perfengine.IEventListener;
 /**
  * TranPerfEvent - Performance Event API
  *
+ * @hide
  * Unified interface for performance event notifications.
  * This class is part of the Android Framework overlay.
  *
@@ -64,6 +65,7 @@ public final class TranPerfEvent {
 
     /**
      * Get event name by ID (for debugging)
+     * @hide
      */
     public static String getEventName(int eventId) {
         // 使用生成的常量
@@ -170,6 +172,7 @@ public final class TranPerfEvent {
 
     /**
      * Register a PerfEventListener, subscribe to ALL events.
+     * @hide
      */
     public static void registerEventListener(PerfEventListener listener) {
         registerEventListener(listener, new int[0]);
@@ -180,6 +183,7 @@ public final class TranPerfEvent {
      *
      * @param listener    PerfEventListener implementation
      * @param eventFilter Array of eventIds to subscribe; empty = all events
+     * @hide
      */
     public static void registerEventListener(PerfEventListener listener, int[] eventFilter) {
         if (listener == null)
@@ -211,6 +215,7 @@ public final class TranPerfEvent {
         }
     }
 
+    /** @hide **/
     public static void unregisterEventListener(PerfEventListener listener) {
         if (listener != null && listener.mStub instanceof IEventListener.Stub) {
             android.os.IBinder binder = ((IEventListener.Stub) listener.mStub).asBinder();
@@ -225,6 +230,7 @@ public final class TranPerfEvent {
      * Register a full AIDL event listener, subscribe to ALL events.
      *
      * @param listenerBinder The IBinder object of the listener
+     * @hide
      */
     public static void registerEventListener(android.os.IBinder listenerBinder) {
         registerEventListener(listenerBinder, new int[0]);
@@ -235,6 +241,7 @@ public final class TranPerfEvent {
      *
      * @param listenerBinder The IBinder object of the listener
      * @param eventFilter    Array of eventIds to subscribe; empty = all events
+     * @hide
      */
     public static void registerEventListener(android.os.IBinder listenerBinder, int[] eventFilter) {
         if (listenerBinder == null) {
@@ -269,6 +276,7 @@ public final class TranPerfEvent {
     /**
      * Unregister a full AIDL event listener
      * * @param listenerBinder The IBinder object to remove
+     * @hide
      */
     public static void unregisterEventListener(android.os.IBinder listenerBinder) {
         if (listenerBinder == null)
@@ -373,6 +381,7 @@ public final class TranPerfEvent {
 
     /**
      * Overload 1: eventId + timestamp
+     * @hide
      */
     public static void notifyEventStart(int eventId, long timestamp) {
         notifyEventStartInternal(eventId, timestamp, 0, null, null);
@@ -380,6 +389,7 @@ public final class TranPerfEvent {
 
     /**
      * Overload 2: eventId + timestamp + string
+     * @hide
      */
     public static void notifyEventStart(int eventId, long timestamp, String extraString) {
         notifyEventStartInternal(eventId, timestamp, 0, null, extraString);
@@ -387,6 +397,7 @@ public final class TranPerfEvent {
 
     /**
      * Overload 3: eventId + timestamp + string[]
+     * @hide
      */
     public static void notifyEventStart(int eventId, long timestamp, String[] stringParams) {
         notifyEventStartInternal(eventId, timestamp, 0, null, joinStrings(stringParams));
@@ -394,6 +405,7 @@ public final class TranPerfEvent {
 
     /**
      * Overload 4: eventId + timestamp + numParams + int[]
+     * @hide
      */
     public static void notifyEventStart(
             int eventId, long timestamp, int numParams, int[] intParams) {
@@ -402,6 +414,7 @@ public final class TranPerfEvent {
 
     /**
      * Overload 5: eventId + timestamp + numParams + int[] + string[]
+     * @hide
      */
     public static void notifyEventStart(
             int eventId, long timestamp, int numParams, int[] intParams, String[] stringParams) {
@@ -479,6 +492,7 @@ public final class TranPerfEvent {
 
     /**
      * Notify event end (minimal)
+     * @hide
      */
     public static void notifyEventEnd(int eventId, long timestamp) {
         notifyEventEnd(eventId, timestamp, null);
@@ -486,6 +500,7 @@ public final class TranPerfEvent {
 
     /**
      * Notify event end with string parameter
+     * @hide
      */
     public static void notifyEventEnd(int eventId, long timestamp, String extraString) {
         // Check aconfig flag
@@ -549,6 +564,7 @@ public final class TranPerfEvent {
      * Example:
      *   long ts = TranPerfEvent.now();
      *   TranPerfEvent.notifyEventStart(EVENT_APP_LAUNCH, ts);
+     *   @hide
      */
     public static long now() {
         return SystemClock.elapsedRealtimeNanos();

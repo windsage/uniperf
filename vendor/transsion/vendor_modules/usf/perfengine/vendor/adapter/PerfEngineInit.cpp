@@ -1,5 +1,7 @@
 #include <android/binder_manager.h>
 #include <android/binder_process.h>
+#include <processgroup/sched_policy.h>
+#include <sys/resource.h>
 
 #include "ServiceBridge.h"
 #include "TranLog.h"

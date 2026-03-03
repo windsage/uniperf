@@ -17,6 +17,14 @@ cc_library_shared {
         "client/TranPerfEvent.cpp",
     ],
 
+    generated_headers: [
+        "perfengine-event-constants-cpp",
+    ],
+
+    export_generated_headers: [
+        "perfengine-event-constants-cpp",
+    ],
+
     export_include_dirs: [
         "include",
     ],

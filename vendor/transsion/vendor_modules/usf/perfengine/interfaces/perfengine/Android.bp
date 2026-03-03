@@ -26,6 +26,6 @@ aidl_interface {
     //            imports: [], // 无依赖其他 AIDL
     //        },
     //    ],
-    frozen: false,
+    // frozen: false,
     owner: "transsion",
 }

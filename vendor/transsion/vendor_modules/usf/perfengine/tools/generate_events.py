@@ -91,6 +91,7 @@ def generate_java_overlay(ranges, events, output_path):
         " * - System events: 0x00000 - 0x00FFF",
         " * - App events: 0x01000 - 0xEFFFF",
         " * - Internal events: 0xF0000 - 0xFFFFF",
+        " * @hide",
         " */",
         "public final class TranPerfEventConstants {",
         "",
@@ -100,8 +101,9 @@ def generate_java_overlay(ranges, events, output_path):
 
     # Add range constants
     for r in ranges:
-        lines.append(f"    /** {r['desc']} */")
+        lines.append(f"    /** {r['desc']} @hide */")
         lines.append(f"    public static final int {r['name']}_START = {r['start']};")
+        lines.append(f"    /** @hide */")
         lines.append(f"    public static final int {r['name']}_END   = {r['end']};")
         lines.append("")
 
@@ -119,7 +121,7 @@ def generate_java_overlay(ranges, events, output_path):
         lines.append("")
 
         for e in sorted(cat_events, key=lambda x: int(x['id'], 16)):
-            lines.append(f"    /** {e['desc']} */")
+            lines.append(f"    /** {e['desc']} @hide */")
             lines.append(f"    public static final int {e['name']} = {e['id']};")
             lines.append("")
 
@@ -458,54 +460,106 @@ def validate_events(events):
     return errors
 
 def main():
-    if len(sys.argv) < 2:
-        print(f"Usage: {sys.argv[0]} <event_definitions.xml>")
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description='PerfEngine Event ID Code Generator',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Generate all files (manual execution)
+  %(prog)s event_definitions.xml
+
+  # Generate C++ headers only (called by genrule)
+  %(prog)s event_definitions.xml --out-cpp-dir output/include/perfengine
+
+  # Generate Java overlay only (called by genrule)
+  %(prog)s event_definitions.xml --out-java output/TranPerfEventConstants.java
+        """
+    )
+    parser.add_argument('xml_file', help='Path to event_definitions.xml')
+    parser.add_argument('--out-cpp-dir', metavar='DIR',
+                        help='Output directory for C++ headers (generates TranPerfEventConstants.h and TranPerfEventImportMacro.h)')
+    parser.add_argument('--out-java', metavar='FILE',
+                        help='Output file for Java overlay constants')
+    parser.add_argument('--out-java-sdk', metavar='FILE',
+                        help='Output file for Java SDK constants')
+    parser.add_argument('--out-docs', metavar='FILE',
+                        help='Output file for Markdown documentation')
+
+    args = parser.parse_args()
+
+    xml_path = Path(args.xml_file)
+    if not xml_path.exists():
+        print(f"Error: File not found: {args.xml_file}")
+        sys.exit(1)
+
+    # 打印标题
+    is_genrule_mode = any([args.out_cpp_dir, args.out_java, args.out_java_sdk, args.out_docs])
+
+    if not is_genrule_mode:
+        print("=" * 60)
+        print("PerfEngine Event ID Code Generator")
+        print("=" * 60)
         print()
-        print("Example:")
-        print(f"  {sys.argv[0]} event_definitions.xml")
-        sys.exit(1)
-
-    xml_file = sys.argv[1]
-
-    if not Path(xml_file).exists():
-        print(f"Error: File not found: {xml_file}")
-        sys.exit(1)
-
-    print("=" * 60)
-    print("PerfEngine Event ID Code Generator")
-    print("=" * 60)
-    print()
 
     # Parse XML
-    print(f"Parsing: {xml_file}")
-    ranges, events = parse_xml(xml_file)
-    print(f"  Ranges: {len(ranges)}")
-    print(f"  Events: {len(events)}")
-    print()
+    if not is_genrule_mode:
+        print(f"Parsing: {args.xml_file}")
+    ranges, events = parse_xml(args.xml_file)
+    if not is_genrule_mode:
+        print(f"  Ranges: {len(ranges)}")
+        print(f"  Events: {len(events)}")
+        print()
 
     # Validate
-    print("Validating event definitions...")
+    if not is_genrule_mode:
+        print("Validating event definitions...")
     errors = validate_events(events)
     if errors:
         print("Validation failed:")
         for err in errors:
             print(f"  - {err}")
         sys.exit(1)
-    print("✓ Validation passed")
-    print()
+    if not is_genrule_mode:
+        print("✓ Validation passed")
+        print()
 
-    # Generate all outputs
-    print("Generating code files...")
-    generate_java_overlay(ranges, events, JAVA_OVERLAY_OUT)
-    generate_java_sdk(ranges, events, JAVA_SDK_OUT)
-    generate_cpp_header(ranges, events, CPP_HEADER_OUT)
-    generate_cpp_import_macro(events, CPP_MACRO_OUT)
-    generate_markdown_docs(ranges, events, DOCS_MD_OUT)
+    # Generate files based on arguments
+    if not is_genrule_mode:
+        print("Generating code files...")
 
-    print()
-    print("=" * 60)
-    print("✓ Code generation complete!")
-    print("=" * 60)
+    if args.out_cpp_dir:
+        # Genrule mode: C++ headers only
+        cpp_dir = Path(args.out_cpp_dir)
+        cpp_dir.mkdir(parents=True, exist_ok=True)
+        generate_cpp_header(ranges, events, cpp_dir / "TranPerfEventConstants.h")
+        generate_cpp_import_macro(events, cpp_dir / "TranPerfEventImportMacro.h")
+
+    if args.out_java:
+        # Genrule mode: Java overlay only
+        generate_java_overlay(ranges, events, Path(args.out_java))
+
+    if args.out_java_sdk:
+        # Genrule mode: Java SDK only
+        generate_java_sdk(ranges, events, Path(args.out_java_sdk))
+
+    if args.out_docs:
+        # Genrule mode: Docs only
+        generate_markdown_docs(ranges, events, Path(args.out_docs))
+
+    # Full generation mode (no arguments)
+    if not is_genrule_mode:
+        generate_java_overlay(ranges, events, JAVA_OVERLAY_OUT)
+        generate_java_sdk(ranges, events, JAVA_SDK_OUT)
+        generate_cpp_header(ranges, events, CPP_HEADER_OUT)
+        generate_cpp_import_macro(events, CPP_MACRO_OUT)
+        generate_markdown_docs(ranges, events, DOCS_MD_OUT)
+
+        print()
+        print("=" * 60)
+        print("✓ Code generation complete!")
+        print("=" * 60)
 
 if __name__ == '__main__':
     main()

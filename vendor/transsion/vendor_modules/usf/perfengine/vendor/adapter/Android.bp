@@ -15,6 +15,7 @@ cc_library_shared {
         "XmlConfigParser.cpp",
         "ParamMapper.cpp",
         "PerfEngineTypes.cpp",
+        "PerfEngineInit.cpp",
     ],
 
     local_include_dirs: [
@@ -25,6 +26,7 @@ cc_library_shared {
         "libbase",
         "libbinder_ndk",
         "libcutils",
+        "libprocessgroup",
         "liblog",
         "libutils",
         "libxml2",

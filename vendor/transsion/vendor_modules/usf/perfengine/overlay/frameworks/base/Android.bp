@@ -8,7 +8,7 @@ filegroup {
     name: "transsion_framework_overlay_sources",
     srcs: [
         "core/java/android/util/*.java",
+        ":perfengine-event-constants-java-overlay",
     ],
-    path: "core/java",
     visibility: ["//frameworks/base"],
 }

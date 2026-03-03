@@ -14,7 +14,7 @@ java_library {
     ],
     static_libs: [
         "vendor.transsion.hardware.perfengine-V1-java",
-    //    "com.transsion.perfengine.flags-aconfig-java",
+        //    "com.transsion.perfengine.flags-aconfig-java",
     ],
 }
 
