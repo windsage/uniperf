@@ -7,7 +7,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.transsion.perfengine.version=1.0.0
 
+PRODUCT_BOOT_JARS += perfengine_impl
+
 ifneq ($(filter eng userdebug,$(TARGET_BUILD_VARIANT)),)
     PRODUCT_SYSTEM_PROPERTIES += \
         persist.transsion.perfengine.debug=1
 endif
+
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
+    vendor/transsion/vendor_modules/usf/perfengine/framework_compatibility_matrix_perfengine.xml

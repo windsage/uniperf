@@ -121,7 +121,7 @@ def generate_java_overlay(ranges, events, output_path):
         lines.append("")
 
         for e in sorted(cat_events, key=lambda x: int(x['id'], 16)):
-            lines.append(f"    /** {e['desc']} @hide */")
+            lines.append(f"    /** {e['desc']} */")
             lines.append(f"    public static final int {e['name']} = {e['id']};")
             lines.append("")
 

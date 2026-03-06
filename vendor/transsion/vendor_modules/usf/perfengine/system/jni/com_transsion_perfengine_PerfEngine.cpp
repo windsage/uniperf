@@ -22,7 +22,7 @@
 // #include "com_transsion_perfengine_flags.h"
 
 // #define CHECK_FLAG() com::transsion::perfengine::flags::enable_perfengine()
-#define CHECK_FLAG() (false)
+#define CHECK_FLAG() (true)
 using namespace android;
 
 using aidl::vendor::transsion::hardware::perfengine::IEventListener;
@@ -42,7 +42,7 @@ static Mutex gServiceLock;
 static const char *VENDOR_SERVICE_NAME = "vendor.transsion.hardware.perfengine.IPerfEngine/default";
 
 // Debug 开关
-static constexpr bool DEBUG = false;
+static constexpr bool DEBUG = true;
 
 // ==================== AIDL 服务管理 ====================
 

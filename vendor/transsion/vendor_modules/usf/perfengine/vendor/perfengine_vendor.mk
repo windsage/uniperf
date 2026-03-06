@@ -3,21 +3,17 @@ PRODUCT_PACKAGES += \
     libperfengine-adapter \
     vendor.transsion.perfengine-V1-ndk
 
-PERFENGINE_PLATFORM_TYPE := unknown
 PERFENGINE_CHIP_NAME := unknown
 
 ifneq ($(filter msm% kona lahaina taro kalama volcano pineapple sm% sdm%,$(TARGET_BOARD_PLATFORM)),)
-    PERFENGINE_PLATFORM_TYPE := qcom
     PERFENGINE_CHIP_NAME := $(TARGET_BOARD_PLATFORM)
 endif
 
 ifneq ($(filter mt%,$(TARGET_BOARD_PLATFORM)),)
-    PERFENGINE_PLATFORM_TYPE := mtk
     PERFENGINE_CHIP_NAME := $(TARGET_BOARD_PLATFORM)
 endif
 
 ifneq ($(filter ums% unisoc%,$(TARGET_BOARD_PLATFORM)),)
-    PERFENGINE_PLATFORM_TYPE := unisoc
     PERFENGINE_CHIP_NAME := $(TARGET_BOARD_PLATFORM)
 endif
 
@@ -47,3 +43,21 @@ ifneq ($(filter eng userdebug,$(TARGET_BUILD_VARIANT)),)
     PRODUCT_VENDOR_PROPERTIES += \
         persist.vendor.transsion.perfengine.debug=1
 endif
+
+ifneq ($(PERFENGINE_MAPPING_PATH),)
+    PRODUCT_COPY_FILES += \
+        $(PERFENGINE_MAPPING_PATH):$(TARGET_COPY_OUT_VENDOR)/etc/perfengine/$(notdir $(PERFENGINE_MAPPING_PATH))
+endif
+
+ifneq ($(PERFENGINE_CONFIG_PATH),)
+    PRODUCT_COPY_FILES += \
+        $(PERFENGINE_CONFIG_PATH):$(TARGET_COPY_OUT_VENDOR)/etc/perfengine/perfengine_params.xml
+endif
+
+$(warning ############### PERFENGINE DEBUG ###############)
+$(warning PLATFORM: $(PERFENGINE_PLATFORM_TYPE))
+$(warning CHIP: $(PERFENGINE_CHIP_NAME))
+$(warning FULL_CONFIG_DIR: $(PERFENGINE_CHIP_CONFIG_DIR))
+$(warning MAPPING_FILE: $(PERFENGINE_MAPPING_PATH))
+$(warning CONFIG_FILE: $(PERFENGINE_CONFIG_PATH))
+$(warning ################################################)

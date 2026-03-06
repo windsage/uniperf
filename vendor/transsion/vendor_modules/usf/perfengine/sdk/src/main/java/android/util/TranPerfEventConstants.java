@@ -1,6 +1,6 @@
 /*
  * AUTO-GENERATED FILE - DO NOT EDIT MANUALLY
- * Generated: 2026-03-03 19:13:28
+ * Generated: 2026-03-03 11:40:41
  * Source: event_definitions.xml
  * Generator: tools/generate_events.py
  */

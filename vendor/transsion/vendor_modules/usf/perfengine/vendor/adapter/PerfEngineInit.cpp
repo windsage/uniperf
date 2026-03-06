@@ -46,8 +46,19 @@ extern "C" bool PerfEngine_Initialize() {
         return false;
     }
 
+    if (ServiceBridge::descriptor == nullptr) {
+        TLOGE("ServiceBridge::descriptor is NULL!");
+        return false;
+    }
+
     // 2. 注册 AIDL 服务
     const std::string serviceName = std::string() + ServiceBridge::descriptor + "/default";
+    TLOGI("Attempting to register service: %s", serviceName.c_str());
+
+    auto existingService = AServiceManager_checkService(serviceName.c_str());
+    if (existingService != nullptr) {
+        TLOGW("Service already exists: %s", serviceName.c_str());
+    }
     binder_status_t status =
         AServiceManager_addService(gServiceBridge->asBinder().get(), serviceName.c_str());
 

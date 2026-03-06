@@ -18,10 +18,10 @@
 // System 和 Vendor 都使用 aconfig
 // #include <com_transsion_perfengine_flags.h>
 // #define CHECK_FLAG() (com::transsion::perfengine::flags::enable_perfengine())
-#define CHECK_FLAG() (false)
+#define CHECK_FLAG() (true)
 // ==================== Constants ====================
 
-static constexpr bool DEBUG = false;
+static constexpr bool DEBUG = true;
 static const char *SERVICE_NAME = "vendor.transsion.hardware.perfengine.IPerfEngine/default";
 
 // ==================== AIDL Service Management ====================

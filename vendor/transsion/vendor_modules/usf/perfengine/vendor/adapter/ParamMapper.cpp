@@ -185,7 +185,6 @@ bool ParamMapper::parseXmlDocument(const std::string &xmlPath) {
     xmlDocPtr doc = xmlReadFile(xmlPath.c_str(), nullptr, XML_PARSE_NOBLANKS | XML_PARSE_NONET);
     if (doc == nullptr) {
         TLOGE("Failed to parse XML file: %s", xmlPath.c_str());
-        xmlCleanupParser();
         return false;
     }
 
@@ -194,7 +193,6 @@ bool ParamMapper::parseXmlDocument(const std::string &xmlPath) {
     if (root == nullptr) {
         TLOGE("Empty XML document");
         xmlFreeDoc(doc);
-        xmlCleanupParser();
         return false;
     }
 
@@ -202,7 +200,6 @@ bool ParamMapper::parseXmlDocument(const std::string &xmlPath) {
     if (xmlStrcmp(root->name, (const xmlChar *)"PlatformMapping") != 0) {
         TLOGE("Invalid root node: %s (expected: PlatformMapping)", root->name);
         xmlFreeDoc(doc);
-        xmlCleanupParser();
         return false;
     }
 
@@ -211,7 +208,6 @@ bool ParamMapper::parseXmlDocument(const std::string &xmlPath) {
     if (xmlPlatform) {
         std::string platformStr = (const char *)xmlPlatform;
         xmlFree(xmlPlatform);
-
         TLOGI("XML platform: %s, Current platform: %s", platformStr.c_str(),
               PlatformDetector::getInstance().getPlatformName());
     }
@@ -276,7 +272,6 @@ bool ParamMapper::parseXmlDocument(const std::string &xmlPath) {
 
     // Cleanup
     xmlFreeDoc(doc);
-    xmlCleanupParser();
 
     return mappingCount > 0;
 }

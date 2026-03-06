@@ -52,7 +52,6 @@ phony {
         "perfengine_demo",
         // System Native Client
         "libperfengine-client",
-
         // AIDL 接口
         "vendor.transsion.hardware.perfengine-V1-ndk",
         "vendor.transsion.hardware.perfengine-V1-java",

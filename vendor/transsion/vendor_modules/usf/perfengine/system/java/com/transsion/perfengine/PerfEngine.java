@@ -19,11 +19,11 @@ import vendor.transsion.hardware.perfengine.IEventListener;
  */
 public final class PerfEngine {
     private static final String TAG = "PerfEngine";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     // Native library name (matches libperfengine-jni.so)
     private static final String JNI_LIBRARY = "perfengine-jni";
-    private static final boolean ENABLE_PERFENGINE = false;
+    private static final boolean ENABLE_PERFENGINE = true;
 
     // Load native library
     static {

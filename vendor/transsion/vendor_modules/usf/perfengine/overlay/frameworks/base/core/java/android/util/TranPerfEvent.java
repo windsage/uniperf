@@ -53,7 +53,7 @@ import vendor.transsion.hardware.perfengine.IEventListener;
  */
 public final class TranPerfEvent {
     private static final String TAG = "TranPerfEvent";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     // String separator (ASCII 31 - Unit Separator)
     private static final char STRING_SEPARATOR = '\u001F';
@@ -61,7 +61,7 @@ public final class TranPerfEvent {
     // Latency threshold for warning (10ms)
     private static final long LATENCY_THRESHOLD_NS = 10_000_000L;
 
-    private static final boolean ENABLE_PERFENGINE = false;
+    private static final boolean ENABLE_PERFENGINE = true;
 
     /**
      * Get event name by ID (for debugging)

@@ -105,6 +105,10 @@ bool PerfLockCaller::init() {
     }
     TLOGI("Loaded scenario config: %zu entries", XmlConfigParser::getInstance().getScenarioCount());
 
+    // 5. Clean libxml2
+    xmlCleanupParser();
+    TLOGI("libxml2 cleaned up after initialization");
+
     mInitialized = true;
     TLOGI("PerfLockCaller initialized successfully");
     return true;

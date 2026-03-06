@@ -219,7 +219,6 @@ bool XmlConfigParser::parseXmlDocument(const std::string &xmlPath) {
     xmlDocPtr doc = xmlReadFile(xmlPath.c_str(), nullptr, XML_PARSE_NOBLANKS | XML_PARSE_NONET);
     if (doc == nullptr) {
         TLOGE("xmlReadFile failed: %s", xmlPath.c_str());
-        xmlCleanupParser();
         return false;
     }
 
@@ -227,14 +226,12 @@ bool XmlConfigParser::parseXmlDocument(const std::string &xmlPath) {
     if (root == nullptr) {
         TLOGE("Empty XML document: %s", xmlPath.c_str());
         xmlFreeDoc(doc);
-        xmlCleanupParser();
         return false;
     }
 
     if (xmlStrcmp(root->name, (const xmlChar *)"PerfEngine") != 0) {
         TLOGE("Invalid root node '%s', expected 'PerfEngine'", root->name);
         xmlFreeDoc(doc);
-        xmlCleanupParser();
         return false;
     }
 
@@ -258,7 +255,6 @@ bool XmlConfigParser::parseXmlDocument(const std::string &xmlPath) {
     if (scenariosNode == nullptr) {
         TLOGE("No <Scenarios> node found in: %s", xmlPath.c_str());
         xmlFreeDoc(doc);
-        xmlCleanupParser();
         return false;
     }
 
@@ -296,7 +292,6 @@ bool XmlConfigParser::parseXmlDocument(const std::string &xmlPath) {
     }
 
     xmlFreeDoc(doc);
-    xmlCleanupParser();
 
     TLOGI("Parsed %d scenario entries from %s", parsedCount, xmlPath.c_str());
     return parsedCount > 0;
