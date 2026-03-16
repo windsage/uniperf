@@ -7,7 +7,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.transsion.perfengine.version=1.0.0
 
-PRODUCT_BOOT_JARS += perfengine_impl
+PRODUCT_BOOT_JARS += system_ext:perfengine_impl
 
 ifneq ($(filter eng userdebug,$(TARGET_BUILD_VARIANT)),)
     PRODUCT_SYSTEM_PROPERTIES += \

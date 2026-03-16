@@ -22,10 +22,10 @@ public final class PerfEngine {
     private static final boolean DEBUG = true;
 
     // Native library name (matches libperfengine-jni.so)
-    private static final String JNI_LIBRARY = "perfengine-jni";
+    //private static final String JNI_LIBRARY = "perfengine-jni";
     private static final boolean ENABLE_PERFENGINE = true;
 
-    // Load native library
+   /* // Load native library
     static {
         try {
             System.loadLibrary(JNI_LIBRARY);
@@ -35,7 +35,7 @@ public final class PerfEngine {
         } catch (UnsatisfiedLinkError e) {
             Log.e(TAG, "Failed to load native library: " + JNI_LIBRARY, e);
         }
-    }
+    }*/
 
     // Private constructor to prevent instantiation
     private PerfEngine() {

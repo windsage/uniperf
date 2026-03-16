@@ -2,6 +2,7 @@
 
 #include <android-base/properties.h>
 #include <dlfcn.h>
+#include <libxml/parser.h>
 #include <unistd.h>
 
 #include <chrono>

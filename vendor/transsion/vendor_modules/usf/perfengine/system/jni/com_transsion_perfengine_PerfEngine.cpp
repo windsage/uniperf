@@ -344,17 +344,11 @@ static void nativeUnregisterEventListener(JNIEnv *env, jclass clazz, jobject lis
 }
 
 // ==================== JNI 方法注册 ====================
-
 static const JNINativeMethod gMethods[] = {
-    // Event notification
-    {"nativeNotifyEventStart", "(IJII[ILjava/lang/String;)V", (void *)nativeNotifyEventStart},
-    {"nativeNotifyEventEnd", "(IJLjava/lang/String;)V", (void *)nativeNotifyEventEnd},
-
-    // Listener registration
-    {"nativeRegisterEventListener", "(Landroid/os/IBinder;[I)V",
-     (void *)nativeRegisterEventListener},
-    {"nativeUnregisterEventListener", "(Landroid/os/IBinder;)V",
-     (void *)nativeUnregisterEventListener},
+        {"nativeNotifyEventStart", "(IJI[ILjava/lang/String;)V", (void *)nativeNotifyEventStart},
+        {"nativeNotifyEventEnd", "(IJLjava/lang/String;)V", (void *)nativeNotifyEventEnd},
+        {"nativeRegisterEventListener", "(Landroid/os/IBinder;[I)V", (void *)nativeRegisterEventListener},
+        {"nativeUnregisterEventListener", "(Landroid/os/IBinder;)V",(void *)nativeUnregisterEventListener},
 };
 
 namespace android {
