@@ -76,6 +76,10 @@ private:
         void *submitRequest;
     } mQcomFuncs;
 
+    // Fetch current display fps via IDisplayConfig AIDL (QCOM-only).
+    // Returns BASE_FPS (60) on failure, matching OptsHandlerExtn behaviour.
+    int32_t queryDisplayFps();
+
     int32_t qcomAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
                                           const std::vector<int32_t> &platformParams,
                                           const std::string &packageName);

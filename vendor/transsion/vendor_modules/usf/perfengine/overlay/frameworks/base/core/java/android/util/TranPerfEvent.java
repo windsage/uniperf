@@ -101,9 +101,8 @@ public final class TranPerfEvent {
          *
          * @param eventId Event type identifier
          * @param timestamp Event timestamp in nanoseconds
-         * @param duration Duration parameter (from intParams[0])
          */
-        void onEventStart(int eventId, long timestamp, int duration);
+        void onEventStart(int eventId, long timestamp);
 
         /**
          * Called when an event ends
@@ -463,11 +462,9 @@ public final class TranPerfEvent {
 
         // 2. Notify local simplified listeners (精简参数)
         if (!sSimplifiedListeners.isEmpty()) {
-            int duration =
-                    (safeIntParams != null && safeIntParams.length > 0) ? safeIntParams[0] : 0;
             for (TrEventListener listener : sSimplifiedListeners) {
                 try {
-                    listener.onEventStart(eventId, timestamp, duration);
+                    listener.onEventStart(eventId, timestamp);
                 } catch (Exception e) {
                     Log.e(TAG, "Simplified listener callback failed", e);
                 }

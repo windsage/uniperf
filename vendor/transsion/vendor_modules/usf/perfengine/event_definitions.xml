@@ -3,18 +3,25 @@
     PerfEngine Event ID Definitions (Single Source of Truth)
 
     Auto-generates:
-      - Java constants for Framework overlay
-      - Java constants for SDK
-      - C++ constants for Native layer
-      - Markdown documentation
+      - Java constants for Framework overlay  (id/name only)
+      - Java constants for SDK               (id/name only)
+      - C++ constants for Native layer       (id/name only)
+      - Markdown documentation               (id/name/desc/hook/priority/params)
 
-    Encoding: 16-bit hex (0x00000 - 0xFFFFF)
+    priority: integer 1-10, higher = more important.
+      1-3  : low    — wallpaper render, widget ops
+      4-6  : normal — scroll, fling, animation
+      7-8  : high   — app launch, activity switch, camera
+      9-10 : critical — input, boot
 
-    Naming conventions:
-      - System events: EVENT_SYS_<ACTION>
-      - App events: EVENT_APP_<APP>_<ACTION>
+    Param/@index : 0-based position in intParams[] or extraStrings (split by \x1F)
+    Param/@type  : int | String
+    Param/@required : true | false
+
+    NOTE: priority and Params are doc/runtime-only.
+          Code generators (.h/.java) ignore them entirely.
 -->
-<PerfEngineEvents version="2.0">
+<PerfEngineEvents version="3.0">
 
     <!-- ========== Range Definitions ========== -->
     <Ranges>
@@ -38,133 +45,376 @@
 
     <!-- ========== System Events (0x00000 - 0x00FFF) ========== -->
     <SystemEvents>
-        <Event id="0x00001" name="EVENT_SYS_INPUT"
+
+        <Event id="0x00001"
+               name="EVENT_SYS_INPUT"
                description="Input event (touch/key) detected"
-               hook="InputDispatcher.cpp"/>
+               hook="InputDispatcher.cpp"
+               priority="10">
+            <intParams>
+                <Param index="0" name="inputType" type="int"
+                       required="false"
+                       description="Input device type: 0=touch, 1=key, 2=stylus"/>
+            </intParams>
+        </Event>
 
-        <Event id="0x00002" name="EVENT_SYS_APP_LAUNCH"
+        <Event id="0x00002"
+               name="EVENT_SYS_APP_LAUNCH"
                description="Application launch started"
-               hook="ActivityTaskManagerService.java"/>
+               hook="ActivityTaskManagerService.java"
+               priority="8">
+            <intParams>
+                <Param index="0" name="launchType" type="int"
+                       required="false"
+                       description="Launch type: 0=cold start, 1=warm start, 2=hot start"/>
+            </intParams>
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Target package name, e.g. com.android.settings"/>
+                <Param index="1" name="activityName" type="String"
+                       required="false"
+                       description="Target activity class name, e.g. .MainActivity"/>
+            </stringParams>
+        </Event>
 
-        <Event id="0x00003" name="EVENT_SYS_BIND_APPLICATION"
+        <Event id="0x00003"
+               name="EVENT_SYS_BIND_APPLICATION"
                description="Application bind (process created)"
-               hook="ActivityThread.java:handleBindApplication()"/>
+               hook="ActivityThread.java:handleBindApplication()"
+               priority="8">
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Package being bound, e.g. com.android.settings"/>
+            </stringParams>
+        </Event>
 
-        <Event id="0x00004" name="EVENT_SYS_ACTIVITY_SWITCH"
+        <Event id="0x00004"
+               name="EVENT_SYS_ACTIVITY_SWITCH"
                description="Activity switch/resume"
-               hook="ActivityRecord.java"/>
+               hook="ActivityRecord.java"
+               priority="7">
+            <intParams>
+                <Param index="0" name="transitType" type="int"
+                       required="false"
+                       description="Transition type: 0=resume, 1=new task, 2=task switch"/>
+            </intParams>
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Target package name"/>
+                <Param index="1" name="activityName" type="String"
+                       required="false"
+                       description="Target activity class name"/>
+            </stringParams>
+        </Event>
 
-        <Event id="0x00005" name="EVENT_SYS_SCROLL"
+        <Event id="0x00005"
+               name="EVENT_SYS_SCROLL"
                description="Scroll gesture started"
-               hook="RecyclerView.java"/>
+               hook="RecyclerView.java"
+               priority="5">
+            <intParams>
+                <Param index="0" name="scrollAxis" type="int"
+                       required="false"
+                       description="Scroll axis: 0=vertical, 1=horizontal"/>
+            </intParams>
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Package where scroll occurred"/>
+            </stringParams>
+        </Event>
 
-        <Event id="0x00006" name="EVENT_SYS_FLING"
+        <Event id="0x00006"
+               name="EVENT_SYS_FLING"
                description="Fling gesture detected"
-               hook="GestureDetector.java"/>
+               hook="GestureDetector.java"
+               priority="5">
+            <intParams>
+                <Param index="0" name="flingAxis" type="int"
+                       required="false"
+                       description="Fling axis: 0=vertical, 1=horizontal"/>
+            </intParams>
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Package where fling occurred"/>
+            </stringParams>
+        </Event>
 
-        <Event id="0x00007" name="EVENT_SYS_ANIMATION"
+        <Event id="0x00007"
+               name="EVENT_SYS_ANIMATION"
                description="Window animation started"
-               hook="WindowAnimator.java"/>
+               hook="WindowAnimator.java"
+               priority="5">
+            <intParams>
+                <Param index="0" name="animationType" type="int"
+                       required="false"
+                       description="Animation type: 0=enter, 1=exit, 2=cross-fade"/>
+            </intParams>
+        </Event>
 
-        <Event id="0x00008" name="EVENT_SYS_CAMERA_OPEN"
+        <Event id="0x00008"
+               name="EVENT_SYS_CAMERA_OPEN"
                description="Camera HAL open requested"
-               hook="CameraService.cpp"/>
+               hook="CameraService.cpp"
+               priority="7">
+            <intParams>
+                <Param index="0" name="cameraId" type="int"
+                       required="false"
+                       description="Camera hardware ID (0=rear main, 1=front)"/>
+            </intParams>
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Package requesting camera"/>
+            </stringParams>
+        </Event>
 
-        <Event id="0x00009" name="EVENT_SYS_VIDEO_DECODE"
+        <Event id="0x00009"
+               name="EVENT_SYS_VIDEO_DECODE"
                description="Video decoder initialization"
-               hook="MediaCodec.cpp"/>
+               hook="MediaCodec.cpp"
+               priority="6">
+            <intParams>
+                <Param index="0" name="codecType" type="int"
+                       required="false"
+                       description="Codec type: 0=H264, 1=H265, 2=VP9, 3=AV1"/>
+            </intParams>
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Package using video decoder"/>
+            </stringParams>
+        </Event>
 
-        <Event id="0x0000A" name="EVENT_SYS_BOOT_COMPLETED"
+        <Event id="0x0000A"
+               name="EVENT_SYS_BOOT_COMPLETED"
                description="System boot completed broadcast"
-               hook="ActivityManagerService.java"/>
+               hook="ActivityManagerService.java"
+               priority="9"/>
 
         <!-- Reserved: 0x0000B - 0x00FFF for future system events -->
     </SystemEvents>
 
     <!-- ========== SystemUI Events (0x01000 - 0x01FFF) ========== -->
     <AppEvents app="SystemUI">
-        <Event id="0x01001" name="EVENT_APP_SYSTEMUI_PANEL_EXPAND"
-               description="Notification panel expand gesture started"/>
 
-        <Event id="0x01002" name="EVENT_APP_SYSTEMUI_NOTIFICATION_POST"
-               description="New notification posted"/>
+        <Event id="0x01001"
+               name="EVENT_APP_SYSTEMUI_PANEL_EXPAND"
+               description="Notification panel expand gesture started"
+               hook="NotificationPanelViewController.java"
+               priority="6"/>
 
-        <Event id="0x01003" name="EVENT_APP_SYSTEMUI_QUICK_SETTINGS"
-               description="Quick settings panel toggled"/>
+        <Event id="0x01002"
+               name="EVENT_APP_SYSTEMUI_NOTIFICATION_POST"
+               description="New notification posted"
+               hook="NotificationManagerService.java"
+               priority="4">
+            <intParams>
+                <Param index="0" name="notificationStyle" type="int"
+                       required="false"
+                       description="Notification style: 0=normal, 1=heads-up, 2=fullscreen"/>
+            </intParams>
+        </Event>
 
-        <Event id="0x01004" name="EVENT_APP_SYSTEMUI_STATUS_BAR_SCROLL"
-               description="Status bar notification list scrolled"/>
+        <Event id="0x01003"
+               name="EVENT_APP_SYSTEMUI_QUICK_SETTINGS"
+               description="Quick settings panel toggled"
+               hook="QuickSettingsController.java"
+               priority="5"/>
 
-        <Event id="0x01005" name="EVENT_APP_SYSTEMUI_KEYGUARD_UNLOCK"
-               description="Keyguard unlock animation started"/>
+        <Event id="0x01004"
+               name="EVENT_APP_SYSTEMUI_STATUS_BAR_SCROLL"
+               description="Status bar notification list scrolled"
+               hook="NotificationStackScrollLayout.java"
+               priority="4"/>
 
-        <!-- Reserved: 0x01006 - 0x01FFF -->
+        <Event id="0x01005"
+               name="EVENT_APP_SYSTEMUI_KEYGUARD_UNLOCK"
+               description="Keyguard unlock animation started"
+               hook="KeyguardViewController.java"
+               priority="8"/>
+
     </AppEvents>
 
     <!-- ========== Launcher Events (0x02000 - 0x02FFF) ========== -->
     <AppEvents app="Launcher">
-        <Event id="0x02001" name="EVENT_APP_LAUNCHER_SWIPE_UP"
-               description="Swipe up gesture to home screen"/>
 
-        <Event id="0x02002" name="EVENT_APP_LAUNCHER_FOLDER_OPEN"
-               description="App folder opened"/>
+        <Event id="0x02001"
+               name="EVENT_APP_LAUNCHER_SWIPE_UP"
+               description="Swipe up gesture to home screen"
+               hook="SwipeUpAnimationLogic.java"
+               priority="6"/>
 
-        <Event id="0x02003" name="EVENT_APP_LAUNCHER_WIDGET_RESIZE"
-               description="Home screen widget resize started"/>
+        <Event id="0x02002"
+               name="EVENT_APP_LAUNCHER_FOLDER_OPEN"
+               description="App folder opened"
+               hook="Folder.java"
+               priority="4"/>
 
-        <Event id="0x02004" name="EVENT_APP_LAUNCHER_ICON_DRAG"
-               description="App icon drag operation started"/>
+        <Event id="0x02003"
+               name="EVENT_APP_LAUNCHER_WIDGET_RESIZE"
+               description="Home screen widget resize started"
+               hook="AppWidgetResizeFrame.java"
+               priority="3"/>
 
-        <Event id="0x02005" name="EVENT_APP_LAUNCHER_APP_DRAWER_OPEN"
-               description="App drawer opened"/>
+        <Event id="0x02004"
+               name="EVENT_APP_LAUNCHER_ICON_DRAG"
+               description="App icon drag operation started"
+               hook="DragController.java"
+               priority="3"/>
 
-        <!-- Reserved: 0x02006 - 0x02FFF -->
+        <Event id="0x02005"
+               name="EVENT_APP_LAUNCHER_APP_DRAWER_OPEN"
+               description="App drawer opened"
+               hook="AllAppsController.java"
+               priority="5"/>
+
     </AppEvents>
 
     <!-- ========== Wallpaper Events (0x03000 - 0x03FFF) ========== -->
     <AppEvents app="Wallpaper">
-        <Event id="0x03001" name="EVENT_APP_WALLPAPER_CHANGE"
-               description="Wallpaper change operation started"/>
 
-        <Event id="0x03002" name="EVENT_APP_WALLPAPER_PREVIEW"
-               description="Wallpaper preview rendering"/>
+        <Event id="0x03001"
+               name="EVENT_APP_WALLPAPER_CHANGE"
+               description="Wallpaper change operation started"
+               hook="WallpaperManagerService.java"
+               priority="5"/>
 
-        <Event id="0x03003" name="EVENT_APP_WALLPAPER_LIVE_RENDER"
-               description="Live wallpaper frame rendering"/>
+        <Event id="0x03002"
+               name="EVENT_APP_WALLPAPER_PREVIEW"
+               description="Wallpaper preview rendering"
+               hook="WallpaperPreviewActivity.java"
+               priority="4"/>
 
-        <!-- Reserved: 0x03004 - 0x03FFF -->
+        <Event id="0x03003"
+               name="EVENT_APP_WALLPAPER_LIVE_RENDER"
+               description="Live wallpaper frame rendering"
+               hook="WallpaperService.java"
+               priority="2"/>
+
     </AppEvents>
 
     <!-- ========== Third-party App Events (0x10000 - 0xEFFFF) ========== -->
-    <!-- These are examples; apps can define their own in this range -->
     <AppEvents app="ThirdParty">
-        <Event id="0x10001" name="EVENT_APP_GAME_LEVEL_START"
-               description="Game level/stage loading started"/>
 
-        <Event id="0x10002" name="EVENT_APP_GAME_BOSS_FIGHT"
-               description="Boss fight encounter started"/>
+        <Event id="0x10001"
+               name="EVENT_APP_GAME_LEVEL_START"
+               description="Game level/stage loading started"
+               hook="Application.onCreate() or custom hook"
+               priority="7">
+            <intParams>
+                <Param index="0" name="levelId" type="int"
+                       required="false"
+                       description="Game level or stage ID"/>
+            </intParams>
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Game package name"/>
+            </stringParams>
+        </Event>
 
-        <Event id="0x10003" name="EVENT_APP_VIDEO_PLAYER_DECODE"
-               description="Video player decoder initialization"/>
+        <Event id="0x10002"
+               name="EVENT_APP_GAME_BOSS_FIGHT"
+               description="Boss fight encounter started"
+               hook="Application custom hook"
+               priority="6">
+            <intParams>
+                <Param index="0" name="bossId" type="int"
+                       required="false"
+                       description="Boss or encounter identifier"/>
+            </intParams>
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Game package name"/>
+            </stringParams>
+        </Event>
 
-        <Event id="0x10004" name="EVENT_APP_BROWSER_PAGE_LOAD"
-               description="Browser page load started"/>
+        <Event id="0x10003"
+               name="EVENT_APP_VIDEO_PLAYER_DECODE"
+               description="Video player decoder initialization"
+               hook="MediaPlayer/ExoPlayer hook"
+               priority="6">
+            <intParams>
+                <Param index="0" name="resolution" type="int"
+                       required="false"
+                       description="Video resolution: 0=SD, 1=HD, 2=FHD, 3=4K"/>
+            </intParams>
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Video player package name"/>
+            </stringParams>
+        </Event>
 
-        <Event id="0x10005" name="EVENT_APP_CAMERA_CAPTURE"
-               description="Camera capture shutter pressed"/>
+        <Event id="0x10004"
+               name="EVENT_APP_BROWSER_PAGE_LOAD"
+               description="Browser page load started"
+               hook="WebView.loadUrl() hook"
+               priority="5">
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Browser package name"/>
+            </stringParams>
+        </Event>
 
-        <!-- Reserved: 0x10006 - 0xEFFFF for app-defined events -->
+        <Event id="0x10005"
+               name="EVENT_APP_CAMERA_CAPTURE"
+               description="Camera capture shutter pressed"
+               hook="CameraX/Camera2 hook"
+               priority="7">
+            <intParams>
+                <Param index="0" name="captureMode" type="int"
+                       required="false"
+                       description="Capture mode: 0=photo, 1=burst, 2=HDR, 3=night"/>
+            </intParams>
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Camera app package name"/>
+            </stringParams>
+        </Event>
+
     </AppEvents>
 
-    <!-- ========== Internal Test Events (0xF0000 - 0xFFFFF) ========== -->
+    <!-- ========== Internal / Debug Events (0xF0000 - 0xFFFFF) ========== -->
     <InternalEvents>
-        <Event id="0xF0001" name="EVENT_INTERNAL_TEST_BENCHMARK"
-               description="Performance benchmark test"/>
 
-        <Event id="0xF0002" name="EVENT_INTERNAL_DEBUG_TRACE"
-               description="Debug trace marker"/>
+        <Event id="0xF0001"
+               name="EVENT_INTERNAL_TEST_BENCHMARK"
+               description="Performance benchmark test"
+               hook="PerfEngineDemo"
+               priority="1">
+            <intParams>
+                <Param index="0" name="benchmarkId" type="int"
+                       required="false"
+                       description="Benchmark test case ID"/>
+            </intParams>
+        </Event>
 
-        <!-- Reserved: 0xF0003 - 0xFFFFF for internal use -->
+        <Event id="0xF0002"
+               name="EVENT_INTERNAL_DEBUG_TRACE"
+               description="Debug trace marker"
+               hook="PerfEngineDemo"
+               priority="1">
+            <intParams>
+                <Param index="0" name="markerId" type="int"
+                       required="false"
+                       description="Custom trace marker ID for debugging"/>
+            </intParams>
+            <stringParams>
+                <Param index="0" name="label" type="String"
+                       required="false"
+                       description="Human-readable trace label"/>
+            </stringParams>
+        </Event>
+
     </InternalEvents>
 
 </PerfEngineEvents>

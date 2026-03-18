@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
 
     // Send panel
     private Spinner mSpinnerEvent;
-    private EditText mEtPackage, mEtDuration, mEtCount, mEtInterval;
+    private EditText mEtPackage, mEtCount, mEtInterval;
     private Button mBtnSend, mBtnSendAll;
 
     // Listen panel
@@ -120,7 +120,6 @@ public class MainActivity extends Activity {
 
         mSpinnerEvent = findViewById(R.id.spinner_event);
         mEtPackage = findViewById(R.id.et_package);
-        mEtDuration = findViewById(R.id.et_duration);
         mEtCount = findViewById(R.id.et_count);
         mEtInterval = findViewById(R.id.et_interval);
         mBtnSend = findViewById(R.id.btn_send);
@@ -163,11 +162,9 @@ public class MainActivity extends Activity {
 
     private void onSendClicked(boolean sendAll) {
         String pkgStr = mEtPackage.getText().toString().trim();
-        String durStr = mEtDuration.getText().toString().trim();
         String countStr = mEtCount.getText().toString().trim();
         String intrvStr = mEtInterval.getText().toString().trim();
 
-        final int duration = durStr.isEmpty() ? 0 : parseInt(durStr, 0);
         final int count = Math.max(1, parseInt(countStr, 1));
         final int interval = Math.max(0, parseInt(intrvStr, 500));
         final String pkg = pkgStr;
@@ -186,7 +183,7 @@ public class MainActivity extends Activity {
             try {
                 for (int round = 0; round < count; round++) {
                     for (int eventId : events) {
-                        sendEvent(eventId, pkg, duration);
+                        sendEvent(eventId, pkg);
                         if (events.length > 1)
                             sleep(interval);
                     }
@@ -202,23 +199,18 @@ public class MainActivity extends Activity {
         });
     }
 
-    private void sendEvent(int eventId, String pkg, int duration) {
+    private void sendEvent(int eventId, String pkg) {
         long ts = TranPerfEvent.now();
 
-        if (!pkg.isEmpty() && duration > 0) {
-            TranPerfEvent.notifyEventStart(
-                    eventId, ts, 1, new int[] {duration}, new String[] {pkg});
-        } else if (!pkg.isEmpty()) {
+        if (!pkg.isEmpty()) {
             TranPerfEvent.notifyEventStart(eventId, ts, pkg);
-        } else if (duration > 0) {
-            TranPerfEvent.notifyEventStart(eventId, ts, 1, new int[] {duration});
         } else {
             TranPerfEvent.notifyEventStart(eventId, ts);
         }
 
-        Log.d(TAG, "[SEND][START] eventId=" + eventId + " pkg=" + pkg + " dur=" + duration);
+        Log.d(TAG, "[SEND][START] eventId=" + eventId + " pkg=" + pkg);
 
-        sleep(duration > 0 ? Math.min(duration, 200) : 100);
+        sleep(200);
 
         TranPerfEvent.notifyEventEnd(eventId, TranPerfEvent.now(), pkg.isEmpty() ? null : pkg);
 

@@ -1,11 +1,13 @@
 #include "ServiceBridge.h"
 
+#define ATRACE_TAG (ATRACE_TAG_POWER | ATRACE_TAG_HAL)
 #include <sched.h>
 #include <sys/prctl.h>
 #include <unistd.h>
 #include <utils/Trace.h>
 
 #include <cerrno>
+#include <cstdio>
 #include <cstring>
 
 #include "PerfLockCaller.h"
@@ -56,7 +58,6 @@ static void ensureBinderThreadSetup() {
     } else {
         TLOGD("Binder thread tid=%d renamed to 'tpe_binder'", gettid());
     }
-
     // Elevate to RT
     struct sched_param param;
     param.sched_priority = 2;
@@ -66,7 +67,6 @@ static void ensureBinderThreadSetup() {
     } else {
         TLOGW("sched_setscheduler failed: %s (tid=%d)", strerror(errno), gettid());
     }
-
     sSetup = true;
 }
 // ==================== Event Notification Implementation ====================
@@ -74,7 +74,9 @@ static void ensureBinderThreadSetup() {
 ::ndk::ScopedAStatus ServiceBridge::notifyEventStart(
     int32_t eventId, int64_t timestamp, int32_t numParams, const std::vector<int32_t> &intParams,
     const std::optional<std::string> &extraStrings) {
-    ATRACE_NAME("ServiceBridge::notifyEventStart");
+    char buf[64];
+    snprintf(buf, sizeof(buf), "ServiceBridge::notifyEventStart 0x%x", eventId);
+    ATRACE_NAME(buf);
     ensureBinderThreadSetup();
 
     if (!mPerfLockCaller) {
@@ -125,7 +127,9 @@ static void ensureBinderThreadSetup() {
 
 ::ndk::ScopedAStatus ServiceBridge::notifyEventEnd(int32_t eventId, int64_t timestamp,
                                                    const std::optional<std::string> &extraStrings) {
-    ATRACE_NAME("ServiceBridge::notifyEventEnd");
+    char buf[64];
+    snprintf(buf, sizeof(buf), "ServiceBridge::notifyEventEnd 0x%x", eventId);
+    ATRACE_NAME(buf);
     ensureBinderThreadSetup();
 
     if (!mPerfLockCaller) {

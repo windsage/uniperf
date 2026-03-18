@@ -3,7 +3,7 @@
  *
  * Usage:
  *   perfengine_demo listen [--filter <id,id,...>] [--verbose]
- *   perfengine_demo send --event <id|name> [--pkg <pkg>] [--duration <ms>]
+ *   perfengine_demo send --event <id|name> [--pkg <pkg>]
  *                        [--count <n>] [--interval <ms>]
  *   perfengine_demo send --all [--interval <ms>]
  *   perfengine_demo both [--filter <id,...>]
@@ -11,7 +11,7 @@
  * Examples:
  *   perfengine_demo listen
  *   perfengine_demo listen --filter 1,3,5
- *   perfengine_demo send --event app_launch --pkg com.android.settings --duration 3000
+ *   perfengine_demo send --event app_launch --pkg com.android.settings
  *   perfengine_demo send --event 1 --count 5 --interval 1000
  *   perfengine_demo send --all
  *   perfengine_demo both
@@ -107,7 +107,7 @@ static int32_t parseEventId(const std::string &s) {
 static void printUsage(const char *prog) {
     std::cout << "Usage:\n"
               << "  " << prog << " listen [--filter <id,id,...>] [--verbose]\n"
-              << "  " << prog << " send --event <id|name> [--pkg <pkg>] [--duration <ms>]\n"
+              << "  " << prog << " send --event <id|name> [--pkg <pkg>]\n"
               << "                       [--count <n>] [--interval <ms>]\n"
               << "  " << prog << " send --all [--interval <ms>]\n"
               << "  " << prog << " both [--filter <id,...>]\n"
@@ -118,8 +118,7 @@ static void printUsage(const char *prog) {
               << "Examples:\n"
               << "  " << prog << " listen\n"
               << "  " << prog << " listen --filter 1,3\n"
-              << "  " << prog
-              << " send --event app_launch --pkg com.android.settings --duration 3000\n"
+              << "  " << prog << " send --event app_launch --pkg com.android.settings\n"
               << "  " << prog << " send --event 1 --count 5 --interval 1000\n"
               << "  " << prog << " send --all\n"
               << "  " << prog << " both\n";
@@ -183,19 +182,12 @@ private:
 
 // ==================== Send Logic ====================
 
-static void sendOneEvent(int32_t id, const std::string &pkg, int32_t duration, bool verbose) {
+static void sendOneEvent(int32_t id, const std::string &pkg, bool verbose) {
     int64_t ts = TranPerfEvent::now();
     int32_t ret;
 
-    if (!pkg.empty() && duration > 0) {
-        std::vector<int32_t> intParams = {duration};
-        std::vector<std::string> strParams = {pkg};
-        ret = TranPerfEvent::notifyEventStart(id, ts, intParams, strParams);
-    } else if (!pkg.empty()) {
+    if (!pkg.empty()) {
         ret = TranPerfEvent::notifyEventStart(id, ts, pkg);
-    } else if (duration > 0) {
-        std::vector<int32_t> intParams = {duration};
-        ret = TranPerfEvent::notifyEventStart(id, ts, intParams);
     } else {
         ret = TranPerfEvent::notifyEventStart(id, ts);
     }
@@ -203,14 +195,13 @@ static void sendOneEvent(int32_t id, const std::string &pkg, int32_t duration, b
     if (verbose) {
         std::cout << "[SEND][START] eventId=" << id << "(" << eventName(id) << ")"
                   << " pkg=\"" << pkg << "\""
-                  << " duration=" << duration << "ms"
                   << " ret=" << ret << std::endl;
     } else {
         std::cout << "[SEND][START] eventId=" << id << "(" << eventName(id) << ")" << std::endl;
     }
 
     // Hold briefly then send end
-    std::this_thread::sleep_for(std::chrono::milliseconds(duration > 0 ? 200 : 100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
     TranPerfEvent::notifyEventEnd(id, TranPerfEvent::now(), pkg);
     std::cout << "[SEND][ END ] eventId=" << id << "(" << eventName(id) << ")" << std::endl;
@@ -252,8 +243,8 @@ static int modeListenRun(const std::vector<int32_t> &filter, bool verbose) {
 
 // ==================== Mode: send ====================
 
-static int modeSendRun(bool sendAll, int32_t eventId, const std::string &pkg, int32_t duration,
-                       int32_t count, int32_t intervalMs, bool verbose) {
+static int modeSendRun(bool sendAll, int32_t eventId, const std::string &pkg, int32_t count,
+                       int32_t intervalMs, bool verbose) {
     std::vector<int32_t> events;
     if (sendAll) {
         events = kAllEvents;
@@ -272,7 +263,7 @@ static int modeSendRun(bool sendAll, int32_t eventId, const std::string &pkg, in
         for (int32_t id : events) {
             if (!gRunning)
                 break;
-            sendOneEvent(id, pkg, duration, verbose);
+            sendOneEvent(id, pkg, verbose);
             if (events.size() > 1) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(intervalMs));
             }
@@ -308,7 +299,7 @@ static int modeBothRun(const std::vector<int32_t> &filter) {
         for (int32_t id : kAllEvents) {
             if (!gRunning)
                 break;
-            sendOneEvent(id, "com.transsion.demo", 1000, true);
+            sendOneEvent(id, "com.transsion.demo", true);
             std::this_thread::sleep_for(std::chrono::milliseconds(600));
         }
         std::cout << "[BOTH] All test events sent, waiting 2s then exit..." << std::endl;
@@ -351,7 +342,6 @@ int main(int argc, char **argv) {
     std::vector<int32_t> filter;
     int32_t eventId = -1;
     std::string pkg;
-    int32_t duration = 0;
     int32_t count = 1;
     int32_t intervalMs = 500;
     bool verbose = false;
@@ -365,8 +355,6 @@ int main(int argc, char **argv) {
             eventId = parseEventId(argv[++i]);
         } else if (arg == "--pkg" && i + 1 < argc) {
             pkg = argv[++i];
-        } else if (arg == "--duration" && i + 1 < argc) {
-            duration = std::atoi(argv[++i]);
         } else if (arg == "--count" && i + 1 < argc) {
             count = std::atoi(argv[++i]);
         } else if (arg == "--interval" && i + 1 < argc) {
@@ -383,7 +371,7 @@ int main(int argc, char **argv) {
     if (mode == "listen") {
         return modeListenRun(filter, verbose);
     } else if (mode == "send") {
-        return modeSendRun(sendAll, eventId, pkg, duration, count, intervalMs, verbose);
+        return modeSendRun(sendAll, eventId, pkg, count, intervalMs, verbose);
     } else if (mode == "both") {
         return modeBothRun(filter);
     } else {

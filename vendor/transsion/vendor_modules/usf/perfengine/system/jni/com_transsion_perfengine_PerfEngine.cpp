@@ -8,6 +8,7 @@
 
 #include <android_runtime/AndroidRuntime.h>
 #include <jni.h>
+#include <memory>
 #include <nativehelper/JNIHelp.h>
 #include <utils/Log.h>
 #include <utils/Mutex.h>
@@ -50,13 +51,19 @@ static constexpr bool DEBUG = true;
  * 获取 Vendor AIDL 服务
  */
 static std::shared_ptr<IPerfEngine> getVendorService() {
-    AutoMutex _l(gServiceLock);
-
-    if (gVendorService != nullptr) {
-        return gVendorService;
+    std::shared_ptr<IPerfEngine> service =
+        std::atomic_load_explicit(&gVendorService, std::memory_order_acquire);
+    if (service != nullptr) {
+        return service;
     }
 
-    // 获取 Vendor AIDL 服务
+    AutoMutex _l(gServiceLock);
+
+    service = std::atomic_load_explicit(&gVendorService, std::memory_order_acquire);
+    if (service != nullptr) {
+        return service;
+    }
+
     SpAIBinder binder = SpAIBinder(AServiceManager_checkService(VENDOR_SERVICE_NAME));
 
     if (binder.get() == nullptr) {
@@ -64,17 +71,19 @@ static std::shared_ptr<IPerfEngine> getVendorService() {
         return nullptr;
     }
 
-    gVendorService = IPerfEngine::fromBinder(binder);
-    if (gVendorService == nullptr) {
+    service = IPerfEngine::fromBinder(binder);
+    if (service == nullptr) {
         ALOGE("Failed to convert binder to IPerfEngine");
         return nullptr;
     }
+
+    std::atomic_store_explicit(&gVendorService, service, std::memory_order_release);
 
     if (DEBUG) {
         ALOGD("Vendor service connected");
     }
 
-    return gVendorService;
+    return service;
 }
 
 /**
@@ -82,7 +91,8 @@ static std::shared_ptr<IPerfEngine> getVendorService() {
  */
 static void resetVendorService() {
     AutoMutex _l(gServiceLock);
-    gVendorService = nullptr;
+    std::atomic_store_explicit(&gVendorService, std::shared_ptr<IPerfEngine>(nullptr),
+                               std::memory_order_release);
     ALOGW("Vendor service reset");
 }
 
@@ -116,7 +126,7 @@ static void nativeNotifyEventStart(JNIEnv *env, jclass clazz, jint eventId, jlon
         return;
     }
 
-    if (numParams < 1) {
+    if (numParams < 0) {
         ALOGE("Invalid numParams: %d", numParams);
         return;
     }

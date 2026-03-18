@@ -36,7 +36,14 @@ CPP_MACRO_OUT = ROOT_DIR / "system/native/include/perfengine/TranPerfEventImport
 DOCS_MD_OUT = ROOT_DIR / "docs/EVENT_ID_REFERENCE.md"
 
 def parse_xml(xml_file):
-    """Parse event_definitions.xml and extract ranges and events"""
+    """Parse event_definitions.xml and extract ranges and events.
+
+    Each event dict now contains two extra fields (doc/runtime only,
+    ignored by all code generators):
+      'priority'      : int string, e.g. '8'  (from Event/@priority)
+      'int_params'    : list of dicts with keys index/name/type/required/desc
+      'string_params' : list of dicts with keys index/name/type/required/desc
+    """
     tree = ET.parse(xml_file)
     root = tree.getroot()
 
@@ -59,13 +66,44 @@ def parse_xml(xml_file):
         for event_group in root.findall(category_tag):
             app_name = event_group.get('app', 'System' if category_tag == 'SystemEvents' else 'Internal')
             for e in event_group.findall('Event'):
+
+                # --- parse intParams child element ---
+                int_params = []
+                int_params_node = e.find('intParams')
+                if int_params_node is not None:
+                    for p in int_params_node.findall('Param'):
+                        int_params.append({
+                            'index':    p.get('index', '0'),
+                            'name':     p.get('name', ''),
+                            'type':     p.get('type', 'int'),
+                            'required': p.get('required', 'false'),
+                            'desc':     p.get('description', ''),
+                        })
+
+                # --- parse stringParams child element ---
+                string_params = []
+                string_params_node = e.find('stringParams')
+                if string_params_node is not None:
+                    for p in string_params_node.findall('Param'):
+                        string_params.append({
+                            'index':    p.get('index', '0'),
+                            'name':     p.get('name', ''),
+                            'type':     p.get('type', 'String'),
+                            'required': p.get('required', 'false'),
+                            'desc':     p.get('description', ''),
+                        })
+
                 events.append({
-                    'id': e.get('id'),
-                    'name': e.get('name'),
-                    'desc': e.get('description'),
-                    'hook': e.get('hook', ''),
-                    'category': category_tag,
-                    'app': app_name
+                    'id':            e.get('id'),
+                    'name':          e.get('name'),
+                    'desc':          e.get('description'),
+                    'hook':          e.get('hook', ''),
+                    'category':      category_tag,
+                    'app':           app_name,
+                    # doc/runtime-only fields — ignored by code generators
+                    'priority':      e.get('priority', ''),
+                    'int_params':    int_params,
+                    'string_params': string_params,
                 })
 
     return ranges, events
@@ -121,7 +159,7 @@ def generate_java_overlay(ranges, events, output_path):
         lines.append("")
 
         for e in sorted(cat_events, key=lambda x: int(x['id'], 16)):
-            lines.append(f"    /** {e['desc']} */")
+            lines.append(f"    /** {e['desc']} @hide */")
             lines.append(f"    public static final int {e['name']} = {e['id']};")
             lines.append("")
 
@@ -166,6 +204,7 @@ def generate_java_sdk(ranges, events, output_path):
         if 'APP' in r['name'] or 'THIRDPARTY' in r['name']:
             lines.append(f"    /** {r['desc']} */")
             lines.append(f"    public static final int {r['name']}_START = {r['start']};")
+            lines.append(f"    /** @hide */")
             lines.append(f"    public static final int {r['name']}_END   = {r['end']};")
             lines.append("")
 
@@ -319,8 +358,61 @@ def generate_cpp_import_macro(events, output_path):
     output_path.write_text('\n'.join(lines), encoding='utf-8')
     print(f"✓ Generated: {output_path}")
 
+def _render_event_params(lines, e):
+    """Helper: append intParams and stringParams tables for one event.
+
+    Called only from generate_markdown_docs(). Emits nothing when the
+    event has no parameters defined.
+
+    Returns True if any param tables were emitted (so the caller knows
+    it must re-emit the main table header before the next event row).
+    Returns False when no params exist and the main table can continue
+    uninterrupted.
+    """
+    int_params    = e.get('int_params', [])
+    string_params = e.get('string_params', [])
+
+    if not int_params and not string_params:
+        return False
+
+    if int_params:
+        lines.extend([
+            "",
+            "**Integer Parameters (intParams)**",
+            "",
+            "| Index | Name | Type | Required | Description |",
+            "|-------|------|------|----------|-------------|",
+        ])
+        for p in sorted(int_params, key=lambda x: int(x['index'])):
+            req = "Yes" if p['required'].lower() == 'true' else "No"
+            lines.append(
+                f"| {p['index']} | `{p['name']}` | `{p['type']}` | {req} | {p['desc']} |"
+            )
+
+    if string_params:
+        lines.extend([
+            "",
+            "**String Parameters (extraStrings, separated by `\\x1F`)**",
+            "",
+            "| Index | Name | Type | Required | Description |",
+            "|-------|------|------|----------|-------------|",
+        ])
+        for p in sorted(string_params, key=lambda x: int(x['index'])):
+            req = "Yes" if p['required'].lower() == 'true' else "No"
+            lines.append(
+                f"| {p['index']} | `{p['name']}` | `{p['type']}` | {req} | {p['desc']} |"
+            )
+
+    return True
+
 def generate_markdown_docs(ranges, events, output_path):
-    """Generate Markdown documentation"""
+    """Generate Markdown documentation.
+
+    Changes vs. previous version:
+      - Summary tables now include a Priority column.
+      - Events that have intParams / stringParams get an extra param table
+        rendered below their summary row (via _render_event_params).
+    """
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     lines = [
@@ -346,6 +438,17 @@ def generate_markdown_docs(ranges, events, output_path):
         "",
         "---",
         "",
+        "## Priority Scale",
+        "",
+        "| Range | Meaning | Typical events |",
+        "|-------|---------|----------------|",
+        "| 9-10 | Critical — almost never overridden | Input, Boot |",
+        "| 7-8  | High — overrides normal/low | App launch, Activity switch, Camera |",
+        "| 4-6  | Normal — default level | Scroll, Fling, Animation, Video decode |",
+        "| 1-3  | Low — overridden by any higher event | Wallpaper render, Widget ops |",
+        "",
+        "---",
+        "",
         "## Event ID Ranges",
         "",
         "| Range Name | Start | End | Description |",
@@ -355,6 +458,9 @@ def generate_markdown_docs(ranges, events, output_path):
     for r in ranges:
         lines.append(f"| `{r['name']}` | `{r['start']}` | `{r['end']}` | {r['desc']} |")
 
+    # ------------------------------------------------------------------ #
+    #  System Events
+    # ------------------------------------------------------------------ #
     lines.extend([
         "",
         "---",
@@ -362,43 +468,79 @@ def generate_markdown_docs(ranges, events, output_path):
         "## Event Definitions",
         "",
         "### System Events (Framework Internal)",
-        "",
-        "| Event ID | Constant Name | Description | Hook Point |",
-        "|----------|---------------|-------------|------------|"
     ])
 
-    # System events
+    # SYS_HEADER / APP_HEADER / INT_HEADER are re-emitted after each param
+    # block so the next event row always has a valid table header above it.
+    SYS_HEADER = [
+        "",
+        "| Event ID | Constant Name | Priority | Description | Hook Point |",
+        "|----------|---------------|----------|-------------|------------|",
+    ]
+    APP_HEADER = [
+        "",
+        "| Event ID | Constant Name | App | Priority | Description |",
+        "|----------|---------------|-----|----------|-------------|",
+    ]
+    INT_HEADER = [
+        "",
+        "| Event ID | Constant Name | Priority | Description |",
+        "|----------|---------------|----------|-------------|",
+    ]
+
+    lines.extend(SYS_HEADER)
+
     sys_events = [e for e in events if e['category'] == 'SystemEvents']
     for e in sorted(sys_events, key=lambda x: int(x['id'], 16)):
-        hook = e['hook'] if e['hook'] else 'N/A'
-        lines.append(f"| `{e['id']}` | `{e['name']}` | {e['desc']} | {hook} |")
+        hook     = e['hook'] if e['hook'] else 'N/A'
+        priority = e['priority'] if e['priority'] else '-'
+        lines.append(
+            f"| `{e['id']}` | `{e['name']}` | {priority} | {e['desc']} | {hook} |"
+        )
+        # If params were emitted the main table is now closed; re-open it.
+        if _render_event_params(lines, e):
+            lines.extend(SYS_HEADER)
 
+    # ------------------------------------------------------------------ #
+    #  Application Events
+    # ------------------------------------------------------------------ #
     lines.extend([
         "",
         "### Application Events",
-        "",
-        "| Event ID | Constant Name | App | Description |",
-        "|----------|---------------|-----|-------------|"
     ])
+    lines.extend(APP_HEADER)
 
-    # App events
     app_events = [e for e in events if e['category'] == 'AppEvents']
     for e in sorted(app_events, key=lambda x: int(x['id'], 16)):
-        lines.append(f"| `{e['id']}` | `{e['name']}` | {e['app']} | {e['desc']} |")
+        priority = e['priority'] if e['priority'] else '-'
+        lines.append(
+            f"| `{e['id']}` | `{e['name']}` | {e['app']} | {priority} | {e['desc']} |"
+        )
+        if _render_event_params(lines, e):
+            lines.extend(APP_HEADER)
 
+    # ------------------------------------------------------------------ #
+    #  Internal Events
+    # ------------------------------------------------------------------ #
     if any(e['category'] == 'InternalEvents' for e in events):
         lines.extend([
             "",
             "### Internal Events (Test/Debug)",
-            "",
-            "| Event ID | Constant Name | Description |",
-            "|----------|---------------|-------------|"
         ])
+        lines.extend(INT_HEADER)
 
         internal_events = [e for e in events if e['category'] == 'InternalEvents']
         for e in sorted(internal_events, key=lambda x: int(x['id'], 16)):
-            lines.append(f"| `{e['id']}` | `{e['name']}` | {e['desc']} |")
+            priority = e['priority'] if e['priority'] else '-'
+            lines.append(
+                f"| `{e['id']}` | `{e['name']}` | {priority} | {e['desc']} |"
+            )
+            if _render_event_params(lines, e):
+                lines.extend(INT_HEADER)
 
+    # ------------------------------------------------------------------ #
+    #  Usage examples  (unchanged from original)
+    # ------------------------------------------------------------------ #
     lines.extend([
         "",
         "---",

@@ -26,11 +26,11 @@ cc_library_shared {
         "libbase",
         "libbinder_ndk",
         "libcutils",
-        "libprocessgroup",
         "liblog",
         "libutils",
         "libxml2",
         "vendor.transsion.hardware.perfengine-V1-ndk",
+        "vendor.qti.hardware.display.config-V5-ndk",
     ],
 
     cflags: [

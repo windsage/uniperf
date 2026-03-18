@@ -1,6 +1,10 @@
 #include "PerfLockCaller.h"
 
+#include <aidl/vendor/qti/hardware/display/config/Attributes.h>
+#include <aidl/vendor/qti/hardware/display/config/DisplayType.h>
+#include <aidl/vendor/qti/hardware/display/config/IDisplayConfig.h>
 #include <android-base/properties.h>
+#include <android/binder_manager.h>
 #include <dlfcn.h>
 #include <libxml/parser.h>
 #include <unistd.h>
@@ -12,6 +16,11 @@
 #include "PerfEngineTypes.h"
 #include "TranLog.h"
 #include "XmlConfigParser.h"
+
+using aidl::vendor::qti::hardware::display::config::Attributes;
+using aidl::vendor::qti::hardware::display::config::DisplayType;
+using aidl::vendor::qti::hardware::display::config::IDisplayConfig;
+using ::ndk::SpAIBinder;
 
 #ifdef LOG_TAG
 #undef LOG_TAG
@@ -146,6 +155,76 @@ bool PerfLockCaller::initQcom() {
     return true;
 }
 
+/**
+ * Query current display refresh rate (QCOM only).
+ *
+ * Primary path: read /data/vendor/perfd/current_fps written by
+ * QCOM perf-hal-service on every VENDOR_HINT_FPS_UPDATE.
+ * Mirrors OptsHandlerExtn::DisplayExtn::readFPSFile().
+ *
+ * Fallback: query IDisplayConfig AIDL directly.
+ * Mirrors OptsHandlerExtn::DisplayExtn::getDisplayFPS().
+ *
+ * Returns BASE_FPS (60) on all failure paths.
+ */
+int32_t PerfLockCaller::queryDisplayFps() {
+    static constexpr int32_t BASE_FPS = 60;
+    static constexpr const char *CURRENT_FPS_FILE = "/data/vendor/perfd/current_fps";
+
+    // --- Primary path: read file maintained by QCOM perf-hal-service ---
+    FILE *fpsFile = fopen(CURRENT_FPS_FILE, "r");
+    if (fpsFile != nullptr) {
+        float fps = BASE_FPS;
+        int ret = fscanf(fpsFile, "%f", &fps);
+        fclose(fpsFile);
+
+        if (ret == 1 && fps >= 1.0f) {
+            int32_t ifps = static_cast<int32_t>(fps + 0.5f);
+            TLOGD("queryDisplayFps: read from file -> %d Hz", ifps);
+            return ifps;
+        }
+        TLOGW("queryDisplayFps: file read invalid value %.1f, fallback to AIDL", fps);
+    } else {
+        TLOGW("queryDisplayFps: cannot open %s, fallback to AIDL", CURRENT_FPS_FILE);
+    }
+
+    // --- Fallback path: query IDisplayConfig AIDL ---
+    static constexpr int64_t NSEC_TO_SEC = 1000000000LL;
+
+    SpAIBinder binder(
+        AServiceManager_checkService("vendor.qti.hardware.display.config.IDisplayConfig/default"));
+    if (binder.get() == nullptr) {
+        TLOGW("queryDisplayFps: IDisplayConfig not available, using BASE_FPS=%d", BASE_FPS);
+        return BASE_FPS;
+    }
+
+    auto displayConfig = IDisplayConfig::fromBinder(binder);
+    if (displayConfig == nullptr) {
+        TLOGW("queryDisplayFps: fromBinder failed, using BASE_FPS=%d", BASE_FPS);
+        return BASE_FPS;
+    }
+
+    int32_t dpyIndex = -1;
+    displayConfig->getActiveConfig(DisplayType::PRIMARY, &dpyIndex);
+    if (dpyIndex < 0) {
+        TLOGW("queryDisplayFps: getActiveConfig failed, using BASE_FPS=%d", BASE_FPS);
+        return BASE_FPS;
+    }
+
+    Attributes dpyAttr;
+    displayConfig->getDisplayAttributes(dpyIndex, DisplayType::PRIMARY, &dpyAttr);
+    if (dpyAttr.vsyncPeriod <= 0) {
+        TLOGW("queryDisplayFps: invalid vsyncPeriod=%d, using BASE_FPS=%d", dpyAttr.vsyncPeriod,
+              BASE_FPS);
+        return BASE_FPS;
+    }
+
+    int32_t fps = static_cast<int32_t>(
+        static_cast<float>(NSEC_TO_SEC) / static_cast<float>(dpyAttr.vsyncPeriod) + 0.5f);
+    TLOGI("queryDisplayFps: AIDL vsyncPeriod=%d ns -> %d Hz", dpyAttr.vsyncPeriod, fps);
+    return fps;
+}
+
 bool PerfLockCaller::initMtk() {
     TLOGI("Initializing MTK platform");
 
@@ -174,12 +253,15 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
         return -1;
     }
 
-    TLOGI("=== acquirePerfLock START: eventId=%d fps=%d pkg='%s' act='%s' duration=%d ===",
+    TLOGI("=== acquirePerfLock START: eventId=%d fps=%d pkg='%s' act='%s' intParam1=%d ===",
           ctx.eventId, ctx.intParam0, ctx.package.c_str(), ctx.activity.c_str(), ctx.intParam1);
 
+    // QCOM: use cached display fps for scenario matching.
+    // Other platforms: fps=0, falls through to generic P6 config.
+    int32_t fps = (mPlatform == Platform::QCOM) ? queryDisplayFps() : 0;
     // Find best-matching scenario config (6-level priority)
     const ScenarioConfig *config = XmlConfigParser::getInstance().getScenarioConfig(
-        ctx.eventId, ctx.intParam0, ctx.package, ctx.activity);
+        ctx.eventId, fps, ctx.package, ctx.activity);
 
     if (!config) {
         TLOGE("No config: eventId=%d param0=%d pkg='%s' act='%s'", ctx.eventId, ctx.intParam0,
@@ -203,8 +285,7 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
         return -1;
     }
 
-    // Config timeout takes priority; fall back to caller-supplied duration
-    int32_t effectiveTimeout = (config->timeout > 0) ? config->timeout : ctx.intParam0;
+    int32_t effectiveTimeout = config->timeout;
 
     int32_t platformHandle = -1;
     switch (mPlatform) {

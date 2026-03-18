@@ -4,7 +4,7 @@
     <Scenarios>
 
         <!-- 应用启动场景 -->
-        <Scenario id="1" name="APP_LAUNCH" fps="0" description="应用启动基础boost">
+        <Scenario id="2" name="APP_LAUNCH" fps="0" description="应用启动基础boost">
             <Config timeout="2000" release="auto">
                 <Resources>
                     <!-- 通用CPU频率配置 -->

@@ -11,6 +11,8 @@
 #include <time.h>
 #include <utils/Log.h>
 
+#include <memory>
+#include <mutex>
 #include <sstream>
 
 // ==================== Aconfig Flag Handling ====================
@@ -39,8 +41,17 @@ namespace transsion {
  */
 static std::shared_ptr<IPerfEngine> getService() {
     static std::shared_ptr<IPerfEngine> sService = nullptr;
+    static std::mutex sServiceMutex;
 
-    if (sService == nullptr) {
+    std::shared_ptr<IPerfEngine> service =
+        std::atomic_load_explicit(&sService, std::memory_order_acquire);
+    if (service != nullptr) {
+        return service;
+    }
+
+    std::lock_guard<std::mutex> lock(sServiceMutex);
+    service = std::atomic_load_explicit(&sService, std::memory_order_acquire);
+    if (service == nullptr) {
         const std::string instance = std::string() + IPerfEngine::descriptor + "/default";
 
         SpAIBinder binder(AServiceManager_checkService(instance.c_str()));
@@ -49,13 +60,14 @@ static std::shared_ptr<IPerfEngine> getService() {
             return nullptr;
         }
 
-        sService = IPerfEngine::fromBinder(binder);
-        if (sService != nullptr && DEBUG) {
+        service = IPerfEngine::fromBinder(binder);
+        if (service != nullptr && DEBUG) {
             ALOGD("PerfEngine service connected");
         }
+        std::atomic_store_explicit(&sService, service, std::memory_order_release);
     }
 
-    return sService;
+    return service;
 }
 
 // ==================== Utility Methods ====================

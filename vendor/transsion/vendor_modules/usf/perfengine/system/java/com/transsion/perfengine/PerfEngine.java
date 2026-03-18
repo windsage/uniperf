@@ -50,9 +50,10 @@ public final class PerfEngine {
      * @param eventId Event type identifier
      * @param timestamp Event timestamp in nanoseconds (use SystemClock.elapsedRealtimeNanos())
      * @param numParams Number of valid parameters in intParams array
-     * @param intParams Integer parameters array
-     *                  intParams[0] = duration (ms), 0 means manual release
-     *                  intParams[1..n] = event-specific parameters
+     * @param intParams Integer parameters array, caller-defined.
+     *                  Content is event-specific; no position is reserved.
+     *                  e.g. intParams[0] = fps hint, intParams[0] = pid, etc.
+     *                  Timeout is configured exclusively in perfengine_params.xml.
      * @param extraStrings Optional string parameter (usually packageName), can be null
      */
     public static void notifyEventStart(
@@ -78,8 +79,8 @@ public final class PerfEngine {
             return;
         }
 
-        if (numParams < 1) {
-            Log.e(TAG, "Invalid numParams: " + numParams + " (must be >= 1)");
+        if (numParams < 0) {
+            Log.e(TAG, "Invalid numParams: " + numParams);
             return;
         }
 

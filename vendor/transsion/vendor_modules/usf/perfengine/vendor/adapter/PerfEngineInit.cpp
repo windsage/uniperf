@@ -1,7 +1,5 @@
 #include <android/binder_manager.h>
 #include <android/binder_process.h>
-#include <processgroup/sched_policy.h>
-#include <sys/resource.h>
 
 #include "ServiceBridge.h"
 #include "TranLog.h"
@@ -50,7 +48,12 @@ extern "C" bool PerfEngine_Initialize() {
         TLOGE("ServiceBridge::descriptor is NULL!");
         return false;
     }
-
+    // 配置 Binder 线程池最大线程数4并启动
+    ABinderProcess_setThreadPoolMaxThreadCount(4);
+    if (!ABinderProcess_isThreadPoolStarted()) {
+        ABinderProcess_startThreadPool();
+        TLOGI("Binder thread pool started, max thread count is 4");
+    }
     // 2. 注册 AIDL 服务
     const std::string serviceName = std::string() + ServiceBridge::descriptor + "/default";
     TLOGI("Attempting to register service: %s", serviceName.c_str());
@@ -69,12 +72,6 @@ extern "C" bool PerfEngine_Initialize() {
     }
 
     TLOGI("PerfEngine service registered: %s", serviceName.c_str());
-
-    // Elevate binder thread pool to RT-class for oneway dispatch latency
-    set_sched_policy(0, SP_FOREGROUND);
-    setpriority(PRIO_PROCESS, 0, -20);
-
-    TLOGI("Binder thread pool priority elevated");
     return true;
 }
 

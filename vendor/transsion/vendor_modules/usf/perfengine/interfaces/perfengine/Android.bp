@@ -34,6 +34,4 @@ aidl_interface {
             imports: [],
         },
     ],
-    // frozen: true,
-
 }
