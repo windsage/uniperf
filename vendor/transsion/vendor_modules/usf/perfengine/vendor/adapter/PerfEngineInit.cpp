@@ -1,9 +1,6 @@
 #include <android/binder_manager.h>
 #include <android/binder_process.h>
 #include <android/binder_ibinder_platform.h>
-#include <android/binder_ibinder.h>
-#include <sched.h>
-#include <errno.h>
 
 #include "ServiceBridge.h"
 #include "TranLog.h"

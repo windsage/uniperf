@@ -84,11 +84,16 @@ void ServiceBridge::workerLoop(int index) {
     snprintf(name, sizeof(name), "tpe_worker_%d", index);
     prctl(PR_SET_NAME, name, 0, 0, 0);
 
-    int policy = sched_getscheduler(0);
     struct sched_param param;
-    sched_getparam(0, &param);
-    TLOGI("Worker thread '%s' tid=%d started, policy=%d prio=%d", name, gettid(), policy,
-          param.sched_priority);
+    param.sched_priority = 1;
+    int res = sched_setscheduler(0, SCHED_FIFO, &param);
+    if (res == 0) {
+        TLOGI("Worker thread '%s' started, tid=%d elevated to SCHED_FIFO successfully!", name, gettid());
+    } else {
+        TLOGW("sched_setscheduler failed for worker thread '%s',tid=%d , errno=%d, error=%s", name, gettid(), errno, strerror(errno));
+    }
+
+    TLOGI("Worker thread '%s' tid=%d started!", name, gettid());
 
     while (true) {
         EventTask task;
@@ -129,7 +134,9 @@ void ServiceBridge::enqueueTask(EventTask task) {
 // ==================== Task Processing (runs on worker threads) ====================
 
 void ServiceBridge::processEventStart(const EventTask &task) {
-    ATRACE_BEGIN("processEventStart");
+    char buf[64];
+    snprintf(buf, sizeof(buf), "ServiceBridge::processEventStart eventId=0x%d", task.eventId);
+    ATRACE_BEGIN(buf);
 
     if (!mPerfLockCaller) {
         TLOGE("PerfLockCaller not initialized");
@@ -176,7 +183,9 @@ void ServiceBridge::processEventStart(const EventTask &task) {
 }
 
 void ServiceBridge::processEventEnd(const EventTask &task) {
-    ATRACE_BEGIN("processEventEnd");
+    char buf[64];
+    snprintf(buf, sizeof(buf), "ServiceBridge::processEventEnd eventId=0x%d", task.eventId);
+    ATRACE_BEGIN(buf);
 
     if (!mPerfLockCaller) {
         TLOGE("PerfLockCaller not initialized");
@@ -211,36 +220,6 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
     ATRACE_END();
 }
 
-static void renameBinderThread() {
-    thread_local bool sNamed = false;
-    if (sNamed)
-        return;
-    sNamed = true;
-    static std::atomic<int> sThreadIndex{1};
-    int idx = sThreadIndex.fetch_add(1, std::memory_order_relaxed);
-    char name[16];
-    snprintf(name, sizeof(name), "tpe_binder_%d", idx);
-    if (prctl(PR_SET_NAME, name, 0, 0, 0) == 0) {
-        TLOGI("Binder thread tid=%d named '%s'", gettid(), name);
-    } else {
-        TLOGW("prctl PR_SET_NAME failed for tid=%d: %s", gettid(), strerror(errno));
-    }
-}
-
-static void ensureBinderThreadSetup() {
-    // Rename thread — max 15 chars (PR_SET_NAME limit)
-    renameBinderThread();
-    // Elevate to RT
-    struct sched_param param;
-    param.sched_priority = 2;
-    int ret = sched_setscheduler(0, SCHED_FIFO, &param);
-    if (ret == 0) {
-        TLOGI("Binder thread tid=%d elevated to SCHED_FIFO prio=2", gettid());
-    } else {
-        TLOGW("sched_setscheduler failed: %s (tid=%d)", strerror(errno), gettid());
-    }
-}
-
 // ==================== Event Notification Implementation ====================
 
 ::ndk::ScopedAStatus ServiceBridge::notifyEventStart(
@@ -249,7 +228,6 @@ static void ensureBinderThreadSetup() {
     char buf[64];
     snprintf(buf, sizeof(buf), "ServiceBridge::notifyEventStart 0x%x", eventId);
     ATRACE_NAME(buf);
-    ensureBinderThreadSetup();
 
     if (!mPerfLockCaller) {
         TLOGE("PerfLockCaller not initialized");
@@ -279,7 +257,6 @@ static void ensureBinderThreadSetup() {
     char buf[64];
     snprintf(buf, sizeof(buf), "ServiceBridge::notifyEventEnd 0x%x", eventId);
     ATRACE_NAME(buf);
-    ensureBinderThreadSetup();
 
     if (!mPerfLockCaller) {
         TLOGE("PerfLockCaller not initialized");
