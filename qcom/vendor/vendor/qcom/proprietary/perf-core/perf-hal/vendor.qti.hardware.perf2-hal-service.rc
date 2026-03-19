@@ -11,6 +11,7 @@ service perf2-hal-1-0 /vendor/bin/hw/vendor.qti.hardware.perf2-hal-service
     class hal
     user root
     group root system readproc oem_2907
+    capabilities NET_ADMIN SYS_NICE
     interface aidl vendor.qti.hardware.perf2
 
 

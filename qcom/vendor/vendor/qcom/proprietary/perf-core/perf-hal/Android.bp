@@ -165,6 +165,7 @@ cc_binary {
         "libperfgluelayer",
         "libqti-perfd-client",
         "libqti-util",
+        "libdl",
     ],
 
     cppflags: [

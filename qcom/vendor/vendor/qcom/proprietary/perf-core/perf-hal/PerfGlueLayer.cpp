@@ -384,7 +384,7 @@ int32_t PerfModule::LoadPerfLib(const char *libname) {
     int32_t ret = -1;
 
     if (!mLibHandle.is_opened && (NULL != libname)) {
-         mLibHandle.dlhandle = dlopen(libname, RTLD_NOW | RTLD_LOCAL);
+         mLibHandle.dlhandle = dlopen(libname, RTLD_NOW | RTLD_GLOBAL);
          if (mLibHandle.dlhandle == NULL) {
              QLOGE(LOG_TAG, "%s Failed to (dl)open %s %s\n", __func__, libname, dlerror());
              return ret;

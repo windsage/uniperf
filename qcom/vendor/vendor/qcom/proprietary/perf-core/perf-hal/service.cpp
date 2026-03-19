@@ -24,7 +24,7 @@
 // add for cloud control by chao.xu5 at Jul 31th, 2025 end.
 #include "Perf.h"
 #include "PerfLog.h"
-
+#include <dlfcn.h>
 //TODO: Check if reuired with AIDL based service
 /*
 #ifdef ENABLE_BINDER_BUFFER_TUNING_FOR_32_BIT
@@ -37,6 +37,42 @@ using android::hardware::ProcessState;
 using aidl::vendor::qti::hardware::perf2::Perf;
 //TODO: check its usage
 //using android::hardware::defaultPassthroughServiceImplementation;
+
+static const char* PERFENGINE_ENABLE_PROPERTY = "persist.tr_perf.perfengine.enable";
+
+// add for PerfEngine by chao.xu5 start.
+static void loadPerfEngine() {
+    QLOGI(LOG_TAG, "[PerfEngine] Loading libperfengine-adapter.so...");
+
+    void *handle = dlopen("libperfengine-adapter.so", RTLD_NOW | RTLD_LOCAL);
+    if (!handle) {
+        QLOGE(LOG_TAG, "[PerfEngine] Failed to dlopen: %s", dlerror());
+        return;
+    }
+
+    QLOGI(LOG_TAG, "[PerfEngine] Library loaded successfully");
+
+    typedef bool (*InitFunc)(void);
+    InitFunc initFunc = reinterpret_cast<InitFunc>(dlsym(handle, "PerfEngine_Initialize"));
+
+    if (!initFunc) {
+        QLOGE(LOG_TAG, "[PerfEngine] Failed to find PerfEngine_Initialize: %s", dlerror());
+        dlclose(handle);
+        return;
+    }
+
+    QLOGI(LOG_TAG, "[PerfEngine] Found PerfEngine_Initialize");
+
+    bool success = initFunc();
+
+    if (success) {
+        QLOGI(LOG_TAG, "[PerfEngine] Initialization SUCCESS");
+    } else {
+        QLOGE(LOG_TAG, "[PerfEngine] Initialization FAILED");
+        dlclose(handle);
+    }
+}
+// add for PerfEngine by chao.xu5 end.
 
 int main() {
     ABinderProcess_setThreadPoolMaxThreadCount(0);
@@ -55,10 +91,40 @@ int main() {
     }
 
     CHECK_EQ(status, STATUS_OK);
+    // Temporarily elevate current thread to SCHED_FIFO before starting
+    // the thread pool. Threads spawned by startThreadPool() inherit the
+    // caller's scheduler policy — mirrors main_surfaceflinger.cpp.
+    int origPolicy = sched_getscheduler(0);
+    struct sched_param origParam;
+    bool schedSaved = (sched_getparam(0, &origParam) == 0);
+    bool schedElevated = false;
+    if (schedSaved) {
+        struct sched_param rtParam = {};
+        rtParam.sched_priority = sched_get_priority_min(SCHED_FIFO); // = 1
+        if (sched_setscheduler(0, SCHED_FIFO, &rtParam) == 0) {
+            schedElevated = true;
+            QLOGI(LOG_TAG, "Elevated to SCHED_FIFO prio=1 for thread pool spawn");
+        } else {
+            ALOGW("Failed to elevate scheduler: %s", strerror(errno));
+        }
+    }
 
     ABinderProcess_startThreadPool();
     QLOGE(LOG_TAG, "Registered IPerf HAL service success!");
+    // add for PerfEngine by chao.xu5 start.
+    char prop_value[PROPERTY_VALUE_MAX];
+    property_get(PERFENGINE_ENABLE_PROPERTY, prop_value, "1");
+    loadPerfEngine();
+    // add for PerfEngine by chao.xu5 end.
     ABinderProcess_joinThreadPool();
+    // Restore current thread immediately after spawn
+    if (schedElevated) {
+        if (sched_setscheduler(0, origPolicy, &origParam) == 0) {
+            QLOGI(LOG_TAG, "Restored original scheduler after thread pool spawn");
+        } else {
+            ALOGW("Failed to restore scheduler: %s", strerror(errno));
+        }
+    }
 
     // add for cloud control by chao.xu5 at Jul 31th, 2025 start.
     UnregistCloudctlListener();
