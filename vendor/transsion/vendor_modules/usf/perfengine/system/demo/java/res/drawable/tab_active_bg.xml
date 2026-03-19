@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- tab_active_bg.xml - Active tab has bottom orange indicator bar -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/color_tab_bg"/>
+        </shape>
+    </item>
+    <!-- Bottom indicator line -->
+    <item android:top="-4dp" android:left="8dp" android:right="8dp" android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/color_tab_indicator"/>
+            <corners android:topLeftRadius="2dp" android:topRightRadius="2dp"/>
+            <size android:height="3dp"/>
+        </shape>
+    </item>
+</layer-list>

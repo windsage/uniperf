@@ -102,6 +102,8 @@ private:
         int32_t duration;
         std::shared_ptr<std::thread> thread;
         std::shared_ptr<std::atomic<bool>> cancelled;
+        std::shared_ptr<std::mutex> cvMutex;
+        std::shared_ptr<std::condition_variable> cv;
     };
 
     void startTimeoutTimer(int32_t eventId, int32_t platformHandle, int32_t duration);

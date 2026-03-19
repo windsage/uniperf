@@ -3,7 +3,7 @@ package {
 }
 
 java_library {
-    name: "perfengine_impl",
+    name: "perfengine_client",
     system_ext_specific: true,
     srcs: ["com/transsion/perfengine/PerfEngine.java"],
     installable: true,

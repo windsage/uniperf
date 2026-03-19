@@ -483,26 +483,26 @@ void PerfLockCaller::releasePerfLock(int32_t handle) {
 }
 
 // ==================== 超时管理 ====================
-
 void PerfLockCaller::startTimeoutTimer(int32_t eventId, int32_t platformHandle, int32_t duration) {
     std::lock_guard<std::mutex> lock(mTimerMutex);
 
     auto cancelled = std::make_shared<std::atomic<bool>>(false);
+    auto cvMutex = std::make_shared<std::mutex>();
+    auto cv = std::make_shared<std::condition_variable>();
 
-    auto thread =
-        std::make_shared<std::thread>([this, eventId, platformHandle, duration, cancelled]() {
-            auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(duration);
+    auto thread = std::make_shared<std::thread>(
+        [this, eventId, platformHandle, duration, cancelled, cvMutex, cv]() {
+            std::unique_lock<std::mutex> lk(*cvMutex);
 
-            while (std::chrono::steady_clock::now() < deadline) {
-                if (cancelled->load()) {
-                    return;
-                }
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            }
+            // Block until timeout OR cancellation — wakes up immediately on cancel
+            bool timedOut = !cv->wait_for(lk, std::chrono::milliseconds(duration), [&cancelled]() {
+                return cancelled->load(std::memory_order_relaxed);
+            });
 
-            if (!cancelled->load()) {
+            if (timedOut && !cancelled->load(std::memory_order_relaxed)) {
                 handleTimeout(eventId, platformHandle);
             }
+            // If cancelled, just return — join() in cancelTimeoutTimer returns instantly
         });
 
     TimeoutInfo info;
@@ -511,22 +511,27 @@ void PerfLockCaller::startTimeoutTimer(int32_t eventId, int32_t platformHandle, 
     info.duration = duration;
     info.thread = thread;
     info.cancelled = cancelled;
+    info.cvMutex = cvMutex;
+    info.cv = cv;
 
-    mActiveTimers[platformHandle] = info;
+    mActiveTimers[platformHandle] = std::move(info);
 }
 
 void PerfLockCaller::cancelTimeoutTimer(int32_t platformHandle) {
     std::lock_guard<std::mutex> lock(mTimerMutex);
 
     auto it = mActiveTimers.find(platformHandle);
-    if (it == mActiveTimers.end()) {
+    if (it == mActiveTimers.end())
         return;
-    }
 
-    if (it->second.cancelled) {
-        it->second.cancelled->store(true);
-    }
+    // Signal cancellation
+    it->second.cancelled->store(true, std::memory_order_relaxed);
 
+    // Wake up the timer thread immediately — it will exit right away
+    { std::lock_guard<std::mutex> cvLk(*it->second.cvMutex); }
+    it->second.cv->notify_one();
+
+    // join() now returns in microseconds, not 100ms
     if (it->second.thread && it->second.thread->joinable()) {
         it->second.thread->join();
     }

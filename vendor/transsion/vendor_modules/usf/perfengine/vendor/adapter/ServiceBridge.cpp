@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <utils/Trace.h>
 
+#include <atomic>
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
@@ -35,40 +36,211 @@ ServiceBridge::ServiceBridge() {
         return;
     }
 
+    startWorkerPool();
     TLOGI("ServiceBridge initialized successfully");
 }
 
 ServiceBridge::~ServiceBridge() {
     TLOGI("ServiceBridge destroyed");
 
+    stopWorkerPool();
     // 清理监听器
     std::lock_guard<Mutex> lock(mListenerLock);
     mListeners.clear();
 }
 
-static void ensureBinderThreadSetup() {
-    thread_local bool sSetup = false;
-    if (sSetup)
-        return;
+// ==================== Worker Thread Pool ====================
 
-    // Rename thread — max 15 chars (PR_SET_NAME limit)
-    int ret = prctl(PR_SET_NAME, "tpe_binder", 0, 0, 0);
-    if (ret != 0) {
-        TLOGW("prctl PR_SET_NAME failed: %s", strerror(errno));
-    } else {
-        TLOGD("Binder thread tid=%d renamed to 'tpe_binder'", gettid());
+void ServiceBridge::startWorkerPool() {
+    mShutdown.store(false, std::memory_order_relaxed);
+    mWorkerThreads.reserve(kWorkerThreadCount);
+
+    for (int i = 0; i < kWorkerThreadCount; ++i) {
+        mWorkerThreads.emplace_back([this, i]() {
+            workerLoop(i + 1);    // index 从 1 开始，命名为 tpe_worker_1 ~ tpe_worker_4
+        });
     }
+    TLOGI("Worker pool started: %d threads", kWorkerThreadCount);
+}
+
+void ServiceBridge::stopWorkerPool() {
+    {
+        std::lock_guard<std::mutex> lock(mQueueMutex);
+        mShutdown.store(true, std::memory_order_relaxed);
+    }
+    mQueueCv.notify_all();    // 唤醒所有等待的工作线程
+
+    for (auto &t : mWorkerThreads) {
+        if (t.joinable())
+            t.join();
+    }
+    mWorkerThreads.clear();
+    TLOGI("Worker pool stopped");
+}
+
+void ServiceBridge::workerLoop(int index) {
+    // Set thread name: "tpe_worker_1" ~ "tpe_worker_4", max 15 chars
+    char name[16];
+    snprintf(name, sizeof(name), "tpe_worker_%d", index);
+    prctl(PR_SET_NAME, name, 0, 0, 0);
+
+    int policy = sched_getscheduler(0);
+    struct sched_param param;
+    sched_getparam(0, &param);
+    TLOGI("Worker thread '%s' tid=%d started, policy=%d prio=%d", name, gettid(), policy,
+          param.sched_priority);
+
+    while (true) {
+        EventTask task;
+        {
+            std::unique_lock<std::mutex> lock(mQueueMutex);
+            // Block until there's a task or shutdown is requested
+            mQueueCv.wait(lock, [this]() {
+                return !mTaskQueue.empty() || mShutdown.load(std::memory_order_relaxed);
+            });
+
+            if (mShutdown.load(std::memory_order_relaxed) && mTaskQueue.empty()) {
+                break;    // Drain remaining tasks before exit
+            }
+
+            task = std::move(mTaskQueue.front());
+            mTaskQueue.pop();
+        }
+
+        // Execute task outside the lock
+        if (task.type == EventTask::Type::START) {
+            processEventStart(task);
+        } else {
+            processEventEnd(task);
+        }
+    }
+
+    TLOGI("Worker thread '%s' tid=%d exiting", name, gettid());
+}
+
+void ServiceBridge::enqueueTask(EventTask task) {
+    {
+        std::lock_guard<std::mutex> lock(mQueueMutex);
+        mTaskQueue.push(std::move(task));
+    }
+    mQueueCv.notify_one();
+}
+
+// ==================== Task Processing (runs on worker threads) ====================
+
+void ServiceBridge::processEventStart(const EventTask &task) {
+    ATRACE_BEGIN("processEventStart");
+
+    if (!mPerfLockCaller) {
+        TLOGE("PerfLockCaller not initialized");
+        ATRACE_END();
+        return;
+    }
+
+    EventContext ctx =
+        EventContext::parse(task.eventId, task.intParams, task.extraStrings.value_or(""));
+
+    TLOGI("processEventStart: eventId=%d pkg='%s' act='%s'", ctx.eventId, ctx.package.c_str(),
+          ctx.activity.c_str());
+
+    // 1. Broadcast to listeners (oneway, non-blocking)
+    broadcastEventStart(task.eventId, task.timestamp, task.numParams, task.intParams,
+                        task.extraStrings);
+
+    // 2. Acquire perf lock — this is the slow path, safe on worker thread
+    int32_t platformHandle = mPerfLockCaller->acquirePerfLock(ctx);
+    if (platformHandle < 0) {
+        TLOGE("Failed to acquire perf lock for eventId=%d", task.eventId);
+        ATRACE_END();
+        return;
+    }
+
+    // 3. Track active event
+    {
+        std::lock_guard<Mutex> lock(mEventLock);
+        auto it = mActiveEvents.find(task.eventId);
+        if (it != mActiveEvents.end()) {
+            TLOGW("Event %d already active, releasing old handle=%d", task.eventId,
+                  it->second.platformHandle);
+            mPerfLockCaller->releasePerfLock(it->second.platformHandle);
+        }
+        EventInfo info;
+        info.platformHandle = platformHandle;
+        info.startTime = task.timestamp;
+        info.packageName = ctx.package;
+        mActiveEvents[task.eventId] = info;
+    }
+
+    TLOGI("Event %d started, handle=%d", task.eventId, platformHandle);
+    ATRACE_END();
+}
+
+void ServiceBridge::processEventEnd(const EventTask &task) {
+    ATRACE_BEGIN("processEventEnd");
+
+    if (!mPerfLockCaller) {
+        TLOGE("PerfLockCaller not initialized");
+        ATRACE_END();
+        return;
+    }
+
+    EventContext ctx = EventContext::parse(task.eventId, {}, task.extraStrings.value_or(""));
+
+    TLOGI("processEventEnd: eventId=%d pkg='%s'", ctx.eventId, ctx.package.c_str());
+
+    // 1. Broadcast to listeners
+    broadcastEventEnd(task.eventId, task.timestamp, task.extraStrings);
+
+    // 2. Release perf lock
+    {
+        std::lock_guard<Mutex> lock(mEventLock);
+        auto it = mActiveEvents.find(task.eventId);
+        if (it == mActiveEvents.end()) {
+            TLOGW("Event %d not found in active events", task.eventId);
+            ATRACE_END();
+            return;
+        }
+        mPerfLockCaller->releasePerfLock(it->second.platformHandle);
+
+        int64_t elapsedMs = (task.timestamp - it->second.startTime) / 1000000LL;
+        TLOGI("Event %d ended: handle=%d elapsed=%lldms", task.eventId, it->second.platformHandle,
+              (long long)elapsedMs);
+        mActiveEvents.erase(it);
+    }
+
+    ATRACE_END();
+}
+
+static void renameBinderThread() {
+    thread_local bool sNamed = false;
+    if (sNamed)
+        return;
+    sNamed = true;
+    static std::atomic<int> sThreadIndex{1};
+    int idx = sThreadIndex.fetch_add(1, std::memory_order_relaxed);
+    char name[16];
+    snprintf(name, sizeof(name), "tpe_binder_%d", idx);
+    if (prctl(PR_SET_NAME, name, 0, 0, 0) == 0) {
+        TLOGI("Binder thread tid=%d named '%s'", gettid(), name);
+    } else {
+        TLOGW("prctl PR_SET_NAME failed for tid=%d: %s", gettid(), strerror(errno));
+    }
+}
+
+static void ensureBinderThreadSetup() {
+    // Rename thread — max 15 chars (PR_SET_NAME limit)
+    renameBinderThread();
     // Elevate to RT
     struct sched_param param;
     param.sched_priority = 2;
-    ret = sched_setscheduler(0, SCHED_FIFO, &param);
+    int ret = sched_setscheduler(0, SCHED_FIFO, &param);
     if (ret == 0) {
         TLOGI("Binder thread tid=%d elevated to SCHED_FIFO prio=2", gettid());
     } else {
         TLOGW("sched_setscheduler failed: %s (tid=%d)", strerror(errno), gettid());
     }
-    sSetup = true;
 }
+
 // ==================== Event Notification Implementation ====================
 
 ::ndk::ScopedAStatus ServiceBridge::notifyEventStart(
@@ -89,39 +261,16 @@ static void ensureBinderThreadSetup() {
         return ::ndk::ScopedAStatus::ok();
     }
 
-    // Single source of truth: parse all context here
-    EventContext ctx = EventContext::parse(eventId, intParams, extraStrings.value_or(""));
+    EventTask task;
+    task.type = EventTask::Type::START;
+    task.eventId = eventId;
+    task.timestamp = timestamp;
+    task.numParams = numParams;
+    task.intParams = intParams;
+    task.extraStrings = extraStrings;
 
-    TLOGI("notifyEventStart: eventId=%d pkg='%s' act='%s' param0=%d param1=%d", ctx.eventId,
-          ctx.package.c_str(), ctx.activity.c_str(), ctx.intParam0, ctx.intParam1);
+    enqueueTask(std::move(task));
 
-    // 1. Broadcast to listeners first (non-blocking, oneway)
-    broadcastEventStart(eventId, timestamp, numParams, intParams, extraStrings);
-
-    // 2. Acquire perf lock
-    int32_t platformHandle = mPerfLockCaller->acquirePerfLock(ctx);
-    if (platformHandle < 0) {
-        TLOGE("Failed to acquire perf lock for eventId=%d", eventId);
-        return ::ndk::ScopedAStatus::ok();
-    }
-
-    // 3. Track active event
-    {
-        std::lock_guard<Mutex> lock(mEventLock);
-        auto it = mActiveEvents.find(eventId);
-        if (it != mActiveEvents.end()) {
-            TLOGW("Event %d already active, releasing old handle=%d", eventId,
-                  it->second.platformHandle);
-            mPerfLockCaller->releasePerfLock(it->second.platformHandle);
-        }
-        EventInfo info;
-        info.platformHandle = platformHandle;
-        info.startTime = timestamp;
-        info.packageName = ctx.package;
-        mActiveEvents[eventId] = info;
-    }
-
-    TLOGI("Event %d started, handle=%d", eventId, platformHandle);
     return ::ndk::ScopedAStatus::ok();
 }
 
@@ -137,32 +286,13 @@ static void ensureBinderThreadSetup() {
         return ::ndk::ScopedAStatus::ok();
     }
 
-    // Parse context for logging; extraStrings on End carries same
-    // positional convention as Start (e.g. package at strings[0])
-    EventContext ctx = EventContext::parse(eventId, {}, extraStrings.value_or(""));
+    EventTask task;
+    task.type = EventTask::Type::END;
+    task.eventId = eventId;
+    task.timestamp = timestamp;
+    task.extraStrings = extraStrings;
 
-    TLOGI("notifyEventEnd: eventId=%d pkg='%s'", ctx.eventId, ctx.package.c_str());
-
-    // 1. Broadcast to listeners first
-    broadcastEventEnd(eventId, timestamp, extraStrings);
-
-    // 2. Find, release, and remove active event
-    {
-        std::lock_guard<Mutex> lock(mEventLock);
-        auto it = mActiveEvents.find(eventId);
-        if (it == mActiveEvents.end()) {
-            TLOGW("Event %d not found in active events", eventId);
-            return ::ndk::ScopedAStatus::ok();
-        }
-
-        mPerfLockCaller->releasePerfLock(it->second.platformHandle);
-
-        int64_t elapsedMs = (timestamp - it->second.startTime) / 1000000LL;
-        TLOGI("Event %d ended: handle=%d elapsed=%lldms", eventId, it->second.platformHandle,
-              (long long)elapsedMs);
-
-        mActiveEvents.erase(it);
-    }
+    enqueueTask(std::move(task));
 
     return ::ndk::ScopedAStatus::ok();
 }

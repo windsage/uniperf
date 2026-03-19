@@ -1,95 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    PerfEngineDemo - Redesigned activity_main.xml
+    Design: Dark immersive header extending into status bar + clean white content cards
+    Status bar: transparent, header draws behind it using android:fitsSystemWindows
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/color_bg">
 
-    <!-- Tab Bar -->
+    <!-- ===== Dark Header (extends behind status bar) ===== -->
     <LinearLayout
+        android:id="@+id/layout_header"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="80dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:background="@color/color_header_bg"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="0dp">
 
-        <Button
-            android:id="@+id/btn_tab_send"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Send"
-            android:textAllCaps="false"/>
+        <!-- Title row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <Button
-            android:id="@+id/btn_tab_listen"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Listen"
-            android:textAllCaps="false"/>
+            <!-- Accent bar decoration -->
+            <View
+                android:layout_width="3dp"
+                android:layout_height="22dp"
+                android:background="@color/color_accent"
+                android:layout_marginEnd="10dp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PerfEngine"
+                    android:textColor="@color/color_header_title"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.02"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Event Debug Console"
+                    android:textColor="@color/color_header_subtitle"
+                    android:textSize="11sp"
+                    android:letterSpacing="0.05"/>
+            </LinearLayout>
+
+            <!-- Version badge -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="v1.0"
+                android:textColor="@color/color_accent"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
+                android:background="@drawable/badge_bg"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"/>
+        </LinearLayout>
+
+        <!-- Tab Bar (part of header, bottom-aligned) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <Button
+                android:id="@+id/btn_tab_send"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Send"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-medium"
+                android:background="@drawable/tab_active_bg"
+                android:textColor="@color/color_tab_active_text"
+                android:letterSpacing="0.02"/>
+
+            <!-- Tab divider -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="#30FFFFFF"/>
+
+            <Button
+                android:id="@+id/btn_tab_listen"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Listen"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-medium"
+                android:background="@color/color_tab_bg"
+                android:textColor="@color/color_tab_inactive_text"
+                android:letterSpacing="0.02"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- Send Panel -->
+    <!-- ===== Send Panel ===== -->
     <ScrollView
         android:id="@+id/panel_send"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:visibility="visible"
-        android:padding="12dp">
+        android:fillViewport="false"
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Event Selector -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Event"
-                android:textStyle="bold"/>
-
-            <Spinner
-                android:id="@+id/spinner_event"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="4dp"/>
-
-            <!-- Package Name -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Package (optional)"
-                android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/et_package"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="e.g. com.android.settings"
-                android:inputType="text"
-                android:singleLine="true"/>
-
-            <!-- Count + Interval -->
+            <!-- Event Selector Card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:background="@drawable/card_bg"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Event Type"
+                    style="@style/LabelText"
+                    android:layout_marginBottom="10dp"/>
+
+                <Spinner
+                    android:id="@+id/spinner_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:background="@drawable/spinner_bg"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="8dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_card_stroke"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="14dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Package"
+                    style="@style/LabelText"
+                    android:layout_marginBottom="6dp"/>
+
+                <EditText
+                    android:id="@+id/et_package"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="e.g. com.android.settings  (optional)"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textColor="@color/color_text_primary"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:paddingBottom="8dp"/>
+
+                <!-- Bottom underline for EditText -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_input_underline"/>
+            </LinearLayout>
+
+            <!-- Count / Interval Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/card_bg"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
+
+                <!-- Count -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:paddingEnd="6dp">
+                    android:paddingEnd="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Count"
-                        android:textStyle="bold"/>
+                        style="@style/LabelText"
+                        android:layout_marginBottom="6dp"/>
 
                     <EditText
                         android:id="@+id/et_count"
@@ -97,21 +220,41 @@
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:singleLine="true"
-                        android:text="1"/>
+                        android:text="1"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:background="@null"
+                        android:paddingBottom="6dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_input_underline"/>
                 </LinearLayout>
 
+                <!-- Divider -->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_card_stroke"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"/>
+
+                <!-- Interval -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:paddingStart="6dp">
+                    android:paddingStart="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Interval ms"
-                        android:textStyle="bold"/>
+                        style="@style/LabelText"
+                        android:layout_marginBottom="6dp"/>
 
                     <EditText
                         android:id="@+id/et_interval"
@@ -119,30 +262,40 @@
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:singleLine="true"
-                        android:text="500"/>
+                        android:text="500"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:background="@null"
+                        android:paddingBottom="6dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_input_underline"/>
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Send Buttons -->
+            <!-- Action Buttons -->
             <Button
                 android:id="@+id/btn_send"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="52dp"
                 android:text="Send Event"
-                android:textAllCaps="false"/>
+                style="@style/ButtonPrimary"
+                android:layout_marginBottom="10dp"/>
 
             <Button
                 android:id="@+id/btn_send_all"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="52dp"
                 android:text="Send All Events"
-                android:textAllCaps="false"/>
+                style="@style/ButtonSecondary"/>
+
         </LinearLayout>
     </ScrollView>
 
-    <!-- Listen Panel -->
+    <!-- ===== Listen Panel ===== -->
     <LinearLayout
         android:id="@+id/panel_listen"
         android:layout_width="match_parent"
@@ -150,118 +303,173 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:visibility="gone"
-        android:padding="12dp">
+        android:padding="16dp">
 
-        <!-- Listener Type -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Listener Type"
-            android:textStyle="bold"/>
-
-        <RadioGroup
-            android:id="@+id/rg_listener_type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rb_perf_event"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="true"
-                android:text="PerfEventListener"/>
-
-            <RadioButton
-                android:id="@+id/rb_ibinder"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="IBinder (raw AIDL)"/>
-        </RadioGroup>
-
-        <!-- Filter -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Event Filter (comma-separated ids, empty = all)"
-            android:textStyle="bold"/>
-
-        <EditText
-            android:id="@+id/et_filter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="e.g. 1,3,5"
-            android:inputType="text"
-            android:singleLine="true"/>
-
-        <!-- Register / Unregister -->
+        <!-- Config Card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <!-- Listener Type -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Listener Type"
+                style="@style/LabelText"
+                android:layout_marginBottom="10dp"/>
+
+            <RadioGroup
+                android:id="@+id/rg_listener_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="14dp">
+
+                <RadioButton
+                    android:id="@+id/rb_perf_event"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="PerfEventListener"
+                    android:textColor="@color/color_text_primary"
+                    android:textSize="13sp"
+                    android:buttonTint="@color/color_accent"/>
+
+                <RadioButton
+                    android:id="@+id/rb_ibinder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="IBinder (raw)"
+                    android:textColor="@color/color_text_primary"
+                    android:textSize="13sp"
+                    android:buttonTint="@color/color_accent"/>
+            </RadioGroup>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_card_stroke"
+                android:layout_marginBottom="14dp"/>
+
+            <!-- Filter -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Event Filter"
+                style="@style/LabelText"
+                android:layout_marginBottom="6dp"/>
+
+            <EditText
+                android:id="@+id/et_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="comma-separated ids, empty = all  (e.g. 1,3,5)"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/color_text_primary"
+                android:textColorHint="@color/color_text_hint"
+                android:textSize="14sp"
+                android:background="@null"
+                android:paddingBottom="8dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_input_underline"/>
+        </LinearLayout>
+
+        <!-- Register Buttons Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
             <Button
                 android:id="@+id/btn_register"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="6dp"
                 android:text="Register"
-                android:textAllCaps="false"/>
+                style="@style/ButtonPrimary"/>
 
             <Button
                 android:id="@+id/btn_unregister"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="6dp"
                 android:enabled="false"
                 android:text="Unregister"
-                android:textAllCaps="false"/>
+                style="@style/ButtonSecondary"/>
         </LinearLayout>
 
-        <!-- Status -->
+        <!-- Status chip -->
         <TextView
             android:id="@+id/tv_listen_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Status: Not registered"
-            android:textSize="12sp"/>
+            android:layout_marginBottom="12dp"
+            android:text="● Not registered"
+            android:textColor="@color/color_text_secondary"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif"
+            android:background="@drawable/card_bg"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
 
-        <!-- Log Area -->
+        <!-- Log area header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="14dp"
+                android:background="@color/color_accent"
+                android:layout_marginEnd="8dp"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Event Log"
-                android:textStyle="bold"/>
+                style="@style/LabelText"/>
 
             <Button
                 android:id="@+id/btn_clear_log"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:text="Clear"
-                android:textAllCaps="false"
-                android:textSize="12sp"/>
+                style="@style/ButtonSmall"/>
         </LinearLayout>
 
+        <!-- Log list on dark background -->
         <ListView
             android:id="@+id/lv_log"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="0.5dp"/>
+            android:background="@drawable/log_bg"
+            android:divider="@color/color_log_divider"
+            android:dividerHeight="1dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:clipToPadding="false"/>
+
     </LinearLayout>
 </LinearLayout>

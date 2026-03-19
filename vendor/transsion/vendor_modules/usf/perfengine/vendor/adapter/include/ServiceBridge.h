@@ -1,6 +1,3 @@
-// vendor/transsion/vendor_modules/usf/perfengine/vendor/adapter/include/ServiceBridge.h
-// AIDL 服务桥接层 - 重命名自 PerfEngineAdapter
-
 #ifndef SERVICE_BRIDGE_H
 #define SERVICE_BRIDGE_H
 
@@ -11,6 +8,8 @@
 
 #include <map>
 #include <memory>
+#include <queue>
+#include <thread>
 #include <unordered_set>
 #include <vector>
 
@@ -47,6 +46,37 @@ public:
         const std::shared_ptr<IEventListener> &listener) override;
 
 private:
+    // ==================== Event task dispatched to worker pool ====================
+    struct EventTask {
+        enum class Type { START, END };
+        Type type;
+        int32_t eventId;
+        int64_t timestamp;
+        // START only
+        int32_t numParams;
+        std::vector<int32_t> intParams;
+        std::optional<std::string> extraStrings;
+    };
+
+    // ==================== Worker thread pool ====================
+    static constexpr int kWorkerThreadCount = 4;
+    static constexpr char kWorkerNamePrefix[] = "tpe_worker_";
+
+    std::vector<std::thread> mWorkerThreads;
+    std::queue<EventTask> mTaskQueue;
+    std::mutex mQueueMutex;
+    std::condition_variable mQueueCv;
+    std::atomic<bool> mShutdown{false};
+
+    void startWorkerPool();
+    void stopWorkerPool();
+    void workerLoop(int index);
+    void enqueueTask(EventTask task);
+
+    void processEventStart(const EventTask &task);
+    void processEventEnd(const EventTask &task);
+
+    // ==================== Active events ====================
     struct EventInfo {
         int32_t platformHandle;
         int64_t startTime;
@@ -58,6 +88,7 @@ private:
 
     std::unique_ptr<PerfLockCaller> mPerfLockCaller;
 
+    // ==================== Listeners ====================
     struct DeathCookie {
         ServiceBridge *bridge;
         AIBinder *binder;

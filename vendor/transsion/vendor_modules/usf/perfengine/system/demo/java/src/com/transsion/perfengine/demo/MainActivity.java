@@ -93,8 +93,22 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        View header = findViewById(R.id.layout_header);
+        header.post(() -> {
+            int statusBarHeight = 0;
+            int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resId > 0) {
+                statusBarHeight = getResources().getDimensionPixelSize(resId);
+            }
+            // Base paddingTop = 8dp; add statusBarHeight on top
+            int basePadding = (int) (8 * getResources().getDisplayMetrics().density);
+            header.setPadding(header.getPaddingLeft(), basePadding + statusBarHeight,
+                    header.getPaddingRight(), header.getPaddingBottom());
+        });
         bindViews();
         setupTabSwitcher();
         setupSendPanel();
@@ -135,12 +149,23 @@ public class MainActivity extends Activity {
     }
 
     // ==================== Tab ====================
-
     private void showTab(boolean showSend) {
         mPanelSend.setVisibility(showSend ? View.VISIBLE : View.GONE);
         mPanelListen.setVisibility(showSend ? View.GONE : View.VISIBLE);
-        mBtnTabSend.setAlpha(showSend ? 1.0f : 0.5f);
-        mBtnTabListen.setAlpha(showSend ? 0.5f : 1.0f);
+
+        // Active tab: white bg + orange bottom indicator (tab_active_bg.xml)
+        // Inactive tab: plain white bg + muted text color
+        if (showSend) {
+            mBtnTabSend.setBackgroundResource(R.drawable.tab_active_bg);
+            mBtnTabSend.setTextColor(getColor(R.color.color_tab_active_text));
+            mBtnTabListen.setBackgroundColor(getColor(R.color.color_tab_bg));
+            mBtnTabListen.setTextColor(getColor(R.color.color_tab_inactive_text));
+        } else {
+            mBtnTabListen.setBackgroundResource(R.drawable.tab_active_bg);
+            mBtnTabListen.setTextColor(getColor(R.color.color_tab_active_text));
+            mBtnTabSend.setBackgroundColor(getColor(R.color.color_tab_bg));
+            mBtnTabSend.setTextColor(getColor(R.color.color_tab_inactive_text));
+        }
     }
 
     private void setupTabSwitcher() {

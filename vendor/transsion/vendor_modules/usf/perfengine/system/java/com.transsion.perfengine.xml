@@ -2,5 +2,5 @@
 <permissions>
     <library
         name="com.transsion.perfengine"
-        file="/system_ext/framework/perfengine_impl.jar"/>
+        file="/system_ext/framework/perfengine_client.jar"/>
 </permissions>

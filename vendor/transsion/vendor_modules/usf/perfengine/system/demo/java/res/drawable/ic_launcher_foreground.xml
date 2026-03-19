@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ic_launcher_foreground.xml
+    Adaptive icon foreground layer.
+    Canvas: 108dp x 108dp (AdaptiveIcon spec).
+    Safe zone: 72dp x 72dp centered at (54, 54), i.e. inset 18dp on each side.
+    All artwork kept within safe zone so nothing clips on any mask shape.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!--
+        Flat-top hexagon centered at (54, 54), circumradius = 30dp.
+        Vertices (flat-top, angle offset 0°):
+          top-right:    (54 + 30*cos30°, 54 - 30*sin30°) = (79.98, 39)
+          right:        (54 + 30,        54             ) = (84,    54)
+          bottom-right: (54 + 30*cos30°, 54 + 30*sin30°) = (79.98, 69)
+          bottom-left:  (54 - 30*cos30°, 54 + 30*sin30°) = (28.02, 69)
+          left:         (54 - 30,        54             ) = (24,    54)
+          top-left:     (54 - 30*cos30°, 54 - 30*sin30°) = (28.02, 39)
+        Rounded with strokeLineCap/Join for clean corners.
+    -->
+    <path
+        android:pathData="M80,39 L84,54 L80,69 L28,69 L24,54 L28,39 Z"
+        android:fillColor="#00000000"
+        android:strokeColor="#FF6B35"
+        android:strokeWidth="3.5"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round"/>
+
+    <!--
+        Lightning bolt, centered in hexagon.
+        Upper half:  (58,25) -> (44,54) -> (54,54)
+        Lower half:  (54,54) -> (64,54) -> (50,83) intentionally NOT symmetric
+        Classic bolt: wide top-right, narrows at waist, kicks out bottom-left.
+        Coordinates tuned to sit visually centered within the hex safe zone.
+    -->
+    <path
+        android:pathData="M60,26 L42,57 L54,57 L48,82 L66,51 L54,51 Z"
+        android:fillColor="#FF6B35"/>
+
+    <!--
+        Small accent dot at top-right hex vertex — adds visual weight
+        to balance the bolt and echoes a "signal / pulse" metaphor.
+    -->
+    <path
+        android:pathData="M80,39 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"
+        android:fillColor="#FF6B35"
+        android:fillAlpha="0.55"/>
+
+</vector>

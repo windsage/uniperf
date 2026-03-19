@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        PerfEngineDemo app theme.
+        - No ActionBar (NoTitleBar)
+        - Status bar is transparent; the header view draws behind it
+        - Content uses fitsSystemWindows to avoid nav-bar overlap
+    -->
+    <style name="AppTheme" parent="android:Theme.DeviceDefault.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/color_bg</item>
+        <!-- 状态栏颜色直接设为 header 同色，视觉上仍然"沉浸" -->
+        <item name="android:statusBarColor">@color/color_header_bg</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+        <!-- 状态栏图标强制白色（亮色图标模式） -->
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <!-- Primary button: filled orange -->
+    <style name="ButtonPrimary">
+        <item name="android:background">@drawable/btn_primary_bg</item>
+        <item name="android:textColor">@color/color_btn_primary_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <!-- Secondary button: dark outline -->
+    <style name="ButtonSecondary">
+        <item name="android:background">@drawable/btn_secondary_bg</item>
+        <item name="android:textColor">@color/color_btn_secondary_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <!-- Small clear/utility button -->
+    <style name="ButtonSmall">
+        <item name="android:background">@drawable/btn_small_bg</item>
+        <item name="android:textColor">@color/color_text_secondary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">32dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+    </style>
+
+    <!-- Section label -->
+    <style name="LabelText">
+        <item name="android:textColor">@color/color_text_secondary</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+</resources>

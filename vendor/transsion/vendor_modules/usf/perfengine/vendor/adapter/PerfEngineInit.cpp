@@ -1,5 +1,9 @@
 #include <android/binder_manager.h>
 #include <android/binder_process.h>
+#include <android/binder_ibinder_platform.h>
+#include <android/binder_ibinder.h>
+#include <sched.h>
+#include <errno.h>
 
 #include "ServiceBridge.h"
 #include "TranLog.h"
@@ -48,12 +52,7 @@ extern "C" bool PerfEngine_Initialize() {
         TLOGE("ServiceBridge::descriptor is NULL!");
         return false;
     }
-    // 配置 Binder 线程池最大线程数4并启动
-    ABinderProcess_setThreadPoolMaxThreadCount(4);
-    if (!ABinderProcess_isThreadPoolStarted()) {
-        ABinderProcess_startThreadPool();
-        TLOGI("Binder thread pool started, max thread count is 4");
-    }
+
     // 2. 注册 AIDL 服务
     const std::string serviceName = std::string() + ServiceBridge::descriptor + "/default";
     TLOGI("Attempting to register service: %s", serviceName.c_str());
@@ -62,8 +61,18 @@ extern "C" bool PerfEngine_Initialize() {
     if (existingService != nullptr) {
         TLOGW("Service already exists: %s", serviceName.c_str());
     }
-    binder_status_t status =
-        AServiceManager_addService(gServiceBridge->asBinder().get(), serviceName.c_str());
+
+    ndk::SpAIBinder serviceBinder = gServiceBridge->asBinder();
+    if (serviceBinder == nullptr) {
+        TLOGE("serviceBinder is null");
+        return false;
+    }
+
+    // PerfEngine 服务节点调度策略 SCHED_FIFO 
+    AIBinder_setMinSchedulerPolicy(serviceBinder.get(), SCHED_FIFO, 1);
+    AIBinder_setInheritRt(serviceBinder.get(), true);
+    
+    binder_status_t status = AServiceManager_addService(serviceBinder.get(), serviceName.c_str());
 
     if (status != STATUS_OK) {
         TLOGE("Failed to register PerfEngine service: %d", status);

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Header / Primary -->
+    <color name="color_header_bg">#0D1B2A</color>
+    <color name="color_header_title">#FFFFFF</color>
+    <color name="color_header_subtitle">#7A9BBF</color>
+
+    <!-- Accent -->
+    <color name="color_accent">#FF6B35</color>
+    <color name="color_accent_dark">#D94F1A</color>
+    <color name="color_accent_light">#FF8C5A</color>
+
+    <!-- Tab -->
+    <color name="color_tab_indicator">#FF6B35</color>
+    <color name="color_tab_active_text">#0D1B2A</color>
+    <color name="color_tab_inactive_text">#8899AA</color>
+    <color name="color_tab_bg">#FFFFFF</color>
+
+    <!-- Content -->
+    <color name="color_bg">#F4F6F9</color>
+    <color name="color_card_bg">#FFFFFF</color>
+    <color name="color_card_stroke">#E2E8F0</color>
+
+    <!-- Text -->
+    <color name="color_text_primary">#1A2B3C</color>
+    <color name="color_text_secondary">#5A7080</color>
+    <color name="color_text_hint">#AAB8C2</color>
+
+    <!-- Input -->
+    <color name="color_input_underline">#CBD5E0</color>
+    <color name="color_input_underline_focused">#FF6B35</color>
+
+    <!-- Button -->
+    <color name="color_btn_primary_bg">#FF6B35</color>
+    <color name="color_btn_primary_text">#FFFFFF</color>
+    <color name="color_btn_secondary_bg">#FFFFFF</color>
+    <color name="color_btn_secondary_stroke">#0D1B2A</color>
+    <color name="color_btn_secondary_text">#0D1B2A</color>
+    <color name="color_btn_disabled_bg">#E2E8F0</color>
+    <color name="color_btn_disabled_text">#A0AEC0</color>
+
+    <!-- Log area -->
+    <color name="color_log_bg">#0D1B2A</color>
+    <color name="color_log_text">#C8D8E8</color>
+    <color name="color_log_start">#58B4FF</color>
+    <color name="color_log_end">#56D67F</color>
+    <color name="color_log_divider">#1E3048</color>
+
+    <!-- Status bar scrim -->
+    <color name="color_status_bar">#0D1B2A</color>
+</resources>
