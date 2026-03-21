@@ -1,8 +1,5 @@
 #include "PerfLockCaller.h"
 
-#include <aidl/vendor/qti/hardware/display/config/Attributes.h>
-#include <aidl/vendor/qti/hardware/display/config/DisplayType.h>
-#include <aidl/vendor/qti/hardware/display/config/IDisplayConfig.h>
 #include <android-base/properties.h>
 #include <android/binder_manager.h>
 #include <dlfcn.h>
@@ -17,10 +14,6 @@
 #include "TranLog.h"
 #include "XmlConfigParser.h"
 
-using aidl::vendor::qti::hardware::display::config::Attributes;
-using aidl::vendor::qti::hardware::display::config::DisplayType;
-using aidl::vendor::qti::hardware::display::config::IDisplayConfig;
-using ::ndk::SpAIBinder;
 
 #ifdef LOG_TAG
 #undef LOG_TAG
@@ -171,58 +164,29 @@ int32_t PerfLockCaller::queryDisplayFps() {
     static constexpr int32_t BASE_FPS = 60;
     static constexpr const char *CURRENT_FPS_FILE = "/data/vendor/perfd/current_fps";
 
-    // --- Primary path: read file maintained by QCOM perf-hal-service ---
+    // Primary path: file maintained by QCOM perf-hal-service
     FILE *fpsFile = fopen(CURRENT_FPS_FILE, "r");
     if (fpsFile != nullptr) {
         float fps = BASE_FPS;
         int ret = fscanf(fpsFile, "%f", &fps);
         fclose(fpsFile);
-
         if (ret == 1 && fps >= 1.0f) {
             int32_t ifps = static_cast<int32_t>(fps + 0.5f);
-            TLOGD("queryDisplayFps: read from file -> %d Hz", ifps);
+            TLOGD("queryDisplayFps: file -> %d Hz", ifps);
             return ifps;
         }
-        TLOGW("queryDisplayFps: file read invalid value %.1f, fallback to AIDL", fps);
+        TLOGW("queryDisplayFps: invalid file value, fallback to AIDL");
     } else {
         TLOGW("queryDisplayFps: cannot open %s, fallback to AIDL", CURRENT_FPS_FILE);
     }
 
-    // --- Fallback path: query IDisplayConfig AIDL ---
-    static constexpr int64_t NSEC_TO_SEC = 1000000000LL;
-
-    SpAIBinder binder(
-        AServiceManager_checkService("vendor.qti.hardware.display.config.IDisplayConfig/default"));
-    if (binder.get() == nullptr) {
-        TLOGW("queryDisplayFps: IDisplayConfig not available, using BASE_FPS=%d", BASE_FPS);
-        return BASE_FPS;
-    }
-
-    auto displayConfig = IDisplayConfig::fromBinder(binder);
-    if (displayConfig == nullptr) {
-        TLOGW("queryDisplayFps: fromBinder failed, using BASE_FPS=%d", BASE_FPS);
-        return BASE_FPS;
-    }
-
-    int32_t dpyIndex = -1;
-    displayConfig->getActiveConfig(DisplayType::PRIMARY, &dpyIndex);
-    if (dpyIndex < 0) {
-        TLOGW("queryDisplayFps: getActiveConfig failed, using BASE_FPS=%d", BASE_FPS);
-        return BASE_FPS;
-    }
-
-    Attributes dpyAttr;
-    displayConfig->getDisplayAttributes(dpyIndex, DisplayType::PRIMARY, &dpyAttr);
-    if (dpyAttr.vsyncPeriod <= 0) {
-        TLOGW("queryDisplayFps: invalid vsyncPeriod=%d, using BASE_FPS=%d", dpyAttr.vsyncPeriod,
-              BASE_FPS);
-        return BASE_FPS;
-    }
-
-    int32_t fps = static_cast<int32_t>(
-        static_cast<float>(NSEC_TO_SEC) / static_cast<float>(dpyAttr.vsyncPeriod) + 0.5f);
-    TLOGI("queryDisplayFps: AIDL vsyncPeriod=%d ns -> %d Hz", dpyAttr.vsyncPeriod, fps);
-    return fps;
+    // Fallback: QCOM IDisplayConfig AIDL
+    // Implementation in PerfLockCallerQcomDisplay.cpp (QCOM-only compilation unit)
+#ifdef PERFENGINE_PLATFORM_QCOM
+    return queryDisplayFpsViaAidl();
+#else
+    return BASE_FPS;
+#endif
 }
 
 bool PerfLockCaller::initMtk() {

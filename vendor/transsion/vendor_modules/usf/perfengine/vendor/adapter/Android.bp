@@ -2,12 +2,44 @@ package {
     default_applicable_licenses: ["vendor_transsion_license"],
 }
 
+soong_config_string_variable {
+    name: "platform",
+    values: ["qcom", "mtk", "unisoc", "unknown"],
+}
+
+soong_config_module_type {
+    name: "perfengine_cc_defaults",
+    module_type: "cc_defaults",
+    config_namespace: "transsion_perfengine",
+    variables: ["platform"],
+    properties: ["srcs", "shared_libs", "cflags"],
+}
+
+perfengine_cc_defaults {
+    name: "perfengine_platform_defaults",
+    soong_config_variables: {
+        platform: {
+            qcom: {
+                srcs: ["PerfLockCallerQcomDisplay.cpp"],
+                shared_libs: ["vendor.qti.hardware.display.config-V5-ndk"],
+                cflags: ["-DPERFENGINE_PLATFORM_QCOM"],
+            },
+            mtk: {
+                cflags: ["-DPERFENGINE_PLATFORM_MTK"],
+            },
+            unisoc: {
+                cflags: ["-DPERFENGINE_PLATFORM_UNISOC"],
+            },
+        },
+    },
+}
 // ==================== libperfengine-adapter.so ====================
 // Vendor AIDL 服务端实现
 
 cc_library_shared {
     name: "libperfengine-adapter",
     vendor: true,
+    defaults: ["perfengine_platform_defaults"],
 
     srcs: [
         "PerfLockCaller.cpp",
@@ -30,7 +62,6 @@ cc_library_shared {
         "libutils",
         "libxml2",
         "vendor.transsion.hardware.perfengine-V1-ndk",
-        "vendor.qti.hardware.display.config-V5-ndk",
     ],
 
     cflags: [

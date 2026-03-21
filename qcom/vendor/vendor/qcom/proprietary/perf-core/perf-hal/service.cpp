@@ -91,23 +91,6 @@ int main() {
     }
 
     CHECK_EQ(status, STATUS_OK);
-    // Temporarily elevate current thread to SCHED_FIFO before starting
-    // the thread pool. Threads spawned by startThreadPool() inherit the
-    // caller's scheduler policy — mirrors main_surfaceflinger.cpp.
-    int origPolicy = sched_getscheduler(0);
-    struct sched_param origParam;
-    bool schedSaved = (sched_getparam(0, &origParam) == 0);
-    bool schedElevated = false;
-    if (schedSaved) {
-        struct sched_param rtParam = {};
-        rtParam.sched_priority = sched_get_priority_min(SCHED_FIFO); // = 1
-        if (sched_setscheduler(0, SCHED_FIFO, &rtParam) == 0) {
-            schedElevated = true;
-            QLOGI(LOG_TAG, "Elevated to SCHED_FIFO prio=1 for thread pool spawn");
-        } else {
-            ALOGW("Failed to elevate scheduler: %s", strerror(errno));
-        }
-    }
 
     ABinderProcess_startThreadPool();
     QLOGE(LOG_TAG, "Registered IPerf HAL service success!");
@@ -117,14 +100,7 @@ int main() {
     loadPerfEngine();
     // add for PerfEngine by chao.xu5 end.
     ABinderProcess_joinThreadPool();
-    // Restore current thread immediately after spawn
-    if (schedElevated) {
-        if (sched_setscheduler(0, origPolicy, &origParam) == 0) {
-            QLOGI(LOG_TAG, "Restored original scheduler after thread pool spawn");
-        } else {
-            ALOGW("Failed to restore scheduler: %s", strerror(errno));
-        }
-    }
+
 
     // add for cloud control by chao.xu5 at Jul 31th, 2025 start.
     UnregistCloudctlListener();
