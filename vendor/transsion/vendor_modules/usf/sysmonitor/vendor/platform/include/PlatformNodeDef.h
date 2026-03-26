@@ -27,7 +27,7 @@
  */
 
 #if defined(SMON_PLATFORM_QCOM)
-#include "platform/qcom/QcomNodeDef.h"
+#include "qcom/QcomNodeDef.h"
 
 // Alias generic names → QCOM-specific arrays so collector code
 // can reference platform-agnostic symbols.
@@ -45,7 +45,7 @@
 #define CHARGER_ONLINE_CANDIDATES QCOM_CHARGER_ONLINE_CANDIDATES
 
 #elif defined(SMON_PLATFORM_MTK)
-#include "platform/mtk/MtkNodeDef.h"
+#include "mtk/MtkNodeDef.h"
 
 #define GPU_UTIL_CANDIDATES MTK_GPU_UTIL_CANDIDATES
 #define GPU_FREQ_CANDIDATES MTK_GPU_FREQ_CANDIDATES
@@ -61,7 +61,7 @@
 #define CHARGER_ONLINE_CANDIDATES MTK_CHARGER_ONLINE_CANDIDATES
 
 #elif defined(SMON_PLATFORM_UNISOC)
-#include "platform/unisoc/UnisocNodeDef.h"
+#include "unisoc/UnisocNodeDef.h"
 
 #define GPU_UTIL_CANDIDATES UNISOC_GPU_UTIL_CANDIDATES
 #define GPU_FREQ_CANDIDATES UNISOC_GPU_FREQ_CANDIDATES

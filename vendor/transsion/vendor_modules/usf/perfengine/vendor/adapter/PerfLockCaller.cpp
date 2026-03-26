@@ -148,6 +148,9 @@ bool PerfLockCaller::initQcom() {
     return true;
 }
 
+#ifdef PERFENGINE_PLATFORM_QCOM
+int32_t queryDisplayFpsViaAidl();
+#endif
 /**
  * Query current display refresh rate (QCOM only).
  *

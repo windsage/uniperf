@@ -35,7 +35,6 @@ namespace sysmonitor {
 
 class CollectorManager {
 public:
-    explicit CollectorManager(MetricStore *store);
     explicit CollectorManager(MetricStore *store, PublishFn externalHook = nullptr);
     ~CollectorManager();
 

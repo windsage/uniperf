@@ -4,9 +4,15 @@
 
 #include <sched.h>
 #include <sys/resource.h>
+#include <sys/syscall.h>
 #include <time.h>
+#include <unistd.h>
 
 #include <cstring>
+
+#ifndef gettid
+#define gettid() syscall(SYS_gettid)
+#endif
 
 #include "NodeProbe.h"
 #include "SysMonLog.h"
@@ -18,10 +24,6 @@ namespace sysmonitor {
 // ---------------------------------------------------------------------------
 // Constructor / Destructor
 // ---------------------------------------------------------------------------
-
-CollectorManager::CollectorManager(MetricStore *store) : mStore(store) {
-    SMLOGD("CollectorManager created");
-}
 
 CollectorManager::CollectorManager(MetricStore *store, PublishFn hook)
     : mStore(store), mExternalHook(std::move(hook)) {}
@@ -112,7 +114,7 @@ void CollectorManager::stop() {
 // ---------------------------------------------------------------------------
 
 void CollectorManager::samplingLoop() {
-    SMLOGI("samplingLoop: enter, tid=%d", ::gettid());
+    SMLOGI("samplingLoop: enter, tid=%d", static_cast<int>(gettid()));
 
     // Lower the thread priority slightly to avoid competing with UI threads.
     // SCHED_BATCH: CPU-bound work, yields to interactive threads.

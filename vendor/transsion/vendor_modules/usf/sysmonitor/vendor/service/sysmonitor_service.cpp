@@ -84,7 +84,7 @@ int main(int /*argc*/, char * /*argv*/[]) {
     SMLOGI("sysmonitor-service ready, joining thread pool");
 
     // Block until the service is shut down
-    ABinderProcess_joinRpcThreadpool();
+    ABinderProcess_joinThreadPool();
 
     // Cleanup (reached only via explicit exit path)
     sysmon->stop();

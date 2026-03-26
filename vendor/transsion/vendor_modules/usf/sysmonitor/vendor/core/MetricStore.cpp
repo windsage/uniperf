@@ -2,12 +2,16 @@
 
 #include "MetricStore.h"
 
-#include <android/sharedmem.h>
+#include <fcntl.h>
+#include <linux/ashmem.h>
+#include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <time.h>
 #include <unistd.h>
 
+#include <cerrno>
 #include <cstring>
+#include <new>
 
 #include "SysMonLog.h"
 
@@ -48,11 +52,24 @@ bool MetricStore::createShm() {
         return true;
     }
 
-    // ASharedMemory_create() is available since API 26 (Android 8.0).
-    // Returns an fd backed by /dev/ashmem (kernel) or memfd (newer kernels).
-    mShmFd = ASharedMemory_create("sysmonitor_metrics", kShmSize);
+    mShmFd = ::open("/dev/ashmem", O_RDWR);
     if (mShmFd < 0) {
-        SMLOGE("ASharedMemory_create failed: errno=%d (%s)", errno, strerror(errno));
+        SMLOGE("open /dev/ashmem failed: errno=%d (%s)", errno, strerror(errno));
+        return false;
+    }
+
+    char name[] = "sysmonitor_metrics";
+    if (::ioctl(mShmFd, ASHMEM_SET_NAME, name) < 0) {
+        SMLOGE("ASHMEM_SET_NAME failed: errno=%d", errno);
+        ::close(mShmFd);
+        mShmFd = -1;
+        return false;
+    }
+
+    if (::ioctl(mShmFd, ASHMEM_SET_SIZE, kShmSize) < 0) {
+        SMLOGE("ASHMEM_SET_SIZE failed: errno=%d", errno);
+        ::close(mShmFd);
+        mShmFd = -1;
         return false;
     }
     SMLOGD("ashmem created: fd=%d size=%zu bytes", mShmFd, kShmSize);
@@ -119,13 +136,6 @@ bool MetricStore::attachShm(int fd) {
     }
     if (fd < 0) {
         SMLOGE("attachShm: invalid fd=%d", fd);
-        return false;
-    }
-
-    // Verify reported size matches expectation
-    size_t regionSize = ASharedMemory_getSize(fd);
-    if (regionSize < kShmSize) {
-        SMLOGE("attachShm: region too small: got %zu, need %zu", regionSize, kShmSize);
         return false;
     }
 

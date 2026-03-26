@@ -129,3 +129,16 @@ void javaBridgePush(int metricIdInt, int64_t value) {
 }    // namespace sysmonitor
 }    // namespace transsion
 }    // namespace vendor
+
+static void *g_JavaBridgeInstance = nullptr;
+
+extern "C" void javaBridgeSetInstance(void *inst) {
+    g_JavaBridgeInstance = inst;
+
+    using namespace vendor::transsion::sysmonitor;
+    JavaBridgeCollector::setInstance(static_cast<JavaBridgeCollector *>(inst));
+}
+
+extern "C" void *javaBridgeGetInstance() {
+    return g_JavaBridgeInstance;
+}

@@ -51,6 +51,7 @@ using IMetricListener = ::aidl::vendor::transsion::hardware::sysmonitor::IMetric
 
 class SysMonitor : public BnSysMonitor {
 public:
+    SysMonitor();
     ~SysMonitor() override;
 
     /**
@@ -93,11 +94,10 @@ public:
 
     ::ndk::ScopedAStatus readMetric(int32_t metricId, int64_t *out) override;
     ::ndk::ScopedAStatus pushMetric(int32_t metricId, int64_t value) override;
-    ::ndk::ScopedAStatus dump(std::string *out) override;
+    ::ndk::ScopedAStatus getDebugInfo(std::string *out) override;
+    binder_status_t dump(int fd, const char **args, uint32_t numArgs) override;
 
 private:
-    SysMonitor();
-
     // Called by CollectorManager's PublishFn after each MetricStore::publish()
     // to trigger DispatchManager threshold checks.
     void onMetricPublished(MetricId id, int64_t value, int64_t timestampNs);

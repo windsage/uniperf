@@ -1,14 +1,16 @@
 package com.transsion.sysmonitor.collectors;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.transsion.sysmonitor.SysMonitorBridge;
-
 /**
  * WifiSignalCollector — monitors Wi-Fi RSSI via WifiManager broadcast.
  *
@@ -18,55 +20,65 @@ import com.transsion.sysmonitor.SysMonitorBridge;
  */
 public class WifiSignalCollector {
     private static final String TAG = "SMon-Wifi";
+    private static final int POLL_INTERVAL_MS = 2000;
 
-    private final Context mContext;
-    private final WifiManager mWifiManager;
-    private boolean mRegistered = false;
+    private final WifiManager mWifiMgr;
+    private final ConnectivityManager mConnectivityMgr;
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
+    private boolean mRunning = false;
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private final Runnable mPollTask = new Runnable() {
         @Override
-        public void onReceive(Context ctx, Intent intent) {
-            if (!WifiManager.RSSI_CHANGED_ACTION.equals(intent.getAction()))
+        public void run() {
+            if (!mRunning)
                 return;
-            int rssi = intent.getIntExtra(WifiManager.EXTRA_NEW_RSSI, Integer.MIN_VALUE);
-            if (rssi == Integer.MIN_VALUE)
-                return;
-            Log.d(TAG, "RSSI=" + rssi + " dBm");
-            SysMonitorBridge.push(SysMonitorBridge.METRIC_WIFI_RSSI, rssi);
+            sample();
+            mHandler.postDelayed(this, POLL_INTERVAL_MS);
         }
     };
 
     public WifiSignalCollector(Context context) {
-        mContext = context.getApplicationContext();
-        mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        Context appContext = context.getApplicationContext();
+        mWifiMgr = (WifiManager) appContext.getSystemService(Context.WIFI_SERVICE);
+        mConnectivityMgr =
+                (ConnectivityManager) appContext.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
-    /** Start listening. Safe to call multiple times. */
     public void start() {
-        if (mRegistered || mWifiManager == null)
+        if (mRunning)
             return;
-        IntentFilter filter = new IntentFilter(WifiManager.RSSI_CHANGED_ACTION);
-        mContext.registerReceiver(mReceiver, filter);
-        mRegistered = true;
-        // Push current RSSI immediately on start
-        int rssi = 0;
-        NetworkCapabilities nc =connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
-        if (nc != null) {
-            WifiInfo info = (WifiInfo) nc.getTransportInfo();
-            rssi = info.getRssi();
+        mRunning = true;
+        mHandler.post(mPollTask);
+        Log.i(TAG, "started");
+    }
+
+    public void stop() {
+        if (!mRunning)
+            return;
+        mRunning = false;
+        mHandler.removeCallbacks(mPollTask);
+        Log.i(TAG, "stopped");
+    }
+
+    private void sample() {
+        if (mWifiMgr == null || !mWifiMgr.isWifiEnabled()) {
+            return;
         }
-        if (rssi != Integer.MIN_VALUE) {
+
+        Network network = mConnectivityMgr.getActiveNetwork();
+        if (network == null)
+            return;
+
+        NetworkCapabilities nc = mConnectivityMgr.getNetworkCapabilities(network);
+        if (nc == null || !nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+            return;
+        }
+
+        WifiInfo info = (WifiInfo) nc.getTransportInfo();
+        if (info != null) {
+            int rssi = info.getRssi();
+            Log.d(TAG, "RSSI=" + rssi);
             SysMonitorBridge.push(SysMonitorBridge.METRIC_WIFI_RSSI, rssi);
         }
-        Log.i(TAG, "started, current RSSI=" + rssi);
-    }
-
-    /** Stop listening. */
-    public void stop() {
-        if (!mRegistered)
-            return;
-        mContext.unregisterReceiver(mReceiver);
-        mRegistered = false;
-        Log.i(TAG, "stopped");
     }
 }

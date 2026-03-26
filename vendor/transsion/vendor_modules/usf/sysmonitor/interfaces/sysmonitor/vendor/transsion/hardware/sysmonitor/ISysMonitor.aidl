@@ -100,5 +100,5 @@ interface ISysMonitor {
      *
      * @return Multi-line human-readable status string.
      */
-    @utf8InCpp String dump();
+    @utf8InCpp String getDebugInfo();
 }

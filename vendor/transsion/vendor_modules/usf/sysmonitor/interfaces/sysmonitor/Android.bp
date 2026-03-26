@@ -15,13 +15,13 @@ aidl_interface {
     stability: "vintf",
     backend: {
         cpp: {
-            enabled: false,  // Use NDK backend only
+            enabled: false, // Use NDK backend only
         },
         java: {
-            enabled: true,   // For system Java consumers (PerfEngine.jar etc.)
+            enabled: true, // For system Java consumers (PerfEngine.jar etc.)
         },
         ndk: {
-            enabled: true,   // Primary backend for vendor native code
+            enabled: true, // Primary backend for vendor native code
         },
     },
     versions_with_info: [

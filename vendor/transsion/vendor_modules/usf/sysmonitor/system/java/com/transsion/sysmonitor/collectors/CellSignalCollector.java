@@ -1,4 +1,3 @@
-package com.transsion.sysmonitor.collectors;
 
 import android.content.Context;
 import android.os.Build;
@@ -29,20 +28,19 @@ public class CellSignalCollector {
     private final Executor mExecutor = Executors.newSingleThreadExecutor();
     private boolean mListening = false;
 
-    // API 31+ callback (replaces deprecated PhoneStateListener)
-    private final TelephonyCallback mCallback = new TelephonyCallback.SignalStrengthsListener() {
+    private class SignalCallback
+            extends TelephonyCallback implements TelephonyCallback.SignalStrengthsListener {
         @Override
         public void onSignalStrengthsChanged(SignalStrength ss) {
-            if (ss == null) {
+            if (ss == null)
                 return;
-            }
-            // getLevel() returns 0-4 across all RATs (API 23+)
             int level = ss.getLevel();
             Log.d(TAG, "signal level=" + level);
             SysMonitorBridge.push(SysMonitorBridge.METRIC_CELL_SIGNAL, level);
         }
-    };
+    }
 
+    private final TelephonyCallback mCallback = new SignalCallback();
     public CellSignalCollector(Context context) {
         mTelMgr = (TelephonyManager) context.getApplicationContext().getSystemService(
                 Context.TELEPHONY_SERVICE);

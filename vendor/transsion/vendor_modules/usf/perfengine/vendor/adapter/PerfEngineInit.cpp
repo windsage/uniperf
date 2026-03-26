@@ -1,6 +1,6 @@
+#include <android/binder_ibinder_platform.h>
 #include <android/binder_manager.h>
 #include <android/binder_process.h>
-#include <android/binder_ibinder_platform.h>
 
 #include "ServiceBridge.h"
 #include "TranLog.h"
@@ -60,15 +60,15 @@ extern "C" bool PerfEngine_Initialize() {
     }
 
     ndk::SpAIBinder serviceBinder = gServiceBridge->asBinder();
-    if (serviceBinder == nullptr) {
+    if (serviceBinder.get() == nullptr) {
         TLOGE("serviceBinder is null");
         return false;
     }
 
-    // PerfEngine 服务节点调度策略 SCHED_FIFO 
+    // PerfEngine 服务节点调度策略 SCHED_FIFO
     AIBinder_setMinSchedulerPolicy(serviceBinder.get(), SCHED_FIFO, 1);
     AIBinder_setInheritRt(serviceBinder.get(), true);
-    
+
     binder_status_t status = AServiceManager_addService(serviceBinder.get(), serviceName.c_str());
 
     if (status != STATUS_OK) {

@@ -29,12 +29,15 @@ class JavaBridgeCollector;
 }    // namespace transsion
 }    // namespace vendor
 
-#include <android/sharedmem.h>
+#include <fcntl.h>
 #include <inttypes.h>
+#include <linux/ashmem.h>
+#include <sys/ioctl.h>
 
 #include <cstdio>
 #include <cstring>
 
+extern "C" void javaBridgeSetInstance(void *inst);
 namespace vendor {
 namespace transsion {
 namespace sysmonitor {
@@ -56,8 +59,7 @@ SysMonitor::~SysMonitor() {
 }
 
 std::shared_ptr<SysMonitor> SysMonitor::create() {
-    // Can't use make_shared — ctor is private
-    return std::shared_ptr<SysMonitor>(new SysMonitor());
+    return ndk::SharedRefBase::make<SysMonitor>();
 }
 
 // ---------------------------------------------------------------------------
@@ -117,7 +119,7 @@ bool SysMonitor::init() {
     mCollectors = std::make_unique<CollectorManager>(store);
 
     // 4. Instantiate all collectors
-    auto *javaBridge = static_cast<JavaBridgeCollector *>(createJavaBridgeCollector(store));
+    ICollector *javaBridge = createJavaBridgeCollector(store);
 
     mCollectorInstances = {
         createCpuCollector(),     createMemCollector(),   createGpuCollector(),
@@ -134,7 +136,6 @@ bool SysMonitor::init() {
     // Since JavaBridgeCollector is defined only in .cpp, call via the extern
     // C-linkage wrapper exposed at the bottom of JavaBridgeCollector.cpp.
     // That wrapper (javaBridgeSetInstance) is declared here:
-    extern void javaBridgeSetInstance(void *inst);
     javaBridgeSetInstance(javaBridge);
 
     // 6. Run NodeProbe + init all collectors
@@ -249,7 +250,7 @@ void SysMonitor::stop() {
 // AIDL: dump
 // ---------------------------------------------------------------------------
 
-::ndk::ScopedAStatus SysMonitor::dump(std::string *out) {
+::ndk::ScopedAStatus SysMonitor::getDebugInfo(std::string *out) {
     char buf[4096];
     int pos = 0;
 
@@ -296,6 +297,12 @@ void SysMonitor::stop() {
     return ::ndk::ScopedAStatus::ok();
 }
 
+binder_status_t SysMonitor::dump(int fd, const char ** /*args*/, uint32_t /*numArgs*/) {
+    std::string info;
+    getDebugInfo(&info);
+    ::write(fd, info.c_str(), info.size());
+    return STATUS_OK;
+}
 }    // namespace sysmonitor
 }    // namespace transsion
 }    // namespace vendor

@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <utils/Trace.h>
 
-#include <atomic>
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
