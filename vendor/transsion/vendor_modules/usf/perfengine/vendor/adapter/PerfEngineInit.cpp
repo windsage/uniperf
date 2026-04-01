@@ -3,7 +3,7 @@
 #include <android/binder_process.h>
 
 #include "ServiceBridge.h"
-#include "TranLog.h"
+#include "perf-utils/TranLog.h"
 
 #ifdef LOG_TAG
 #undef LOG_TAG

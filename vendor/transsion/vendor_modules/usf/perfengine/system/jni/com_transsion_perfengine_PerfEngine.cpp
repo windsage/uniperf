@@ -8,10 +8,11 @@
 
 #include <android_runtime/AndroidRuntime.h>
 #include <jni.h>
-#include <memory>
 #include <nativehelper/JNIHelp.h>
 #include <utils/Log.h>
 #include <utils/Mutex.h>
+
+#include <memory>
 
 // Vendor AIDL 接口
 #include <aidl/vendor/transsion/hardware/perfengine/IEventListener.h>
@@ -355,10 +356,12 @@ static void nativeUnregisterEventListener(JNIEnv *env, jclass clazz, jobject lis
 
 // ==================== JNI 方法注册 ====================
 static const JNINativeMethod gMethods[] = {
-        {"nativeNotifyEventStart", "(IJI[ILjava/lang/String;)V", (void *)nativeNotifyEventStart},
-        {"nativeNotifyEventEnd", "(IJLjava/lang/String;)V", (void *)nativeNotifyEventEnd},
-        {"nativeRegisterEventListener", "(Landroid/os/IBinder;[I)V", (void *)nativeRegisterEventListener},
-        {"nativeUnregisterEventListener", "(Landroid/os/IBinder;)V",(void *)nativeUnregisterEventListener},
+    {"nativeNotifyEventStart", "(IJI[ILjava/lang/String;)V", (void *)nativeNotifyEventStart},
+    {"nativeNotifyEventEnd", "(IJLjava/lang/String;)V", (void *)nativeNotifyEventEnd},
+    {"nativeRegisterEventListener", "(Landroid/os/IBinder;[I)V",
+     (void *)nativeRegisterEventListener},
+    {"nativeUnregisterEventListener", "(Landroid/os/IBinder;)V",
+     (void *)nativeUnregisterEventListener},
 };
 
 namespace android {

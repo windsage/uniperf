@@ -63,28 +63,36 @@ public final class TranPerfEvent {
 
     private static final boolean ENABLE_PERFENGINE = true;
 
+    private static final String PERF_ENGINE_PERMISSION =
+            "com.transsion.permission.PERF_ENGINE_NOTIFY";
+
+    private static final int MY_UID = android.os.Process.myUid();
+
+    private static final boolean IS_SYSTEM_PROCESS =
+            MY_UID < android.os.Process.FIRST_APPLICATION_UID;
+
     /**
      * Get event name by ID (for debugging)
      * @hide
      */
     public static String getEventName(int eventId) {
         // 使用生成的常量
-        if (eventId == EVENT_SYS_INPUT)
+        if (eventId == EVENT_SYS_TOUCH)
             return "INPUT";
-        if (eventId == EVENT_SYS_APP_LAUNCH)
-            return "APP_LAUNCH";
-        if (eventId == EVENT_SYS_BIND_APPLICATION)
-            return "BIND_APPLICATION";
+        if (eventId == EVENT_SYS_APP_LAUNCH_CLOD)
+            return "APP_LAUNCH_CLOD";
+        if (eventId == EVENT_SYS_APP_LAUNCH_WARM)
+            return "APP_LAUNCH_WARM";
         if (eventId == EVENT_SYS_ACTIVITY_SWITCH)
             return "ACTIVITY_SWITCH";
-        if (eventId == EVENT_SYS_SCROLL)
-            return "SCROLL";
         if (eventId == EVENT_SYS_FLING)
             return "FLING";
-        if (eventId == EVENT_SYS_ANIMATION)
-            return "ANIMATION";
-        if (eventId == EVENT_SYS_CAMERA_OPEN)
-            return "CAMERA_OPEN";
+        if (eventId == EVENT_SYS_SCROLL)
+            return "SCROLL";
+        if (eventId == EVENT_SYS_AMIN_TRANSITION)
+            return "AMIN_TRANSITION";
+        if (eventId == EVENT_SYS_CAMERA_LAUNCH)
+            return "CAMERA_LAUNCH";
         // ... 其他事件 ...
         return "UNKNOWN(0x" + Integer.toHexString(eventId) + ")";
     }
@@ -435,6 +443,15 @@ public final class TranPerfEvent {
             return;
         }
 
+        if (!checkCallerPermission()) {
+            if (DEBUG) {
+                Log.w(TAG,
+                        "notifyEventStart denied: no permission, uid=" + android.os.Process.myUid()
+                                + " eventId=0x" + Integer.toHexString(eventId));
+            }
+            return;
+        }
+
         // Record receive timestamp for latency monitoring
         long receiveTimestamp = SystemClock.elapsedRealtimeNanos();
         long latency = receiveTimestamp - timestamp;
@@ -503,6 +520,14 @@ public final class TranPerfEvent {
         // Check aconfig flag
         // if (!Flags.enablePerfengine()) {
         if (!ENABLE_PERFENGINE) {
+            return;
+        }
+
+        if (!checkCallerPermission()) {
+            if (DEBUG) {
+                Log.w(TAG, "notifyEventEnd denied: no permission, uid=" + android.os.Process.myUid()
+                                   + " eventId=0x" + Integer.toHexString(eventId));
+            }
             return;
         }
 
@@ -592,5 +617,39 @@ public final class TranPerfEvent {
     // Private constructor to prevent instantiation
     private TranPerfEvent() {
         throw new AssertionError("TranPerfEvent cannot be instantiated");
+    }
+
+    /**
+     * Check whether the calling process has PERF_ENGINE_NOTIFY permission.
+     *
+     * Uses ActivityThread.currentApplication() to get Context without
+     * requiring explicit Context injection, since TranPerfEvent is a
+     * static utility class living in the framework overlay.
+     *
+     * Fast path: uid < AID_APP_START (10000) means a system process
+     * (system_server, radio, etc.) — always trusted, skip PackageManager.
+     *
+     * @return true if caller is permitted
+     */
+    private static boolean checkCallerPermission() {
+        if (IS_SYSTEM_PROCESS) {
+            return true;
+        }
+
+        // Slow path: app process — check permission via Context
+        try {
+            android.app.Application app = android.app.ActivityThread.currentApplication();
+            if (app == null) {
+                // Cannot determine context, deny by default
+                Log.w(TAG,
+                        "checkCallerPermission: no Application context, denying uid=" + MY_UID);
+                return false;
+            }
+            int result = app.checkCallingOrSelfPermission(PERF_ENGINE_PERMISSION);
+            return result == android.content.pm.PackageManager.PERMISSION_GRANTED;
+        } catch (Exception e) {
+            Log.e(TAG, "checkCallerPermission: exception, denying", e);
+            return false;
+        }
     }
 }

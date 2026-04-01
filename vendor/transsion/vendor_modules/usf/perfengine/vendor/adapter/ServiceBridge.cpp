@@ -1,17 +1,19 @@
 #include "ServiceBridge.h"
 
 #define ATRACE_TAG (ATRACE_TAG_POWER | ATRACE_TAG_HAL)
+#include <android/binder_ibinder.h>
 #include <sched.h>
 #include <sys/prctl.h>
 #include <unistd.h>
-#include <utils/Trace.h>
 
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
 
+#include "CallerValidator.h"
 #include "PerfLockCaller.h"
-#include "TranLog.h"
+#include "perf-utils/TranLog.h"
+#include "perf-utils/TranTrace.h"
 
 #ifdef LOG_TAG
 #undef LOG_TAG
@@ -24,7 +26,6 @@ namespace perfengine {
 // ==================== Constructor / Destructor ====================
 
 ServiceBridge::ServiceBridge() {
-    ATRACE_CALL();
     TLOGI("ServiceBridge initializing...");
 
     // 创建性能锁调用器
@@ -87,9 +88,11 @@ void ServiceBridge::workerLoop(int index) {
     param.sched_priority = 1;
     int res = sched_setscheduler(0, SCHED_FIFO, &param);
     if (res == 0) {
-        TLOGI("Worker thread '%s' started, tid=%d elevated to SCHED_FIFO successfully!", name, gettid());
+        TLOGI("Worker thread '%s' started, tid=%d elevated to SCHED_FIFO successfully!", name,
+              gettid());
     } else {
-        TLOGW("sched_setscheduler failed for worker thread '%s',tid=%d , errno=%d, error=%s", name, gettid(), errno, strerror(errno));
+        TLOGW("sched_setscheduler failed for worker thread '%s',tid=%d , errno=%d, error=%s", name,
+              gettid(), errno, strerror(errno));
     }
 
     TLOGI("Worker thread '%s' tid=%d started!", name, gettid());
@@ -109,6 +112,7 @@ void ServiceBridge::workerLoop(int index) {
 
             task = std::move(mTaskQueue.front());
             mTaskQueue.pop();
+            TTRACE_INT(TraceLevel::COARSE, LOG_TAG ":TaskQueue", (int64_t)mTaskQueue.size());
         }
 
         // Execute task outside the lock
@@ -126,6 +130,7 @@ void ServiceBridge::enqueueTask(EventTask task) {
     {
         std::lock_guard<std::mutex> lock(mQueueMutex);
         mTaskQueue.push(std::move(task));
+        TTRACE_INT(TraceLevel::COARSE, LOG_TAG ":TaskQueue", (int64_t)mTaskQueue.size());
     }
     mQueueCv.notify_one();
 }
@@ -133,13 +138,12 @@ void ServiceBridge::enqueueTask(EventTask task) {
 // ==================== Task Processing (runs on worker threads) ====================
 
 void ServiceBridge::processEventStart(const EventTask &task) {
-    char buf[64];
-    snprintf(buf, sizeof(buf), "ServiceBridge::processEventStart eventId=0x%d", task.eventId);
-    ATRACE_BEGIN(buf);
+    // Slice length = worker time spent handling this EventStart (enqueue ~ done).
+    TTRACE_SCOPED(TraceLevel::VERBOSE, LOG_TAG ":processEventStart id=0x%x ts=%lld",
+                  static_cast<unsigned>(task.eventId), static_cast<long long>(task.timestamp));
 
     if (!mPerfLockCaller) {
         TLOGE("PerfLockCaller not initialized");
-        ATRACE_END();
         return;
     }
 
@@ -157,7 +161,6 @@ void ServiceBridge::processEventStart(const EventTask &task) {
     int32_t platformHandle = mPerfLockCaller->acquirePerfLock(ctx);
     if (platformHandle < 0) {
         TLOGE("Failed to acquire perf lock for eventId=%d", task.eventId);
-        ATRACE_END();
         return;
     }
 
@@ -178,17 +181,15 @@ void ServiceBridge::processEventStart(const EventTask &task) {
     }
 
     TLOGI("Event %d started, handle=%d", task.eventId, platformHandle);
-    ATRACE_END();
 }
 
 void ServiceBridge::processEventEnd(const EventTask &task) {
-    char buf[64];
-    snprintf(buf, sizeof(buf), "ServiceBridge::processEventEnd eventId=0x%d", task.eventId);
-    ATRACE_BEGIN(buf);
+    // Slice length = worker time spent handling this EventEnd (enqueue ~ done).
+    TTRACE_SCOPED(TraceLevel::VERBOSE, LOG_TAG ":processEventEnd id=0x%x ts=%lld",
+                  static_cast<unsigned>(task.eventId), static_cast<long long>(task.timestamp));
 
     if (!mPerfLockCaller) {
         TLOGE("PerfLockCaller not initialized");
-        ATRACE_END();
         return;
     }
 
@@ -205,7 +206,6 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
         auto it = mActiveEvents.find(task.eventId);
         if (it == mActiveEvents.end()) {
             TLOGW("Event %d not found in active events", task.eventId);
-            ATRACE_END();
             return;
         }
         mPerfLockCaller->releasePerfLock(it->second.platformHandle);
@@ -215,8 +215,6 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
               (long long)elapsedMs);
         mActiveEvents.erase(it);
     }
-
-    ATRACE_END();
 }
 
 // ==================== Event Notification Implementation ====================
@@ -224,9 +222,9 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
 ::ndk::ScopedAStatus ServiceBridge::notifyEventStart(
     int32_t eventId, int64_t timestamp, int32_t numParams, const std::vector<int32_t> &intParams,
     const std::optional<std::string> &extraStrings) {
-    char buf[64];
-    snprintf(buf, sizeof(buf), "ServiceBridge::notifyEventStart 0x%x", eventId);
-    ATRACE_NAME(buf);
+
+    TTRACE_SCOPED(TraceLevel::COARSE, LOG_TAG ":notifyEventStart id=0x%x ts=%lld",
+                  static_cast<unsigned>(eventId), static_cast<long long>(timestamp));
 
     if (!mPerfLockCaller) {
         TLOGE("PerfLockCaller not initialized");
@@ -237,6 +235,25 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
         TLOGE("Param count mismatch: expected=%d actual=%zu", numParams, intParams.size());
         return ::ndk::ScopedAStatus::ok();
     }
+
+    const uid_t callerUid = AIBinder_getCallingUid();
+#if !PERFENGINE_PRODUCTION
+    const pid_t callerPid = AIBinder_getCallingPid();
+#endif
+
+    if (!CallerValidator::isEventAllowed(callerUid, eventId)) {
+#if !PERFENGINE_PRODUCTION
+        TLOGW("notifyEventStart DENIED: uid=%u pid=%d eventId=0x%x", callerUid, callerPid, eventId);
+#else
+        TLOGW("notifyEventStart DENIED: uid=%u eventId=0x%x", callerUid, eventId);
+#endif
+        return ::ndk::ScopedAStatus::ok();
+    }
+#if !PERFENGINE_PRODUCTION
+    TLOGI("notifyEventStart: uid=%u pid=%d eventId=0x%x", callerUid, callerPid, eventId);
+#else
+    TLOGI("notifyEventStart: uid=%u eventId=0x%x", callerUid, eventId);
+#endif
 
     EventTask task;
     task.type = EventTask::Type::START;
@@ -253,14 +270,34 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
 
 ::ndk::ScopedAStatus ServiceBridge::notifyEventEnd(int32_t eventId, int64_t timestamp,
                                                    const std::optional<std::string> &extraStrings) {
-    char buf[64];
-    snprintf(buf, sizeof(buf), "ServiceBridge::notifyEventEnd 0x%x", eventId);
-    ATRACE_NAME(buf);
+
+    TTRACE_SCOPED(TraceLevel::COARSE, LOG_TAG ":notifyEventEnd id=0x%x ts=%lld",
+                  static_cast<unsigned>(eventId), static_cast<long long>(timestamp));
 
     if (!mPerfLockCaller) {
         TLOGE("PerfLockCaller not initialized");
         return ::ndk::ScopedAStatus::ok();
     }
+
+    const uid_t callerUid = AIBinder_getCallingUid();
+#if !PERFENGINE_PRODUCTION
+    const pid_t callerPid = AIBinder_getCallingPid();
+#endif
+    if (!CallerValidator::isEventAllowed(callerUid, eventId)) {
+#if !PERFENGINE_PRODUCTION
+        TLOGW("notifyEventEnd DENIED: uid=%u pid=%d eventId=0x%x", callerUid, callerPid, eventId);
+#else
+        TLOGW("notifyEventEnd DENIED: uid=%u eventId=0x%x", callerUid, eventId);
+
+#endif
+        return ::ndk::ScopedAStatus::ok();
+    }
+
+#if !PERFENGINE_PRODUCTION
+    TLOGI("notifyEventEnd: uid=%u pid=%d eventId=0x%x", callerUid, callerPid, eventId);
+#else
+    TLOGI("notifyEventEnd: uid=%u eventId=0x%x", callerUid, eventId);
+#endif
 
     EventTask task;
     task.type = EventTask::Type::END;
@@ -277,7 +314,7 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
 
 ::ndk::ScopedAStatus ServiceBridge::registerEventListener(
     const std::shared_ptr<IEventListener> &listener, const std::vector<int32_t> &eventFilter) {
-    ATRACE_NAME("ServiceBridge::registerEventListener");
+    TTRACE_SCOPED(TraceLevel::COARSE, LOG_TAG ":registerListener");
 
     if (!listener) {
         TLOGE("Null listener");
@@ -321,7 +358,7 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
 
 ::ndk::ScopedAStatus ServiceBridge::unregisterEventListener(
     const std::shared_ptr<IEventListener> &listener) {
-    ATRACE_NAME("ServiceBridge::unregisterEventListener");
+    TTRACE_SCOPED(TraceLevel::COARSE, LOG_TAG ":unregisterListener");
 
     if (!listener) {
         TLOGE("Null listener");

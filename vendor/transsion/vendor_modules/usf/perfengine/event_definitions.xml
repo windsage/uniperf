@@ -47,156 +47,396 @@
     <SystemEvents>
 
         <Event id="0x00001"
-               name="EVENT_SYS_INPUT"
-               description="Input event (touch/key) detected"
-               hook="InputDispatcher.cpp"
-               priority="10">
-            <intParams>
-                <Param index="0" name="inputType" type="int"
-                       required="false"
-                       description="Input device type: 0=touch, 1=key, 2=stylus"/>
-            </intParams>
-        </Event>
+               name="EVENT_SYS_PROCESS_CREATE"
+               description="Process creation"
+               hook="ActivityManagerService.java"
+               priority="8"/>
 
         <Event id="0x00002"
-               name="EVENT_SYS_APP_LAUNCH"
-               description="Application launch started"
+               name="EVENT_SYS_APP_LAUNCH_CLOD"
+               description="cold start"
                hook="ActivityTaskManagerService.java"
-               priority="8">
-            <intParams>
-                <Param index="0" name="launchType" type="int"
-                       required="false"
-                       description="Launch type: 0=cold start, 1=warm start, 2=hot start"/>
-            </intParams>
-            <stringParams>
+               priority="8"/>
+              <stringParams>
                 <Param index="0" name="packageName" type="String"
                        required="false"
                        description="Target package name, e.g. com.android.settings"/>
                 <Param index="1" name="activityName" type="String"
                        required="false"
                        description="Target activity class name, e.g. .MainActivity"/>
-            </stringParams>
-        </Event>
+              </stringParams>
 
         <Event id="0x00003"
-               name="EVENT_SYS_BIND_APPLICATION"
-               description="Application bind (process created)"
-               hook="ActivityThread.java:handleBindApplication()"
-               priority="8">
-            <stringParams>
+               name="EVENT_SYS_APP_LAUNCH_WARM"
+               description="warm start"
+               hook="ActivityTaskManagerService.java"
+               priority="8"/>
+              <stringParams>
                 <Param index="0" name="packageName" type="String"
                        required="false"
-                       description="Package being bound, e.g. com.android.settings"/>
-            </stringParams>
-        </Event>
-
-        <Event id="0x00004"
-               name="EVENT_SYS_ACTIVITY_SWITCH"
-               description="Activity switch/resume"
-               hook="ActivityRecord.java"
-               priority="7">
-            <intParams>
-                <Param index="0" name="transitType" type="int"
-                       required="false"
-                       description="Transition type: 0=resume, 1=new task, 2=task switch"/>
-            </intParams>
-            <stringParams>
-                <Param index="0" name="packageName" type="String"
-                       required="false"
-                       description="Target package name"/>
+                       description="Target package name, e.g. com.android.settings"/>
                 <Param index="1" name="activityName" type="String"
                        required="false"
-                       description="Target activity class name"/>
-            </stringParams>
-        </Event>
+                       description="Target activity class name, e.g. .MainActivity"/>
+              </stringParams>
+
+        <Event id="0x00004"
+               name="EVENT_SYS_APP_LAUNCH_HOT"
+               description="hot start"
+               hook="ActivityTaskManagerService.java"
+               priority="8"/>
+              <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Target package name, e.g. com.android.settings"/>
+                <Param index="1" name="activityName" type="String"
+                       required="false"
+                       description="Target activity class name, e.g. .MainActivity"/>
+              </stringParams>
 
         <Event id="0x00005"
-               name="EVENT_SYS_SCROLL"
-               description="Scroll gesture started"
-               hook="RecyclerView.java"
-               priority="5">
-            <intParams>
-                <Param index="0" name="scrollAxis" type="int"
+               name="EVENT_SYS_FIRST_DRAW"
+               description="First frame drawing"
+               hook=""
+               priority="7"/>
+
+        <Event id="0x00006"
+               name="EVENT_SYS_ACTIVITY_SWITCH"
+               description="Activity switch"
+               hook="ActivityTaskManagerService.java"
+               priority="7"/>
+              <stringParams>
+                <Param index="0" name="packageName" type="String"
                        required="false"
-                       description="Scroll axis: 0=vertical, 1=horizontal"/>
-            </intParams>
+                       description="Target package name, e.g. com.android.settings"/>
+                <Param index="1" name="activityName" type="String"
+                       required="false"
+                       description="Target activity class name, e.g. .MainActivity"/>
+              </stringParams>
+
+        <Event id="0x00007"
+               name="EVENT_SYS_TOUCH"
+               description="Screen touch"
+               hook="InputDispatcher.cpp"
+               priority="10"/>
+
+        <Event id="0x00008"
+               name="EVENT_SYS_KEY_PRESS"
+               description="Button click"
+               hook="InputDispatcher.cpp"
+               priority="10"/>
+
+        <Event id="0x00009"
+               name="EVENT_SYS_FLING"
+               description="Sliding scene"
+               hook="OverScroller.cpp"
+               priority="5"/>
             <stringParams>
                 <Param index="0" name="packageName" type="String"
                        required="false"
                        description="Package where scroll occurred"/>
             </stringParams>
-        </Event>
-
-        <Event id="0x00006"
-               name="EVENT_SYS_FLING"
-               description="Fling gesture detected"
-               hook="GestureDetector.java"
-               priority="5">
-            <intParams>
-                <Param index="0" name="flingAxis" type="int"
-                       required="false"
-                       description="Fling axis: 0=vertical, 1=horizontal"/>
-            </intParams>
-            <stringParams>
-                <Param index="0" name="packageName" type="String"
-                       required="false"
-                       description="Package where fling occurred"/>
-            </stringParams>
-        </Event>
-
-        <Event id="0x00007"
-               name="EVENT_SYS_ANIMATION"
-               description="Window animation started"
-               hook="WindowAnimator.java"
-               priority="5">
-            <intParams>
-                <Param index="0" name="animationType" type="int"
-                       required="false"
-                       description="Animation type: 0=enter, 1=exit, 2=cross-fade"/>
-            </intParams>
-        </Event>
-
-        <Event id="0x00008"
-               name="EVENT_SYS_CAMERA_OPEN"
-               description="Camera HAL open requested"
-               hook="CameraService.cpp"
-               priority="7">
-            <intParams>
-                <Param index="0" name="cameraId" type="int"
-                       required="false"
-                       description="Camera hardware ID (0=rear main, 1=front)"/>
-            </intParams>
-            <stringParams>
-                <Param index="0" name="packageName" type="String"
-                       required="false"
-                       description="Package requesting camera"/>
-            </stringParams>
-        </Event>
-
-        <Event id="0x00009"
-               name="EVENT_SYS_VIDEO_DECODE"
-               description="Video decoder initialization"
-               hook="MediaCodec.cpp"
-               priority="6">
-            <intParams>
-                <Param index="0" name="codecType" type="int"
-                       required="false"
-                       description="Codec type: 0=H264, 1=H265, 2=VP9, 3=AV1"/>
-            </intParams>
-            <stringParams>
-                <Param index="0" name="packageName" type="String"
-                       required="false"
-                       description="Package using video decoder"/>
-            </stringParams>
-        </Event>
 
         <Event id="0x0000A"
-               name="EVENT_SYS_BOOT_COMPLETED"
-               description="System boot completed broadcast"
-               hook="ActivityManagerService.java"
+               name="EVENT_SYS_SCROLL"
+               description="Drag scene"
+               hook="OverScroller.cpp"
+               priority="5"/>
+            <stringParams>
+                <Param index="0" name="packageName" type="String"
+                       required="false"
+                       description="Package where scroll occurred"/>
+            </stringParams>
+
+        <Event id="0x0000B"
+               name="EVENT_SYS_SCREEN_ON"
+               description="Screen-on scene"
+               hook="DisplayPowerController.cpp"
+               priority="6"/>
+
+        <Event id="0x0000C"
+               name="EVENT_SYS_SCREEN_OFF"
+               description="Screen-off scene"
+               hook="DisplayPowerController.cpp"
+               priority="6"/>
+
+        <Event id="0x0000D"
+               name="EVENT_SYS_SCREEN_DOZE"
+               description="Screen sleep"
+               hook="DisplayPowerController.cpp"
+               priority="4"/>
+
+        <Event id="0x0000E"
+               name="EVENT_SYS_SCREEN_UNLOCK"
+               description="Screen unlock"
+               hook="KeyguardController.cpp"
+               priority="8"/>
+
+        <Event id="0x0000F"
+               name="EVENT_SYS_SCREEN_ROTATE"
+               description="Screen rotation"
+               hook="DisplayManagerService.cpp"
+               priority="5"/>
+
+        <Event id="0x00010"
+               name="EVENT_SYS_IME_BOOST"
+               description="Input method pop-up/retract"
+               hook="InputMethodManagerService.cpp"
+               priority="5"/>
+
+        <Event id="0x00011"
+               name="EVENT_SYS_IME_INPUT"
+               description="Keyboard input"
+               hook="InputMethodManagerService.cpp"
+               priority="5"/>
+
+        <Event id="0x00012"
+               name="EVENT_SYS_REFRESH_UPDATE"
+               description="Refresh rate toggle"
+               hook="DisplayManagerService.cpp"
+               priority="4"/>
+
+        <Event id="0x00013"
+               name="EVENT_SYS_SPLIT_WINDOW"
+               description="Split screen scene"
+               hook="DisplayManagerService.cpp"
+               priority="5"/>
+
+        <Event id="0x00014"
+               name="EVENT_SYS_PIP_WINDOW"
+               description="Small window mode"
+               hook="DisplayManagerService.cpp"
+               priority="5"/>
+
+        <Event id="0x00015"
+               name="EVENT_SYS_AMIN_TRANSITION_LAUNCHER"
+               description="Startup animation (desktop startup)"
+               hook="ActivityTaskManagerService.java"
+               priority="6"/>
+
+        <Event id="0x00016"
+               name="EVENT_SYS_AMIN_TRANSITION"
+               description="Startup animation (non-desktop startup)"
+               hook="ActivityTaskManagerService.java"
+               priority="5"/>
+
+        <Event id="0x00017"
+               name="EVENT_SYS_AMIN_EXIT"
+               description="Exit animation"
+               hook="ActivityTaskManagerService.java"
+               priority="5"/>
+
+        <Event id="0x00018"
+               name="EVENT_SYS_AMIN_LITE"
+               description="Lightweight animation"
+               hook="ActivityTaskManagerService.java"
+               priority="4"/>
+
+        <Event id="0x00019"
+               name="EVENT_SYS_AMIN_MEDIUM"
+               description="Moderate animation"
+               hook="ActivityTaskManagerService.java"
+               priority="5"/>
+
+        <Event id="0x0001A"
+               name="EVENT_SYS_AMIN_HEAVY"
+               description="Complex animation"
+               hook="ActivityTaskManagerService.java"
+               priority="6"/>
+
+        <Event id="0x0001B"
+               name="EVENT_SYS_APP_INSTALL"
+               description="App installation"
+               hook="PackageManagerService.java"
+               priority="3"/>
+
+        <Event id="0x0001C"
+               name="EVENT_SYS_APP_UNINSTALL"
+               description="App uninstall"
+               hook="PackageManagerService.java"
+               priority="3"/>
+
+        <Event id="0x0001D"
+               name="EVENT_SYS_EXPENSIVE_RENDERING"
+               description="High load rendering/compositing"
+               hook="RenderEngine.cpp"
+               priority="6"/>
+
+        <Event id="0x0001E"
+               name="EVENT_SYS_IO_HEAVY"
+               description="High IO scenarios"
+               hook="File.cpp"
+               priority="3"/>
+
+        <Event id="0x0001F"
+               name="EVENT_SYS_FILE_OPERATION"
+               description="File operation"
+               hook="File.cpp"
+               priority="2"/>
+
+        <Event id="0x00020"
+               name="EVENT_SYS_DOWNLOAD"
+               description="Network download"
+               hook="File.cpp"
+               priority="3"/>
+
+        <Event id="0x00021"
+               name="EVENT_SYS_CAMERA_LAUNCH"
+               description="Camera on"
+               hook="CameraService.cpp"
+               priority="7"/>
+
+        <Event id="0x00022"
+               name="EVENT_SYS_VOICE_CALL"
+               description="Voice call"
+               hook="Phone.java"
+               priority="6"/>
+
+        <Event id="0x00023"
+               name="EVENT_SYS_VIDEO_CALL"
+               description="Video call"
+               hook="Phone.java"
+               priority="6"/>
+
+        <Event id="0x00024"
+               name="EVENT_SYS_VIDEO_DECODE"
+               description="Video decoding"
+               hook="MediaPlayerService.java"
+               priority="6"/>
+
+        <Event id="0x00025"
+               name="EVENT_SYS_VIDEO_PLAY"
+               description="Video playback"
+               hook="MediaPlayerService.java"
+               priority="5"/>
+
+        <Event id="0x00026"
+               name="EVENT_SYS_AUDIO_PLAY"
+               description="Audio playback"
+               hook="MediaPlayerService.java"
+               priority="5"/>
+
+        <Event id="0x00027"
+               name="EVENT_SYS_SCREEN_SHOT"
+               description="Screen capture"
+               hook="ScreenshotService.java"
+               priority="4"/>
+
+        <Event id="0x00028"
+               name="EVENT_SYS_SCREEN_RECORD"
+               description="Screen recording"
+               hook="ScreenRecorder.java"
+               priority="4"/>
+
+        <Event id="0x00029"
+               name="EVENT_SYS_VOICE_RECORD"
+               description="Audio recording"
+               hook="AudioRecorder.java"
+               priority="3"/>
+
+        <Event id="0x0002A"
+               name="EVENT_SYS_BT_CONNECT"
+               description="Bluetooth connection"
+               hook="BluetoothManagerService.java"
+               priority="3"/>
+
+        <Event id="0x0002B"
+               name="EVENT_SYS_GPS_CONNECT"
+               description="GPS connection"
+               hook="LocationManagerService.java"
+               priority="3"/>
+
+        <Event id="0x0002C"
+               name="EVENT_SYS_MTP_TRANSFER"
+               description="MTP transmission"
+               hook="StorageManagerService.java"
+               priority="2"/>
+
+        <Event id="0x0002D"
+               name="EVENT_SYS_LOW_POWER"
+               description="Low battery scenario"
+               hook="BatteryService.java"
+               priority="4"/>
+
+        <Event id="0x0002E"
+               name="EVENT_SYS_THERMAL_HIGH"
+               description="High temperature scene"
+               hook="ThermalManagerService.java"
+               priority="4"/>
+
+        <Event id="0x0002F"
+               name="EVENT_SYS_THERMAL_BENCH"
+               description="Benchmark mode"
+               hook="ThermalManagerService.java"
+               priority="3"/>
+
+        <Event id="0x00030"
+               name="EVENT_SYS_PERFORMANCE"
+               description="Performance mode"
+               hook="ThermalManagerService.java"
+               priority="4"/>
+
+        <Event id="0x00031"
+               name="EVENT_SYS_IDEL"
+               description="Idle mode"
+               hook="ThermalManagerService.java"
+               priority="1"/>
+
+        <Event id="0x00032"
+               name="EVENT_SYS_FINGERPRINT"
+               description="Fingerprint unlock"
+               hook="FingerprintService.java"
+               priority="7"/>
+
+        <Event id="0x00033"
+               name="EVENT_SYS_FACE"
+               description="Face unlock"
+               hook="FaceService.java"
+               priority="7"/>
+
+        <Event id="0x00034"
+               name="EVENT_SYS_ASSISTANT"
+               description="Voice assistant"
+               hook="VoiceInteractionService.java"
+               priority="6"/>
+
+        <Event id="0x00035"
+               name="EVENT_SYS_AI"
+               description="AI scenarios"
+               hook="AI.java"
+               priority="5"/>
+
+        <Event id="0x00036"
+               name="EVENT_SYS_BOOT"
+               description="Boot scene"
+               hook="BootReceiver.java"
                priority="9"/>
 
-        <!-- Reserved: 0x0000B - 0x00FFF for future system events -->
+        <Event id="0x00037"
+               name="EVENT_SYS_SHUTDOWN"
+               description="Shutdown scenario"
+               hook="ShutdownReceiver.java"
+               priority="9"/>
+
+        <Event id="0x00038"
+               name="EVENT_SYS_DEX2OAT"
+               description="DEX2OAT"
+               hook="Dex2Oat.cpp"
+               priority="2"/>
+
+        <Event id="0x00039"
+               name="EVENT_SYS_GC"
+               description="GC"
+               hook="GC.cpp"
+               priority="2"/>
+       
+       <Event id="0x0003A"
+               name="EVENT_SYS_GAME_MODE"
+               description="Game mode"
+               hook="GameModeService.java"
+               priority="10"/>
+
+        <!-- Reserved: 0x0003A - 0x00FFF for future system events -->
     </SystemEvents>
 
     <!-- ========== SystemUI Events (0x01000 - 0x01FFF) ========== -->

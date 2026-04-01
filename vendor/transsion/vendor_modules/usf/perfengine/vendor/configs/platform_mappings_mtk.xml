@@ -19,37 +19,37 @@
     <!-- ==================== MAJOR=0x00 CPU Freq (30) ==================== -->
 
     <ParamMap
-        name="MTK_CPUFREQ_MIN_CLUSTER_0"
+        name="CPU_CLUSTER0_MIN_FREQ"
         nativeName="PERF_RES_CPUFREQ_MIN_CLUSTER_0"
         opcode="0x00400000"
         description="CPU min freq - cluster 0"/>
 
     <ParamMap
-        name="MTK_CPUFREQ_MIN_CLUSTER_1"
+        name="CPU_CLUSTER1_MIN_FREQ"
         nativeName="PERF_RES_CPUFREQ_MIN_CLUSTER_1"
         opcode="0x00400100"
         description="CPU min freq - cluster 1"/>
 
     <ParamMap
-        name="MTK_CPUFREQ_MIN_CLUSTER_2"
+        name="CPU_CLUSTER2_MIN_FREQ"
         nativeName="PERF_RES_CPUFREQ_MIN_CLUSTER_2"
         opcode="0x00400200"
         description="CPU min freq - cluster 2"/>
 
     <ParamMap
-        name="MTK_CPUFREQ_MAX_CLUSTER_0"
+        name="CPU_CLUSTER0_MAX_FREQ"
         nativeName="PERF_RES_CPUFREQ_MAX_CLUSTER_0"
         opcode="0x00404000"
         description="CPU max freq - cluster 0"/>
 
     <ParamMap
-        name="MTK_CPUFREQ_MAX_CLUSTER_1"
+        name="CPU_CLUSTER1_MAX_FREQ"
         nativeName="PERF_RES_CPUFREQ_MAX_CLUSTER_1"
         opcode="0x00404100"
         description="CPU max freq - cluster 1"/>
 
     <ParamMap
-        name="MTK_CPUFREQ_MAX_CLUSTER_2"
+        name="CPU_CLUSTER2_MAX_FREQ"
         nativeName="PERF_RES_CPUFREQ_MAX_CLUSTER_2"
         opcode="0x00404200"
         description="CPU max freq - cluster 2"/>
@@ -201,37 +201,37 @@
     <!-- ==================== MAJOR=2 CPU Core (24) ==================== -->
 
     <ParamMap
-        name="MTK_CPUCORE_MIN_CLUSTER_0"
+        name="CPU_CLUSTER0_MIN_ONLINE"
         nativeName="PERF_RES_CPUCORE_MIN_CLUSTER_0"
         opcode="0x00800000"
         description="CPU core min - cluster 0"/>
 
     <ParamMap
-        name="MTK_CPUCORE_MIN_CLUSTER_1"
+        name="CPU_CLUSTER1_MIN_ONLINE"
         nativeName="PERF_RES_CPUCORE_MIN_CLUSTER_1"
         opcode="0x00800100"
         description="CPU core min - cluster 1"/>
 
     <ParamMap
-        name="MTK_CPUCORE_MIN_CLUSTER_2"
+        name="CPU_CLUSTER2_MIN_ONLINE"
         nativeName="PERF_RES_CPUCORE_MIN_CLUSTER_2"
         opcode="0x00800200"
         description="CPU core min - cluster 2"/>
 
     <ParamMap
-        name="MTK_CPUCORE_MAX_CLUSTER_0"
+        name="CPU_CLUSTER0_MAX_ONLINE"
         nativeName="PERF_RES_CPUCORE_MAX_CLUSTER_0"
         opcode="0x00804000"
         description="CPU core max - cluster 0"/>
 
     <ParamMap
-        name="MTK_CPUCORE_MAX_CLUSTER_1"
+        name="CPU_CLUSTER1_MAX_ONLINE"
         nativeName="PERF_RES_CPUCORE_MAX_CLUSTER_1"
         opcode="0x00804100"
         description="CPU core max - cluster 1"/>
 
     <ParamMap
-        name="MTK_CPUCORE_MAX_CLUSTER_2"
+        name="CPU_CLUSTER2_MAX_ONLINE"
         nativeName="PERF_RES_CPUCORE_MAX_CLUSTER_2"
         opcode="0x00804200"
         description="CPU core max - cluster 2"/>
@@ -347,7 +347,7 @@
     <!-- ==================== MAJOR=3 GPU (30) ==================== -->
 
     <ParamMap
-        name="MTK_GPU_FREQ_MIN"
+        name="GPU_MIN_FREQ_LEVEL"
         nativeName="PERF_RES_GPU_FREQ_MIN"
         opcode="0x00c00000"
         description="GPU min freq"/>
@@ -359,7 +359,7 @@
         description="GPU min freq HL"/>
 
     <ParamMap
-        name="MTK_GPU_FREQ_MAX"
+        name="GPU_MAX_FREQ_LEVEL"
         nativeName="PERF_RES_GPU_FREQ_MAX"
         opcode="0x00c04000"
         description="GPU max freq"/>
@@ -529,7 +529,7 @@
     <!-- ==================== MAJOR=4 DRAM / VCORE / CM MGR / EMI (50) ==================== -->
 
     <ParamMap
-        name="MTK_DRAM_OPP_MIN"
+        name="DDR_OPP_MIN"
         nativeName="PERF_RES_DRAM_OPP_MIN"
         opcode="0x01000000"
         description="DRAM OPP min"/>
@@ -1047,7 +1047,7 @@
         description="Sched CPU prefer task 2 - reserved"/>
 
     <ParamMap
-        name="MTK_SCHED_CPUSET_TA"
+        name="SCHED_CPUSET_TOP_APP"
         nativeName="PERF_RES_SCHED_CPUSET_TA"
         opcode="0x01418600"
         description="Sched cpuset top-app"/>

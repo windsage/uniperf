@@ -43,7 +43,7 @@
     <!-- ==================== CPU MIN FREQ (11) ==================== -->
 
     <ParamMap
-        name="QCOM_MIN_FREQ_CLUSTER_BIG_CORE_0"
+        name="CPU_CLUSTER1_MIN_FREQ"
         opcode="0x40800000"
         description="Big cluster core 0 min freq"/>
 
@@ -63,7 +63,7 @@
         description="Big cluster core 3 min freq"/>
 
     <ParamMap
-        name="QCOM_MIN_FREQ_CLUSTER_LITTLE_CORE_0"
+        name="CPU_CLUSTER0_MIN_FREQ"
         opcode="0x40800100"
         description="Little cluster core 0 min freq"/>
 
@@ -83,7 +83,7 @@
         description="Little cluster core 3 min freq"/>
 
     <ParamMap
-        name="QCOM_MIN_FREQ_CLUSTER_PRIME_CORE_0"
+        name="CPU_CLUSTER2_MIN_FREQ"
         opcode="0x40800200"
         description="Prime cluster core 0 min freq"/>
 
@@ -100,7 +100,7 @@
     <!-- ==================== CPU MAX FREQ (11) ==================== -->
 
     <ParamMap
-        name="QCOM_MAX_FREQ_CLUSTER_BIG_CORE_0"
+        name="CPU_CLUSTER1_MAX_FREQ"
         opcode="0x40804000"
         description="Big cluster core 0 max freq"/>
 
@@ -120,7 +120,7 @@
         description="Big cluster core 3 max freq"/>
 
     <ParamMap
-        name="QCOM_MAX_FREQ_CLUSTER_LITTLE_CORE_0"
+        name="CPU_CLUSTER0_MAX_FREQ"
         opcode="0x40804100"
         description="Little cluster core 0 max freq"/>
 
@@ -140,7 +140,7 @@
         description="Little cluster core 3 max freq"/>
 
     <ParamMap
-        name="QCOM_MAX_FREQ_CLUSTER_PRIME_CORE_0"
+        name="CPU_CLUSTER2_MAX_FREQ"
         opcode="0x40804200"
         description="Prime cluster core 0 max freq"/>
 
@@ -293,7 +293,7 @@
         description="Scheduler freq aggregation group"/>
 
     <ParamMap
-        name="QCOM_SCHED_CPUSET_TOP_APP"
+        name="SCHED_CPUSET_TOP_APP"
         opcode="0x40C3C000"
         description="Scheduler cpuset top-app"/>
 
@@ -550,27 +550,27 @@
     <!-- ==================== CPU Online / Core Control (12) ==================== -->
 
     <ParamMap
-        name="QCOM_MIN_ONLINE_CPU_CLUSTER_BIG"
+        name="CPU_CLUSTER1_MIN_ONLINE"
         opcode="0x41000000"
         description="Min online CPUs - Big cluster"/>
 
     <ParamMap
-        name="QCOM_MIN_ONLINE_CPU_CLUSTER_LITTLE"
+        name="CPU_CLUSTER0_MIN_ONLINE"
         opcode="0x41000100"
         description="Min online CPUs - Little cluster"/>
 
     <ParamMap
-        name="QCOM_MIN_ONLINE_CPU_CLUSTER_PRIME"
+        name="CPU_CLUSTER2_MIN_ONLINE"
         opcode="0x41000200"
         description="Min online CPUs - Prime cluster"/>
 
     <ParamMap
-        name="QCOM_MAX_ONLINE_CPU_CLUSTER_BIG"
+        name="CPU_CLUSTER1_MAX_ONLINE"
         opcode="0x41004000"
         description="Max online CPUs - Big cluster"/>
 
     <ParamMap
-        name="QCOM_MAX_ONLINE_CPU_CLUSTER_LITTLE"
+        name="CPU_CLUSTER0_MAX_ONLINE"
         opcode="0x41004100"
         description="Max online CPUs - Little cluster"/>
 
@@ -1071,12 +1071,12 @@
         description="GPU power level"/>
 
     <ParamMap
-        name="QCOM_GPU_MIN_POWER_LEVEL"
+        name="GPU_MIN_POWER_LEVEL"
         opcode="0x42804000"
         description="GPU min power level"/>
 
     <ParamMap
-        name="QCOM_GPU_MAX_POWER_LEVEL"
+        name="GPU_MAX_POWER_LEVEL"
         opcode="0x42808000"
         description="GPU max power level"/>
 
@@ -1315,7 +1315,7 @@
         description="LLCC to DDR BW idle Mbps"/>
 
     <ParamMap
-        name="QCOM_LLCC_DDR_BW_MIN_FREQ_V2"
+        name="DDR_OPP_MIN"
         opcode="0x4303C000"
         description="LLCC to DDR BW min freq V2"/>
 

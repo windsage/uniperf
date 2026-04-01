@@ -11,9 +11,9 @@
 
 #include "ParamMapper.h"
 #include "PerfEngineTypes.h"
-#include "TranLog.h"
+#include "perf-utils/TranLog.h"
+#include "perf-utils/TranTrace.h"
 #include "XmlConfigParser.h"
-
 
 #ifdef LOG_TAG
 #undef LOG_TAG
@@ -215,6 +215,8 @@ bool PerfLockCaller::initUnisoc() {
 // ==================== 核心功能链路 ====================
 
 int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
+    TTRACE_SCOPED(TraceLevel::COARSE, LOG_TAG ":acquirePerfLock");
+
     if (!mInitialized) {
         TLOGE("PerfLockCaller not initialized");
         return -1;
@@ -282,6 +284,7 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
 int32_t PerfLockCaller::qcomAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
                                                       const std::vector<int32_t> &platformParams,
                                                       const std::string &packageName) {
+    TTRACE_SCOPED(TraceLevel::VERBOSE, LOG_TAG ":qcomAcquirePerfLockWithParams");
     typedef int (*perfmodule_submit_request_t)(mpctl_msg_t *);
     auto submitRequest = reinterpret_cast<perfmodule_submit_request_t>(mQcomFuncs.submitRequest);
 
@@ -365,6 +368,7 @@ void PerfLockCaller::qcomReleasePerfLock(int32_t handle) {
 
 int32_t PerfLockCaller::mtkAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
                                                      const std::vector<int32_t> &platformParams) {
+    TTRACE_SCOPED(TraceLevel::VERBOSE, LOG_TAG ":mtkAcquirePerfLockWithParams");
     typedef int (*mtk_perf_lock_acq_t)(int *, int, int, int, int, int);
     auto lockAcq = reinterpret_cast<mtk_perf_lock_acq_t>(mMtkFuncs.lockAcq);
 

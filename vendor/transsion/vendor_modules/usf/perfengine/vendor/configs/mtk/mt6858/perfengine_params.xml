@@ -1,31 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PerfEngine version="1.0" platform="mt6858" chip="MTK">
-
     <Scenarios>
-
-        <!-- 应用启动场景 -->
-        <Scenario id="2" name="APP_LAUNCH" fps="0" description="应用启动基础boost">
-            <Config timeout="2000" release="auto">
-                <Resources>
-                    <!-- 通用CPU频率配置 -->
-                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
-                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="3000000"/>
-
-                    <!-- DDR配置 -->
-                    <Param name="DDR_OPP_MIN" value="0"/>
-
-                    <!-- 通用调度器配置 -->
-                    <Param name="SCHED_UCLAMP_MIN" value="100"/>
-
-                    <!-- MTK专有参数 -->
-                    <Param name="MTK_PERF_TASK_TURBO" value="15"/>
-                    <Param name="MTK_SCHED_CACHE_PART_CTRL" value="1"/>
-                </Resources>
-            </Config>
-        </Scenario>
-
         <!-- 进程创建场景 -->
-        <Scenario id="3" name="APP_LAUNCH_PROCESS_CREATE" description="进程创建boost">
+        <Scenario id="0x00001" name="EVENT_SYS_PROCESS_CREATE" priority="8" description="进程创建boost">
             <Config timeout="35000" release="auto">
                 <Resources>
                     <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
@@ -38,7 +15,346 @@
                 </Resources>
             </Config>
         </Scenario>
-
+        <!-- 应用冷启动场景 -->
+        <Scenario id="0x00002" name="EVENT_SYS_APP_LAUNCH_CLOD" priority="8" description="应用冷启动boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <!-- 通用CPU频率配置 -->
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="3000000"/>
+                    <!-- DDR配置 -->
+                    <Param name="DDR_OPP_MIN" value="0"/>
+                    <!-- 通用调度器配置 -->
+                    <Param name="SCHED_UCLAMP_MIN" value="100"/>
+                    <!-- MTK专有参数 -->
+                    <Param name="MTK_PERF_TASK_TURBO" value="15"/>
+                    <Param name="MTK_SCHED_CACHE_PART_CTRL" value="1"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 应用温启动场景 -->
+        <Scenario id="0x00003" name="EVENT_SYS_APP_LAUNCH_WARM" priority="8" description="应用温启动boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <!-- 通用CPU频率配置 -->
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="3000000"/>
+                    <!-- DDR配置 -->
+                    <Param name="DDR_OPP_MIN" value="0"/>
+                    <!-- 通用调度器配置 -->
+                    <Param name="SCHED_UCLAMP_MIN" value="100"/>
+                    <!-- MTK专有参数 -->
+                    <Param name="MTK_PERF_TASK_TURBO" value="15"/>
+                    <Param name="MTK_SCHED_CACHE_PART_CTRL" value="1"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 应用启动场景 -->
+        <Scenario id="0x00004" name="EVENT_SYS_APP_LAUNCH_HOT" priority="8" description="应用启动基础boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <!-- 通用CPU频率配置 -->
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="3000000"/>
+                    <!-- DDR配置 -->
+                    <Param name="DDR_OPP_MIN" value="0"/>
+                    <!-- 通用调度器配置 -->
+                    <Param name="SCHED_UCLAMP_MIN" value="100"/>
+                    <!-- MTK专有参数 -->
+                    <Param name="MTK_PERF_TASK_TURBO" value="15"/>
+                    <Param name="MTK_SCHED_CACHE_PART_CTRL" value="1"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- ACTIVITY切换场景 -->
+        <Scenario id="0x00006" name="EVENT_SYS_ACTIVITY_SWITCH" priority="7" description="ACTIVITY切换">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="2000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="2600000"/>
+                    <Param name="DDR_OPP_MIN" value="1"/>
+                    <Param name="MTK_POWER_HINT_EXT_HINT" value="30"/>
+                    <Param name="MTK_POWER_HINT_EXT_HINT_HOLD_TIME" value="500"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 应用旋转屏幕场景 -->
+        <Scenario id="0x0000F" name="EVENT_SYS_SCREEN_ROTATE" priority="5" description="应用旋转屏幕boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="2000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="2600000"/>
+                    <Param name="DDR_OPP_MIN" value="1"/>
+                    <Param name="MTK_SCHED_UCLAMP_MIN_TA" value="100"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- PMS应用安装场景 -->
+        <Scenario id="0x0001B" name="EVENT_SYS_APP_INSTALL" priority="3" description="PMS应用安装boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="1800000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="2850000"/>
+                    <Param name="DDR_OPP_MIN" value="1"/>
+                    <Param name="MTK_SCHED_UCLAMP_MIN_TA" value="100"/>
+                    <Param name="MTK_SCHED_UCLAMP_MIN_FG" value="100"/>
+                    <Param name="MTK_SCHED_PREFER_IDLE_FG" value="1"/>
+                    <Param name="MTK_POWERHAL_SCREEN_OFF_STATE" value="2"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- PMS应用卸载 -->
+        <Scenario id="0x0001C" name="EVENT_SYS_APP_UNINSTALL" priority="3" description="PMS应用卸载boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="1800000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="2850000"/>
+                    <Param name="DDR_OPP_MIN" value="1"/>
+                    <Param name="MTK_SCHED_UCLAMP_MIN_TA" value="100"/>
+                    <Param name="MTK_SCHED_UCLAMP_MIN_FG" value="100"/>
+                    <Param name="MTK_SCHED_PREFER_IDLE_FG" value="1"/>
+                    <Param name="MTK_POWERHAL_SCREEN_OFF_STATE" value="2"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 音频播放 -->
+        <Scenario id="0x00026" name="EVENT_SYS_AUDIO_PLAY" priority="5" description="音频播放">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="1000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="1000000"/>
+                    <Param name="MTK_POWERHAL_SCREEN_OFF_STATE" value="1"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 刷新率切换90Hz -->
+        <Scenario id="0x00012" name="EVENT_SYS_REFRESH_UPDATE" priority="4" fps="90" description="刷新率切换90Hz">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="MTK_FPS_FBT_BHR_OPP" value="31"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 刷新率切换120Hz -->
+        <Scenario id="0x00012" name="EVENT_SYS_REFRESH_UPDATE" priority="4" fps="120" description="刷新率切换120Hz">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="MTK_FPS_FBT_BHR_OPP" value="31"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 刷新率切换144Hz -->
+        <Scenario id="0x00012" name="EVENT_SYS_REFRESH_UPDATE" priority="4" fps="144" description="刷新率切换144Hz">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="MTK_FPS_FBT_BHR_OPP" value="31"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 游戏模式 -->
+        <Scenario id="0x0003A" name="EVENT_SYS_GAME_MODE" priority="10" description="游戏模式全局boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="MTK_FPS_FPSGO_CONTROL_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_BYPASS_NONSF_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_CONTROL_API_MASK_BY_PID" value="6"/>
+                    <Param name="MTK_FPS_FSTB_TARGET_FPS_ENABLE_BY_PID" value="2"/>
+                    <Param name="MTK_FPS_FPSGO_CALCULATE_DEP_ENABLE_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_AA_ENABLE_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FBT_RESCUE_SECOND_ENABLE_BY_PID" value="1"/>
+                    <Param name="MTK_THERMAL_POLICY" value="9"/>
+                    <Param name="MTK_SCHED_CORE_CTL_POLICY_ENABLE" value="0"/>
+                    <Param name="MTK_ADPF_CPU_TIMING_HINT_ENABLE" value="0"/>
+                    <Param name="MTK_FPS_FBT_FILTER_FRAME_ENABLE_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FBT_SEPARATE_AA_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FBT_BOOST_AFFINITY_BY_PID" value="6"/>
+                    <Param name="MTK_FPS_FBT_CPUMASK_HEAVY_BY_PID" value="240"/>
+                    <Param name="MTK_FPS_FBT_CPUMASK_SECOND_BY_PID" value="240"/>
+                    <Param name="MTK_FPS_FBT_BOOST_LR_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_SPID" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_EMA2_ENABLE_BY_PID" value="1"/>
+                    <Param name="MTK_NET_BT_AUDIO_LOW_LATENCY" value="1"/>
+                    <Param name="MTK_FPS_FBT_RESCUE_ENABLE_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FBT_QR_T2WNT_Y_P_BY_PID" value="0"/>
+                    <Param name="MTK_FPS_FBT_CHECK_BUFFER_QUOTA_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FBT_GCC_ENABLE_BY_PID" value="2"/>
+                    <Param name="MTK_FPS_FBT_SEPARATE_PCT_OTHER_BY_PID" value="0"/>
+                    <Param name="MTK_SCHED_IGNORE_IDLE_UTIL_CTRL" value="1"/>
+                    <Param name="MTK_FPS_FBT_BOOST_VIP_BY_PID" value="2"/>
+                    <Param name="MTK_FPS_FBT_VIP_MASK_BY_PID" value="6"/>
+                    <Param name="MTK_FPS_FPSGO_AA_B_MINUS_IDLE_BY_PID" value="0"/>
+                    <Param name="MTK_FPS_FPSGO_FORCE_NO_SUB_QUE_DEQUE_PERIOD" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_FORCE_SET_PERF_MIN" value="50"/>
+                    <Param name="MTK_SCHED_RUNNABLE_BOOST" value="0"/>
+                    <Param name="MTK_FPS_FBT_VIP_THROTTLE_BY_PID" value="1500"/>
+                    <Param name="MTK_POWERHAL_TOUCH_BOOST_ENABLE" value="0"/>
+                    <Param name="MTK_SCHED_DPT_CTRL" value="0"/>
+                    <Param name="MTK_FPS_FPSGO_RECEIVE_FW_INFO_ENABLE" value="495"/>
+                    <Param name="MTK_FPS_FPSGO_RECORD_TRACE_ENABLE" value="1"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 滑动场景 -->
+        <Scenario id="0x00009" name="EVENT_SYS_FLING" priority="5" description="滑动场景">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="MTK_FPS_FBT_RESCUE_PERCENT" value="100"/>
+                    <Param name="MTK_FPS_FBT_SHORT_RESCUE_NS" value="8333333"/>
+                    <Param name="MTK_FPS_FBT_MIN_RESCUE_PERCENT" value="50"/>
+                    <Param name="DDR_OPP_MIN" value="5"/>
+                    <Param name="MTK_FPS_FBT_RESCUE_F" value="50"/>
+                    <Param name="MTK_UX_SBE_RESCUE_ENHANS" value="65"/>
+                    <Param name="MTK_UX_SBE_DY_FRAME_THRESHOLD" value="3"/>
+                    <Param name="MTK_UX_SBE_DY_MAX_ENHANCE" value="70"/>
+                    <Param name="MTK_UX_SBE_SCROLL_CNT" value="6"/>
+                    <Param name="MTK_SCHED_PREFER_IDLE_TA" value="1"/>
+                    <Param name="MTK_POWERHAL_TOUCH_BOOST_ENABLE" value="0"/>
+                    <Param name="MTK_FPS_FPSGO_RECORD_TRACE_ENABLE" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_RECEIVE_FW_INFO_ENABLE" value="495"/>
+                    <Param name="MTK_SCHED_IGNORE_IDLE_UTIL_CTRL" value="1"/>
+                    <Param name="MTK_SCHED_RUNNABLE_BOOST" value="0"/>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="1497600"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="1450000"/>
+                    <Param name="CPU_CLUSTER0_MAX_FREQ" value="1804800"/>
+                    <Param name="CPU_CLUSTER1_MAX_FREQ" value="2508000"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 拖拽场景 -->
+        <Scenario id="0x0000A" name="EVENT_SYS_SCROLL" priority="5" description="拖拽场景">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="MTK_FPS_FBT_RESCUE_PERCENT" value="100"/>
+                    <Param name="MTK_FPS_FBT_SHORT_RESCUE_NS" value="8333333"/>
+                    <Param name="MTK_FPS_FBT_MIN_RESCUE_PERCENT" value="50"/>
+                    <Param name="DDR_OPP_MIN" value="5"/>
+                    <Param name="MTK_FPS_FBT_RESCUE_F" value="50"/>
+                    <Param name="MTK_UX_SBE_RESCUE_ENHANS" value="65"/>
+                    <Param name="MTK_UX_SBE_DY_FRAME_THRESHOLD" value="3"/>
+                    <Param name="MTK_UX_SBE_DY_MAX_ENHANCE" value="70"/>
+                    <Param name="MTK_UX_SBE_SCROLL_CNT" value="6"/>
+                    <Param name="MTK_SCHED_PREFER_IDLE_TA" value="1"/>
+                    <Param name="MTK_POWERHAL_TOUCH_BOOST_ENABLE" value="0"/>
+                    <Param name="MTK_FPS_FPSGO_RECORD_TRACE_ENABLE" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_RECEIVE_FW_INFO_ENABLE" value="495"/>
+                    <Param name="MTK_SCHED_IGNORE_IDLE_UTIL_CTRL" value="1"/>
+                    <Param name="MTK_SCHED_RUNNABLE_BOOST" value="0"/>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="1497600"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="1450000"/>
+                    <Param name="CPU_CLUSTER0_MAX_FREQ" value="1804800"/>
+                    <Param name="CPU_CLUSTER1_MAX_FREQ" value="2508000"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 相机模式全局boost -->
+        <Scenario id="0x00021" name="EVENT_SYS_CAMERA_LAUNCH" priority="7" description="相机模式全局boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="MTK_FPS_FPSGO_BYPASS_NONSF_BY_PID" value="0"/>
+                    <Param name="MTK_FPS_FPSGO_CONTROL_API_MASK_BY_PID" value="6"/>
+                    <Param name="MTK_FPS_FPSGO_RECORD_TRACE_ENABLE" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_CALCULATE_DEP_ENABLE_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_AA_ENABLE_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FBT_SEPARATE_AA_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FBT_GCC_ENABLE_BY_PID" value="2"/>
+                    <Param name="MTK_FPS_FBT_EXPECTED_FPS_MARGIN_BY_PID" value="-5"/>
+                    <Param name="MTK_FPS_FBT_CHECK_BUFFER_QUOTA_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FBT_RESCUE_ENABLE_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FBT_QR_ENABLE_BY_PID" value="1"/>
+                    <Param name="MTK_FPS_FBT_QR_T2WNT_X_BY_PID" value="50"/>
+                    <Param name="MTK_FPS_FBT_QR_T2WNT_Y_P_BY_PID" value="0"/>
+                    <Param name="MTK_POWERHAL_SCREEN_OFF_STATE" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_SPID" value="1"/>
+                    <Param name="MTK_SCHED_IGNORE_IDLE_UTIL_CTRL" value="1"/>
+                    <Param name="MTK_FPS_FPSGO_DEP_LOADING_THR_BY_PID" value="58"/>
+                    <Param name="MTK_FPS_FPSGO_CAM_WINDOW_MS_BY_PID" value="1000"/>
+                    <Param name="MTK_SCHED_RUNNABLE_BOOST" value="0"/>
+                    <Param name="MTK_FPS_FBT_TARGET_T_UP_BOUND_BY_PID" value="150"/>
+                    <Param name="MTK_FRS_ENABLE" value="1"/>
+                    <Param name="MTK_FRS_TARGET_TEMP" value="50600"/>
+                    <Param name="MTK_FRS_TZ_INDEX" value="48"/>
+                    <Param name="MTK_THERMAL_POLICY" value="2"/>
+                    <Param name="MTK_FRS_MIN_FPS" value="8"/>
+                    <Param name="MTK_FRS_PTIME" value="5"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 启动动画 -->
+        <Scenario id="0x00016" name="EVENT_SYS_AMIN_TRANSITION" priority="5" description="场景过渡切换boost">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="DDR_OPP_MIN" value="0"/>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="2000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="2850000"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- Launcher动画 -->
+        <Scenario id="0x00015" fps="0" name="EVENT_SYS_AMIN_TRANSITION_LAUNCHER" priority="6" description="Launcher动画">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="GPU_FREQ_MIN" value="0"/>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="3000000"/>
+                    <Param name="MTK_SCHED_PREFER_IDLE_TA" value="1"/>
+                    <Param name="MTK_TRAN_SCHED_SCENE" value="4"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 应用退出动画 -->
+        <Scenario id="0x00017" fps="0" name="EVENT_SYS_AMIN_EXIT" priority="5" description="Launcher动画">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="GPU_FREQ_MIN" value="0"/>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="3000000"/>
+                    <Param name="MTK_SCHED_PREFER_IDLE_TA" value="1"/>
+                    <Param name="MTK_TRAN_SCHED_SCENE" value="4"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 文件操作 -->
+        <Scenario id="0x0001F" name="FILE_OPERATION" priority="2" description="文件操作">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="2000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="1900000"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 上滑 -->
+        <Scenario id="0x02001" name="EVENT_APP_LAUNCHER_SWIPE_UP" priority="6" description="上滑">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="3000000"/>
+                    <Param name="MTK_SCHED_PREFER_IDLE_TA" value="1"/>
+                    <Param name="MTK_TRAN_SCHED_SCENE" value="4"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 文件夹打开 -->
+        <Scenario id="0x02002" name="EVENT_APP_LAUNCHER_FOLDER_OPEN" priority="4" description="文件夹打开">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="3000000"/>
+                    <Param name="MTK_SCHED_PREFER_IDLE_TA" value="1"/>
+                    <Param name="MTK_TRAN_SCHED_SCENE" value="4"/>
+                </Resources>
+            </Config>
+        </Scenario>
+        <!-- 壁纸切换 -->
+        <Scenario id="0x03001" name="EVENT_APP_WALLPAPER_CHANGE" priority="5" description="壁纸切换">
+            <Config timeout="2000" release="auto">
+                <Resources>
+                    <Param name="CPU_CLUSTER0_MIN_FREQ" value="3000000"/>
+                    <Param name="CPU_CLUSTER1_MIN_FREQ" value="3000000"/>
+                    <Param name="MTK_SCHED_PREFER_IDLE_TA" value="1"/>
+                    <Param name="MTK_TRAN_SCHED_SCENE" value="4"/>
+                </Resources>
+            </Config>
+        </Scenario>
         <!-- 更多场景... -->
     </Scenarios>
 </PerfEngine>

@@ -5,12 +5,12 @@
 #include <aidl/vendor/transsion/hardware/perfengine/IEventListener.h>
 #include <android/binder_auto_utils.h>
 #include <utils/Mutex.h>
+
 #include <atomic>
 #include <condition_variable>
-#include <mutex>
-
 #include <map>
 #include <memory>
+#include <mutex>
 #include <queue>
 #include <thread>
 #include <unordered_set>

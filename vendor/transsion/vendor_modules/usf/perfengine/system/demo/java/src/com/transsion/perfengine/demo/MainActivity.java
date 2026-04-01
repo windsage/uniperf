@@ -32,22 +32,23 @@ public class MainActivity extends Activity {
     private static final String TAG = "PerfEngineDemo";
 
     // ==================== Event definitions ====================
-
     private static final int[] EVENT_IDS = {
-            EVENT_SYS_APP_LAUNCH, EVENT_SYS_ACTIVITY_SWITCH, EVENT_SYS_SCROLL,
-            EVENT_SYS_CAMERA_OPEN,
+            EVENT_SYS_APP_LAUNCH_CLOD, EVENT_SYS_ACTIVITY_SWITCH, EVENT_SYS_SCROLL,
+            EVENT_SYS_CAMERA_LAUNCH, EVENT_APP_LAUNCHER_SWIPE_UP, EVENT_APP_LAUNCHER_FOLDER_OPEN,
+            EVENT_APP_WALLPAPER_CHANGE,
             // ...
     };
 
     private static final String[] EVENT_NAMES = {
-            "APP_LAUNCH (0x00002)", "ACTIVITY_SWITCH (0x00004)", "SCROLL (0x00005)",
-            "CAMERA_OPEN (0x00008)",
+            "APP_LAUNCH (0x00002)", "ACTIVITY_SWITCH (0x00006)", "SCROLL (0x0000A)",
+            "CAMERA_OPEN (0x00021)", "APP_LAUNCHER_SWIPE_UP (0x02001)",
+            "APP_LAUNCHER_FOLDER_OPEN (0x02002)", "APP_WALLPAPER_CHANGE (0x03001)",
             // ...
     };
 
     private static String idToName(int id) {
-        if (id == EVENT_SYS_APP_LAUNCH)
-            return "APP_LAUNCH";
+        if (id == EVENT_SYS_APP_LAUNCH_CLOD)
+            return "APP_LAUNCH_CLOD";
         if (id == EVENT_SYS_ACTIVITY_SWITCH)
             return "ACTIVITY_SWITCH";
         if (id == EVENT_SYS_SCROLL)

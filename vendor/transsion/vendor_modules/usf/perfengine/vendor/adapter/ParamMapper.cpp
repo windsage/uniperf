@@ -1,7 +1,7 @@
 
 #include "ParamMapper.h"
 
-#include "TranLog.h"
+#include "perf-utils/TranLog.h"
 
 #if !PERFENGINE_USE_HARDCODED_MAPPINGS
 #include <libxml/parser.h>

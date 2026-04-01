@@ -11,7 +11,7 @@
 #include <aidl/vendor/qti/hardware/display/config/IDisplayConfig.h>
 #include <android/binder_manager.h>
 
-#include "TranLog.h"
+#include "perf-utils/TranLog.h"
 
 using aidl::vendor::qti::hardware::display::config::Attributes;
 using aidl::vendor::qti::hardware::display::config::DisplayType;

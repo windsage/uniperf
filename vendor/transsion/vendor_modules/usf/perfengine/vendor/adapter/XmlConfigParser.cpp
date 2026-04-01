@@ -10,7 +10,8 @@
 #include <cstring>
 
 #include "ParamMapper.h"
-#include "TranLog.h"
+#include "perf-utils/TranLog.h"
+#include "perf-utils/TranTrace.h"
 
 #ifdef LOG_TAG
 #undef LOG_TAG
@@ -104,6 +105,7 @@ size_t XmlConfigParser::getScenarioCount() const {
 const ScenarioConfig *XmlConfigParser::findBestMatch(int32_t sceneId, int32_t fps,
                                                      const std::string &package,
                                                      const std::string &activity) const {
+    TTRACE_SCOPED(TraceLevel::VERBOSE, LOG_TAG ":findBestMatch");
     auto it = mConfigCache.find(sceneId);
     if (it == mConfigCache.end()) {
         TLOGW("No scenarios found for sceneId=%d", sceneId);
@@ -304,7 +306,7 @@ ScenarioConfig XmlConfigParser::parseScenarioNode(void *node) {
     // --- Scenario attributes ---
     std::string idStr = getXmlAttribute(scenarioNode, "id");
     if (!idStr.empty()) {
-        config.id = std::atoi(idStr.c_str());
+        config.id = static_cast<int>(std::strtol(idStr.c_str(), nullptr, 0));
     }
 
 #if !PERFENGINE_PRODUCTION

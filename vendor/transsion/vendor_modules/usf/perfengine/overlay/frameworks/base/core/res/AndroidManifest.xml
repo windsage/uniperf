@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    PerfEngine Permission Declarations
+    Compiled into framework overlay, registered to PackageManager at boot.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.transsion.perfengine.permissions">
+
+    <!--
+        Permission for notifying PerfEngine performance events.
+
+        protectionLevel:
+          - signature: auto-granted to apps signed with platform key
+          - privileged: can be granted to apps in /system/priv-app via
+                        privapp-permissions XML (requires explicit declaration)
+
+        Third-party apps in /data/app cannot obtain this permission
+        regardless of their manifest declaration.
+    -->
+    <permission
+        android:name="com.transsion.permission.PERF_ENGINE_NOTIFY"
+        android:protectionLevel="signature|privileged" />
+
+</manifest>

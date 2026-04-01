@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.transsion.perfengine.demo">
 
+    <uses-permission android:name="com.transsion.permission.PERF_ENGINE_NOTIFY" />
     <application
         android:label="PerfEngine Demo"
         android:icon="@mipmap/ic_launcher"

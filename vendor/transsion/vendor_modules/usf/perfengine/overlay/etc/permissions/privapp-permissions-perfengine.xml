@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    PerfEngine privileged permission allowlist.
+
+    Apps listed here will be granted com.transsion.permission.PERF_ENGINE_NOTIFY
+    even if they are NOT platform-signed, as long as they reside in priv-app.
+
+    Platform-signed apps (same key as framework) get the permission automatically
+    via the "signature" part and do NOT need to be listed here.
+
+    Add entries for priv-app system applications that need to call
+    TranPerfEvent.notifyEventStart/End directly.
+-->
+<permissions>
+
+    <!-- SystemUI: notification panel, keyguard, quick settings animations -->
+    <privapp-permissions package="com.android.systemui">
+        <permission name="com.transsion.permission.PERF_ENGINE_NOTIFY" />
+    </privapp-permissions>
+
+    <!-- Transsion Launcher -->
+    <privapp-permissions package="com.transsion.launcher3">
+        <permission name="com.transsion.permission.PERF_ENGINE_NOTIFY" />
+    </privapp-permissions>
+
+    <!-- Settings: heavy UI transitions -->
+    <privapp-permissions package="com.android.settings">
+        <permission name="com.transsion.permission.PERF_ENGINE_NOTIFY" />
+    </privapp-permissions>
+
+    <privapp-permissions package="com.transsion.perfengine.demo">
+        <permission name="com.transsion.permission.PERF_ENGINE_NOTIFY" />
+    </privapp-permissions>
+    <!--
+        Add more priv-app packages here as needed.
+        DO NOT add third-party packages.
+    -->
+
+</permissions>

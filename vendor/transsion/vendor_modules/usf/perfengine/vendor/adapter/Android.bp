@@ -4,7 +4,12 @@ package {
 
 soong_config_string_variable {
     name: "platform",
-    values: ["qcom", "mtk", "unisoc", "unknown"],
+    values: [
+        "qcom",
+        "mtk",
+        "unisoc",
+        "unknown",
+    ],
 }
 
 soong_config_module_type {
@@ -12,7 +17,11 @@ soong_config_module_type {
     module_type: "cc_defaults",
     config_namespace: "transsion_perfengine",
     variables: ["platform"],
-    properties: ["srcs", "shared_libs", "cflags"],
+    properties: [
+        "srcs",
+        "shared_libs",
+        "cflags",
+    ],
 }
 
 perfengine_cc_defaults {
@@ -33,6 +42,7 @@ perfengine_cc_defaults {
         },
     },
 }
+
 // ==================== libperfengine-adapter.so ====================
 // Vendor AIDL 服务端实现
 
@@ -48,10 +58,15 @@ cc_library_shared {
         "ParamMapper.cpp",
         "PerfEngineTypes.cpp",
         "PerfEngineInit.cpp",
+        "CallerValidator.cpp",
     ],
 
     local_include_dirs: [
         "include",
+    ],
+
+    header_libs: [
+        "libperfengine_perfutils_headers",
     ],
 
     shared_libs: [
