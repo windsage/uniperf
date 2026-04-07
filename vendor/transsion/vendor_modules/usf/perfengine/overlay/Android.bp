@@ -7,7 +7,7 @@ package {
 filegroup {
     name: "transsion_framework_overlay_sources",
     srcs: [
-        "frameworks/base/core/java/android/util/*.java",
+        "frameworks/base/core/java/com/transsion/usf/perfengine/*.java",
         ":perfengine-event-constants-java-overlay",
     ],
     visibility: ["//frameworks/base"],

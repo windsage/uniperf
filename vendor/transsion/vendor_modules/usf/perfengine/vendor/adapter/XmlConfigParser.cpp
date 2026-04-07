@@ -62,9 +62,8 @@ bool XmlConfigParser::loadConfig(const std::string &filename) {
     return true;
 }
 
-const ScenarioConfig *XmlConfigParser::getScenarioConfig(int32_t sceneId, int32_t currentFps,
-                                                         const std::string &package,
-                                                         const std::string &activity) {
+std::shared_ptr<const ScenarioConfig> XmlConfigParser::getScenarioConfig(
+    int32_t sceneId, int32_t currentFps, const std::string &package, const std::string &activity) {
     std::lock_guard<std::mutex> lock(mMutex);
     return findBestMatch(sceneId, currentFps, package, activity);
 }
@@ -102,9 +101,8 @@ size_t XmlConfigParser::getScenarioCount() const {
  *   P5: fps==0          && package==pkg && activity==""
  *   P6: fps==0          && package==""  && activity==""
  */
-const ScenarioConfig *XmlConfigParser::findBestMatch(int32_t sceneId, int32_t fps,
-                                                     const std::string &package,
-                                                     const std::string &activity) const {
+std::shared_ptr<const ScenarioConfig> XmlConfigParser::findBestMatch(
+    int32_t sceneId, int32_t fps, const std::string &package, const std::string &activity) const {
     TTRACE_SCOPED(TraceLevel::VERBOSE, LOG_TAG ":findBestMatch");
     auto it = mConfigCache.find(sceneId);
     if (it == mConfigCache.end()) {
@@ -112,23 +110,23 @@ const ScenarioConfig *XmlConfigParser::findBestMatch(int32_t sceneId, int32_t fp
         return nullptr;
     }
 
-    const std::vector<ScenarioConfig> &entries = it->second;
+    const auto &entries = it->second;
 
     TLOGD("findBestMatch: sceneId=%d, fps=%d, pkg='%s', act='%s', candidates=%zu", sceneId, fps,
           package.c_str(), activity.c_str(), entries.size());
 
     // Helper lambda: find first entry matching the given criteria
     auto find = [&](int32_t wantFps, const std::string &wantPkg,
-                    const std::string &wantAct) -> const ScenarioConfig * {
+                    const std::string &wantAct) -> std::shared_ptr<const ScenarioConfig> {
         for (const auto &cfg : entries) {
-            if (cfg.fps == wantFps && cfg.package == wantPkg && cfg.activity == wantAct) {
-                return &cfg;
+            if (cfg->fps == wantFps && cfg->package == wantPkg && cfg->activity == wantAct) {
+                return cfg;
             }
         }
         return nullptr;
     };
 
-    const ScenarioConfig *result = nullptr;
+    std::shared_ptr<const ScenarioConfig> result = nullptr;
 
     // ---- P1: exact fps + package + activity ----
     if (fps > 0 && !package.empty() && !activity.empty()) {
@@ -289,7 +287,7 @@ bool XmlConfigParser::parseXmlDocument(const std::string &xmlPath) {
               cfg.timeout, cfg.release.c_str(), cfg.params.size());
 #endif
 
-        mConfigCache[cfg.id].push_back(std::move(cfg));
+        mConfigCache[cfg.id].push_back(std::make_shared<ScenarioConfig>(std::move(cfg)));
         parsedCount++;
     }
 
@@ -464,23 +462,23 @@ void XmlConfigParser::buildPlatformParams() {
 
     for (auto &kv : mConfigCache) {
         for (auto &cfg : kv.second) {
-            int32_t converted = convertScenarioParams(cfg);
+            int32_t converted = convertScenarioParams(*cfg);
             totalConverted += converted;
 
-            if (cfg.platformParams.empty()) {
+            if (cfg->platformParams.empty()) {
                 // No mappable params for this platform — warn but keep entry
                 // so higher-priority matches can still be found by findBestMatch
                 TLOGW(
                     "Scenario id=%d fps=%d pkg='%s' act='%s': "
                     "no mappable params on current platform, entry kept but will be no-op",
-                    cfg.id, cfg.fps, cfg.package.c_str(), cfg.activity.c_str());
+                    cfg->id, cfg->fps, cfg->package.c_str(), cfg->activity.c_str());
                 totalSkipped++;
             } else {
                 TLOGD(
                     "Scenario id=%d fps=%d pkg='%s' act='%s': "
                     "%zu opcodes pre-converted",
-                    cfg.id, cfg.fps, cfg.package.c_str(), cfg.activity.c_str(),
-                    cfg.platformParams.size() / 2);
+                    cfg->id, cfg->fps, cfg->package.c_str(), cfg->activity.c_str(),
+                    cfg->platformParams.size() / 2);
             }
         }
     }
@@ -490,16 +488,17 @@ void XmlConfigParser::buildPlatformParams() {
         "%d entries with no mappable params",
         totalConverted, totalSkipped);
 
-    // release param mapper
-    ParamMapper::getInstance().clearMappings();
-    TLOGI("ParamMapper cache released after pre-conversion");
+    // Don't clear ParamMapper cache to support dynamic reload
+    // If reload is triggered, ParamMapper will be updated with new mappings
+    // before buildPlatformParams is called again.
+    // ParamMapper::getInstance().clearMappings();
+    TLOGI("ParamMapper cache retained for dynamic reload support");
 }
 
 int32_t XmlConfigParser::convertScenarioParams(ScenarioConfig &config) {
-    config.platformParams.clear();
-
 #if !PERFENGINE_PRODUCTION
     // Dev build: iterate named params, log each mapping result
+    config.platformParams.clear();
     for (const auto &param : config.params) {
         int32_t opcode = ParamMapper::getInstance().getOpcode(param.name);
         if (opcode < 0) {
@@ -515,6 +514,7 @@ int32_t XmlConfigParser::convertScenarioParams(ScenarioConfig &config) {
     // In production, parseScenarioNode converts directly without storing params.
     // This branch should not be reached; conversion happens inside parseScenarioNode.
     TLOGW("convertScenarioParams called in PRODUCTION build — unexpected");
+    // Don't clear platformParams in production build
 #endif
 
     return static_cast<int32_t>(config.platformParams.size() / 2);

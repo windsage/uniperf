@@ -13,8 +13,8 @@ Usage:
     python3 generate_events.py event_definitions.xml
 
 Output files:
-    - overlay/frameworks/base/core/java/android/util/TranPerfEventConstants.java
-    - sdk/src/main/java/android/util/TranPerfEventConstants.java
+    - overlay/frameworks/base/core/java/com/transsion/usf/perfengine/TranPerfEventConstants.java
+    - sdk/src/main/java/com/transsion/usf/perfengine/TranPerfEventConstants.java
     - system/native/include/perfengine/TranPerfEventConstants.h
     - system/native/include/perfengine/TranPerfEventImportMacro.h
     - docs/EVENT_ID_REFERENCE.md
@@ -29,8 +29,8 @@ from datetime import datetime
 SCRIPT_DIR = Path(__file__).parent
 ROOT_DIR = SCRIPT_DIR.parent
 
-JAVA_OVERLAY_OUT = ROOT_DIR / "overlay/frameworks/base/core/java/android/util/TranPerfEventConstants.java"
-JAVA_SDK_OUT = ROOT_DIR / "sdk/src/main/java/android/util/TranPerfEventConstants.java"
+JAVA_OVERLAY_OUT = ROOT_DIR / "overlay/frameworks/base/core/java/com/transsion/usf/perfengine/TranPerfEventConstants.java"
+JAVA_SDK_OUT = ROOT_DIR / "sdk/src/main/java/com/transsion/usf/perfengine/TranPerfEventConstants.java"
 CPP_HEADER_OUT = ROOT_DIR / "system/native/include/perfengine/TranPerfEventConstants.h"
 CPP_MACRO_OUT = ROOT_DIR / "system/native/include/perfengine/TranPerfEventImportMacro.h"
 DOCS_MD_OUT = ROOT_DIR / "docs/EVENT_ID_REFERENCE.md"
@@ -120,7 +120,7 @@ def generate_java_overlay(ranges, events, output_path):
         " * Generator: tools/generate_events.py",
         " */",
         "",
-        "package android.util;",
+        "package com.transsion.usf.perfengine;",
         "",
         "/**",
         " * PerfEngine Event ID Constants",
@@ -185,7 +185,7 @@ def generate_java_sdk(ranges, events, output_path):
         " * Generator: tools/generate_events.py",
         " */",
         "",
-        "package android.util;",
+        "package com.transsion.usf.perfengine;",
         "",
         "/**",
         " * PerfEngine Event ID Constants (SDK Version)",
@@ -550,7 +550,7 @@ def generate_markdown_docs(ranges, events, output_path):
         "### Java (Framework)",
         "",
         "```java",
-        "import static android.util.TranPerfEventConstants.*;",
+        "import static com.transsion.usf.perfengine.TranPerfEventConstants.*;",
         "",
         "TranPerfEvent.notifyEventStart(EVENT_SYS_APP_LAUNCH, System.nanoTime());",
         "```",

@@ -46,11 +46,11 @@ public:
      * @param currentFps  Current screen refresh rate (0 = ignore FPS)
      * @param package     Foreground package name (empty = generic)
      * @param activity    Foreground activity name (empty = package-level)
-     * @return Pointer to matched config, nullptr if not found
+     * @return Shared pointer to matched config, nullptr if not found
      */
-    const ScenarioConfig *getScenarioConfig(int32_t sceneId, int32_t currentFps = 0,
-                                            const std::string &package = "",
-                                            const std::string &activity = "");
+    std::shared_ptr<const ScenarioConfig> getScenarioConfig(int32_t sceneId, int32_t currentFps = 0,
+                                                            const std::string &package = "",
+                                                            const std::string &activity = "");
 
     /**
      * Reload configuration (supports hot update).
@@ -86,12 +86,13 @@ private:
      * Core matching logic — called with mMutex already held.
      * Implements the 6-level priority cascade.
      */
-    const ScenarioConfig *findBestMatch(int32_t sceneId, int32_t fps, const std::string &package,
-                                        const std::string &activity) const;
+    std::shared_ptr<const ScenarioConfig> findBestMatch(int32_t sceneId, int32_t fps,
+                                                        const std::string &package,
+                                                        const std::string &activity) const;
 
     // key = sceneId; value = all Scenario entries for that id (unsorted)
     // Using vector per id so multiple entries (different fps/package/activity) coexist.
-    std::unordered_map<int32_t, std::vector<ScenarioConfig>> mConfigCache;
+    std::unordered_map<int32_t, std::vector<std::shared_ptr<ScenarioConfig>>> mConfigCache;
 
     mutable std::mutex mMutex;
     std::string mCurrentConfigPath;

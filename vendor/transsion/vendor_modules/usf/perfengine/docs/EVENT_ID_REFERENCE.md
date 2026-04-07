@@ -1,6 +1,6 @@
 # PerfEngine Event ID Reference
 
-**Auto-generated:** 2026-03-17 11:46:26
+**Auto-generated:** 2026-04-02 15:16:27
 
 **Source:** `event_definitions.xml`
 
@@ -52,23 +52,8 @@ Events use **16-bit hexadecimal encoding** (0x00000 - 0xFFFFF):
 
 | Event ID | Constant Name | Priority | Description | Hook Point |
 |----------|---------------|----------|-------------|------------|
-| `0x00001` | `EVENT_SYS_INPUT` | 10 | Input event (touch/key) detected | InputDispatcher.cpp |
-
-**Integer Parameters (intParams)**
-
-| Index | Name | Type | Required | Description |
-|-------|------|------|----------|-------------|
-| 0 | `inputType` | `int` | No | Input device type: 0=touch, 1=key, 2=stylus |
-
-| Event ID | Constant Name | Priority | Description | Hook Point |
-|----------|---------------|----------|-------------|------------|
-| `0x00002` | `EVENT_SYS_APP_LAUNCH` | 8 | Application launch started | ActivityTaskManagerService.java |
-
-**Integer Parameters (intParams)**
-
-| Index | Name | Type | Required | Description |
-|-------|------|------|----------|-------------|
-| 0 | `launchType` | `int` | No | Launch type: 0=cold start, 1=warm start, 2=hot start |
+| `0x00001` | `EVENT_SYS_PROCESS_CREATE` | 8 | Process creation | ActivityManagerService.java |
+| `0x00002` | `EVENT_SYS_APP_LAUNCH_COLD` | 8 | cold start | ActivityTaskManagerService.java |
 
 **String Parameters (extraStrings, separated by `\x1F`)**
 
@@ -79,40 +64,43 @@ Events use **16-bit hexadecimal encoding** (0x00000 - 0xFFFFF):
 
 | Event ID | Constant Name | Priority | Description | Hook Point |
 |----------|---------------|----------|-------------|------------|
-| `0x00003` | `EVENT_SYS_BIND_APPLICATION` | 8 | Application bind (process created) | ActivityThread.java:handleBindApplication() |
+| `0x00003` | `EVENT_SYS_APP_LAUNCH_WARM` | 8 | warm start | ActivityTaskManagerService.java |
 
 **String Parameters (extraStrings, separated by `\x1F`)**
 
 | Index | Name | Type | Required | Description |
 |-------|------|------|----------|-------------|
-| 0 | `packageName` | `String` | No | Package being bound, e.g. com.android.settings |
+| 0 | `packageName` | `String` | No | Target package name, e.g. com.android.settings |
+| 1 | `activityName` | `String` | No | Target activity class name, e.g. .MainActivity |
 
 | Event ID | Constant Name | Priority | Description | Hook Point |
 |----------|---------------|----------|-------------|------------|
-| `0x00004` | `EVENT_SYS_ACTIVITY_SWITCH` | 7 | Activity switch/resume | ActivityRecord.java |
-
-**Integer Parameters (intParams)**
-
-| Index | Name | Type | Required | Description |
-|-------|------|------|----------|-------------|
-| 0 | `transitType` | `int` | No | Transition type: 0=resume, 1=new task, 2=task switch |
+| `0x00004` | `EVENT_SYS_APP_LAUNCH_HOT` | 8 | hot start | ActivityTaskManagerService.java |
 
 **String Parameters (extraStrings, separated by `\x1F`)**
 
 | Index | Name | Type | Required | Description |
 |-------|------|------|----------|-------------|
-| 0 | `packageName` | `String` | No | Target package name |
-| 1 | `activityName` | `String` | No | Target activity class name |
+| 0 | `packageName` | `String` | No | Target package name, e.g. com.android.settings |
+| 1 | `activityName` | `String` | No | Target activity class name, e.g. .MainActivity |
 
 | Event ID | Constant Name | Priority | Description | Hook Point |
 |----------|---------------|----------|-------------|------------|
-| `0x00005` | `EVENT_SYS_SCROLL` | 5 | Scroll gesture started | RecyclerView.java |
+| `0x00005` | `EVENT_SYS_FIRST_DRAW` | 7 | First frame drawing | N/A |
+| `0x00006` | `EVENT_SYS_ACTIVITY_SWITCH` | 7 | Activity switch | ActivityTaskManagerService.java |
 
-**Integer Parameters (intParams)**
+**String Parameters (extraStrings, separated by `\x1F`)**
 
 | Index | Name | Type | Required | Description |
 |-------|------|------|----------|-------------|
-| 0 | `scrollAxis` | `int` | No | Scroll axis: 0=vertical, 1=horizontal |
+| 0 | `packageName` | `String` | No | Target package name, e.g. com.android.settings |
+| 1 | `activityName` | `String` | No | Target activity class name, e.g. .MainActivity |
+
+| Event ID | Constant Name | Priority | Description | Hook Point |
+|----------|---------------|----------|-------------|------------|
+| `0x00007` | `EVENT_SYS_TOUCH` | 10 | Screen touch | InputDispatcher.cpp |
+| `0x00008` | `EVENT_SYS_KEY_PRESS` | 10 | Button click | InputDispatcher.cpp |
+| `0x00009` | `EVENT_SYS_FLING` | 5 | Sliding scene | OverScroller.cpp |
 
 **String Parameters (extraStrings, separated by `\x1F`)**
 
@@ -122,65 +110,64 @@ Events use **16-bit hexadecimal encoding** (0x00000 - 0xFFFFF):
 
 | Event ID | Constant Name | Priority | Description | Hook Point |
 |----------|---------------|----------|-------------|------------|
-| `0x00006` | `EVENT_SYS_FLING` | 5 | Fling gesture detected | GestureDetector.java |
-
-**Integer Parameters (intParams)**
-
-| Index | Name | Type | Required | Description |
-|-------|------|------|----------|-------------|
-| 0 | `flingAxis` | `int` | No | Fling axis: 0=vertical, 1=horizontal |
+| `0x0000A` | `EVENT_SYS_SCROLL` | 5 | Drag scene | OverScroller.cpp |
 
 **String Parameters (extraStrings, separated by `\x1F`)**
 
 | Index | Name | Type | Required | Description |
 |-------|------|------|----------|-------------|
-| 0 | `packageName` | `String` | No | Package where fling occurred |
+| 0 | `packageName` | `String` | No | Package where scroll occurred |
 
 | Event ID | Constant Name | Priority | Description | Hook Point |
 |----------|---------------|----------|-------------|------------|
-| `0x00007` | `EVENT_SYS_ANIMATION` | 5 | Window animation started | WindowAnimator.java |
-
-**Integer Parameters (intParams)**
-
-| Index | Name | Type | Required | Description |
-|-------|------|------|----------|-------------|
-| 0 | `animationType` | `int` | No | Animation type: 0=enter, 1=exit, 2=cross-fade |
-
-| Event ID | Constant Name | Priority | Description | Hook Point |
-|----------|---------------|----------|-------------|------------|
-| `0x00008` | `EVENT_SYS_CAMERA_OPEN` | 7 | Camera HAL open requested | CameraService.cpp |
-
-**Integer Parameters (intParams)**
-
-| Index | Name | Type | Required | Description |
-|-------|------|------|----------|-------------|
-| 0 | `cameraId` | `int` | No | Camera hardware ID (0=rear main, 1=front) |
-
-**String Parameters (extraStrings, separated by `\x1F`)**
-
-| Index | Name | Type | Required | Description |
-|-------|------|------|----------|-------------|
-| 0 | `packageName` | `String` | No | Package requesting camera |
-
-| Event ID | Constant Name | Priority | Description | Hook Point |
-|----------|---------------|----------|-------------|------------|
-| `0x00009` | `EVENT_SYS_VIDEO_DECODE` | 6 | Video decoder initialization | MediaCodec.cpp |
-
-**Integer Parameters (intParams)**
-
-| Index | Name | Type | Required | Description |
-|-------|------|------|----------|-------------|
-| 0 | `codecType` | `int` | No | Codec type: 0=H264, 1=H265, 2=VP9, 3=AV1 |
-
-**String Parameters (extraStrings, separated by `\x1F`)**
-
-| Index | Name | Type | Required | Description |
-|-------|------|------|----------|-------------|
-| 0 | `packageName` | `String` | No | Package using video decoder |
-
-| Event ID | Constant Name | Priority | Description | Hook Point |
-|----------|---------------|----------|-------------|------------|
-| `0x0000A` | `EVENT_SYS_BOOT_COMPLETED` | 9 | System boot completed broadcast | ActivityManagerService.java |
+| `0x0000B` | `EVENT_SYS_SCREEN_ON` | 6 | Screen-on scene | DisplayPowerController.cpp |
+| `0x0000C` | `EVENT_SYS_SCREEN_OFF` | 6 | Screen-off scene | DisplayPowerController.cpp |
+| `0x0000D` | `EVENT_SYS_SCREEN_DOZE` | 4 | Screen sleep | DisplayPowerController.cpp |
+| `0x0000E` | `EVENT_SYS_SCREEN_UNLOCK` | 8 | Screen unlock | KeyguardController.cpp |
+| `0x0000F` | `EVENT_SYS_SCREEN_ROTATE` | 5 | Screen rotation | DisplayManagerService.cpp |
+| `0x00010` | `EVENT_SYS_IME_BOOST` | 5 | Input method pop-up/retract | InputMethodManagerService.cpp |
+| `0x00011` | `EVENT_SYS_IME_INPUT` | 5 | Keyboard input | InputMethodManagerService.cpp |
+| `0x00012` | `EVENT_SYS_REFRESH_UPDATE` | 4 | Refresh rate toggle | DisplayManagerService.cpp |
+| `0x00013` | `EVENT_SYS_SPLIT_WINDOW` | 5 | Split screen scene | DisplayManagerService.cpp |
+| `0x00014` | `EVENT_SYS_PIP_WINDOW` | 5 | Small window mode | DisplayManagerService.cpp |
+| `0x00015` | `EVENT_SYS_AMIN_TRANSITION_LAUNCHER` | 6 | Startup animation (desktop startup) | ActivityTaskManagerService.java |
+| `0x00016` | `EVENT_SYS_AMIN_TRANSITION` | 5 | Startup animation (non-desktop startup) | ActivityTaskManagerService.java |
+| `0x00017` | `EVENT_SYS_AMIN_EXIT` | 5 | Exit animation | ActivityTaskManagerService.java |
+| `0x00018` | `EVENT_SYS_AMIN_LITE` | 4 | Lightweight animation | ActivityTaskManagerService.java |
+| `0x00019` | `EVENT_SYS_AMIN_MEDIUM` | 5 | Moderate animation | ActivityTaskManagerService.java |
+| `0x0001A` | `EVENT_SYS_AMIN_HEAVY` | 6 | Complex animation | ActivityTaskManagerService.java |
+| `0x0001B` | `EVENT_SYS_APP_INSTALL` | 3 | App installation | PackageManagerService.java |
+| `0x0001C` | `EVENT_SYS_APP_UNINSTALL` | 3 | App uninstall | PackageManagerService.java |
+| `0x0001D` | `EVENT_SYS_EXPENSIVE_RENDERING` | 6 | High load rendering/compositing | RenderEngine.cpp |
+| `0x0001E` | `EVENT_SYS_IO_HEAVY` | 3 | High IO scenarios | File.cpp |
+| `0x0001F` | `EVENT_SYS_FILE_OPERATION` | 2 | File operation | File.cpp |
+| `0x00020` | `EVENT_SYS_DOWNLOAD` | 3 | Network download | File.cpp |
+| `0x00021` | `EVENT_SYS_CAMERA_LAUNCH` | 7 | Camera on | CameraService.cpp |
+| `0x00022` | `EVENT_SYS_VOICE_CALL` | 6 | Voice call | Phone.java |
+| `0x00023` | `EVENT_SYS_VIDEO_CALL` | 6 | Video call | Phone.java |
+| `0x00024` | `EVENT_SYS_VIDEO_DECODE` | 6 | Video decoding | MediaPlayerService.java |
+| `0x00025` | `EVENT_SYS_VIDEO_PLAY` | 5 | Video playback | MediaPlayerService.java |
+| `0x00026` | `EVENT_SYS_AUDIO_PLAY` | 5 | Audio playback | MediaPlayerService.java |
+| `0x00027` | `EVENT_SYS_SCREEN_SHOT` | 4 | Screen capture | ScreenshotService.java |
+| `0x00028` | `EVENT_SYS_SCREEN_RECORD` | 4 | Screen recording | ScreenRecorder.java |
+| `0x00029` | `EVENT_SYS_VOICE_RECORD` | 3 | Audio recording | AudioRecorder.java |
+| `0x0002A` | `EVENT_SYS_BT_CONNECT` | 3 | Bluetooth connection | BluetoothManagerService.java |
+| `0x0002B` | `EVENT_SYS_GPS_CONNECT` | 3 | GPS connection | LocationManagerService.java |
+| `0x0002C` | `EVENT_SYS_MTP_TRANSFER` | 2 | MTP transmission | StorageManagerService.java |
+| `0x0002D` | `EVENT_SYS_LOW_POWER` | 4 | Low battery scenario | BatteryService.java |
+| `0x0002E` | `EVENT_SYS_THERMAL_HIGH` | 4 | High temperature scene | ThermalManagerService.java |
+| `0x0002F` | `EVENT_SYS_THERMAL_BENCH` | 3 | Benchmark mode | ThermalManagerService.java |
+| `0x00030` | `EVENT_SYS_PERFORMANCE` | 4 | Performance mode | ThermalManagerService.java |
+| `0x00031` | `EVENT_SYS_IDEL` | 1 | Idle mode | ThermalManagerService.java |
+| `0x00032` | `EVENT_SYS_FINGERPRINT` | 7 | Fingerprint unlock | FingerprintService.java |
+| `0x00033` | `EVENT_SYS_FACE` | 7 | Face unlock | FaceService.java |
+| `0x00034` | `EVENT_SYS_ASSISTANT` | 6 | Voice assistant | VoiceInteractionService.java |
+| `0x00035` | `EVENT_SYS_AI` | 5 | AI scenarios | AI.java |
+| `0x00036` | `EVENT_SYS_BOOT` | 9 | Boot scene | BootReceiver.java |
+| `0x00037` | `EVENT_SYS_SHUTDOWN` | 9 | Shutdown scenario | ShutdownReceiver.java |
+| `0x00038` | `EVENT_SYS_DEX2OAT` | 2 | DEX2OAT | Dex2Oat.cpp |
+| `0x00039` | `EVENT_SYS_GC` | 2 | GC | GC.cpp |
+| `0x0003A` | `EVENT_SYS_GAME_MODE` | 10 | Game mode | GameModeService.java |
 
 ### Application Events
 
@@ -321,7 +308,7 @@ Events use **16-bit hexadecimal encoding** (0x00000 - 0xFFFFF):
 ### Java (Framework)
 
 ```java
-import static android.util.TranPerfEventConstants.*;
+import static com.transsion.usf.perfengine.TranPerfEventConstants.*;
 
 TranPerfEvent.notifyEventStart(EVENT_SYS_APP_LAUNCH, System.nanoTime());
 ```

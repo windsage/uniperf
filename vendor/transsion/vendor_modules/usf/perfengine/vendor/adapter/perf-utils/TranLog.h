@@ -93,4 +93,3 @@ public:
 #define TLOGI(fmt, ...) TRAN_LOGI(LOG_TAG, fmt, ##__VA_ARGS__)
 #define TLOGW(fmt, ...) TRAN_LOGW(LOG_TAG, fmt, ##__VA_ARGS__)
 #define TLOGE(fmt, ...) TRAN_LOGE(LOG_TAG, fmt, ##__VA_ARGS__)
-

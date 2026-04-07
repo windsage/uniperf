@@ -1,5 +1,5 @@
 PRODUCT_PACKAGES += \
-    perfengine_client \
+    libperfengine-jni \
     libperfengine-client \
     PerfEngineDemo \
     vendor.transsion.perfengine-V1-ndk \
@@ -9,8 +9,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.transsion.perfengine.version=1.0.0
-
-PRODUCT_BOOT_JARS += system_ext:perfengine_client
 
 ifneq ($(filter eng userdebug,$(TARGET_BUILD_VARIANT)),)
     PRODUCT_SYSTEM_PROPERTIES += \

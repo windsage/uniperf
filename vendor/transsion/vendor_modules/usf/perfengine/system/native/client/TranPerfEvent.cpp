@@ -6,6 +6,7 @@
 
 #include <aidl/vendor/transsion/hardware/perfengine/IEventListener.h>
 #include <aidl/vendor/transsion/hardware/perfengine/IPerfEngine.h>
+#include <android/binder_ibinder.h>
 #include <android/binder_manager.h>
 #include <perfengine/TranPerfEvent.h>
 #include <time.h>
@@ -331,6 +332,67 @@ int32_t TranPerfEvent::unregisterEventListener(const std::shared_ptr<IEventListe
     }
 
     return 0;
+}
+
+// ==================== Listener Registration (Binder Entry) ====================
+
+int32_t TranPerfEvent::registerEventListenerFromBinder(AIBinder *listenerBinder) {
+    return registerEventListenerFromBinder(listenerBinder, {});
+}
+
+int32_t TranPerfEvent::registerEventListenerFromBinder(AIBinder *listenerBinder,
+                                                       const std::vector<int32_t> &eventFilter) {
+    if (!CHECK_FLAG()) {
+        if (DEBUG) {
+            ALOGD("PerfEngine disabled by flag");
+        }
+        if (listenerBinder != nullptr) {
+            AIBinder_decStrong(listenerBinder);
+        }
+        return -1;
+    }
+
+    if (listenerBinder == nullptr) {
+        ALOGE("Listener binder is null");
+        return -1;
+    }
+
+    // Adopt ownership of listenerBinder reference from caller.
+    SpAIBinder spBinder(listenerBinder);
+    std::shared_ptr<IEventListener> listener = IEventListener::fromBinder(spBinder);
+    if (!listener) {
+        ALOGE("Failed to convert binder to IEventListener");
+        return -1;
+    }
+
+    return registerEventListener(listener, eventFilter);
+}
+
+int32_t TranPerfEvent::unregisterEventListenerFromBinder(AIBinder *listenerBinder) {
+    if (!CHECK_FLAG()) {
+        if (DEBUG) {
+            ALOGD("PerfEngine disabled by flag");
+        }
+        if (listenerBinder != nullptr) {
+            AIBinder_decStrong(listenerBinder);
+        }
+        return -1;
+    }
+
+    if (listenerBinder == nullptr) {
+        ALOGE("Listener binder is null");
+        return -1;
+    }
+
+    // Adopt ownership of listenerBinder reference from caller.
+    SpAIBinder spBinder(listenerBinder);
+    std::shared_ptr<IEventListener> listener = IEventListener::fromBinder(spBinder);
+    if (!listener) {
+        ALOGE("Failed to convert binder to IEventListener");
+        return -1;
+    }
+
+    return unregisterEventListener(listener);
 }
 
 }    // namespace transsion

@@ -24,6 +24,10 @@ namespace perfengine {
 struct EventContext {
     int32_t eventId = 0;
 
+    /** REQ-SEC-002：由 ServiceBridge::notifyEventStart 注入 Binder 身份；未注入时为 -1。 */
+    int32_t callerUid = -1;
+    int32_t callerPid = -1;
+
     // 这里是以后需要补充的参数，用于转换ints中的每个元素
     int32_t intParam0 = 0;
     int32_t intParam1 = 0;
@@ -112,6 +116,8 @@ private:
 
             default:
                 // Fallback: treat [0]=intParam0, [1]=intParam1 universally
+                // DSE / EventSemanticDecoder: ints[2] low 8b = input channel (1=touch…5=sensor),
+                // bit8=background hint; ints[3] = lifecycle phase hint (non-zero → lifecycle).
                 intParam0 = getInt(0);
                 intParam1 = getInt(1);
                 break;

@@ -1,0 +1,15 @@
+ext {
+    configs = [
+            compileSdk  : 35,
+            minSdk      : 31,
+            targetSdk   : 35,
+            versionCode : 36010100,
+            versionName : "36.1.1.0",
+            packageName : 'com.transsion.usf.perfengine',
+    ]
+
+    uploads = [
+            groupid : "com.transsion.usf.perfengine",
+            url     : System.getenv("MAVEN_URL"),
+    ]
+}

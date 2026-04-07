@@ -22,7 +22,6 @@
           Code generators (.h/.java) ignore them entirely.
 -->
 <PerfEngineEvents version="3.0">
-
     <!-- ========== Range Definitions ========== -->
     <Ranges>
         <Range name="RANGE_SYS"              start="0x00000" end="0x00FFF"
@@ -42,412 +41,408 @@
         <Range name="RANGE_INTERNAL"         start="0xF0000" end="0xFFFFF"
                description="Internal test/debug events"/>
     </Ranges>
-
     <!-- ========== System Events (0x00000 - 0x00FFF) ========== -->
     <SystemEvents>
-
         <Event id="0x00001"
                name="EVENT_SYS_PROCESS_CREATE"
                description="Process creation"
                hook="ActivityManagerService.java"
-               priority="8"/>
-
+               priority="8">
+        </Event>
         <Event id="0x00002"
-               name="EVENT_SYS_APP_LAUNCH_CLOD"
+               name="EVENT_SYS_APP_LAUNCH_COLD"
                description="cold start"
                hook="ActivityTaskManagerService.java"
-               priority="8"/>
-              <stringParams>
+               priority="8">
+            <stringParams>
                 <Param index="0" name="packageName" type="String"
                        required="false"
                        description="Target package name, e.g. com.android.settings"/>
                 <Param index="1" name="activityName" type="String"
                        required="false"
                        description="Target activity class name, e.g. .MainActivity"/>
-              </stringParams>
-
+            </stringParams>
+        </Event>
         <Event id="0x00003"
                name="EVENT_SYS_APP_LAUNCH_WARM"
                description="warm start"
                hook="ActivityTaskManagerService.java"
-               priority="8"/>
-              <stringParams>
+               priority="8">
+            <stringParams>
                 <Param index="0" name="packageName" type="String"
                        required="false"
                        description="Target package name, e.g. com.android.settings"/>
                 <Param index="1" name="activityName" type="String"
                        required="false"
                        description="Target activity class name, e.g. .MainActivity"/>
-              </stringParams>
-
+            </stringParams>
+        </Event>
         <Event id="0x00004"
                name="EVENT_SYS_APP_LAUNCH_HOT"
                description="hot start"
                hook="ActivityTaskManagerService.java"
-               priority="8"/>
-              <stringParams>
+               priority="8">
+            <stringParams>
                 <Param index="0" name="packageName" type="String"
                        required="false"
                        description="Target package name, e.g. com.android.settings"/>
                 <Param index="1" name="activityName" type="String"
                        required="false"
                        description="Target activity class name, e.g. .MainActivity"/>
-              </stringParams>
-
+            </stringParams>
+        </Event>
         <Event id="0x00005"
                name="EVENT_SYS_FIRST_DRAW"
                description="First frame drawing"
                hook=""
-               priority="7"/>
-
+               priority="7">
+        </Event>
         <Event id="0x00006"
                name="EVENT_SYS_ACTIVITY_SWITCH"
                description="Activity switch"
                hook="ActivityTaskManagerService.java"
-               priority="7"/>
-              <stringParams>
+               priority="7">
+            <stringParams>
                 <Param index="0" name="packageName" type="String"
                        required="false"
                        description="Target package name, e.g. com.android.settings"/>
                 <Param index="1" name="activityName" type="String"
                        required="false"
                        description="Target activity class name, e.g. .MainActivity"/>
-              </stringParams>
-
+            </stringParams>
+        </Event>
         <Event id="0x00007"
                name="EVENT_SYS_TOUCH"
                description="Screen touch"
                hook="InputDispatcher.cpp"
-               priority="10"/>
-
+               priority="10">
+        </Event>
         <Event id="0x00008"
                name="EVENT_SYS_KEY_PRESS"
                description="Button click"
                hook="InputDispatcher.cpp"
-               priority="10"/>
-
+               priority="10">
+        </Event>
         <Event id="0x00009"
                name="EVENT_SYS_FLING"
                description="Sliding scene"
                hook="OverScroller.cpp"
-               priority="5"/>
+               priority="5">
             <stringParams>
                 <Param index="0" name="packageName" type="String"
                        required="false"
                        description="Package where scroll occurred"/>
             </stringParams>
-
+        </Event>
         <Event id="0x0000A"
                name="EVENT_SYS_SCROLL"
                description="Drag scene"
                hook="OverScroller.cpp"
-               priority="5"/>
+               priority="5">
             <stringParams>
                 <Param index="0" name="packageName" type="String"
                        required="false"
                        description="Package where scroll occurred"/>
             </stringParams>
-
+        </Event>
         <Event id="0x0000B"
                name="EVENT_SYS_SCREEN_ON"
                description="Screen-on scene"
                hook="DisplayPowerController.cpp"
-               priority="6"/>
-
+               priority="6">
+        </Event>
         <Event id="0x0000C"
                name="EVENT_SYS_SCREEN_OFF"
                description="Screen-off scene"
                hook="DisplayPowerController.cpp"
-               priority="6"/>
-
+               priority="6">
+        </Event>
         <Event id="0x0000D"
                name="EVENT_SYS_SCREEN_DOZE"
                description="Screen sleep"
                hook="DisplayPowerController.cpp"
-               priority="4"/>
-
+               priority="4">
+        </Event>
         <Event id="0x0000E"
                name="EVENT_SYS_SCREEN_UNLOCK"
                description="Screen unlock"
                hook="KeyguardController.cpp"
-               priority="8"/>
-
+               priority="8">
+        </Event>
         <Event id="0x0000F"
                name="EVENT_SYS_SCREEN_ROTATE"
                description="Screen rotation"
                hook="DisplayManagerService.cpp"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x00010"
                name="EVENT_SYS_IME_BOOST"
                description="Input method pop-up/retract"
                hook="InputMethodManagerService.cpp"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x00011"
                name="EVENT_SYS_IME_INPUT"
                description="Keyboard input"
                hook="InputMethodManagerService.cpp"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x00012"
                name="EVENT_SYS_REFRESH_UPDATE"
                description="Refresh rate toggle"
                hook="DisplayManagerService.cpp"
-               priority="4"/>
-
+               priority="4">
+        </Event>
         <Event id="0x00013"
                name="EVENT_SYS_SPLIT_WINDOW"
                description="Split screen scene"
                hook="DisplayManagerService.cpp"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x00014"
                name="EVENT_SYS_PIP_WINDOW"
                description="Small window mode"
                hook="DisplayManagerService.cpp"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x00015"
                name="EVENT_SYS_AMIN_TRANSITION_LAUNCHER"
                description="Startup animation (desktop startup)"
                hook="ActivityTaskManagerService.java"
-               priority="6"/>
-
+               priority="6">
+        </Event>
         <Event id="0x00016"
                name="EVENT_SYS_AMIN_TRANSITION"
                description="Startup animation (non-desktop startup)"
                hook="ActivityTaskManagerService.java"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x00017"
                name="EVENT_SYS_AMIN_EXIT"
                description="Exit animation"
                hook="ActivityTaskManagerService.java"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x00018"
                name="EVENT_SYS_AMIN_LITE"
                description="Lightweight animation"
                hook="ActivityTaskManagerService.java"
-               priority="4"/>
-
+               priority="4">
+        </Event>
         <Event id="0x00019"
                name="EVENT_SYS_AMIN_MEDIUM"
                description="Moderate animation"
                hook="ActivityTaskManagerService.java"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x0001A"
                name="EVENT_SYS_AMIN_HEAVY"
                description="Complex animation"
                hook="ActivityTaskManagerService.java"
-               priority="6"/>
-
+               priority="6">
+        </Event>
         <Event id="0x0001B"
                name="EVENT_SYS_APP_INSTALL"
                description="App installation"
                hook="PackageManagerService.java"
-               priority="3"/>
-
+               priority="3">
+        </Event>
         <Event id="0x0001C"
                name="EVENT_SYS_APP_UNINSTALL"
                description="App uninstall"
                hook="PackageManagerService.java"
-               priority="3"/>
-
+               priority="3">
+        </Event>
         <Event id="0x0001D"
                name="EVENT_SYS_EXPENSIVE_RENDERING"
                description="High load rendering/compositing"
                hook="RenderEngine.cpp"
-               priority="6"/>
-
+               priority="6">
+        </Event>
         <Event id="0x0001E"
                name="EVENT_SYS_IO_HEAVY"
                description="High IO scenarios"
                hook="File.cpp"
-               priority="3"/>
-
+               priority="3">
+        </Event>
         <Event id="0x0001F"
                name="EVENT_SYS_FILE_OPERATION"
                description="File operation"
                hook="File.cpp"
-               priority="2"/>
-
+               priority="2">
+        </Event>
         <Event id="0x00020"
                name="EVENT_SYS_DOWNLOAD"
                description="Network download"
                hook="File.cpp"
-               priority="3"/>
-
+               priority="3">
+        </Event>
         <Event id="0x00021"
                name="EVENT_SYS_CAMERA_LAUNCH"
                description="Camera on"
                hook="CameraService.cpp"
-               priority="7"/>
-
+               priority="7">
+        </Event>
         <Event id="0x00022"
                name="EVENT_SYS_VOICE_CALL"
                description="Voice call"
                hook="Phone.java"
-               priority="6"/>
-
+               priority="6">
+        </Event>
         <Event id="0x00023"
                name="EVENT_SYS_VIDEO_CALL"
                description="Video call"
                hook="Phone.java"
-               priority="6"/>
-
+               priority="6">
+        </Event>
         <Event id="0x00024"
                name="EVENT_SYS_VIDEO_DECODE"
                description="Video decoding"
                hook="MediaPlayerService.java"
-               priority="6"/>
-
+               priority="6">
+        </Event>
         <Event id="0x00025"
                name="EVENT_SYS_VIDEO_PLAY"
                description="Video playback"
                hook="MediaPlayerService.java"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x00026"
                name="EVENT_SYS_AUDIO_PLAY"
                description="Audio playback"
                hook="MediaPlayerService.java"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x00027"
                name="EVENT_SYS_SCREEN_SHOT"
                description="Screen capture"
                hook="ScreenshotService.java"
-               priority="4"/>
-
+               priority="4">
+        </Event>
         <Event id="0x00028"
                name="EVENT_SYS_SCREEN_RECORD"
                description="Screen recording"
                hook="ScreenRecorder.java"
-               priority="4"/>
-
+               priority="4">
+        </Event>
         <Event id="0x00029"
                name="EVENT_SYS_VOICE_RECORD"
                description="Audio recording"
                hook="AudioRecorder.java"
-               priority="3"/>
-
+               priority="3">
+        </Event>
         <Event id="0x0002A"
                name="EVENT_SYS_BT_CONNECT"
                description="Bluetooth connection"
                hook="BluetoothManagerService.java"
-               priority="3"/>
-
+               priority="3">
+        </Event>
         <Event id="0x0002B"
                name="EVENT_SYS_GPS_CONNECT"
                description="GPS connection"
                hook="LocationManagerService.java"
-               priority="3"/>
-
+               priority="3">
+        </Event>
         <Event id="0x0002C"
                name="EVENT_SYS_MTP_TRANSFER"
                description="MTP transmission"
                hook="StorageManagerService.java"
-               priority="2"/>
-
+               priority="2">
+        </Event>
         <Event id="0x0002D"
                name="EVENT_SYS_LOW_POWER"
                description="Low battery scenario"
                hook="BatteryService.java"
-               priority="4"/>
-
+               priority="4">
+        </Event>
         <Event id="0x0002E"
                name="EVENT_SYS_THERMAL_HIGH"
                description="High temperature scene"
                hook="ThermalManagerService.java"
-               priority="4"/>
-
+               priority="4">
+        </Event>
         <Event id="0x0002F"
                name="EVENT_SYS_THERMAL_BENCH"
                description="Benchmark mode"
                hook="ThermalManagerService.java"
-               priority="3"/>
-
+               priority="3">
+        </Event>
         <Event id="0x00030"
                name="EVENT_SYS_PERFORMANCE"
                description="Performance mode"
                hook="ThermalManagerService.java"
-               priority="4"/>
-
+               priority="4">
+        </Event>
         <Event id="0x00031"
                name="EVENT_SYS_IDEL"
                description="Idle mode"
                hook="ThermalManagerService.java"
-               priority="1"/>
-
+               priority="1">
+        </Event>
         <Event id="0x00032"
                name="EVENT_SYS_FINGERPRINT"
                description="Fingerprint unlock"
                hook="FingerprintService.java"
-               priority="7"/>
-
+               priority="7">
+        </Event>
         <Event id="0x00033"
                name="EVENT_SYS_FACE"
                description="Face unlock"
                hook="FaceService.java"
-               priority="7"/>
-
+               priority="7">
+        </Event>
         <Event id="0x00034"
                name="EVENT_SYS_ASSISTANT"
                description="Voice assistant"
                hook="VoiceInteractionService.java"
-               priority="6"/>
-
+               priority="6">
+        </Event>
         <Event id="0x00035"
                name="EVENT_SYS_AI"
                description="AI scenarios"
                hook="AI.java"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x00036"
                name="EVENT_SYS_BOOT"
                description="Boot scene"
                hook="BootReceiver.java"
-               priority="9"/>
-
+               priority="9">
+        </Event>
         <Event id="0x00037"
                name="EVENT_SYS_SHUTDOWN"
                description="Shutdown scenario"
                hook="ShutdownReceiver.java"
-               priority="9"/>
-
+               priority="9">
+        </Event>
         <Event id="0x00038"
                name="EVENT_SYS_DEX2OAT"
                description="DEX2OAT"
                hook="Dex2Oat.cpp"
-               priority="2"/>
-
+               priority="2">
+        </Event>
         <Event id="0x00039"
                name="EVENT_SYS_GC"
                description="GC"
                hook="GC.cpp"
-               priority="2"/>
-       
-       <Event id="0x0003A"
+               priority="2">
+        </Event>
+        <Event id="0x0003A"
                name="EVENT_SYS_GAME_MODE"
                description="Game mode"
                hook="GameModeService.java"
-               priority="10"/>
-
+               priority="10">
+        </Event>
         <!-- Reserved: 0x0003A - 0x00FFF for future system events -->
     </SystemEvents>
-
     <!-- ========== SystemUI Events (0x01000 - 0x01FFF) ========== -->
     <AppEvents app="SystemUI">
-
         <Event id="0x01001"
                name="EVENT_APP_SYSTEMUI_PANEL_EXPAND"
                description="Notification panel expand gesture started"
                hook="NotificationPanelViewController.java"
-               priority="6"/>
-
+               priority="6">
+        </Event>
         <Event id="0x01002"
                name="EVENT_APP_SYSTEMUI_NOTIFICATION_POST"
                description="New notification posted"
@@ -459,88 +454,81 @@
                        description="Notification style: 0=normal, 1=heads-up, 2=fullscreen"/>
             </intParams>
         </Event>
-
         <Event id="0x01003"
                name="EVENT_APP_SYSTEMUI_QUICK_SETTINGS"
                description="Quick settings panel toggled"
                hook="QuickSettingsController.java"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x01004"
                name="EVENT_APP_SYSTEMUI_STATUS_BAR_SCROLL"
                description="Status bar notification list scrolled"
                hook="NotificationStackScrollLayout.java"
-               priority="4"/>
-
+               priority="4">
+        </Event>
         <Event id="0x01005"
                name="EVENT_APP_SYSTEMUI_KEYGUARD_UNLOCK"
                description="Keyguard unlock animation started"
                hook="KeyguardViewController.java"
-               priority="8"/>
-
+               priority="8">
+        </Event>
     </AppEvents>
-
     <!-- ========== Launcher Events (0x02000 - 0x02FFF) ========== -->
     <AppEvents app="Launcher">
-
         <Event id="0x02001"
                name="EVENT_APP_LAUNCHER_SWIPE_UP"
                description="Swipe up gesture to home screen"
                hook="SwipeUpAnimationLogic.java"
-               priority="6"/>
-
+               priority="6">
+        </Event>
         <Event id="0x02002"
                name="EVENT_APP_LAUNCHER_FOLDER_OPEN"
                description="App folder opened"
                hook="Folder.java"
-               priority="4"/>
-
+               priority="4">
+        </Event>
         <Event id="0x02003"
                name="EVENT_APP_LAUNCHER_WIDGET_RESIZE"
                description="Home screen widget resize started"
                hook="AppWidgetResizeFrame.java"
-               priority="3"/>
-
+               priority="3">
+        </Event>
         <Event id="0x02004"
                name="EVENT_APP_LAUNCHER_ICON_DRAG"
                description="App icon drag operation started"
                hook="DragController.java"
-               priority="3"/>
-
+               priority="3">
+        </Event>
         <Event id="0x02005"
                name="EVENT_APP_LAUNCHER_APP_DRAWER_OPEN"
                description="App drawer opened"
                hook="AllAppsController.java"
-               priority="5"/>
-
+               priority="5">
+        </Event>
     </AppEvents>
-
     <!-- ========== Wallpaper Events (0x03000 - 0x03FFF) ========== -->
     <AppEvents app="Wallpaper">
-
         <Event id="0x03001"
                name="EVENT_APP_WALLPAPER_CHANGE"
                description="Wallpaper change operation started"
                hook="WallpaperManagerService.java"
-               priority="5"/>
-
+               priority="5">
+        </Event>
         <Event id="0x03002"
                name="EVENT_APP_WALLPAPER_PREVIEW"
                description="Wallpaper preview rendering"
                hook="WallpaperPreviewActivity.java"
-               priority="4"/>
-
+               priority="4">
+        </Event>
         <Event id="0x03003"
                name="EVENT_APP_WALLPAPER_LIVE_RENDER"
                description="Live wallpaper frame rendering"
                hook="WallpaperService.java"
-               priority="2"/>
-
+               priority="2">
+        </Event>
     </AppEvents>
-
     <!-- ========== Third-party App Events (0x10000 - 0xEFFFF) ========== -->
     <AppEvents app="ThirdParty">
-
         <Event id="0x10001"
                name="EVENT_APP_GAME_LEVEL_START"
                description="Game level/stage loading started"
@@ -557,7 +545,6 @@
                        description="Game package name"/>
             </stringParams>
         </Event>
-
         <Event id="0x10002"
                name="EVENT_APP_GAME_BOSS_FIGHT"
                description="Boss fight encounter started"
@@ -574,7 +561,6 @@
                        description="Game package name"/>
             </stringParams>
         </Event>
-
         <Event id="0x10003"
                name="EVENT_APP_VIDEO_PLAYER_DECODE"
                description="Video player decoder initialization"
@@ -591,7 +577,6 @@
                        description="Video player package name"/>
             </stringParams>
         </Event>
-
         <Event id="0x10004"
                name="EVENT_APP_BROWSER_PAGE_LOAD"
                description="Browser page load started"
@@ -603,7 +588,6 @@
                        description="Browser package name"/>
             </stringParams>
         </Event>
-
         <Event id="0x10005"
                name="EVENT_APP_CAMERA_CAPTURE"
                description="Camera capture shutter pressed"
@@ -620,12 +604,9 @@
                        description="Camera app package name"/>
             </stringParams>
         </Event>
-
     </AppEvents>
-
     <!-- ========== Internal / Debug Events (0xF0000 - 0xFFFFF) ========== -->
     <InternalEvents>
-
         <Event id="0xF0001"
                name="EVENT_INTERNAL_TEST_BENCHMARK"
                description="Performance benchmark test"
@@ -637,7 +618,6 @@
                        description="Benchmark test case ID"/>
             </intParams>
         </Event>
-
         <Event id="0xF0002"
                name="EVENT_INTERNAL_DEBUG_TRACE"
                description="Debug trace marker"
@@ -654,7 +634,5 @@
                        description="Human-readable trace label"/>
             </stringParams>
         </Event>
-
     </InternalEvents>
-
 </PerfEngineEvents>

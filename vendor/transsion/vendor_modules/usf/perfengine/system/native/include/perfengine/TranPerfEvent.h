@@ -16,6 +16,9 @@
 #include "TranPerfEventConstants.h"
 #include "TranPerfEventImportMacro.h"
 
+// Forward declaration (avoid including binder headers in public API)
+struct AIBinder;
+
 // Forward declaration
 namespace aidl {
 namespace vendor {
@@ -209,6 +212,40 @@ public:
     static int32_t unregisterEventListener(
         const std::shared_ptr<::aidl::vendor::transsion::hardware::perfengine::IEventListener>
             &listener);
+
+    // ==================== Listener Registration (Binder Entry) ====================
+
+    /**
+     * Register event listener from Binder object.
+     *
+     * Ownership: This API adopts the reference of listenerBinder (caller should not release it).
+     *
+     * @param listenerBinder AIBinder object implementing IEventListener
+     * @return 0 on success, -1 on failure
+     */
+    static int32_t registerEventListenerFromBinder(AIBinder *listenerBinder);
+
+    /**
+     * Register event listener from Binder object with event filter.
+     *
+     * Ownership: This API adopts the reference of listenerBinder (caller should not release it).
+     *
+     * @param listenerBinder AIBinder object implementing IEventListener
+     * @param eventFilter EventIds to subscribe; empty vector = all events
+     * @return 0 on success, -1 on failure
+     */
+    static int32_t registerEventListenerFromBinder(AIBinder *listenerBinder,
+                                                   const std::vector<int32_t> &eventFilter);
+
+    /**
+     * Unregister event listener from Binder object.
+     *
+     * Ownership: This API adopts the reference of listenerBinder (caller should not release it).
+     *
+     * @param listenerBinder AIBinder object implementing IEventListener
+     * @return 0 on success, -1 on failure
+     */
+    static int32_t unregisterEventListenerFromBinder(AIBinder *listenerBinder);
 
     // ==================== Utility Methods ====================
 

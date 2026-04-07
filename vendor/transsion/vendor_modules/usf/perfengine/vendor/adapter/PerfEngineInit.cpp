@@ -1,6 +1,11 @@
 #include <android/binder_ibinder_platform.h>
+#include <android/binder_interface_utils.h>
 #include <android/binder_manager.h>
 #include <android/binder_process.h>
+#include <processgroup/sched_policy.h>
+#include <sys/resource.h>
+
+#include <memory>
 
 #include "ServiceBridge.h"
 #include "perf-utils/TranLog.h"
@@ -39,6 +44,9 @@ extern "C" bool PerfEngine_Initialize() {
 
     // 1. 创建 ServiceBridge 实例
     //    构造函数会自动初始化 PerfLockCaller, XmlConfigParser, ParamMapper
+    // AIDL BnPerfEngine 派生自 ndk::SharedRefBase：operator new 私有，必须通过 SharedRefBase::make
+    // 创建；持有 std::shared_ptr 与 NDK Binder 服务生命周期一致（服务层仅做桥接与注册，决策在
+    // DSE）。
     gServiceBridge = ndk::SharedRefBase::make<ServiceBridge>();
     if (!gServiceBridge) {
         TLOGE("Failed to create ServiceBridge");
@@ -78,6 +86,8 @@ extern "C" bool PerfEngine_Initialize() {
     }
 
     TLOGI("PerfEngine service registered: %s", serviceName.c_str());
+
+    TLOGI("Binder thread pool priority elevated");
     return true;
 }
 

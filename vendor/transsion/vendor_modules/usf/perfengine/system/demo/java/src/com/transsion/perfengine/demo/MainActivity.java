@@ -1,13 +1,12 @@
 package com.transsion.perfengine.demo;
 
-import static android.util.TranPerfEventConstants.*;
+import static com.transsion.usf.perfengine.TranPerfEventConstants.*;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.util.TranPerfEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,39 +20,81 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.transsion.usf.perfengine.TranPerfEvent;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import vendor.transsion.hardware.perfengine.IEventListener;
+
 public class MainActivity extends Activity {
     private static final String TAG = "PerfEngineDemo";
 
     // ==================== Event definitions ====================
+    // Aligned with event_definitions.xml (latest)
     private static final int[] EVENT_IDS = {
-            EVENT_SYS_APP_LAUNCH_CLOD, EVENT_SYS_ACTIVITY_SWITCH, EVENT_SYS_SCROLL,
-            EVENT_SYS_CAMERA_LAUNCH, EVENT_APP_LAUNCHER_SWIPE_UP, EVENT_APP_LAUNCHER_FOLDER_OPEN,
-            EVENT_APP_WALLPAPER_CHANGE,
-            // ...
+            EVENT_SYS_APP_LAUNCH_COLD, // 0x00002
+            EVENT_SYS_APP_LAUNCH_WARM, // 0x00003
+            EVENT_SYS_ACTIVITY_SWITCH, // 0x00006
+            EVENT_SYS_TOUCH, // 0x00007
+            EVENT_SYS_FLING, // 0x00009
+            EVENT_SYS_SCROLL, // 0x0000A
+            EVENT_SYS_SCREEN_ON, // 0x0000B
+            EVENT_SYS_SCREEN_UNLOCK, // 0x0000E
+            EVENT_SYS_AMIN_TRANSITION, // 0x00016
+            EVENT_SYS_CAMERA_LAUNCH, // 0x00021
+            EVENT_APP_LAUNCHER_SWIPE_UP, // 0x02001
+            EVENT_APP_LAUNCHER_FOLDER_OPEN, // 0x02002
+            EVENT_APP_WALLPAPER_CHANGE, // 0x03001
     };
 
     private static final String[] EVENT_NAMES = {
-            "APP_LAUNCH (0x00002)", "ACTIVITY_SWITCH (0x00006)", "SCROLL (0x0000A)",
-            "CAMERA_OPEN (0x00021)", "APP_LAUNCHER_SWIPE_UP (0x02001)",
-            "APP_LAUNCHER_FOLDER_OPEN (0x02002)", "APP_WALLPAPER_CHANGE (0x03001)",
-            // ...
+            "APP_LAUNCH_COLD (0x00002)",
+            "APP_LAUNCH_WARM (0x00003)",
+            "ACTIVITY_SWITCH (0x00006)",
+            "TOUCH (0x00007)",
+            "FLING (0x00009)",
+            "SCROLL (0x0000A)",
+            "SCREEN_ON (0x0000B)",
+            "SCREEN_UNLOCK (0x0000E)",
+            "AMIN_TRANSITION (0x00016)",
+            "CAMERA_LAUNCH (0x00021)",
+            "LAUNCHER_SWIPE_UP (0x02001)",
+            "LAUNCHER_FOLDER_OPEN (0x02002)",
+            "WALLPAPER_CHANGE (0x03001)",
     };
 
     private static String idToName(int id) {
-        if (id == EVENT_SYS_APP_LAUNCH_CLOD)
-            return "APP_LAUNCH_CLOD";
+        if (id == EVENT_SYS_APP_LAUNCH_COLD)
+            return "APP_LAUNCH_COLD";
+        if (id == EVENT_SYS_APP_LAUNCH_WARM)
+            return "APP_LAUNCH_WARM";
         if (id == EVENT_SYS_ACTIVITY_SWITCH)
             return "ACTIVITY_SWITCH";
+        if (id == EVENT_SYS_TOUCH)
+            return "TOUCH";
+        if (id == EVENT_SYS_FLING)
+            return "FLING";
         if (id == EVENT_SYS_SCROLL)
             return "SCROLL";
-        // ...
+        if (id == EVENT_SYS_SCREEN_ON)
+            return "SCREEN_ON";
+        if (id == EVENT_SYS_SCREEN_UNLOCK)
+            return "SCREEN_UNLOCK";
+        if (id == EVENT_SYS_AMIN_TRANSITION)
+            return "AMIN_TRANSITION";
+        if (id == EVENT_SYS_CAMERA_LAUNCH)
+            return "CAMERA_LAUNCH";
+        if (id == EVENT_APP_LAUNCHER_SWIPE_UP)
+            return "LAUNCHER_SWIPE_UP";
+        if (id == EVENT_APP_LAUNCHER_FOLDER_OPEN)
+            return "LAUNCHER_FOLDER_OPEN";
+        if (id == EVENT_APP_WALLPAPER_CHANGE)
+            return "WALLPAPER_CHANGE";
         return "UNKNOWN(0x" + Integer.toHexString(id) + ")";
     }
 
@@ -81,14 +122,23 @@ public class MainActivity extends Activity {
     private final Handler mUiHandler = new Handler(Looper.getMainLooper());
     private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
 
-    // PerfEventListener instance (full)
-    private TranPerfEvent.PerfEventListener mPerfEventListener;
-
-    // IBinderEventListener instance (full)
+    // Only IBinder listener remains; PerfEventListener removed (no longer in TranPerfEvent API)
     private IEventListener.Stub mIBinderListener;
 
-    private enum ListenerType { NONE, PERF_EVENT, IBINDER }
+    // TrEventListener for in-process (system_server) monitoring
+    private TranPerfEvent.TrEventListener mTrEventListener;
+
+    private enum ListenerType { NONE, TR_EVENT, IBINDER }
     private ListenerType mRegisteredType = ListenerType.NONE;
+
+    /**
+     * Listener token to ignore in-flight callbacks after unregister.
+     *
+     * Vendor side broadcasts are oneway and may already be queued in Binder driver or worker
+     * threads when unregister returns. We gate callbacks in demo UI to make behavior intuitive.
+     */
+    private final AtomicInteger mListenerSeq = new AtomicInteger(0);
+    private volatile int mActiveListenerSeq = -1;
 
     // ==================== Lifecycle ====================
 
@@ -105,7 +155,6 @@ public class MainActivity extends Activity {
             if (resId > 0) {
                 statusBarHeight = getResources().getDimensionPixelSize(resId);
             }
-            // Base paddingTop = 8dp; add statusBarHeight on top
             int basePadding = (int) (8 * getResources().getDisplayMetrics().density);
             header.setPadding(header.getPaddingLeft(), basePadding + statusBarHeight,
                     header.getPaddingRight(), header.getPaddingBottom());
@@ -114,7 +163,6 @@ public class MainActivity extends Activity {
         setupTabSwitcher();
         setupSendPanel();
         setupListenPanel();
-        // Show Send tab by default
         showTab(true);
     }
 
@@ -150,10 +198,10 @@ public class MainActivity extends Activity {
     }
 
     // ==================== Tab ====================
+
     private void showTab(boolean showSend) {
         mPanelSend.setVisibility(showSend ? View.VISIBLE : View.GONE);
         mPanelListen.setVisibility(showSend ? View.GONE : View.VISIBLE);
-
         // Active tab: white bg + orange bottom indicator (tab_active_bg.xml)
         // Inactive tab: plain white bg + muted text color
         if (showSend) {
@@ -187,20 +235,12 @@ public class MainActivity extends Activity {
     }
 
     private void onSendClicked(boolean sendAll) {
-        String pkgStr = mEtPackage.getText().toString().trim();
-        String countStr = mEtCount.getText().toString().trim();
-        String intrvStr = mEtInterval.getText().toString().trim();
+        String pkg = mEtPackage.getText().toString().trim();
+        int count = parseIntOr(mEtCount.getText().toString().trim(), 1);
+        int interval = parseIntOr(mEtInterval.getText().toString().trim(), 500);
 
-        final int count = Math.max(1, parseInt(countStr, 1));
-        final int interval = Math.max(0, parseInt(intrvStr, 500));
-        final String pkg = pkgStr;
-
-        final int[] events;
-        if (sendAll) {
-            events = EVENT_IDS;
-        } else {
-            events = new int[] {EVENT_IDS[mSpinnerEvent.getSelectedItemPosition()]};
-        }
+        int[] events = sendAll ? EVENT_IDS
+                               : new int[] {EVENT_IDS[mSpinnerEvent.getSelectedItemPosition()]};
 
         mBtnSend.setEnabled(false);
         mBtnSendAll.setEnabled(false);
@@ -227,20 +267,15 @@ public class MainActivity extends Activity {
 
     private void sendEvent(int eventId, String pkg) {
         long ts = TranPerfEvent.now();
-
         if (!pkg.isEmpty()) {
             TranPerfEvent.notifyEventStart(eventId, ts, pkg);
         } else {
             TranPerfEvent.notifyEventStart(eventId, ts);
         }
-
-        Log.d(TAG, "[SEND][START] eventId=" + eventId + " pkg=" + pkg);
-
+        Log.d(TAG, "[SEND][START] eventId=0x" + Integer.toHexString(eventId) + " pkg=" + pkg);
         sleep(200);
-
         TranPerfEvent.notifyEventEnd(eventId, TranPerfEvent.now(), pkg.isEmpty() ? null : pkg);
-
-        Log.d(TAG, "[SEND][ END ] eventId=" + eventId);
+        Log.d(TAG, "[SEND][ END ] eventId=0x" + Integer.toHexString(eventId));
     }
 
     // ==================== Listen Panel ====================
@@ -261,7 +296,8 @@ public class MainActivity extends Activity {
             if (checkedId == R.id.rb_ibinder) {
                 mEtFilter.setHint("Filter supported (IBinder mode)");
             } else {
-                mEtFilter.setHint("e.g. 1,3,5");
+                // rb_perf_event -> now maps to TrEventListener (in-process only)
+                mEtFilter.setHint("No filter (TrEventListener: in-process only)");
             }
         });
     }
@@ -271,59 +307,65 @@ public class MainActivity extends Activity {
             toast("Already registered, unregister first");
             return;
         }
-
-        boolean usePerfEvent = (mRgListenerType.getCheckedRadioButtonId() == R.id.rb_perf_event);
-        int[] filter = parseFilter(mEtFilter.getText().toString().trim());
-
-        if (usePerfEvent) {
-            registerPerfEventListener(filter);
-        } else {
+        // rb_perf_event radio button now drives TrEventListener (in-process)
+        // rb_ibinder radio button drives IEventListener.Stub (cross-process)
+        boolean useIBinder = (mRgListenerType.getCheckedRadioButtonId() == R.id.rb_ibinder);
+        if (useIBinder) {
             registerIBinderListener();
+        } else {
+            registerTrEventListener();
         }
     }
 
-    // ---------- PerfEventListener (full) ----------
+    // ---------- TrEventListener (in-process, system_server internal) ----------
 
-    private void registerPerfEventListener(int[] filter) {
-        mPerfEventListener = new TranPerfEvent.PerfEventListener() {
+    private void registerTrEventListener() {
+        final int mySeq = mListenerSeq.incrementAndGet();
+        mActiveListenerSeq = mySeq;
+        mTrEventListener = new TranPerfEvent.TrEventListener() {
             @Override
-            public void onEventStart(int eventId, long timestamp, int numParams, int[] intParams,
-                    String extraStrings) {
-                String line = ts() + " [START] id=" + eventId + "(" + idToName(eventId) + ")"
-                              + " params=" + arrayToStr(intParams, numParams)
-                              + (extraStrings != null ? " extra=" + extraStrings : "");
+            public void onEventStart(int eventId, long timestamp, int duration) {
+                if (mActiveListenerSeq != mySeq || mRegisteredType != ListenerType.TR_EVENT) {
+                    return;
+                }
+                String line = ts() + " [START] id=0x" + Integer.toHexString(eventId) + "("
+                              + idToName(eventId) + ")"
+                              + " duration=" + duration;
                 appendLog(line);
             }
 
             @Override
-            public void onEventEnd(int eventId, long timestamp, String extraStrings) {
-                String line = ts() + " [ END ] id=" + eventId + "(" + idToName(eventId) + ")"
-                              + (extraStrings != null ? " extra=" + extraStrings : "");
+            public void onEventEnd(int eventId, long timestamp) {
+                if (mActiveListenerSeq != mySeq || mRegisteredType != ListenerType.TR_EVENT) {
+                    return;
+                }
+                String line = ts() + " [ END ] id=0x" + Integer.toHexString(eventId) + "("
+                              + idToName(eventId) + ")";
                 appendLog(line);
             }
         };
 
-        if (filter.length > 0) {
-            TranPerfEvent.registerEventListener(mPerfEventListener, filter);
-            setStatus("PerfEventListener registered, filter=" + intArrayToStr(filter));
-        } else {
-            TranPerfEvent.registerEventListener(mPerfEventListener);
-            setStatus("PerfEventListener registered, all events");
-        }
-
-        mRegisteredType = ListenerType.PERF_EVENT;
+        TranPerfEvent.registerListener(mTrEventListener);
+        setStatus("TrEventListener registered (in-process only)");
+        mRegisteredType = ListenerType.TR_EVENT;
         mBtnRegister.setEnabled(false);
         mBtnUnregister.setEnabled(true);
     }
 
-    // ---------- IBinder Listener ----------
+    // ---------- IBinder Listener (cross-process, via vendor service) ----------
 
     private void registerIBinderListener() {
+        final int mySeq = mListenerSeq.incrementAndGet();
+        mActiveListenerSeq = mySeq;
         mIBinderListener = new IEventListener.Stub() {
             @Override
             public void onEventStart(int eventId, long timestamp, int numParams, int[] intParams,
                     String extraStrings) {
-                String line = ts() + " [START] id=" + eventId + "(" + idToName(eventId) + ")"
+                if (mActiveListenerSeq != mySeq || mRegisteredType != ListenerType.IBINDER) {
+                    return;
+                }
+                String line = ts() + " [START] id=0x" + Integer.toHexString(eventId) + "("
+                              + idToName(eventId) + ")"
                               + " params=" + arrayToStr(intParams, numParams)
                               + (extraStrings != null ? " extra=" + extraStrings : "");
                 appendLog(line);
@@ -331,7 +373,11 @@ public class MainActivity extends Activity {
 
             @Override
             public void onEventEnd(int eventId, long timestamp, String extraStrings) {
-                String line = ts() + " [ END ] id=" + eventId + "(" + idToName(eventId) + ")"
+                if (mActiveListenerSeq != mySeq || mRegisteredType != ListenerType.IBINDER) {
+                    return;
+                }
+                String line = ts() + " [ END ] id=0x" + Integer.toHexString(eventId) + "("
+                              + idToName(eventId) + ")"
                               + (extraStrings != null ? " extra=" + extraStrings : "");
                 appendLog(line);
             }
@@ -340,6 +386,7 @@ public class MainActivity extends Activity {
             public String getInterfaceHash() {
                 return IEventListener.HASH;
             }
+
             @Override
             public int getInterfaceVersion() {
                 return IEventListener.VERSION;
@@ -354,7 +401,6 @@ public class MainActivity extends Activity {
             TranPerfEvent.registerEventListener(mIBinderListener.asBinder());
             setStatus("IBinder listener registered, all events");
         }
-
         mRegisteredType = ListenerType.IBINDER;
         mBtnRegister.setEnabled(false);
         mBtnUnregister.setEnabled(true);
@@ -370,9 +416,12 @@ public class MainActivity extends Activity {
     }
 
     private void doUnregister() {
-        if (mRegisteredType == ListenerType.PERF_EVENT && mPerfEventListener != null) {
-            TranPerfEvent.unregisterEventListener(mPerfEventListener);
-            mPerfEventListener = null;
+        // Stop consuming callbacks immediately (in-flight oneway callbacks may still arrive).
+        mActiveListenerSeq = -1;
+
+        if (mRegisteredType == ListenerType.TR_EVENT && mTrEventListener != null) {
+            TranPerfEvent.unregisterListener(mTrEventListener);
+            mTrEventListener = null;
         } else if (mRegisteredType == ListenerType.IBINDER && mIBinderListener != null) {
             TranPerfEvent.unregisterEventListener(mIBinderListener.asBinder());
             mIBinderListener = null;
@@ -385,24 +434,35 @@ public class MainActivity extends Activity {
     private void appendLog(String line) {
         mUiHandler.post(() -> {
             mLogAdapter.append(line);
-            // Auto-scroll to bottom
             mLvLog.smoothScrollToPosition(mLogAdapter.getCount() - 1);
         });
     }
 
     private void setStatus(String msg) {
-        mUiHandler.post(() -> mTvListenStatus.setText("Status: " + msg));
+        mUiHandler.post(() -> mTvListenStatus.setText(msg));
     }
 
     private void toast(String msg) {
         mUiHandler.post(() -> Toast.makeText(this, msg, Toast.LENGTH_SHORT).show());
     }
 
-    private static int parseInt(String s, int def) {
+    private static String ts() {
+        return new SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault()).format(new Date());
+    }
+
+    private static int parseIntOr(String s, int def) {
         try {
             return Integer.parseInt(s);
         } catch (NumberFormatException e) {
             return def;
+        }
+    }
+
+    private static void sleep(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -411,53 +471,43 @@ public class MainActivity extends Activity {
             return new int[0];
         String[] parts = s.split(",");
         int[] result = new int[parts.length];
-        int idx = 0;
+        int count = 0;
         for (String p : parts) {
             try {
-                result[idx++] = Integer.parseInt(p.trim());
-            } catch (NumberFormatException e) {
+                String trimmed = p.trim();
+                result[count++] = trimmed.startsWith("0x") || trimmed.startsWith("0X")
+                                          ? (int) Long.parseLong(trimmed.substring(2), 16)
+                                          : Integer.parseInt(trimmed);
+            } catch (NumberFormatException ignored) {
             }
         }
-        int[] trimmed = new int[idx];
-        System.arraycopy(result, 0, trimmed, 0, idx);
-        return trimmed;
+        int[] out = new int[count];
+        System.arraycopy(result, 0, out, 0, count);
+        return out;
     }
 
-    private static String arrayToStr(int[] arr, int n) {
-        if (arr == null || n == 0)
+    private static String arrayToStr(int[] arr, int len) {
+        if (arr == null || len == 0)
             return "[]";
         StringBuilder sb = new StringBuilder("[");
-        for (int i = 0; i < Math.min(n, arr.length); i++) {
+        for (int i = 0; i < len && i < arr.length; i++) {
             if (i > 0)
-                sb.append(",");
+                sb.append(',');
             sb.append(arr[i]);
         }
-        return sb.append("]").toString();
+        sb.append(']');
+        return sb.toString();
     }
 
     private static String intArrayToStr(int[] arr) {
         if (arr == null || arr.length == 0)
-            return "[]";
-        StringBuilder sb = new StringBuilder("[");
+            return "";
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < arr.length; i++) {
             if (i > 0)
-                sb.append(",");
-            sb.append(arr[i]);
+                sb.append(',');
+            sb.append("0x").append(Integer.toHexString(arr[i]));
         }
-        return sb.append("]").toString();
-    }
-
-    private static String ts() {
-        return new SimpleDateFormat("HH:mm:ss.SSS", Locale.US).format(new Date());
-    }
-
-    private static void sleep(long ms) {
-        if (ms <= 0)
-            return;
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        return sb.toString();
     }
 }

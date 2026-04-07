@@ -9,7 +9,7 @@
 #include <utils/Log.h>
 
 namespace android {
-extern int register_com_transsion_perfengine_PerfEngine(JNIEnv *env);
+extern int register_com_transsion_usf_perfengine_TranPerfEvent(JNIEnv *env);
 }
 
 using namespace android;
@@ -28,7 +28,7 @@ extern "C" jint JNI_OnLoad(JavaVM *vm, void * /* reserved */) {
     }
 
     // 注册 PerfEngine 的 JNI 方法
-    if (register_com_transsion_perfengine_PerfEngine(env) != JNI_OK) {
+    if (register_com_transsion_usf_perfengine_TranPerfEvent(env) != JNI_OK) {
         ALOGE("Failed to register PerfEngine JNI methods");
         return JNI_ERR;
     }

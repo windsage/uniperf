@@ -1,1 +1,29 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://artifact.transsion.com/artifactory/google/' }
+        maven { url 'https://artifact.transsion.com/artifactory/aliyun/' }
+        maven {
+            url = "https://artifact.transsion.com/artifactory/adm-release-maven-prod-local/"
+            allowInsecureProtocol = true
+        }
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven {
+            url = "https://artifact.transsion.com/artifactory/thub-maven-release-local/"
+            allowInsecureProtocol = true
+        }
+        maven {
+            url = "https://artifact.transsion.com/artifactory/adm-release-maven-prod-local/"
+            allowInsecureProtocol = true
+        }
+        maven { url 'https://artifact.transsion.com/artifactory/google/' }
+        maven { url 'https://artifact.transsion.com/artifactory/aliyun/' }
+    }
+}
+
 rootProject.name = 'perfengine-sdk'
+include ':lib'

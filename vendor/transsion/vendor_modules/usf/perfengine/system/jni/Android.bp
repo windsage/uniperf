@@ -7,7 +7,7 @@ cc_library_shared {
     system_ext_specific: true,
 
     srcs: [
-        "com_transsion_perfengine_PerfEngine.cpp",
+        "com_transsion_usf_perfengine_TranPerfEvent.cpp",
         "onload.cpp",
     ],
 
@@ -24,7 +24,7 @@ cc_library_shared {
         "libnativehelper",
         "libandroid_runtime",
         "libbinder_ndk",
-        "vendor.transsion.hardware.perfengine-V1-ndk",
+        "libperfengine-client",
     ],
 
     // static_libs: [

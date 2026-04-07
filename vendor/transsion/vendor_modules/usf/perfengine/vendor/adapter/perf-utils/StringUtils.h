@@ -59,4 +59,3 @@ inline int32_t getIntAt(const std::vector<int32_t> &ints, size_t index, int32_t 
 }    // namespace perfengine
 }    // namespace transsion
 }    // namespace vendor
-

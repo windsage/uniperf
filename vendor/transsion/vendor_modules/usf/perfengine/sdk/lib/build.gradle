@@ -1,0 +1,108 @@
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
+
+apply from: '../config.gradle'
+
+android {
+    compileSdk configs.compileSdk
+    namespace configs.packageName
+
+    defaultConfig {
+        minSdk configs.minSdk
+        targetSdk configs.targetSdk
+        versionCode configs.versionCode
+        versionName configs.versionName
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java']
+        }
+    }
+}
+
+// ==================== Jar Tasks ====================
+// Publish as plain Jar (not AAR).
+// This is a compile-only stub; callers use:
+//   compileOnly 'com.transsion.usf.perfengine:perfengine-sdk:36.1.1.0:release'
+
+task debugJar(type: Jar, dependsOn: "assembleDebug") {
+    archiveClassifier = 'debug'
+    archiveBaseName   = rootProject.name
+    version           = configs.versionName
+    from('build/intermediates/javac/debug/classes')
+    include('**/*.class')
+}
+
+task releaseJar(type: Jar, dependsOn: "assembleRelease") {
+    archiveClassifier = 'release'
+    archiveBaseName   = rootProject.name
+    version           = configs.versionName
+    from('build/intermediates/javac/release/classes')
+    include('**/*.class')
+}
+
+task jars(dependsOn: [debugJar, releaseJar]) {}
+
+task pack(dependsOn: jars) {}
+
+// ==================== Maven Publishing ====================
+
+afterEvaluate {
+    publishing {
+        publications {
+            jars(MavenPublication) {
+                groupId    = uploads.groupid
+                artifactId = rootProject.name
+                version    = configs.versionName
+
+                artifact debugJar
+                artifact releaseJar
+
+                pom.withXml {
+                    // SDK stub has no runtime dependencies
+                    asNode().appendNode("dependencies")
+                }
+
+                pom {
+                    name        = 'PerfEngine SDK'
+                    description = 'Compile-only stub for TranPerfEvent performance event API'
+                    packaging   = 'jar'
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url = uploads.url
+                allowInsecureProtocol = true
+                credentials {
+                    username System.env.MavenUserName
+                    password System.env.MavenPassword
+                }
+            }
+        }
+    }
+}
+
+// ==================== Dependencies ====================
+// No runtime dependencies. IBinder is provided by compileSdk android.jar.
+dependencies {}

@@ -15,4 +15,3 @@ cc_library_headers {
     vendor_available: true,
     host_supported: false,
 }
-

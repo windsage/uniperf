@@ -6,14 +6,16 @@
 #include <libxml/parser.h>
 #include <unistd.h>
 
+#include <algorithm>
+#include <array>
 #include <chrono>
 #include <cstring>
 
 #include "ParamMapper.h"
 #include "PerfEngineTypes.h"
+#include "XmlConfigParser.h"
 #include "perf-utils/TranLog.h"
 #include "perf-utils/TranTrace.h"
-#include "XmlConfigParser.h"
 
 #ifdef LOG_TAG
 #undef LOG_TAG
@@ -23,6 +25,12 @@
 namespace vendor {
 namespace transsion {
 namespace perfengine {
+
+/**
+ * 历史聚合入口（XML / ParamMapper / 平台 PerfLock）。
+ * 演进：XmlConfigParser、ParamMapper 与芯片侧翻译独立仓库化；DSE 侧以 PlanCodec/ExecutorHub 为界，
+ * 本类逐步收敛为薄适配层（与 `dse/compat/PerfLockCallerCompat` 协同）。
+ */
 
 // ==================== Constructor / Destructor ====================
 
@@ -213,7 +221,6 @@ bool PerfLockCaller::initUnisoc() {
 }
 
 // ==================== 核心功能链路 ====================
-
 int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
     TTRACE_SCOPED(TraceLevel::COARSE, LOG_TAG ":acquirePerfLock");
 
@@ -229,8 +236,8 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
     // Other platforms: fps=0, falls through to generic P6 config.
     int32_t fps = (mPlatform == Platform::QCOM) ? queryDisplayFps() : 0;
     // Find best-matching scenario config (6-level priority)
-    const ScenarioConfig *config = XmlConfigParser::getInstance().getScenarioConfig(
-        ctx.eventId, fps, ctx.package, ctx.activity);
+    auto config = XmlConfigParser::getInstance().getScenarioConfig(ctx.eventId, fps, ctx.package,
+                                                                   ctx.activity);
 
     if (!config) {
         TLOGE("No config: eventId=%d param0=%d pkg='%s' act='%s'", ctx.eventId, ctx.intParam0,
@@ -259,12 +266,14 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
     int32_t platformHandle = -1;
     switch (mPlatform) {
         case Platform::QCOM:
-            platformHandle = qcomAcquirePerfLockWithParams(ctx.eventId, effectiveTimeout,
-                                                           config->platformParams, ctx.package);
+            platformHandle = qcomAcquirePerfLockWithParams(
+                ctx.eventId, effectiveTimeout, config->platformParams.data(),
+                config->platformParams.size(), ctx.package.c_str());
             break;
         case Platform::MTK:
-            platformHandle =
-                mtkAcquirePerfLockWithParams(ctx.eventId, effectiveTimeout, config->platformParams);
+            platformHandle = mtkAcquirePerfLockWithParams(ctx.eventId, effectiveTimeout,
+                                                          config->platformParams.data(),
+                                                          config->platformParams.size());
             break;
         default:
             TLOGE("Unsupported platform");
@@ -280,10 +289,41 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
     return platformHandle;
 }
 
+int32_t PerfLockCaller::acquirePerfLockFromParams(int32_t eventId, int32_t durationMs,
+                                                  const int32_t *platformParams, size_t paramCount,
+                                                  const char *packageName) {
+    if (!mInitialized) {
+        TLOGE("PerfLockCaller not initialized");
+        return -1;
+    }
+    if (!platformParams || paramCount == 0) {
+        TLOGE("acquirePerfLockFromParams: empty params");
+        return -1;
+    }
+    int32_t platformHandle = -1;
+    switch (mPlatform) {
+        case Platform::QCOM:
+            platformHandle = qcomAcquirePerfLockWithParams(eventId, durationMs, platformParams,
+                                                           paramCount, packageName);
+            break;
+        case Platform::MTK:
+            platformHandle =
+                mtkAcquirePerfLockWithParams(eventId, durationMs, platformParams, paramCount);
+            break;
+        default:
+            TLOGE("acquirePerfLockFromParams: unsupported platform");
+            return -1;
+    }
+    if (platformHandle < 0) {
+        TLOGE("acquirePerfLockFromParams failed eventId=%d", eventId);
+    }
+    return platformHandle;
+}
+
 // ==================== QCOM 平台调用 ====================
 int32_t PerfLockCaller::qcomAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                                      const std::vector<int32_t> &platformParams,
-                                                      const std::string &packageName) {
+                                                      const int32_t *platformParams,
+                                                      size_t paramCount, const char *packageName) {
     TTRACE_SCOPED(TraceLevel::VERBOSE, LOG_TAG ":qcomAcquirePerfLockWithParams");
     typedef int (*perfmodule_submit_request_t)(mpctl_msg_t *);
     auto submitRequest = reinterpret_cast<perfmodule_submit_request_t>(mQcomFuncs.submitRequest);
@@ -293,8 +333,12 @@ int32_t PerfLockCaller::qcomAcquirePerfLockWithParams(int32_t eventId, int32_t d
         return -1;
     }
 
-    if (platformParams.size() > MAX_ARGS_PER_REQUEST) {
-        TLOGE("QCOM: Param count %zu exceeds %d", platformParams.size(), MAX_ARGS_PER_REQUEST);
+    if (!platformParams || paramCount == 0) {
+        TLOGE("QCOM: empty params");
+        return -1;
+    }
+    if (paramCount > MAX_ARGS_PER_REQUEST) {
+        TLOGE("QCOM: Param count %zu exceeds %d", paramCount, MAX_ARGS_PER_REQUEST);
         return -1;
     }
 
@@ -304,18 +348,18 @@ int32_t PerfLockCaller::qcomAcquirePerfLockWithParams(int32_t eventId, int32_t d
     msg.req_type = MPCTL_CMD_PERFLOCKACQ;
     msg.pl_handle = 0;
     msg.pl_time = duration;
-    msg.data = static_cast<uint16_t>(platformParams.size());
+    msg.data = static_cast<uint16_t>(paramCount);
     msg.client_pid = getpid();
     msg.client_tid = gettid();
     msg.version = 1;
     msg.size = sizeof(mpctl_msg_t);
 
-    for (size_t i = 0; i < platformParams.size() && i < MAX_ARGS_PER_REQUEST; i++) {
+    for (size_t i = 0; i < paramCount && i < MAX_ARGS_PER_REQUEST; i++) {
         msg.pl_args[i] = platformParams[i];
     }
 
-    if (!packageName.empty()) {
-        strncpy(msg.usrdata_str, packageName.c_str(), MAX_MSG_APP_NAME_LEN - 1);
+    if (packageName && packageName[0] != '\0') {
+        strncpy(msg.usrdata_str, packageName, MAX_MSG_APP_NAME_LEN - 1);
         msg.usrdata_str[MAX_MSG_APP_NAME_LEN - 1] = '\0';
     }
     TLOGI("QCOM perfmodule_submit_request: duration=%dms, numArgs=%u", duration, msg.data);
@@ -367,7 +411,8 @@ void PerfLockCaller::qcomReleasePerfLock(int32_t handle) {
 // ==================== MTK 平台调用 ====================
 
 int32_t PerfLockCaller::mtkAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                                     const std::vector<int32_t> &platformParams) {
+                                                     const int32_t *platformParams,
+                                                     size_t paramCount) {
     TTRACE_SCOPED(TraceLevel::VERBOSE, LOG_TAG ":mtkAcquirePerfLockWithParams");
     typedef int (*mtk_perf_lock_acq_t)(int *, int, int, int, int, int);
     auto lockAcq = reinterpret_cast<mtk_perf_lock_acq_t>(mMtkFuncs.lockAcq);
@@ -377,23 +422,27 @@ int32_t PerfLockCaller::mtkAcquirePerfLockWithParams(int32_t eventId, int32_t du
         return 0;
     }
 
-    if (platformParams.size() % 2 != 0) {
-        TLOGE("MTK: Invalid param size %zu (must be even)", platformParams.size());
+    if (!platformParams || paramCount == 0) {
+        TLOGE("MTK: empty params");
+        return 0;
+    }
+    if (paramCount % 2 != 0) {
+        TLOGE("MTK: Invalid param size %zu (must be even)", paramCount);
         return 0;
     }
 
-    if (platformParams.size() > MTK_MAX_ARGS_PER_REQUEST) {
-        TLOGE("MTK: Param count %zu exceeds %d", platformParams.size(), MTK_MAX_ARGS_PER_REQUEST);
+    if (paramCount > MTK_MAX_ARGS_PER_REQUEST) {
+        TLOGE("MTK: Param count %zu exceeds %d", paramCount, MTK_MAX_ARGS_PER_REQUEST);
         return 0;
     }
 
-    std::vector<int32_t> commands = platformParams;
+    std::array<int32_t, MTK_MAX_ARGS_PER_REQUEST> commands{};
+    std::copy(platformParams, platformParams + paramCount, commands.begin());
 
-    TLOGI("MTK libpowerhal_LockAcq: timeout=%dms, commands=%zu pairs", duration,
-          commands.size() / 2);
+    TLOGI("MTK libpowerhal_LockAcq: timeout=%dms, commands=%zu pairs", duration, paramCount / 2);
 
-    int32_t handle = lockAcq(commands.data(), 0, static_cast<int>(commands.size()), getpid(),
-                             gettid(), duration);
+    int32_t handle =
+        lockAcq(commands.data(), 0, static_cast<int>(paramCount), getpid(), gettid(), duration);
 
     if (handle > 0) {
         TLOGI("MTK SUCCESS: handle=%d", handle);
@@ -516,7 +565,18 @@ void PerfLockCaller::handleTimeout(int32_t eventId, int32_t platformHandle) {
     auto it = mActiveTimers.find(platformHandle);
     if (it != mActiveTimers.end()) {
         TLOGW("Auto-releasing handle %d after timeout", platformHandle);
+        // 保存handle值，因为erase后会失效
+        int32_t handle = it->second.platformHandle;
         mActiveTimers.erase(it);
+
+        // 释放性能锁
+        if (handle > 0) {
+            if (mPlatform == Platform::QCOM) {
+                qcomReleasePerfLock(handle);
+            } else if (mPlatform == Platform::MTK) {
+                mtkReleasePerfLock(handle);
+            }
+        }
     }
 }
 

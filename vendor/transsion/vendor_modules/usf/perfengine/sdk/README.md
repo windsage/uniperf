@@ -5,17 +5,17 @@
 ### Gradle
 ```groovy
 repositories {
-    maven { url 'https://your-maven-repo.com/releases' }
+    maven { url 'https://artifact.transsion.com/artifactory/thub-maven-release-local/' }
 }
 
 dependencies {
-    compileOnly 'com.transsion.perfengine:tranperfevent:1.0.0'
+    compileOnly 'com.transsion.usf.perfengine:perfengine-sdk:36.1.1.0:release'
 }
 ```
 
 ### 使用示例
 ```java
-import android.util.TranPerfEvent;
+import com.transsion.usf.perfengine.TranPerfEvent;
 import vendor.transsion.hardware.perfengine.IEventListener;
 
 // 注册监听器

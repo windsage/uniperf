@@ -1,6 +1,32 @@
+// PerfEngine Adapter Library
+//
+// ============================================================
+// 构建配置说明
+// ============================================================
+//
+// 如需强制覆盖，在 include 前设置：
+//
+//   PERFENGINE_PLATFORM_TYPE := qcom
+//   PERFENGINE_PROFILE_TYPE  := flagship
+//
+// 【手动控制的宏开关】直接修改 libperfengine-adapter 的 cflags：
+//
+//   -DPERFENGINE_PRODUCTION=0/1        (0=开发态, 1=量产)
+//   -DPERFENGINE_ENABLE_DSE_TRACE=0/1  (1=开启Trace, 0=关闭/零开销)
+//
+//   Trace 对应的 srcs 需与宏开关同步切换（见 libperfengine-adapter 注释）。
+//
+// 档位差异：
+//   entry:    resourceMask=0x0F，无 inheritance/stability，精简阶段链
+//   main:     resourceMask=0x7F，有 inheritance/stability，完整阶段链
+//   flagship: resourceMask=0xFF，有 inheritance/stability，完整阶段链+增强追踪
+// ============================================================
+
 package {
     default_applicable_licenses: ["vendor_transsion_license"],
 }
+
+// ==================== Soong Config 变量声明 ====================
 
 soong_config_string_variable {
     name: "platform",
@@ -12,11 +38,23 @@ soong_config_string_variable {
     ],
 }
 
+soong_config_string_variable {
+    name: "profile",
+    values: [
+        "entry",
+        "main",
+        "flagship",
+    ],
+}
+
 soong_config_module_type {
     name: "perfengine_cc_defaults",
     module_type: "cc_defaults",
     config_namespace: "transsion_perfengine",
-    variables: ["platform"],
+    variables: [
+        "platform",
+        "profile",
+    ],
     properties: [
         "srcs",
         "shared_libs",
@@ -24,33 +62,147 @@ soong_config_module_type {
     ],
 }
 
+// 平台 + 档位差异化配置的唯一入口。
 perfengine_cc_defaults {
-    name: "perfengine_platform_defaults",
+    name: "perfengine_platform_profile_defaults",
     soong_config_variables: {
         platform: {
             qcom: {
-                srcs: ["PerfLockCallerQcomDisplay.cpp"],
-                shared_libs: ["vendor.qti.hardware.display.config-V5-ndk"],
+                srcs: [
+                    // QCOM 平台适配层
+                    "dse/platform/qcom/QcomExecutor.cpp",
+                    "dse/platform/qcom/QcomActionMap.cpp",
+                    "dse/platform/qcom/QcomPlatformStateBackend.cpp",
+                    "PerfLockCallerQcomDisplay.cpp",
+                ],
+                shared_libs: [
+                    "vendor.qti.hardware.display.config-V5-ndk",
+                ],
                 cflags: ["-DPERFENGINE_PLATFORM_QCOM"],
             },
             mtk: {
+                srcs: [
+                    // MTK 平台适配层
+                    "dse/platform/mtk/MtkExecutor.cpp",
+                    "dse/platform/mtk/MtkActionMap.cpp",
+                    "dse/platform/mtk/MtkPlatformStateBackend.cpp",
+                ],
                 cflags: ["-DPERFENGINE_PLATFORM_MTK"],
             },
             unisoc: {
+                srcs: [
+                    // Unisoc 平台适配层
+                    // TODO: 按实际文件路径补充
+                ],
                 cflags: ["-DPERFENGINE_PLATFORM_UNISOC"],
+            },
+            conditions_default: {
+                // platform 未设置或为 unknown：不编译任何平台适配层，
+                // 运行时所有平台能力返回 unsupported。
+            },
+        },
+        profile: {
+            entry: {
+                // entry 为默认档位，不附加额外宏。
+                // resourceMask=0x0F，精简阶段链，无 inheritance/stability。
+            },
+            main: {
+                cflags: [
+                    "-DDSE_PROFILE_MAIN",
+                    "-DDSE_BUILD_HAS_REFINE=1",
+                    "-DDSE_BUILD_HAS_STEADY=1",
+                ],
+            },
+            flagship: {
+                cflags: [
+                    "-DDSE_PROFILE_FLAGSHIP",
+                    "-DDSE_BUILD_HAS_REFINE=1",
+                    "-DDSE_BUILD_HAS_STEADY=1",
+                    "-DDSE_BUILD_HAS_PREDICTIVE=1",
+                    "-DDSE_BUILD_HAS_FEEDBACK_ANALYZER=1",
+                ],
+            },
+            conditions_default: {
+                // profile 未设置时降级为 entry，不附加任何档位宏。
             },
         },
     },
 }
 
-// ==================== libperfengine-adapter.so ====================
-// Vendor AIDL 服务端实现
+// ==================== Include 路径公共配置 ====================
 
-cc_library_shared {
-    name: "libperfengine-adapter",
-    vendor: true,
-    defaults: ["perfengine_platform_defaults"],
+cc_defaults {
+    name: "libperfengine-dse-local-includes",
+    local_include_dirs: [
+        "include",
+        "dse",
+        "dse/include",
+        "dse/config",
+        "dse/core",
+        "dse/core/exec",
+        "dse/core/inheritance",
+        "dse/core/orchestration",
+        "dse/core/profile",
+        "dse/core/safety",
+        "dse/core/stability",
+        "dse/core/stage",
+        "dse/core/state",
+        "dse/core/types",
+        "dse/platform",
+        "dse/platform/mtk",
+        "dse/platform/qcom",
+        "dse/platform/state",
+        "dse/trace",
+    ],
+}
 
+// ==================== 源文件组 ====================
+
+// DSE 核心（不含平台适配层和 Trace 编译单元）
+filegroup {
+    name: "libperfengine-dse-srcs-base",
+    srcs: [
+        "dse/core/stage/ConvergeFinalizeStage.cpp",
+        "dse/core/stage/ArbitrationStage.cpp",
+        "dse/core/stage/FastFinalizeStage.cpp",
+        "dse/core/stage/IntentStage.cpp",
+        "dse/core/stage/StabilityStage.cpp",
+        "dse/core/stage/ResourceStage.cpp",
+        "dse/core/stage/InheritanceStage.cpp",
+        "dse/core/stage/EnvelopeStage.cpp",
+        "dse/core/stage/SceneStage.cpp",
+        "dse/core/state/StateVault.cpp",
+        "dse/core/service/state/StateService.cpp",
+        "dse/core/inheritance/IntentInheritance.cpp",
+        "dse/core/stability/StabilityMechanism.cpp",
+        "dse/core/safety/SafetyController.cpp",
+        "dse/platform/PlatformRegistry.cpp",
+        "dse/config/ConfigLoader.cpp",
+        "dse/config/RuleTable.cpp",
+    ],
+}
+
+// Trace 源（开发态：hash + full + buffer 全量编入）
+filegroup {
+    name: "libperfengine-dse-trace-srcs-on",
+    srcs: [
+        "dse/trace/TraceRecorder_hash.cpp",
+        "dse/trace/TraceRecorder_full.cpp",
+        "dse/trace/TraceBuffer.cpp",
+    ],
+}
+
+// Trace 源（量产态：hash + stub，环形缓冲不编入，零运行时开销）
+filegroup {
+    name: "libperfengine-dse-trace-srcs-off",
+    srcs: [
+        "dse/trace/TraceRecorder_hash.cpp",
+        "dse/trace/TraceRecorder_stub.cpp",
+    ],
+}
+
+filegroup {
+    name: "libperfengine-adapter-srcs",
     srcs: [
         "PerfLockCaller.cpp",
         "ServiceBridge.cpp",
@@ -60,10 +212,43 @@ cc_library_shared {
         "PerfEngineInit.cpp",
         "CallerValidator.cpp",
     ],
+}
 
-    local_include_dirs: [
-        "include",
+filegroup {
+    name: "perfengine-dse-unittest-srcs",
+    srcs: [
+        "dse/tests/DseTests.cpp",
+        "dse/tests/DseTests_Flow_Part01.cpp",
+        "dse/tests/DseTests_Flow_Part02.cpp",
+        "dse/tests/DseTests_Flow_Part03.cpp",
+        "dse/tests/DseTests_Flow_Part04.cpp",
+        "dse/tests/DseTests_Flow_Part05.cpp",
+        "dse/tests/DseTests_Flow_Part06.cpp",
+        "dse/tests/DseTests_Flow_Part07.cpp",
+        "dse/tests/DseTests_Flow_StressTests.cpp",
+        "dse/tests/DseTests_Flow_BoundaryTests.cpp",
+        "dse/tests/DseTests_Flow_ConcurrencyTests.cpp",
+        "dse/tests/DseTests_Flow_WorkflowExample.cpp",
+        "dse/tests/DseTests_Flow_CoverageCompleteness.cpp",
+        "dse/tests/DseTests_TraceEnablement.cpp",
     ],
+}
+
+// ==================== 公共编译配置 ====================
+
+cc_defaults {
+    name: "libperfengine-adapter-common-defaults",
+    defaults: [
+        "libperfengine-dse-local-includes",
+        "perfengine_platform_profile_defaults",
+    ],
+
+    srcs: [
+        ":libperfengine-dse-srcs-base",
+        ":libperfengine-adapter-srcs",
+    ],
+
+    export_include_dirs: ["dse/include"],
 
     header_libs: [
         "libperfengine_perfutils_headers",
@@ -82,16 +267,85 @@ cc_library_shared {
     cflags: [
         "-Wall",
         "-Werror",
-        "-Wno-unused-parameter",
         "-DLOG_TAG=\"PerfEngine\"",
         "-DPERFENGINE_USE_HARDCODED_MAPPINGS=0",
-        "-DPERFENGINE_PRODUCTION=0",
         // "-DTRAN_LOG_DISABLED",
     ],
 
     cppflags: [
         "-std=c++17",
     ],
+}
+
+// ==================== 单测公共配置 ====================
+
+cc_defaults {
+    name: "perfengine-dse-unittests-defaults",
+    defaults: [
+        "libperfengine-dse-local-includes",
+    ],
+
+    srcs: [
+        ":perfengine-dse-unittest-srcs",
+        ":libperfengine-dse-trace-srcs-on",
+    ],
+
+    shared_libs: [
+        "libperfengine-adapter",
+        "libbase",
+        "liblog",
+        "libutils",
+    ],
+
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-UNDEBUG",
+        "-DPERFENGINE_ENABLE_DSE_TRACE=1",
+    ],
+
+    cppflags: [
+        "-std=c++17",
+    ],
+}
+
+// ==================== libperfengine-adapter.so ====================
+// 唯一对外产物。
+// 平台和档位由 perfengine_config.mk 自动推导，无需手动干预。
+//
+// ---- 手动维护区：出货前按需修改以下两项 ----
+//
+//   开发态：srcs = trace-srcs-on，PRODUCTION=0，TRACE=1
+//   量产态：srcs = trace-srcs-off，PRODUCTION=1，TRACE=0
+
+cc_library_shared {
+    name: "libperfengine-adapter",
+    vendor: true,
+
+    defaults: [
+        "libperfengine-adapter-common-defaults",
+    ],
+
+    srcs: [
+        // 量产时替换为 ":libperfengine-dse-trace-srcs-off"
+        ":libperfengine-dse-trace-srcs-on",
+    ],
+
+    cflags: [
+        "-DPERFENGINE_PRODUCTION=0", // 量产时改为 1
+        "-DPERFENGINE_ENABLE_DSE_TRACE=1", // 量产时改为 0
+    ],
 
     vintf_fragments: ["vendor.transsion.hardware.perfengine.xml"],
+}
+
+// ==================== 单元测试二进制 ====================
+
+cc_binary {
+    name: "perfengine-dse-unittests",
+    vendor: true,
+
+    defaults: [
+        "perfengine-dse-unittests-defaults",
+    ],
 }

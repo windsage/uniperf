@@ -1,12 +1,12 @@
 #pragma once
 
+#include <sys/system_properties.h>
+#include <utils/Timers.h>
+
 #include <atomic>
 #include <cstdio>
 #include <cstdlib>
 #include <utility>
-
-#include <sys/system_properties.h>
-#include <utils/Timers.h>
 
 // Compile-time default when system property debug.tr_log.trace.level is unset.
 // Override from Soong: -DPERFENGINE_TRACE_DEFAULT_LEVEL=0|1|2
@@ -50,7 +50,7 @@ public:
 
         const int64_t nowNs = systemTime(SYSTEM_TIME_MONOTONIC);
         const int64_t lastNs = sLastReadNs.load(std::memory_order_relaxed);
-        constexpr int64_t kThrottleNs = 500LL * 1000 * 1000; // 500ms
+        constexpr int64_t kThrottleNs = 500LL * 1000 * 1000;    // 500ms
 
         int cached = sCachedLevel.load(std::memory_order_relaxed);
         if (cached >= 0 && (nowNs - lastNs) < kThrottleNs) {
@@ -84,8 +84,7 @@ public:
  */
 class TtraceScoped {
 public:
-    explicit TtraceScoped(TraceLevel want, const char *name)
-        : on_(TranTracer::isTraceOn(want)) {
+    explicit TtraceScoped(TraceLevel want, const char *name) : on_(TranTracer::isTraceOn(want)) {
         if (on_) {
             ATRACE_BEGIN(name);
         }
@@ -133,9 +132,9 @@ private:
     char buf_[256];
 };
 
-} // namespace perfengine
-} // namespace transsion
-} // namespace vendor
+}    // namespace perfengine
+}    // namespace transsion
+}    // namespace vendor
 
 // -------------------- Trace macros --------------------
 
@@ -148,11 +147,12 @@ private:
 // Usage:
 //   TTRACE_SCOPED(level, "literal_name");
 //   TTRACE_SCOPED(level, "fmt id=%d ts=%lld", id, ts);
-#define TTRACE_SCOPED_LIT(level, nameLiteral)                                                          \
-    ::vendor::transsion::perfengine::TtraceScoped TTRACE_PP_CAT(_ttrace_sc_, __LINE__)(level, nameLiteral)
+#define TTRACE_SCOPED_LIT(level, nameLiteral)                                           \
+    ::vendor::transsion::perfengine::TtraceScoped TTRACE_PP_CAT(_ttrace_sc_, __LINE__)( \
+        level, nameLiteral)
 
-#define TTRACE_SCOPED_FMT(level, fmt, ...)                                                             \
-    ::vendor::transsion::perfengine::TtraceScopedFmt TTRACE_PP_CAT(_ttrace_fmt_, __LINE__)(            \
+#define TTRACE_SCOPED_FMT(level, fmt, ...)                                                  \
+    ::vendor::transsion::perfengine::TtraceScopedFmt TTRACE_PP_CAT(_ttrace_fmt_, __LINE__)( \
         level, fmt, ##__VA_ARGS__)
 
 // Macro overload: 2 args -> LIT, 3+ args -> FMT.
@@ -160,18 +160,18 @@ private:
 //   - Literal form: TTRACE_SCOPED(level, "name")                         (2 args)
 //   - Fmt form:     TTRACE_SCOPED(level, "fmt %d %d %d", a, b, c)        (up to 5 args)
 #define TTRACE_SCOPED_CHOOSER(_1, _2, _3, _4, _5, NAME, ...) NAME
-#define TTRACE_SCOPED(...)                                                                             \
-    TTRACE_SCOPED_CHOOSER(__VA_ARGS__,                                                                 \
-                          TTRACE_SCOPED_FMT, TTRACE_SCOPED_FMT, TTRACE_SCOPED_FMT, TTRACE_SCOPED_LIT)  \
+#define TTRACE_SCOPED(...)                                                                      \
+    TTRACE_SCOPED_CHOOSER(__VA_ARGS__, TTRACE_SCOPED_FMT, TTRACE_SCOPED_FMT, TTRACE_SCOPED_FMT, \
+                          TTRACE_SCOPED_LIT)                                                    \
     (__VA_ARGS__)
 
 // android::ScopedTrace via ATRACE_NAME; effective only inside the if-body (typically one line).
 // For call-stack nesting across a whole function, prefer TTRACE_SCOPED.
-#define TTRACE_NAME(level, nameLiteral)   \
-    do {                                  \
-        if (TTRACE_ON(level)) {           \
-            ATRACE_NAME(nameLiteral);     \
-        }                                 \
+#define TTRACE_NAME(level, nameLiteral) \
+    do {                                \
+        if (TTRACE_ON(level)) {         \
+            ATRACE_NAME(nameLiteral);   \
+        }                               \
     } while (0)
 
 #define TTRACE_BEGIN(level, nameLiteral) \
@@ -194,4 +194,3 @@ private:
             ATRACE_INT64(nameLiteral, (int64_t)(value)); \
         }                                                \
     } while (0)
-

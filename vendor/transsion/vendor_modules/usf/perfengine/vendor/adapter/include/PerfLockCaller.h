@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include <atomic>
+#include <cstddef>
 #include <cstdint>
 #include <map>
 #include <memory>
@@ -60,6 +61,14 @@ public:
 
     int32_t acquirePerfLock(const EventContext &ctx);
 
+    /**
+     * DSE narrow API: submit pre-built [opcode,value,...] from PlatformActionTranslator only.
+     * Not used by PolicyCore / semantic layers.
+     */
+    int32_t acquirePerfLockFromParams(int32_t eventId, int32_t durationMs,
+                                      const int32_t *platformParams, size_t paramCount,
+                                      const char *packageName);
+
     void releasePerfLock(int32_t handle);
 
 private:
@@ -81,8 +90,8 @@ private:
     int32_t queryDisplayFps();
 
     int32_t qcomAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                          const std::vector<int32_t> &platformParams,
-                                          const std::string &packageName);
+                                          const int32_t *platformParams, size_t paramCount,
+                                          const char *packageName);
 
     void qcomReleasePerfLock(int32_t handle);
 
@@ -92,7 +101,7 @@ private:
     } mMtkFuncs;
 
     int32_t mtkAcquirePerfLockWithParams(int32_t eventId, int32_t duration,
-                                         const std::vector<int32_t> &platformParams);
+                                         const int32_t *platformParams, size_t paramCount);
 
     void mtkReleasePerfLock(int32_t handle);
 

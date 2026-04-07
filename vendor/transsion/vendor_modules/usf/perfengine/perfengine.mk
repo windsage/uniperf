@@ -1,6 +1,10 @@
 PERFENGINE_BASE_DIR := vendor/transsion/vendor_modules/usf/perfengine
 PERFENGINE_CONFIG_DIR := $(PERFENGINE_BASE_DIR)/vendor/configs
 
+# -------------------------------------------------------------
+# 1. 平台类型自动推导
+#    优先级：手动设置 > vendor 目录探测
+# -------------------------------------------------------------
 ifndef PERFENGINE_PLATFORM_TYPE
     ifneq ($(wildcard vendor/qcom),)
         PERFENGINE_PLATFORM_TYPE := qcom
@@ -26,3 +30,5 @@ endif
 SOONG_CONFIG_NAMESPACES += transsion_perfengine
 SOONG_CONFIG_transsion_perfengine += platform
 SOONG_CONFIG_transsion_perfengine_platform := $(PERFENGINE_PLATFORM_TYPE)
+SOONG_CONFIG_transsion_perfengine += profile
+SOONG_CONFIG_transsion_perfengine_profile := $(PERFENGINE_PROFILE_TYPE)

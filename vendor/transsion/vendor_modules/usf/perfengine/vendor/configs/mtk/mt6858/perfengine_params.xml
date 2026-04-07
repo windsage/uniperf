@@ -16,7 +16,7 @@
             </Config>
         </Scenario>
         <!-- 应用冷启动场景 -->
-        <Scenario id="0x00002" name="EVENT_SYS_APP_LAUNCH_CLOD" priority="8" description="应用冷启动boost">
+        <Scenario id="0x00002" name="EVENT_SYS_APP_LAUNCH_COLD" priority="8" description="应用冷启动boost">
             <Config timeout="2000" release="auto">
                 <Resources>
                     <!-- 通用CPU频率配置 -->

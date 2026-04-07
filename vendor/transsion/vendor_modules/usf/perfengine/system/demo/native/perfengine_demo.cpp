@@ -47,26 +47,32 @@ static std::atomic<bool> gRunning{true};
 // ==================== Helpers ====================
 
 static const std::unordered_map<std::string, int32_t> kEventNameMap = {
-    {"input", TranPerfEvent::EVENT_SYS_INPUT},
-    {"app_launch", TranPerfEvent::EVENT_SYS_APP_LAUNCH},
+    {"process create", TranPerfEvent::EVENT_SYS_PROCESS_CREATE},
+    {"app_cold_launch", TranPerfEvent::EVENT_SYS_APP_LAUNCH_COLD},
     {"scroll", TranPerfEvent::EVENT_SYS_SCROLL},
     {"fling", TranPerfEvent::EVENT_SYS_FLING},
-    {"animation", TranPerfEvent::EVENT_SYS_ANIMATION},
-    {"camera_open", TranPerfEvent::EVENT_SYS_CAMERA_OPEN},
+    {"anim_transition", TranPerfEvent::EVENT_SYS_AMIN_TRANSITION},
+    {"camera_open", TranPerfEvent::EVENT_SYS_CAMERA_LAUNCH},
 };
 
 static const std::vector<int32_t> kAllEvents = {
-    TranPerfEvent::EVENT_SYS_INPUT, TranPerfEvent::EVENT_SYS_APP_LAUNCH,
-    TranPerfEvent::EVENT_SYS_SCROLL, TranPerfEvent::EVENT_SYS_CAMERA_OPEN,
-    // ...
+    TranPerfEvent::EVENT_SYS_PROCESS_CREATE,  TranPerfEvent::EVENT_SYS_APP_LAUNCH_COLD,
+    TranPerfEvent::EVENT_SYS_SCROLL,          TranPerfEvent::EVENT_SYS_FLING,
+    TranPerfEvent::EVENT_SYS_AMIN_TRANSITION, TranPerfEvent::EVENT_SYS_CAMERA_LAUNCH,
 };
 
 static const char *eventName(int32_t id) {
     switch (id) {
-        case TranPerfEvent::EVENT_SYS_INPUT:
-            return "INPUT";
-        case TranPerfEvent::EVENT_SYS_APP_LAUNCH:
-            return "APP_LAUNCH";
+        case TranPerfEvent::EVENT_SYS_PROCESS_CREATE:
+            return "PROCESS CREATE";
+        case TranPerfEvent::EVENT_SYS_APP_LAUNCH_COLD:
+            return "APP_COLD_LAUNCH";
+        case TranPerfEvent::EVENT_SYS_SCROLL:
+            return "SCROLL";
+        case TranPerfEvent::EVENT_SYS_FLING:
+            return "FLING";
+        case TranPerfEvent::EVENT_SYS_AMIN_TRANSITION:
+            return "ANIM_TRANSITION";
         // ...
         default:
             return "UNKNOWN";

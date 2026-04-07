@@ -1,0 +1,5 @@
+https://gerrit.transsion.com/c/QCOM/LA/platform/frameworks/base/+/1426628  system/frameworks/base
+https://gerrit.transsion.com/c/TRAN_CODE/vendor/transsion/system_modules/common/+/1456543  system/vendor/transsion/system_modules/common
+https://gerrit.transsion.com/c/TRAN_CODE/vendor/transsion/vendor_modules/common/+/1456542  vendor/vendor/transsion/vendor_modules/common
+https://gerrit.transsion.com/c/QCOM/LA/platform/vendor/qcom-proprietary/ship/perf-core/+/1460770  vendor/vendor/qcom/proprietary/perf-core
+https://gerrit.transsion.com/c/QCOM/LA/platform/build/soong/+/1470028 vendor/build/soong

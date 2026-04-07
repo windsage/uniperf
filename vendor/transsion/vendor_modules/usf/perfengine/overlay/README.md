@@ -22,7 +22,7 @@
 
 ## 支持的事件类型
 
-[参考文档](../../../docs/EVENT_ID_REFERENCE.md)
+[参考文档](../docs/EVENT_ID_REFERENCE.md)
 
 ---
 
@@ -131,45 +131,9 @@ TranPerfEvent.registerListener(new TranPerfEvent.TrEventListener() {
 });
 ```
 
-### 示例 4：注册完整监听器（SDK 推荐）
-
-```java
-TranPerfEvent.registerEventListener(new TranPerfEvent.PerfEventListener() {
-    @Override
-    public void onEventStart(int eventId, long timestamp, int numParams,
-                             int[] intParams, String extraStrings) {
-        Log.d("SDK", "Event: " + eventId);
-        Log.d("SDK", "Timestamp: " + timestamp);
-        Log.d("SDK", "Params: " + Arrays.toString(intParams));
-        Log.d("SDK", "Extra: " + extraStrings);
-    }
-
-    @Override
-    public void onEventEnd(int eventId, long timestamp, String extraStrings) {
-        Log.d("SDK", "Event " + eventId + " finished");
-    }
-});
 ```
 
-### 示例 4b：注册完整监听器（仅订阅指定事件）
-
-```java
-// 只订阅应用启动和滚动事件，减少不必要的跨进程回调
-int[] filter = {TranPerfEvent.EVENT_APP_LAUNCH, TranPerfEvent.EVENT_SCROLL};
-TranPerfEvent.registerEventListener(new TranPerfEvent.PerfEventListener() {
-    @Override
-    public void onEventStart(int eventId, long timestamp, int numParams,
-                             int[] intParams, String extraStrings) {
-        // 只会收到 EVENT_APP_LAUNCH 和 EVENT_SCROLL 的回调
-    }
-
-    @Override
-    public void onEventEnd(int eventId, long timestamp, String extraStrings) {
-    }
-}, filter);
-```
-
-### 示例 5：AIDL 监听器（高级用法）
+### 示例 4：AIDL 监听器（高级用法）
 
 ```java
 // 直接注册 AIDL 监听器
@@ -189,7 +153,7 @@ TranPerfEvent.registerEventListener(new IEventListener.Stub() {
 });
 ```
 
-### 示例 5b：AIDL 监听器（带事件过滤）
+### 示例 4b：AIDL 监听器（带事件过滤）
 
 ```java
 int[] filter = {TranPerfEvent.EVENT_APP_LAUNCH};
@@ -243,15 +207,6 @@ TranPerfEvent.registerListener(TrEventListener listener)
 // 取消注册简化监听器
 TranPerfEvent.unregisterListener(TrEventListener listener)
 
-// 注册完整监听器 - 订阅所有事件
-TranPerfEvent.registerEventListener(PerfEventListener listener)
-
-// 注册完整监听器 - 按事件过滤
-TranPerfEvent.registerEventListener(PerfEventListener listener, int[] eventFilter)
-
-// 取消注册完整监听器
-TranPerfEvent.unregisterEventListener(PerfEventListener listener)
-
 // 注册 AIDL 监听器（高级）- 订阅所有事件
 TranPerfEvent.registerEventListener(IBinder listenerBinder)
 
@@ -291,7 +246,7 @@ long timestamp = TranPerfEvent.now();
      │
      ├─► 简化监听器（TrEventListener）
      │
-     ├─► 完整监听器（PerfEventListener / IEventListener）
+     ├─► 完整监听器（IEventListener）
      │
      └─► PerfEngine (通过反射)
          └─► 性能优化决策 / 系统调度
