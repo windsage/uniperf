@@ -332,6 +332,8 @@ public class MainActivity extends Activity {
                               + idToName(eventId) + ")"
                               + " duration=" + duration;
                 appendLog(line);
+                Log.d(TAG, "[RECV][TR_EVENT][START] eventId=0x" + Integer.toHexString(eventId) + "timestamp=" + timestamp
+                + " duration=" + duration);
             }
 
             @Override
@@ -342,6 +344,7 @@ public class MainActivity extends Activity {
                 String line = ts() + " [ END ] id=0x" + Integer.toHexString(eventId) + "("
                               + idToName(eventId) + ")";
                 appendLog(line);
+                Log.d(TAG, "[RECV][TR_EVENT][END] eventId=0x" + Integer.toHexString(eventId) + "timestamp=" + timestamp);
             }
         };
 
@@ -369,6 +372,9 @@ public class MainActivity extends Activity {
                               + " params=" + arrayToStr(intParams, numParams)
                               + (extraStrings != null ? " extra=" + extraStrings : "");
                 appendLog(line);
+                Log.d(TAG, "[RECV][IBINDER][START] eventId=0x" + Integer.toHexString(eventId) + "timestamp=" + timestamp
+                + " params=" + arrayToStr(intParams, numParams)
+                + " extra=" + (extraStrings != null ? extraStrings : ""));
             }
 
             @Override
@@ -380,6 +386,8 @@ public class MainActivity extends Activity {
                               + idToName(eventId) + ")"
                               + (extraStrings != null ? " extra=" + extraStrings : "");
                 appendLog(line);
+                Log.d(TAG, "[RECV][IBINDER][END] eventId=0x" + Integer.toHexString(eventId) + "timestamp=" + timestamp
+                + " extra=" + (extraStrings != null ? extraStrings : ""));
             }
 
             @Override

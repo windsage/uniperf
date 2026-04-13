@@ -44,7 +44,7 @@ public final class TranPerfEvent {
     private static final String TAG = "TranPerfEvent";
 
     // Compile-time debug switch — set false for production build
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     // String separator (ASCII 31 - Unit Separator)
     private static final char STRING_SEPARATOR = '\u001F';
@@ -311,8 +311,14 @@ public final class TranPerfEvent {
         }
 
         final int[] safeParams = (intParams != null) ? intParams : new int[0];
+        // 1. Forward to vendor service via JNI
+        try {
+            nativeNotifyEventStart(eventId, timestamp, numParams, safeParams, extraStrings);
+        } catch (UnsatisfiedLinkError e) {
+            Log.e(TAG, "nativeNotifyEventStart: JNI not linked", e);
+        }
 
-        // 1. Notify in-process simplified listeners (zero Binder, system_server internal)
+        // 2. Notify in-process simplified listeners (zero Binder, system_server internal)
         if (!sSimplifiedListeners.isEmpty()) {
             final int duration = (safeParams.length > 0) ? safeParams[0] : 0;
             for (TrEventListener listener : sSimplifiedListeners) {
@@ -324,12 +330,6 @@ public final class TranPerfEvent {
             }
         }
 
-        // 2. Forward to vendor service via JNI
-        try {
-            nativeNotifyEventStart(eventId, timestamp, numParams, safeParams, extraStrings);
-        } catch (UnsatisfiedLinkError e) {
-            Log.e(TAG, "nativeNotifyEventStart: JNI not linked", e);
-        }
     }
 
     // ==================== Event End Methods ====================
@@ -368,7 +368,14 @@ public final class TranPerfEvent {
                                eventId, latency, latency / 1_000_000.0, extraString));
         }
 
-        // 1. Notify in-process simplified listeners
+        // 1. Forward to vendor service via JNI
+        try {
+            nativeNotifyEventEnd(eventId, timestamp, extraString);
+        } catch (UnsatisfiedLinkError e) {
+            Log.e(TAG, "nativeNotifyEventEnd: JNI not linked", e);
+        }
+
+        // 2. Notify in-process simplified listeners
         if (!sSimplifiedListeners.isEmpty()) {
             for (TrEventListener listener : sSimplifiedListeners) {
                 try {
@@ -377,13 +384,6 @@ public final class TranPerfEvent {
                     Log.e(TAG, "TrEventListener.onEventEnd failed", e);
                 }
             }
-        }
-
-        // 2. Forward to vendor service via JNI
-        try {
-            nativeNotifyEventEnd(eventId, timestamp, extraString);
-        } catch (UnsatisfiedLinkError e) {
-            Log.e(TAG, "nativeNotifyEventEnd: JNI not linked", e);
         }
     }
 

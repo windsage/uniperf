@@ -1,11 +1,7 @@
 #include <android/binder_ibinder_platform.h>
 #include <android/binder_interface_utils.h>
 #include <android/binder_manager.h>
-#include <android/binder_process.h>
-#include <processgroup/sched_policy.h>
-#include <sys/resource.h>
-
-#include <memory>
+#include <sched.h>
 
 #include "ServiceBridge.h"
 #include "perf-utils/TranLog.h"
@@ -86,8 +82,6 @@ extern "C" bool PerfEngine_Initialize() {
     }
 
     TLOGI("PerfEngine service registered: %s", serviceName.c_str());
-
-    TLOGI("Binder thread pool priority elevated");
     return true;
 }
 

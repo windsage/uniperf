@@ -261,7 +261,7 @@ long timestamp = TranPerfEvent.now();
 默认延迟阈值为 **10ms**。当事件到达延迟超过此阈值时会输出警告日志：
 
 ```
-notifyEventStart: eventId=1, timestamp=123456, latency=15000000 ns (15.00 ms), ...
+notifyEventStart: eventId=0x1, timestamp=123456, latency=15000000 ns (15.00 ms), ...
 ```
 
 ### 2. 线程安全
@@ -297,7 +297,7 @@ private static final boolean DEBUG = true;
 启用后会输出详细的事件通知日志：
 
 ```
-D/TranPerfEvent: notifyEventStart: eventId=1, timestamp=..., latency=... ns, ...
+D/TranPerfEvent: notifyEventStart: eventId=0x1, timestamp=..., latency=... ns, ...
 D/TranPerfEvent: Simplified listener registered, total: 2
 D/TranPerfEvent: Listener registration methods found
 ```

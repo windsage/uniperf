@@ -229,8 +229,9 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
         return -1;
     }
 
-    TLOGI("=== acquirePerfLock START: eventId=%d fps=%d pkg='%s' act='%s' intParam1=%d ===",
-          ctx.eventId, ctx.intParam0, ctx.package.c_str(), ctx.activity.c_str(), ctx.intParam1);
+    TLOGI("=== acquirePerfLock START: eventId=0x%x fps=%d pkg='%s' act='%s' intParam1=%d ===",
+          static_cast<unsigned>(ctx.eventId), ctx.intParam0, ctx.package.c_str(),
+          ctx.activity.c_str(), ctx.intParam1);
 
     // QCOM: use cached display fps for scenario matching.
     // Other platforms: fps=0, falls through to generic P6 config.
@@ -240,8 +241,9 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
                                                                    ctx.activity);
 
     if (!config) {
-        TLOGE("No config: eventId=%d param0=%d pkg='%s' act='%s'", ctx.eventId, ctx.intParam0,
-              ctx.package.c_str(), ctx.activity.c_str());
+        TLOGE("No config: eventId=0x%x param0=%d pkg='%s' act='%s'",
+              static_cast<unsigned>(ctx.eventId), ctx.intParam0, ctx.package.c_str(),
+              ctx.activity.c_str());
         return -1;
     }
 
@@ -256,8 +258,8 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
 
     // platformParams pre-converted at load time — zero conversion cost here
     if (config->platformParams.empty()) {
-        TLOGE("No platform params for eventId=%d (all params unmapped on this platform)",
-              ctx.eventId);
+        TLOGE("No platform params for eventId=0x%x (all params unmapped on this platform)",
+              static_cast<unsigned>(ctx.eventId));
         return -1;
     }
 
@@ -281,7 +283,7 @@ int32_t PerfLockCaller::acquirePerfLock(const EventContext &ctx) {
     }
 
     if (platformHandle < 0) {
-        TLOGE("Platform acquirePerfLock failed: eventId=%d", ctx.eventId);
+        TLOGE("Platform acquirePerfLock failed: eventId=0x%x", static_cast<unsigned>(ctx.eventId));
         return -1;
     }
 
@@ -315,7 +317,7 @@ int32_t PerfLockCaller::acquirePerfLockFromParams(int32_t eventId, int32_t durat
             return -1;
     }
     if (platformHandle < 0) {
-        TLOGE("acquirePerfLockFromParams failed eventId=%d", eventId);
+        TLOGE("acquirePerfLockFromParams failed eventId=0x%x", static_cast<unsigned>(eventId));
     }
     return platformHandle;
 }

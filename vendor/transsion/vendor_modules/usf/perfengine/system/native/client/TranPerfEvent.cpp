@@ -8,13 +8,16 @@
 #include <aidl/vendor/transsion/hardware/perfengine/IPerfEngine.h>
 #include <android/binder_ibinder.h>
 #include <android/binder_manager.h>
+#include <android/binder_status.h>
 #include <perfengine/TranPerfEvent.h>
 #include <time.h>
 #include <utils/Log.h>
 
+#include <atomic>
 #include <memory>
 #include <mutex>
 #include <sstream>
+#include <utility>
 
 // ==================== Aconfig Flag Handling ====================
 
@@ -37,21 +40,36 @@ using ::ndk::SpAIBinder;
 namespace android {
 namespace transsion {
 
+namespace {
+
+std::mutex g_service_mutex;
+std::shared_ptr<IPerfEngine> g_service;
+
+void clearServiceCache() {
+    std::lock_guard<std::mutex> lock(g_service_mutex);
+    std::shared_ptr<IPerfEngine> cleared;
+    std::atomic_store_explicit(&g_service, cleared, std::memory_order_release);
+}
+
+bool isStaleBinderStatus(const ScopedAStatus &status) {
+    const binder_status_t st = status.getStatus();
+    return st == STATUS_DEAD_OBJECT; // st == STATUS_FAILED_TRANSACTION 
+}
+
+}    // namespace
+
 /**
  * Get AIDL service (lazy-loaded, cached)
  */
 static std::shared_ptr<IPerfEngine> getService() {
-    static std::shared_ptr<IPerfEngine> sService = nullptr;
-    static std::mutex sServiceMutex;
-
     std::shared_ptr<IPerfEngine> service =
-        std::atomic_load_explicit(&sService, std::memory_order_acquire);
+        std::atomic_load_explicit(&g_service, std::memory_order_acquire);
     if (service != nullptr) {
         return service;
     }
 
-    std::lock_guard<std::mutex> lock(sServiceMutex);
-    service = std::atomic_load_explicit(&sService, std::memory_order_acquire);
+    std::lock_guard<std::mutex> lock(g_service_mutex);
+    service = std::atomic_load_explicit(&g_service, std::memory_order_acquire);
     if (service == nullptr) {
         const std::string instance = std::string() + IPerfEngine::descriptor + "/default";
 
@@ -65,11 +83,39 @@ static std::shared_ptr<IPerfEngine> getService() {
         if (service != nullptr && DEBUG) {
             ALOGD("PerfEngine service connected");
         }
-        std::atomic_store_explicit(&sService, service, std::memory_order_release);
+        std::atomic_store_explicit(&g_service, service, std::memory_order_release);
     }
 
     return service;
 }
+
+namespace {
+
+template <typename Call>
+ScopedAStatus callServiceWithRetry(const Call &call) {
+    for (int attempt = 0; attempt < 2; ++attempt) {
+        auto service = getService();
+        if (!service) {
+            return ScopedAStatus::fromStatus(STATUS_NAME_NOT_FOUND);
+        }
+
+        ScopedAStatus status = call(service);
+        if (status.isOk()) {
+            return std::move(status);
+        }
+
+        if (attempt == 0 && isStaleBinderStatus(status)) {
+            clearServiceCache();
+            continue;
+        }
+
+        return std::move(status);
+    }
+
+    return ScopedAStatus::fromStatus(STATUS_UNKNOWN_ERROR);
+}
+
+}    // namespace
 
 // ==================== Utility Methods ====================
 
@@ -136,14 +182,20 @@ int32_t TranPerfEvent::notifyEventStartInternal(int32_t eventId, int64_t timesta
     }
 
     if (DEBUG) {
-        ALOGD("notifyEventStart: eventId=%d, timestamp=%lld, numParams=%d, extraStrings=%s",
+        ALOGD("notifyEventStart: eventId=0x%x, timestamp=%lld, numParams=%d, extraStrings=%s",
               eventId, (long long)timestamp, numParams, extraStrings.c_str());
     }
 
-    // Call AIDL interface
-    auto status = service->notifyEventStart(
-        eventId, timestamp, numParams, intParams,
-        extraStrings.empty() ? std::nullopt : std::make_optional(extraStrings));
+    ScopedAStatus status = callServiceWithRetry([&](const std::shared_ptr<IPerfEngine> &service) {
+        return service->notifyEventStart(
+            eventId, timestamp, numParams, intParams,
+            extraStrings.empty() ? std::nullopt : std::make_optional(extraStrings));
+    });
+
+    if (status.getStatus() == STATUS_NAME_NOT_FOUND) {
+        ALOGE("Service not available");
+        return -1;
+    }
 
     if (!status.isOk()) {
         ALOGE("AIDL call failed: %s", status.getMessage());
@@ -221,21 +273,21 @@ void TranPerfEvent::notifyEventEnd(int32_t eventId, int64_t timestamp,
         return;
     }
 
-    // Get service
-    auto service = getService();
-    if (!service) {
-        ALOGE("Service not available");
-        return;
-    }
-
     if (DEBUG) {
-        ALOGD("notifyEventEnd: eventId=%d, timestamp=%lld, extraString=%s", eventId,
+        ALOGD("notifyEventEnd: eventId=0x%x, timestamp=%lld, extraString=%s", eventId,
               (long long)timestamp, extraString.c_str());
     }
 
-    // Call AIDL interface
-    auto status = service->notifyEventEnd(
-        eventId, timestamp, extraString.empty() ? std::nullopt : std::make_optional(extraString));
+    ScopedAStatus status = callServiceWithRetry([&](const std::shared_ptr<IPerfEngine> &service) {
+        return service->notifyEventEnd(
+            eventId, timestamp,
+            extraString.empty() ? std::nullopt : std::make_optional(extraString));
+    });
+
+    if (status.getStatus() == STATUS_NAME_NOT_FOUND) {
+        ALOGE("Service not available");
+        return;
+    }
 
     if (!status.isOk()) {
         ALOGE("AIDL call failed: %s", status.getMessage());
@@ -269,24 +321,27 @@ int32_t TranPerfEvent::registerEventListener(const std::shared_ptr<IEventListene
         return -1;
     }
 
-    auto service = getService();
-    if (!service) {
-        ALOGE("Service not available");
-        return -1;
-    }
-
     if (DEBUG) {
         ALOGD("registerEventListener: filter size=%zu", eventFilter.size());
     }
 
-    auto status = service->registerEventListener(listener, eventFilter);
+    ScopedAStatus status = callServiceWithRetry([&](const std::shared_ptr<IPerfEngine> &service) {
+        return service->registerEventListener(listener, eventFilter);
+    });
+
+    if (status.getStatus() == STATUS_NAME_NOT_FOUND) {
+        ALOGE("Service not available");
+        return -1;
+    }
+
     if (!status.isOk()) {
         ALOGE("registerEventListener failed: %s", status.getMessage());
         return -1;
     }
 
-    if (DEBUG)
+    if (DEBUG) {
         ALOGD("Listener registered successfully");
+    }
     return 0;
 }
 
@@ -308,19 +363,18 @@ int32_t TranPerfEvent::unregisterEventListener(const std::shared_ptr<IEventListe
         return -1;
     }
 
-    // Get service
-    auto service = getService();
-    if (!service) {
-        ALOGE("Service not available");
-        return -1;
-    }
-
     if (DEBUG) {
         ALOGD("unregisterEventListener");
     }
 
-    // Call AIDL interface
-    auto status = service->unregisterEventListener(listener);
+    ScopedAStatus status = callServiceWithRetry([&](const std::shared_ptr<IPerfEngine> &service) {
+        return service->unregisterEventListener(listener);
+    });
+
+    if (status.getStatus() == STATUS_NAME_NOT_FOUND) {
+        ALOGE("Service not available");
+        return -1;
+    }
 
     if (!status.isOk()) {
         ALOGE("unregisterEventListener failed: %s", status.getMessage());
@@ -330,7 +384,6 @@ int32_t TranPerfEvent::unregisterEventListener(const std::shared_ptr<IEventListe
     if (DEBUG) {
         ALOGD("Listener unregistered successfully");
     }
-
     return 0;
 }
 

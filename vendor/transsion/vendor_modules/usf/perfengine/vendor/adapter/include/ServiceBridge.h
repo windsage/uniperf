@@ -115,6 +115,17 @@ private:
     void processEventStart(const EventTask &task);
     void processEventEnd(const EventTask &task);
 
+    /**
+     * Queue IEventListener broadcast for notifyEventStart. Single entry point so DSE success,
+     * Legacy success, and dual-failure (listener consistency) paths cannot diverge.
+     */
+    void enqueueEventStartListenerBroadcast(int32_t eventId, int64_t timestamp, int32_t numParams,
+                                            const std::vector<int32_t> &intParams,
+                                            const std::optional<std::string> &extraStrings);
+
+    void enqueueEventEndListenerBroadcast(int32_t eventId, int64_t timestamp,
+                                        const std::optional<std::string> &extraStrings);
+
     // ==================== Active events ====================
     struct EventInfo {
         int32_t platformHandle;

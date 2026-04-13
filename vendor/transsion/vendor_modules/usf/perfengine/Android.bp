@@ -15,11 +15,6 @@ python_binary_host {
     name: "perfengine-event-generator",
     main: "tools/generate_events.py",
     srcs: ["tools/generate_events.py"],
-    version: {
-        py3: {
-            enabled: true,
-        },
-    },
 }
 
 genrule {

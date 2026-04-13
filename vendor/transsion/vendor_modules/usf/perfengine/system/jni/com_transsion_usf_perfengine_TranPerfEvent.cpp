@@ -43,7 +43,7 @@ static void nativeNotifyEventStart(JNIEnv *env, jclass clazz, jint eventId, jlon
         return;
     }
     if (DEBUG) {
-        ALOGD("nativeNotifyEventStart: eventId=%d, timestamp=%lld, numParams=%d", eventId,
+        ALOGD("nativeNotifyEventStart: eventId=0x%x, timestamp=%lld, numParams=%d", eventId,
               (long long)timestamp, numParams);
     }
 
@@ -100,7 +100,7 @@ static void nativeNotifyEventStart(JNIEnv *env, jclass clazz, jint eventId, jlon
     }
 
     if (DEBUG) {
-        ALOGD("Event started: eventId=%d", eventId);
+        ALOGD("Event started: eventId=0x%x", eventId);
     }
 }
 
@@ -116,7 +116,7 @@ static void nativeNotifyEventEnd(JNIEnv *env, jclass clazz, jint eventId, jlong 
         return;
     }
     if (DEBUG) {
-        ALOGD("nativeNotifyEventEnd: eventId=%d, timestamp=%lld", eventId, (long long)timestamp);
+        ALOGD("nativeNotifyEventEnd: eventId=0x%x, timestamp=%lld", eventId, (long long)timestamp);
     }
 
     // 转换 extraStrings
@@ -139,7 +139,7 @@ static void nativeNotifyEventEnd(JNIEnv *env, jclass clazz, jint eventId, jlong 
     }
 
     if (DEBUG) {
-        ALOGD("Event ended: eventId=%d", eventId);
+        ALOGD("Event ended: eventId=0x%x", eventId);
     }
 }
 

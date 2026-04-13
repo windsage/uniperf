@@ -47,6 +47,7 @@
 #include <cerrno>
 #include <chrono>
 #include <cstring>
+#include <string>
 #include <thread>
 
 #include "CallerValidator.h"
@@ -381,7 +382,8 @@ ServiceBridge::~ServiceBridge() {
         std::lock_guard<Mutex> lock(mEventLock);
         for (auto &pair : mActiveEvents) {
             if (!pair.second.dseHandled && mPerfLockCaller && pair.second.platformHandle > 0) {
-                TLOGI("Releasing active event %d handle=%d on destroy", pair.first,
+                TLOGI("Releasing active event 0x%x handle=%d on destroy",
+                      static_cast<unsigned>(pair.first),
                       pair.second.platformHandle);
                 mPerfLockCaller->releasePerfLock(pair.second.platformHandle);
             }
@@ -446,14 +448,12 @@ void ServiceBridge::workerLoop(int index) {
     param.sched_priority = 1;
     int res = sched_setscheduler(0, SCHED_FIFO, &param);
     if (res == 0) {
-        TLOGI("Worker thread '%s' started, tid=%d elevated to SCHED_FIFO successfully!", name,
+        TLOGI("worker thread '%s' started, tid=%d and elevated to SCHED_FIFO successfully", name,
               gettid());
     } else {
-        TLOGW("sched_setscheduler failed for worker thread '%s',tid=%d , errno=%d, error=%s", name,
+        TLOGW("worker thread '%s' elevated to SCHED_FIFO failed, tid=%d , errno=%d, error=%s", name,
               gettid(), errno, strerror(errno));
     }
-
-    TLOGI("Worker thread '%s' tid=%d started!", name, gettid());
 
     while (true) {
         EventTask task;
@@ -507,6 +507,29 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
                   static_cast<unsigned>(task.eventId), static_cast<long long>(task.timestamp));
 
     broadcastEventEnd(task.eventId, task.timestamp, task.extraStrings);
+}
+
+void ServiceBridge::enqueueEventStartListenerBroadcast(
+    int32_t eventId, int64_t timestamp, int32_t numParams, const std::vector<int32_t> &intParams,
+    const std::optional<std::string> &extraStrings) {
+    EventTask task;
+    task.type = EventTask::Type::START;
+    task.eventId = eventId;
+    task.timestamp = timestamp;
+    task.numParams = numParams;
+    task.intParams = intParams;
+    task.extraStrings = extraStrings;
+    enqueueTask(std::move(task));
+}
+
+void ServiceBridge::enqueueEventEndListenerBroadcast(
+    int32_t eventId, int64_t timestamp, const std::optional<std::string> &extraStrings) {
+    EventTask task;
+    task.type = EventTask::Type::END;
+    task.eventId = eventId;
+    task.timestamp = timestamp;
+    task.extraStrings = extraStrings;
+    enqueueTask(std::move(task));
 }
 
 // ==================== Event Notification Implementation ====================
@@ -593,9 +616,9 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
         platformHandle = FallbackToLegacy(schedEvent, ctx.package);
         if (platformHandle < 0) {
             TLOGE(
-                "Both DSE and legacy failed for eventId=%d"
+                "Both DSE and legacy failed for eventId=0x%x"
                 " - CRITICAL: no resource allocation path available",
-                eventId);
+                static_cast<unsigned>(eventId));
             RecordBridgeFallback(sessionId, dse::DecisionFallbackReason::ExecutionFailed, 0xFF);
             {
                 std::lock_guard<Mutex> lock(mEventLock);
@@ -608,14 +631,8 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
                 mActiveEvents[eventId] = info;
             }
             // Enqueue broadcast even on failure so listeners stay consistent
-            EventTask task;
-            task.type = EventTask::Type::START;
-            task.eventId = eventId;
-            task.timestamp = timestamp;
-            task.numParams = numParams;
-            task.intParams = intParams;
-            task.extraStrings = extraStrings;
-            enqueueTask(std::move(task));
+            enqueueEventStartListenerBroadcast(eventId, timestamp, numParams, intParams,
+                                               extraStrings);
             return ::ndk::ScopedAStatus::fromExceptionCode(EX_TRANSACTION_FAILED);
         }
     }
@@ -624,8 +641,8 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
         std::lock_guard<Mutex> lock(mEventLock);
         auto it = mActiveEvents.find(eventId);
         if (it != mActiveEvents.end()) {
-            TLOGW("Event %d already active, releasing old handle=%d", eventId,
-                  it->second.platformHandle);
+            TLOGW("Event 0x%x already active, releasing old handle=%d",
+                  static_cast<unsigned>(eventId), it->second.platformHandle);
             if (!it->second.dseHandled && mPerfLockCaller && it->second.platformHandle > 0) {
                 mPerfLockCaller->releasePerfLock(it->second.platformHandle);
             }
@@ -638,18 +655,13 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
         mActiveEvents[eventId] = info;
     }
 
-    TLOGI("Event %d started: dseHandled=%d legacyHandle=%d", eventId, dseHandled, platformHandle);
+    TLOGI("Event 0x%x started: dseHandled=%d legacyHandle=%d", static_cast<unsigned>(eventId),
+          dseHandled, platformHandle);
 
-    // Dispatch broadcast to worker thread — listener callbacks are oneway
-    // and may be slow; keep binder thread unblocked
-    EventTask task;
-    task.type = EventTask::Type::START;
-    task.eventId = eventId;
-    task.timestamp = timestamp;
-    task.numParams = numParams;
-    task.intParams = intParams;
-    task.extraStrings = extraStrings;
-    enqueueTask(std::move(task));
+    // Same listener broadcast queue for DSE success and Legacy success — do not add a branch
+    // that skips enqueueEventStartListenerBroadcast.
+    // Dispatch on worker: listener Binder calls may be slow; keep binder thread unblocked.
+    enqueueEventStartListenerBroadcast(eventId, timestamp, numParams, intParams, extraStrings);
 
     return ::ndk::ScopedAStatus::ok();
 }
@@ -706,38 +718,36 @@ void ServiceBridge::processEventEnd(const EventTask &task) {
     TLOGI("notifyEventEnd: uid=%u eventId=0x%x", callerUid, eventId);
 #endif
     EventContext ctx = EventContext::parse(eventId, {}, extraStrings.value_or(""));
-    TLOGI("notifyEventEnd: eventId=%d pkg='%s'", ctx.eventId, ctx.package.c_str());
+    TLOGI("notifyEventEnd: eventId=0x%x pkg='%s'", static_cast<unsigned>(ctx.eventId),
+          ctx.package.c_str());
 
     {
         std::lock_guard<Mutex> lock(mEventLock);
         auto it = mActiveEvents.find(eventId);
         if (it == mActiveEvents.end()) {
-            TLOGW("Event %d not found in active events", eventId);
+            TLOGW("Event 0x%x not found in active events", static_cast<unsigned>(eventId));
             return ::ndk::ScopedAStatus::ok();
         }
 
         if (it->second.failed) {
-            TLOGW("Event %d ended but was in failed state, skipping release", eventId);
+            TLOGW("Event 0x%x ended but was in failed state, skipping release",
+                  static_cast<unsigned>(eventId));
         } else if (it->second.dseHandled && mDseService) {
             mDseService->OnEventEnd(eventId);
-            TLOGD("DSE lease ended for eventId=%d", eventId);
+            TLOGD("DSE lease ended for eventId=0x%x", static_cast<unsigned>(eventId));
         } else if (!it->second.dseHandled && mPerfLockCaller && it->second.platformHandle > 0) {
             mPerfLockCaller->releasePerfLock(it->second.platformHandle);
         }
 
         int64_t elapsedMs = (timestamp - it->second.startTime) / 1000000LL;
-        TLOGI("Event %d ended: dseHandled=%d handle=%d elapsed=%lldms", eventId,
-              it->second.dseHandled, it->second.platformHandle, (long long)elapsedMs);
+        TLOGI("Event 0x%x ended: dseHandled=%d handle=%d elapsed=%lldms",
+              static_cast<unsigned>(eventId), it->second.dseHandled, it->second.platformHandle,
+              (long long)elapsedMs);
         mActiveEvents.erase(it);
     }
 
-    // Dispatch broadcast to worker thread
-    EventTask task;
-    task.type = EventTask::Type::END;
-    task.eventId = eventId;
-    task.timestamp = timestamp;
-    task.extraStrings = extraStrings;
-    enqueueTask(std::move(task));
+    // DSE OnEventEnd and Legacy release both exit the lock above; one end-broadcast path.
+    enqueueEventEndListenerBroadcast(eventId, timestamp, extraStrings);
 
     return ::ndk::ScopedAStatus::ok();
 }
@@ -926,15 +936,15 @@ bool ServiceBridge::TryDseHandling(const dse::SchedEvent &event) {
     const uint32_t grayscaleSampleKey = dse::GrayscaleSampleKey(event);
 
     if (!safety.IsUidAllowed(event.uid)) {
-        TLOGW("UID %d blocked by access control for eventId=%lld", event.uid,
-              (long long)event.eventId);
+        TLOGW("UID %d blocked by access control for eventId=0x%llx", event.uid,
+              (unsigned long long)event.eventId);
         RecordBridgeFallback(sessionId, dse::DecisionFallbackReason::SafetyBlocked, 0x02);
         return false;
     }
 
     if (!safety.IsUidAuthorizedForHighIntent(event.uid, event.action)) {
-        TLOGW("UID %d not authorized for high-intent semantic action=%u eventId=%lld", event.uid,
-              static_cast<unsigned>(event.action), (long long)event.eventId);
+        TLOGW("UID %d not authorized for high-intent semantic action=%u eventId=0x%llx", event.uid,
+              static_cast<unsigned>(event.action), (unsigned long long)event.eventId);
         RecordBridgeFallback(sessionId, dse::DecisionFallbackReason::SafetyUidBlocked,
                              static_cast<uint32_t>(event.action));
         return false;
@@ -943,11 +953,11 @@ bool ServiceBridge::TryDseHandling(const dse::SchedEvent &event) {
     if (!safety.IsEnabled()) {
         uint32_t grayscalePercent = safety.GetGrayscalePercent();
         if (grayscalePercent > 0 && safety.ShouldUseGrayscale(grayscaleSampleKey)) {
-            TLOGD("DSE grayscale sample passed for eventId=%lld (%u%%)", (long long)event.eventId,
-                  grayscalePercent);
+            TLOGD("DSE grayscale sample passed for eventId=0x%llx (%u%%)",
+                  (unsigned long long)event.eventId, grayscalePercent);
         } else {
-            TLOGD("DSE disabled for eventId=%lld (grayscale=%u%%, state=%s)",
-                  (long long)event.eventId, grayscalePercent,
+            TLOGD("DSE disabled for eventId=0x%llx (grayscale=%u%%, state=%s)",
+                  (unsigned long long)event.eventId, grayscalePercent,
                   dse::SafetyController::StateToString(safety.GetState()));
             RecordBridgeFallback(
                 sessionId, dse::DecisionFallbackReason::SafetyBlocked,
@@ -959,8 +969,8 @@ bool ServiceBridge::TryDseHandling(const dse::SchedEvent &event) {
     if (mStateService) {
         if (!mStateService->IsReady()) {
             if (!mStateService->WaitUntilReady(dse::StateService::kDefaultWaitReadyTimeoutMs)) {
-                TLOGW("StateService not ready after wait; refusing DSE for eventId=%lld",
-                      (long long)event.eventId);
+                TLOGW("StateService not ready after wait; refusing DSE for eventId=0x%llx",
+                      (unsigned long long)event.eventId);
                 RecordBridgeFallback(sessionId, dse::DecisionFallbackReason::StateBaselineSynthetic,
                                      0x10);
                 return false;
@@ -972,14 +982,14 @@ bool ServiceBridge::TryDseHandling(const dse::SchedEvent &event) {
 
     const auto &result = mDseService->GetLastExecutionResult();
     if (result.actualPath == dse::PlatformActionPath::NoopFallback) {
-        TLOGW("DSE returned fallback for eventId=%lld, reason=0x%x", (long long)event.eventId,
-              result.fallbackFlags);
+        TLOGW("DSE returned fallback for eventId=0x%llx, reason=0x%x",
+              (unsigned long long)event.eventId, result.fallbackFlags);
         RecordBridgeFallback(sessionId, dse::DecisionFallbackReason::NoopFallback,
                              result.fallbackFlags);
         return false;
     }
 
-    TLOGI("DSE handled eventId=%lld successfully, path=%d", (long long)event.eventId,
+    TLOGI("DSE handled eventId=0x%llx successfully, path=%d", (unsigned long long)event.eventId,
           static_cast<int>(result.actualPath));
     return true;
 }
@@ -1025,15 +1035,15 @@ int32_t ServiceBridge::FallbackToLegacy(const dse::SchedEvent &event,
 
     int32_t handle = mPerfLockCaller->acquirePerfLock(legacyCtx);
     if (handle < 0) {
-        TLOGE("Legacy PerfLockCaller failed for eventId=%lld", (long long)event.eventId);
+        TLOGE("Legacy PerfLockCaller failed for eventId=0x%llx", (unsigned long long)event.eventId);
         return -1;
     }
 
     RecordBridgeFallback(sessionId, dse::DecisionFallbackReason::LegacyFallback,
                          static_cast<uint32_t>(handle));
 
-    TLOGI("Legacy fallback succeeded for eventId=%lld, handle=%d", (long long)event.eventId,
-          handle);
+    TLOGI("Legacy fallback succeeded for eventId=0x%llx, handle=%d",
+          (unsigned long long)event.eventId, handle);
     return handle;
 }
 
@@ -1154,16 +1164,18 @@ void ServiceBridge::broadcastEventStart(int32_t eventId, int64_t timestamp, int3
     }
 
     if (snapshot.empty()) {
-        TLOGD("broadcastEventStart: no listeners for eventId=%d", eventId);
+        TLOGD("broadcastEventStart: no listeners for eventId=0x%x", static_cast<unsigned>(eventId));
         return;
     }
 
-    TLOGI("Broadcasting eventStart eventId=%d to %zu/%zu listeners", eventId, snapshot.size(),
-          mListeners.size());
+    TLOGI("Broadcasting eventStart eventId=0x%x to %zu/%zu listeners",
+          static_cast<unsigned>(eventId), snapshot.size(), mListeners.size());
 
     for (auto &listener : snapshot) {
         auto status =
             listener->onEventStart(eventId, timestamp, numParams, intParams, extraStrings);
+        TLOGI("Callback EVENT_START:eventId=0x%x, timestamp=%lld, numParams=%d",
+              static_cast<unsigned>(eventId), (long long)timestamp, numParams);
         if (!status.isOk()) {
             TLOGW("Failed to notify listener onEventStart: %s", status.getMessage());
         }
@@ -1193,15 +1205,17 @@ void ServiceBridge::broadcastEventEnd(int32_t eventId, int64_t timestamp,
     }
 
     if (snapshot.empty()) {
-        TLOGD("broadcastEventEnd: no listeners for eventId=%d", eventId);
+        TLOGD("broadcastEventEnd: no listeners for eventId=0x%x", static_cast<unsigned>(eventId));
         return;
     }
 
-    TLOGI("Broadcasting eventEnd eventId=%d to %zu/%zu listeners", eventId, snapshot.size(),
-          mListeners.size());
+    TLOGI("Broadcasting eventEnd eventId=0x%x to %zu/%zu listeners",
+          static_cast<unsigned>(eventId), snapshot.size(), mListeners.size());
 
     for (auto &listener : snapshot) {
         auto status = listener->onEventEnd(eventId, timestamp, extraStrings);
+        TLOGI("Callback EVENT_END:eventId=0x%x, timestamp=%lld", static_cast<unsigned>(eventId),
+              (long long)timestamp);
         if (!status.isOk()) {
             TLOGW("Failed to notify listener onEventEnd: %s", status.getMessage());
         }
