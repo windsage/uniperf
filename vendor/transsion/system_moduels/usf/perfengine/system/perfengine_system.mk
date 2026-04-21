@@ -16,4 +16,4 @@ ifneq ($(filter eng userdebug,$(TARGET_BUILD_VARIANT)),)
 endif
 
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
-    vendor/transsion/vendor_modules/usf/perfengine/framework_compatibility_matrix_perfengine.xml
+    vendor/transsion/system_modules/usf/perfengine/framework_compatibility_matrix_perfengine.xml

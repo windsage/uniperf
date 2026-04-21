@@ -17,11 +17,11 @@
 #include <string>
 #include <vector>
 
-// #include "com_transsion_perfengine_flags.h"
+//#include <com_transsion_perfengine.h>
 #include <perfengine/TranPerfEvent.h>
 
-// #define CHECK_FLAG() com::transsion::perfengine::flags::enable_perfengine()
-#define CHECK_FLAG() (true)
+//#define CHECK_FLAG() com::transsion::perfengine::perfengine_enable()
+#define CHECK_FLAG() true
 using namespace android;
 
 using android::transsion::TranPerfEvent;

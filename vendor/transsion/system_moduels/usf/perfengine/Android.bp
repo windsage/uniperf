@@ -1,0 +1,18 @@
+// ==================== System 分区模块聚合 ====================
+
+phony {
+    name: "perfengine_system",
+    required: [
+        // Framework 实现层
+        "libperfengine-jni",
+        "PerfEngineDemo",
+        "perfengine_demo",
+        // System Native Client
+        "libperfengine-client",
+        // AIDL 接口
+        "vendor.transsion.hardware.perfengine-V1-ndk",
+        "vendor.transsion.hardware.perfengine-V1-java",
+        //"libperfengine_flags_c",
+        //"libaconfig_storage_read_api_cc",
+    ],
+}

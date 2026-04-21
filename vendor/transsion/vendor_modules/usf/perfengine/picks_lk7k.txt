@@ -1,7 +1,0 @@
-https://gerrit.transsion.com/c/MTK_CODE/platform/frameworks/base/+/1462943  system/frameworks/base
-https://gerrit.transsion.com/c/TRAN_CODE/vendor/transsion/system_modules/common/+/1462956 system/vendor/transsion/system_modules/common
-https://gerrit.transsion.com/c/TRAN_CODE/vendor/transsion/vendor_modules/common/+/1462957 vendor/vendor/transsion/vendor_modules/common
-https://gerrit.transsion.com/c/MTK_CODE/alps/vendor/mediatek/proprietary/hardware/power/+/1462904 vendor/vendor/mediatek/proprietary/hardware/power
-https://gerrit.transsion.com/c/TRAN_CODE/vendor/transsion/security/sepolicy/+/1471444 vendor/vendor/transsion/security/sepolicy
-https://gerrit.transsion.com/c/TRAN_CODE/vendor/transsion/security/sepolicy/+/1471444 system/vendor/transsion/security/sepolicy
-

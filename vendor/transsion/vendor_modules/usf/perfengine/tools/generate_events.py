@@ -14,7 +14,7 @@ Usage:
 
 Output files:
     - overlay/frameworks/base/core/java/com/transsion/usf/perfengine/TranPerfEventConstants.java
-    - sdk/src/main/java/com/transsion/usf/perfengine/TranPerfEventConstants.java
+    - sdk/lib/src/main/java/com/transsion/usf/perfengine/TranPerfEventConstants.java
     - system/native/include/perfengine/TranPerfEventConstants.h
     - system/native/include/perfengine/TranPerfEventImportMacro.h
     - docs/EVENT_ID_REFERENCE.md
@@ -27,13 +27,17 @@ from datetime import datetime
 
 # Determine output paths relative to script location
 SCRIPT_DIR = Path(__file__).parent
-ROOT_DIR = SCRIPT_DIR.parent
+VENDOR_ROOT = SCRIPT_DIR.parent   # vendor_modules/usf/perfengine/
 
-JAVA_OVERLAY_OUT = ROOT_DIR / "overlay/frameworks/base/core/java/com/transsion/usf/perfengine/TranPerfEventConstants.java"
-JAVA_SDK_OUT = ROOT_DIR / "sdk/src/main/java/com/transsion/usf/perfengine/TranPerfEventConstants.java"
-CPP_HEADER_OUT = ROOT_DIR / "system/native/include/perfengine/TranPerfEventConstants.h"
-CPP_MACRO_OUT = ROOT_DIR / "system/native/include/perfengine/TranPerfEventImportMacro.h"
-DOCS_MD_OUT = ROOT_DIR / "docs/EVENT_ID_REFERENCE.md"
+# SYSTEM_ROOT defaults to VENDOR_ROOT for backward compatibility (single-repo),
+# overridden by --system-root argument when repos are split.
+_SYSTEM_ROOT_DEFAULT = VENDOR_ROOT
+
+CPP_HEADER_OUT = VENDOR_ROOT / "system/native/include/perfengine/TranPerfEventConstants.h"
+CPP_MACRO_OUT  = VENDOR_ROOT / "system/native/include/perfengine/TranPerfEventImportMacro.h"
+DOCS_MD_OUT    = VENDOR_ROOT / "docs/EVENT_ID_REFERENCE.md"
+
+# overlay output depends on SYSTEM_ROOT, resolved at runtime in main()
 
 def parse_xml(xml_file):
     """Parse event_definitions.xml and extract ranges and events.
@@ -628,8 +632,16 @@ Examples:
                         help='Output file for Java SDK constants')
     parser.add_argument('--out-docs', metavar='FILE',
                         help='Output file for Markdown documentation')
+    parser.add_argument('--system-root', metavar='DIR',
+                        help='Root of system_modules repo (default: same as vendor_modules repo). '
+                             'Used in manual mode to locate overlay/ output directory.')
 
     args = parser.parse_args()
+
+    # Resolve SYSTEM_ROOT: CLI arg > default (VENDOR_ROOT)
+    system_root = Path(args.system_root).resolve() if args.system_root else _SYSTEM_ROOT_DEFAULT
+    java_overlay_out = system_root / "overlay/frameworks/base/core/java/com/transsion/usf/perfengine/TranPerfEventConstants.java"
+    java_sdk_out     = system_root / "sdk/lib/src/main/java/com/transsion/usf/perfengine/TranPerfEventConstants.java"
 
     xml_path = Path(args.xml_file)
     if not xml_path.exists():
@@ -692,8 +704,8 @@ Examples:
 
     # Full generation mode (no arguments)
     if not is_genrule_mode:
-        generate_java_overlay(ranges, events, JAVA_OVERLAY_OUT)
-        generate_java_sdk(ranges, events, JAVA_SDK_OUT)
+        generate_java_overlay(ranges, events, java_overlay_out)
+        generate_java_sdk(ranges, events, java_sdk_out)
         generate_cpp_header(ranges, events, CPP_HEADER_OUT)
         generate_cpp_import_macro(events, CPP_MACRO_OUT)
         generate_markdown_docs(ranges, events, DOCS_MD_OUT)
